@@ -1,9 +1,10 @@
 // 'DOMContentLoaded' Solo se ejecuta cuando todo el HTML esté cargado
 document.addEventListener('DOMContentLoaded', () => {
-    const toggle = document.getElementById('showPassword');
-    const passwordInput = document.getElementById('contrasena');
+    // CORREGIDO: Ahora usa los IDs correctos
+    const toggle = document.getElementById('mostrarPassword');
+    const passwordInput = document.getElementById('password');
 
-    // Por si algun elemento no está en la página por algún motivo, evita que el código falle.
+    // Por si algún elemento no está en la página, evita que el código falle
     if (toggle && passwordInput) {
         toggle.addEventListener('change', function () {
             passwordInput.type = this.checked ? 'text' : 'password';
