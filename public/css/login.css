@@ -1,79 +1,85 @@
-body{
-    margin:0;
-    padding:0;
-    font-family: 'Roboto', 'Arial', sans-serif;
-    background-color: #f0f8ff;
-    display:flex;
-    justify-content:center;
-    height: 100vh;
-    align-items:center;
+:root {
+    --aqua: #06b6d4;
+    --aqua-oscuro: #0891b2;
+    --gris-fondo: #f8fafc;
+    --gris-borde: #e5e7eb;
+    --texto: #1f2937;
 }
 
-form{
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-    width: 300px;
-}
+/* Reset básico */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--gris-fondo);
 
-h2{
-    color: #1E3A8A;
-    text-align:center;
-    font-size: 2em;
-}
-        
-img{
-    max-width: 100px;
-    margin: auto;
-    display: block;
-    border-radius: 10px;
-}
-
-p{
-    color: #1E3A8A;
-    margin-bottom: 15px;
-    text-align:center;
-    font-size: 1.2em;
-}
-        
-.labelCredenciales{
-    display: block;
-    margin-top: 10px;
-    color: #1E3A8A;
-    text-align:left;
-    font-size: 1.1em;
-}
-
-.inputCredenciales{
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.checkboxLogin {
     display: flex;
-    text-align:left;
-    margin-top: 10px;
-    color: #1E3A8A;
-    text-align:left;
-    font-size: 1.1em;
-}
-        
-button{
-    background-color: #1E3A8A;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 15px;
-    width: 100%;
-    font-size: 1.1em;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-button:hover{
-    background-color: #0056b3;
+/* Contenedor principal */
+.login-container {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    border: 1px solid var(--gris-borde);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    width: 350px;
+}
+
+/* Títulos */
+h2 {
+    margin-bottom: 5px;
+    color: var(--texto);
+}
+
+p {
+    margin-top: 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+/* Grupos */
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* Inputs */
+.inputCredenciales {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid var(--gris-borde);
+    margin-top: 8px;
+    transition: 0.2s;
+}
+
+.inputCredenciales:focus {
+    outline: none;
+    border-color: var(--aqua);
+    box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.15);
+}
+
+/* Botón */
+button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    background-color: var(--aqua);
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    background-color: var(--aqua-oscuro);
+}
+
+/* Checkbox */
+label {
+    font-size: 14px;
+    color: #4b5563;
 }
