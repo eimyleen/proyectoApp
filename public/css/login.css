@@ -1,0 +1,79 @@
+body{
+    margin:0;
+    padding:0;
+    font-family: 'Roboto', 'Arial', sans-serif;
+    background-color: #f0f8ff;
+    display:flex;
+    justify-content:center;
+    height: 100vh;
+    align-items:center;
+}
+
+form{
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    width: 300px;
+}
+
+h2{
+    color: #1E3A8A;
+    text-align:center;
+    font-size: 2em;
+}
+        
+img{
+    max-width: 100px;
+    margin: auto;
+    display: block;
+    border-radius: 10px;
+}
+
+p{
+    color: #1E3A8A;
+    margin-bottom: 15px;
+    text-align:center;
+    font-size: 1.2em;
+}
+        
+.labelCredenciales{
+    display: block;
+    margin-top: 10px;
+    color: #1E3A8A;
+    text-align:left;
+    font-size: 1.1em;
+}
+
+.inputCredenciales{
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.checkboxLogin {
+    display: flex;
+    text-align:left;
+    margin-top: 10px;
+    color: #1E3A8A;
+    text-align:left;
+    font-size: 1.1em;
+}
+        
+button{
+    background-color: #1E3A8A;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+    width: 100%;
+    font-size: 1.1em;
+}
+
+button:hover{
+    background-color: #0056b3;
+}
