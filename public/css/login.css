@@ -6,19 +6,31 @@
     --texto: #1f2937;
 }
 
-/* Reset básico */
+/* Reset base */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
     background-color: var(--gris-fondo);
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
 }
 
-/* Contenedor principal */
+/* Título superior */
+.titulo-principal {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: var(--texto);
+}
+
+/* Contenedor general */
+.wrapper {
+    height: calc(100vh - 120px);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 40px;
+}
+
+/* Caja login */
 .login-container {
     background: white;
     padding: 25px;
@@ -26,33 +38,107 @@ body {
     border: 1px solid var(--gris-borde);
     box-shadow: 0 5px 15px rgba(0,0,0,0.05);
     width: 350px;
+    text-align: center;
 }
 
-/* Títulos */
-h2 {
+/* Título login */
+.login-container h2 {
+    margin: 0;
     margin-bottom: 5px;
     color: var(--texto);
 }
 
-p {
+/* Texto debajo del título */
+.login-container p {
     margin-top: 0;
+    margin-bottom: 15px;
     color: #6b7280;
     font-size: 14px;
 }
 
 /* Grupos */
 .form-group {
+    text-align: left;
     margin-bottom: 15px;
 }
 
-/* Inputs */
+:root {
+    --aqua: #06b6d4;
+    --aqua-oscuro: #0891b2;
+    --gris-fondo: #f8fafc;
+    --gris-borde: #e5e7eb;
+    --texto: #1f2937;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--gris-fondo);
+
+    /* CENTRADO TOTAL */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* CONTENEDOR GENERAL (titulo + login) */
+.contenedor-general {
+    text-align: center;
+}
+
+/* TÍTULO */
+.titulo-principal {
+    margin-bottom: 20px;
+    color: var(--texto);
+}
+
+/* CAJA LOGIN */
+.login-container {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    border: 1px solid var(--gris-borde);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    width: 350px;
+
+    /* centrado interno */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* TÍTULO LOGIN */
+.login-container h2 {
+    margin-bottom: 5px;
+}
+
+/* TEXTO */
+.login-container p {
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+/* FORMULARIO */
+form {
+    width: 100%;
+}
+
+/* GRUPOS */
+.form-group {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+/* INPUTS */
 .inputCredenciales {
     width: 100%;
     padding: 10px;
     border-radius: 6px;
     border: 1px solid var(--gris-borde);
-    margin-top: 8px;
-    transition: 0.2s;
+    margin-top: 6px;
 }
 
 .inputCredenciales:focus {
@@ -61,7 +147,17 @@ p {
     box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.15);
 }
 
-/* Botón */
+/* CHECKBOX */
+.checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #4b5563;
+}
+
+/* BOTÓN */
 button {
     width: 100%;
     padding: 10px;
@@ -71,15 +167,8 @@ button {
     color: white;
     font-weight: 500;
     cursor: pointer;
-    transition: 0.2s;
 }
 
 button:hover {
     background-color: var(--aqua-oscuro);
-}
-
-/* Checkbox */
-label {
-    font-size: 14px;
-    color: #4b5563;
 }

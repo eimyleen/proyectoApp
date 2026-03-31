@@ -2,61 +2,71 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio de Sesión</title>
 
     <!-- CSS -->
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
 </head>
 <body>
 
-<div class="login-container">
+    <div class="contenedor-general">
 
-    <!-- Manteniendo tu esencia -->
-    <h2>Bienvenido</h2>
-    <p>Ingresa tus credenciales</p>
+        <h1 class="titulo-principal">
+            Portal de Expedientes de la UTNay
+        </h1>
 
-    <!-- Form -->
-    <form action="/dashboard" method="GET">
+        <div class="login-container">
 
-        <div class="form-group">
-            <label for="correo">Correo</label>
-            <input 
-                type="email" 
-                id="correo"
-                name="correo"
-                class="inputCredenciales"
-                placeholder="Ingresa tu correo"
-                required
-            >
+            <h2>Inicio de Sesión</h2>
+            <p>¡Bienvenido, ingresa tus credenciales para acceder!</p>
+
+            <form>
+                @csrf
+
+                <!-- Correo -->
+                <div class="form-group">
+                    <label for="correo">Correo</label>
+                    <input 
+                        type="email" 
+                        name="correo" 
+                        id="correo" 
+                        class="inputCredenciales" 
+                        placeholder="Ingresa tu correo" 
+                        required
+                    >
+                </div>
+
+                <!-- Contraseña -->
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input 
+                        type="password" 
+                        name="password" 
+                        id="password" 
+                        class="inputCredenciales" 
+                        placeholder="Ingresa tu contraseña" 
+                        required
+                    >
+                </div>
+
+                <!-- Mostrar contraseña -->
+                <div class="checkbox">
+                    <input type="checkbox" id="mostrarPassword">
+                    <label for="mostrarPassword">Mostrar contraseña</label>
+                </div>
+
+                <!-- Botón -->
+                <button type="submit">Iniciar sesión</button>
+
+            </form>
+
         </div>
 
-        <div class="form-group">
-            <label for="contrasena">Contraseña</label>
-            <input 
-                type="password" 
-                id="contrasena"
-                name="contrasena"
-                class="inputCredenciales"
-                placeholder="Ingresa tu contraseña"
-                required
-            >
-        </div>
+    </div>
 
-        <div class="form-group">
-            <label>
-                <input type="checkbox" id="showPassword">
-                Mostrar contraseña
-            </label>
-        </div>
-
-        <button type="submit">Iniciar sesión</button>
-
-    </form>
-
-</div>
-
-<!-- JS -->
-<script src="{{ asset('js/login.js') }}"></script>
+    <!-- JS -->
+    <script src="{{ asset('js/login.js') }}"></script>
 
 </body>
 </html>
