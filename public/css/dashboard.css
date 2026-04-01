@@ -16,7 +16,7 @@ body {
     position: relative;
 }
 
-/* ========== HEADER CON GRADIENTE AZUL-VERDE ========== */
+/* Header con gradiente azul-verde */
 .profile-header {
     position: relative;
     background: linear-gradient(135deg, #06b6d4 0%, #10b981 100%);
@@ -37,22 +37,22 @@ body {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: 20px;
+    gap: 24px;
     margin-bottom: 40px;
 }
 
 .role-badge {
     color: white;
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 500;
     background: rgba(255,255,255,0.2);
-    padding: 6px 14px;
-    border-radius: 30px;
+    padding: 8px 18px;
+    border-radius: 40px;
 }
 
 .action-icon {
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     background: rgba(255,255,255,0.2);
     display: flex;
@@ -60,12 +60,16 @@ body {
     justify-content: center;
     cursor: pointer;
     transition: background 0.2s;
-    color: white;
-    font-size: 1.1rem;
 }
 
 .action-icon:hover {
     background: rgba(255,255,255,0.3);
+}
+
+.icon-img {
+    width: 24px;
+    height: 24px;
+    filter: brightness(0) invert(1);
 }
 
 .profile-name {
@@ -83,7 +87,7 @@ body {
     font-weight: 400;
 }
 
-/*  SECCIÓN DE OPCIONES SEGÚN ROL  */
+/* Sección de opciones según rol */
 .role-options {
     width: 100%;
     background: #f5f5f5;
@@ -97,18 +101,19 @@ body {
     min-height: 80px;
 }
 
-/*  BARRA SUPERIOR STICKY  */
+/* Barra sticky */
 .sticky-bar {
     position: sticky;
     top: 0;
     background: white;
     border-bottom: 1px solid #e5e7eb;
-    padding: 12px 40px;
+    padding: 16px 0;
     z-index: 100;
     opacity: 0;
     transform: translateY(-100%);
     transition: all 0.3s ease;
     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    width: 100%;
 }
 
 .sticky-bar.visible {
@@ -132,46 +137,51 @@ body {
 }
 
 .sticky-avatar {
-    width: 48px;
-    height: 48px;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
     background: linear-gradient(135deg, #06b6d4, #10b981);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 500;
+    font-weight: 600;
     color: white;
-    font-size: 1rem;
+    font-size: 1.2rem;
 }
 
 .sticky-name {
     font-weight: 600;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
 }
 
 .sticky-actions {
     display: flex;
-    gap: 12px;
+    gap: 16px;
 }
 
 .sticky-icon {
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: #f3f4f6;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    color: #4b5563;
-    font-size: 0.9rem;
+    transition: background 0.2s;
 }
 
 .sticky-icon:hover {
     background: #e5e7eb;
 }
 
-/*  CONTENIDO PRINCIPAL  */
+.icon-img-small {
+    width: 22px;
+    height: 22px;
+    opacity: 0.7;
+}
+
+/* Contenido principal */
 .main-content {
     max-width: 1200px;
     margin: 0 auto;
@@ -181,7 +191,7 @@ body {
     z-index: 10;
 }
 
-/*  UTILIDADES  */
+/* Utilidades */
 .section {
     margin-bottom: 48px;
 }
@@ -237,9 +247,6 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2rem;
-    font-weight: 500;
-    color: #6b7280;
 }
 
 .card h3 {
@@ -254,77 +261,18 @@ body {
     margin-bottom: 4px;
 }
 
-/* Lista estilo canciones */
-.songs-list {
-    background: white;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-}
-
-.song-item {
-    display: flex;
-    align-items: center;
-    padding: 16px 20px;
-    border-bottom: 1px solid #e5e7eb;
-    transition: background 0.2s;
-    cursor: pointer;
-}
-
-.song-item:hover {
-    background: #f9fafb;
-}
-
-.song-number {
-    width: 40px;
-    color: #6b7280;
-    font-weight: 500;
-}
-
-.song-info {
-    flex: 1;
-}
-
-.song-title {
-    font-weight: 600;
-    margin-bottom: 4px;
-}
-
-.song-artist {
-    font-size: 0.8rem;
-    color: #6b7280;
-}
-
-.song-album {
-    width: 150px;
-    font-size: 0.85rem;
-    color: #6b7280;
-}
-
-.song-duration {
-    width: 100px;
-    text-align: right;
-    color: #6b7280;
-    font-size: 0.85rem;
-}
-
-.show-all {
-    margin-top: 16px;
-    text-align: center;
-    padding: 12px;
-    color: #06b6d4;
-    font-weight: 500;
-    cursor: pointer;
-}
-
-/*  RESPONSIVE */
+/* Responsive */
 @media (max-width: 768px) {
     .profile-name {
         font-size: 2.5rem;
     }
     
     .profile-header {
-        padding: 24px 20px 50px 20px;
+        padding: 24px 0 50px 0;
+    }
+    
+    .profile-info {
+        padding: 0 20px;
     }
     
     .main-content {
@@ -336,54 +284,26 @@ body {
         gap: 16px;
     }
     
-    .song-album {
-        display: none;
-    }
-    
     .role-badge {
         font-size: 0.75rem;
         padding: 4px 10px;
     }
     
-    .role-options {
+    .options-container {
+        padding: 20px;
+    }
+    
+    .sticky-content {
         padding: 0 20px;
     }
-}
-
-/* Íconos como imágenes */
-.icon-img {
-    width: 20px;
-    height: 20px;
-    filter: brightness(0) invert(1); /* Para que se vean blancos sobre el degradado */
-}
-
-.icon-img-small {
-    width: 18px;
-    height: 18px;
-    opacity: 0.7;
-}
-
-/* Ajusta el tamaño de los contenedores si es necesario */
-.action-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.sticky-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: #f3f4f6;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background 0.2s;
+    
+    .sticky-name {
+        font-size: 1rem;
+    }
+    
+    .sticky-avatar {
+        width: 44px;
+        height: 44px;
+        font-size: 1rem;
+    }
 }
