@@ -13,3 +13,7 @@ Route::get('/login', function () {
 Route::get('/dashboard/alumno', function () {
     return view('dashboard.alumno');
 });
+
+Route::get('/dashboard', function () {
+    return view('layouts.dashboard');
+});

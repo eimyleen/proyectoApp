@@ -12,55 +12,64 @@
     @stack('styles')
 </head>
 <body>
-    <div class="dashboard">
-        <!-- Sidebar izquierda -->
-        <aside class="sidebar">
-            <div class="sidebar-logo">
-            <div class="logo-icon">
-                <span></span>
-            </div>
-                <h2>Expedientes UTNay</h2>
-            </div>
-            
-            <nav class="sidebar-nav">
-                @yield('sidebar-menu')
-            </nav>
-            
-            <div class="sidebar-footer">
-                <div class="user-bubble">
-                    <img src="{{ asset('images/default-avatar.png') }}" alt="avatar" class="avatar-img">
-                    <div class="user-info">
-                        <p class="user-name">@yield('user-name', 'Usuario')</p>
-                        <span class="user-role">@yield('user-role')</span>
-                    </div>
+    <div class="profile-container">
+        <!-- Header con gradiente azul-verde -->
+        <div class="profile-header">
+            <div class="profile-info">
+                
+
+            <div class="profile-actions">
+                <span class="role-badge">@yield('user-role', 'Usuario')</span>
+                <div class="action-icon">
+                    <img src="{{ asset('img/tuerca.png') }}" alt="Configuración" class="icon-img">
+                </div>
+                <div class="action-icon">
+                    <img src="{{ asset('img/puntitos.png') }}" alt="Más opciones" class="icon-img">
                 </div>
             </div>
-        </aside>
-        
-        <!-- Contenido principal -->
-        <main class="main-content">
-            <header class="top-header">
-                <div class="header-left">
-                    <button class="menu-toggle" id="menuToggle">
-                        <span>☰</span>
-                    </button>
+
+                <h1 class="profile-name">@yield('welcome-message', '¡Bienvenido!')</h1>
+                <div class="profile-subtitle">@yield('subtitle', 'Aquí puedes consultar tu información')</div>
+            </div>
+        </div>
+
+        <!-- Sección de opciones según rol -->
+        <div class="role-options">
+            <div class="options-container">
+                @yield('role-options')
+            </div>
+        </div>
+
+        <!-- Barra sticky que aparece al hacer scroll -->
+        <div class="sticky-bar" id="stickyBar">
+            <div class="sticky-content">
+                <div class="sticky-left">
+                    <div class="sticky-avatar">
+                        @yield('sticky-avatar', 'U')
+                    </div>
+                    <div class="sticky-name">
+                        @yield('sticky-name', 'Usuario')
+                    </div>
                 </div>
                 
-                <div class="user-bubble-header">
-                    <img src="{{ asset('images/default-avatar.png') }}" alt="avatar" class="avatar-img">
-                    <div class="user-info">
-                        <p class="user-name">@yield('user-name', 'Usuario')</p>
-                        <span class="user-role">@yield('user-role')</span>
+                <div class="sticky-actions">
+                    <div class="sticky-icon">
+                        <img src="{{ asset('img/tuerca.png') }}" alt="Configuración" class="icon-img-small">
+                    </div>
+                    <div class="sticky-icon">
+                        <img src="{{ asset('img/puntitos.png') }}" alt="Más opciones" class="icon-img-small">
                     </div>
                 </div>
-            </header>
-            
-            <div class="page-content">
-                @yield('content')
+
             </div>
-        </main>
+        </div>
+
+        <!-- Contenido principal -->
+        <div class="main-content">
+            @yield('content')
+        </div>
     </div>
-    
+
     <script src="{{ asset('js/dashboard.js') }}"></script>
     @stack('scripts')
 </body>
