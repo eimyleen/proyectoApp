@@ -1,0 +1,38 @@
+/* Botones del alumno */
+.alumno-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+}
+
+.btn-expediente,
+.btn-calificaciones {
+    background: #0891b2;
+    color: white;
+    border: none;
+    padding: 12px 0;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 180px;
+    text-align: center;
+}
+
+.btn-expediente:hover,
+.btn-calificaciones:hover {
+    background: #10b981;
+    transform: translateY(-2px);
+}
+
+/* Contenido del alumno */
+.alumno-content {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.placeholder-text {
+    color: #6b7280;
+    font-size: 1.1rem;
+}
