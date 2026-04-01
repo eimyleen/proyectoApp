@@ -108,7 +108,7 @@ body {
     background: white;
     border-bottom: 1px solid #e5e7eb;
     padding: 16px 0;
-    z-index: 100;
+    z-index: 90;
     opacity: 0;
     transform: translateY(-100%);
     transition: all 0.3s ease;
@@ -306,4 +306,11 @@ body {
         height: 44px;
         font-size: 1rem;
     }
+}
+
+/* Forzar hover botones alumno */
+.alumno-buttons .btn-expediente:hover,
+.alumno-buttons .btn-calificaciones:hover {
+    background: #059669 !important;
+    transform: translateY(-2px);
 }

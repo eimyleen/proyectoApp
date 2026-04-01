@@ -3,6 +3,8 @@
     display: flex;
     justify-content: center;
     gap: 48px;
+    position: relative;
+    z-index: 95;
 }
 
 .btn-expediente,
@@ -22,7 +24,7 @@
 
 .btn-expediente:hover,
 .btn-calificaciones:hover {
-    background: #10b981;
+    background: #059669 !important;
     transform: translateY(-2px);
 }
 
