@@ -1,11 +1,10 @@
-/* Contenedor principal con botones laterales */
+/* ========== ESTILOS DEL DASHBOARD PRINCIPAL (TABLAS) ========== */
 .contenido-con-botones {
     display: flex;
     gap: 32px;
     align-items: flex-start;
 }
 
-/* Botones laterales */
 /* Botones laterales */
 .botones-laterales {
     flex: 0 0 260px;
@@ -41,7 +40,7 @@
     min-width: 0;
 }
 
-/* Títulos */
+/* Títulos de tablas */
 .materias-titulo,
 .horario-titulo {
     margin-bottom: 28px;
@@ -105,12 +104,210 @@
     font-style: italic;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    /* Contenedor principal con botones laterales */
-.contenido-con-botones {
-    display: flex;
-    gap: 32px;
-    align-items: flex-start;
+/* ========== ESTILOS DEL EXPEDIENTE ========== */
+/* Contenido principal del expediente */
+.contenido-principal {
+    flex: 1;
 }
 
+/* Cuadro de datos personales */
+.datos-container {
+    background: white;
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    width: 100%;
+}
+
+/* Foto de perfil */
+.perfil-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 32px;
+}
+
+.foto-perfil {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.avatar-grande {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #06b6d4, #10b981);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.foto-perfil-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-iniciales-grande {
+    color: white;
+    font-size: 3rem;
+    font-weight: 600;
+}
+
+.btn-subir-foto {
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+    padding: 10px 24px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-subir-foto:hover {
+    background: #e5e7eb;
+}
+
+/* Logo de carrera */
+.carrera-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 8px;
+}
+
+.logo-circular {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.logo-circular img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.logo-texto {
+    font-size: 0.75rem;
+    color: #6b7280;
+    text-align: center;
+}
+
+/* Título de datos */
+.datos-titulo {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 28px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+/* Grid de datos */
+.datos-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px 40px;
+}
+
+.dato-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.dato-item label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.dato-valor {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #1f2937;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+    .contenido-con-botones {
+        flex-direction: column;
+    }
+    
+    .botones-laterales {
+        flex: 1;
+        flex-direction: row;
+        width: 100%;
+        gap: 16px;
+    }
+    
+    .btn-expediente,
+    .btn-calificaciones {
+        flex: 1;
+        padding: 14px 0;
+        font-size: 1.2rem;
+    }
+    
+    .carrera-logo {
+        display: none;
+    }
+    
+    .tablas-contenedor,
+    .contenido-principal {
+        width: 100%;
+    }
+    
+    .materias-titulo,
+    .horario-titulo {
+        padding-left: 0;
+    }
+    
+    .datos-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .avatar-grande,
+    .logo-circular {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .avatar-iniciales-grande {
+        font-size: 2rem;
+    }
+    
+    .datos-container {
+        padding: 24px;
+    }
+    
+    .dato-valor {
+        font-size: 1rem;
+    }
+    
+    .tabla-materias th,
+    .tabla-horario th {
+        font-size: 1rem;
+        padding: 14px 16px;
+    }
+    
+    .tabla-materias td,
+    .tabla-horario td {
+        font-size: 0.9rem;
+        padding: 12px 16px;
+    }
+}
