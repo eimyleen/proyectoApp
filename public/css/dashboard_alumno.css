@@ -1,3 +1,46 @@
+/* Contenedor principal con botones laterales */
+.contenido-con-botones {
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+}
+
+/* Botones laterales */
+/* Botones laterales */
+.botones-laterales {
+    flex: 0 0 260px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.btn-expediente,
+.btn-calificaciones {
+    background: #0891b2;
+    color: white;
+    border: none;
+    padding: 20px 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+    border-radius: 60px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    text-align: center;
+}
+
+.btn-expediente:hover,
+.btn-calificaciones:hover {
+    background: #059669;
+    transform: translateY(-2px);
+}
+
+/* Contenedor de tablas */
+.tablas-contenedor {
+    flex: 1;
+    min-width: 0;
+}
+
 /* Títulos */
 .materias-titulo,
 .horario-titulo {
@@ -33,7 +76,7 @@
 .tabla-horario th {
     text-align: left;
     padding: 20px 24px;
-    background: #4b5563;
+    background: #0e7c7c;
     color: white;
     font-weight: 600;
     font-size: 1.2rem;
@@ -54,10 +97,20 @@
 
 .tabla-materias tr:hover td,
 .tabla-horario tr:hover td {
-    background: #f1f5f9;
+    background: #ccf0f0;
 }
 
 .dia-bloqueado {
     color: #94a3b8;
     font-style: italic;
 }
+
+/* Responsive */
+@media (max-width: 768px) {
+    /* Contenedor principal con botones laterales */
+.contenido-con-botones {
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+}
+
