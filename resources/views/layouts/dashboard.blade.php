@@ -18,6 +18,12 @@
             <div class="profile-info">
                 <div class="profile-top">
                     <div class="profile-left">
+                        <!-- Botón de regreso (se muestra solo si se define la sección) -->
+                        @hasSection('back-button')
+                            <div class="back-button">
+                                <img src="{{ asset('img/flecha.png') }}" alt="Regresar" class="back-icon">
+                            </div>
+                        @endif
                         <div class="avatar-circle">
                             <span class="avatar-iniciales">@yield('avatar-iniciales', 'U')</span>
                         </div>

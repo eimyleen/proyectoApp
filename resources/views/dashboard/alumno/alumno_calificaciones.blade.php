@@ -7,6 +7,10 @@
 @section('welcome-message', 'Mis Calificaciones')
 @section('subtitle', 'Aquí puedes consultar tus calificaciones por período')
 
+@section('back-button')
+    <!-- Botón de regreso visible -->
+@endsection
+
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/dashboard_alumno.css') }}">
 @endpush

@@ -7,6 +7,10 @@
 @section('welcome-message', 'Mi Expediente')
 @section('subtitle', 'Aquí puedes consultar tu información personal')
 
+@section('back-button')
+    <!-- Botón de regreso visible -->
+@endsection
+
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/dashboard_alumno.css') }}">
 @endpush
