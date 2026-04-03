@@ -1,4 +1,4 @@
-/* ========== ESTILOS DEL DASHBOARD PRINCIPAL (TABLAS) ========== */
+/* ESTILOS DEL DASHBOARD PRINCIPAL (TABLAS) */
 .contenido-con-botones {
     display: flex;
     gap: 32px;
@@ -104,7 +104,7 @@
     font-style: italic;
 }
 
-/* ========== ESTILOS DEL EXPEDIENTE ========== */
+/* ESTILOS DEL EXPEDIENTE */
 /* Contenido principal del expediente */
 .contenido-principal {
     flex: 1;
@@ -242,7 +242,7 @@
     color: #1f2937;
 }
 
-/* ========== RESPONSIVE ========== */
+/* RESPONSIVE */
 @media (max-width: 768px) {
     .contenido-con-botones {
         flex-direction: column;
@@ -310,4 +310,116 @@
         font-size: 0.9rem;
         padding: 12px 16px;
     }
+}
+
+/* ESTILOS DE CALIFICACIONES */
+.filtro-periodo {
+    margin-bottom: 28px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.periodo-select {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: white;
+    padding: 8px 20px;
+    border-radius: 40px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.periodo-select label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.periodo-select select {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #1f2937;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 30px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.periodo-select select:hover {
+    background: #f3f4f6;
+    border-color: #0e7c7c;
+}
+
+.tabla-calificaciones {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    width: 100%;
+}
+
+.tabla-calificaciones table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-calificaciones th {
+    text-align: left;
+    padding: 20px 24px;
+    background: #0e7c7c;
+    color: white;
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.tabla-calificaciones td {
+    padding: 18px 24px;
+    border-bottom: 1px solid #cbd5e1;
+    color: #4b5563;
+    font-size: 1.1rem;
+}
+
+.tabla-calificaciones tr:last-child td {
+    border-bottom: none;
+}
+
+.tabla-calificaciones tr:hover td {
+    background: #ccf0f0;
+}
+
+.calificacion {
+    font-weight: 600;
+    text-align: center;
+    width: 120px;
+}
+
+.btn-calificaciones.active {
+    background: #059669;
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3);
+}
+
+@media (max-width: 768px) {
+    .filtro-periodo {
+        justify-content: center;
+    }
+    
+    .tabla-calificaciones th,
+    .tabla-calificaciones td {
+        padding: 12px 16px;
+        font-size: 0.9rem;
+    }
+    
+    .calificacion {
+        width: 80px;
+    }
+}
+
+/* Botón activo - Expediente y Calificaciones */
+.btn-expediente.active,
+.btn-calificaciones.active {
+    background: #059669;
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3);
 }

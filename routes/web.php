@@ -21,3 +21,7 @@ Route::get('/dashboard/alumno', function () {
 Route::get('/dashboard/alumno/expediente', function () {
     return view('dashboard.alumno.alumno_expediente');
 });
+
+Route::get('/dashboard/alumno/calificaciones', function () {
+    return view('dashboard.alumno.alumno_calificaciones');
+});

@@ -15,7 +15,7 @@
     <div class="contenido-con-botones">
         <!-- Botones laterales -->
         <div class="botones-laterales">
-            <button class="btn-expediente">Expediente</button>
+            <button class="btn-expediente active">Expediente</button>
             <button class="btn-calificaciones">Calificaciones</button>
             
             <!-- Logo circular de la carrera -->
@@ -24,10 +24,10 @@
                     @if(isset($carrera->logo))
                         <img src="{{ asset('storage/' . $carrera->logo) }}" alt="{{ $carrera->nombre }}">
                     @else
-                        <span class="logo-placeholder"> </span>
+
                     @endif
                 </div>
-                 <span class="logo-texto">Logo de la carrera</span>
+                <span class="logo-texto">Logo de la carrera</span>
             </div>
         </div>
 
