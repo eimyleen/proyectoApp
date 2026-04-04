@@ -29,3 +29,7 @@ Route::get('/dashboard/alumno/calificaciones', function () {
 Route::get('/dashboard/maestro', function () {
     return view('dashboard.maestro.maestro');
 });
+
+Route::get('/dashboard/maestro/perfil', function () {
+    return view('dashboard.maestro.perfil_maestro');
+});

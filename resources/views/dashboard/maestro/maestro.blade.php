@@ -17,9 +17,9 @@
         <button class="btn-lista-global" id="btnListaGlobal">Ver lista de alumnos global</button>
     </div>
 
-    <!-- Carreras -->
-    <div class="carreras-container">
-        <div class="carreras-grid">
+    <!-- Carreras - usando clases específicas para evitar conflictos -->
+    <div class="carreras-dashboard-container">
+        <div class="carreras-dashboard-grid">
             @php
                 $carreras = [
                     ['img' => 'ing_alimentos.png', 'alt' => 'Ingeniería en Alimentos'],
@@ -40,8 +40,8 @@
             @endphp
 
             @foreach($carreras as $carrera)
-                <div class="carrera-card">
-                    <div class="carrera-img">
+                <div class="carrera-dashboard-card">
+                    <div class="carrera-dashboard-img">
                         <img src="{{ asset('img/carreras/' . $carrera['img']) }}" alt="{{ $carrera['alt'] }}">
                     </div>
                 </div>
@@ -56,7 +56,6 @@
                 <h3>Lista de alumnos global</h3>
                 <span class="modal-close" id="closeModal">&times;</span>
             </div>
-
             <div class="modal-body">
                 <div class="modal-actions">
                     <div class="modal-filtro">
@@ -81,17 +80,19 @@
                         <tbody>
                             @for($i = 0; $i < 5; $i++)
                                 <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td></td
+                                    <td></td
+                                    <td></td
+                                    <td></td
                                 </tr>
                             @endfor
                         </tbody>
                     </table>
                 </div>
             </div>
-            @endsection
+        </div>
+    </div>
+@endsection
 
 @push('scripts')
 <script>
@@ -118,9 +119,6 @@
 
     // Filtro dentro del modal
     const inputBusquedaModal = document.getElementById('busquedaModal');
-    const tablaBody = document.querySelector('#tablaAlumnosModal tbody');
-    const filas = tablaBody ? tablaBody.querySelectorAll('tr') : [];
-
     if (inputBusquedaModal) {
         inputBusquedaModal.addEventListener('input', function() {
             const busqueda = this.value.toLowerCase();

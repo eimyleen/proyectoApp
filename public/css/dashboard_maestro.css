@@ -22,29 +22,54 @@
     transform: translateY(-2px);
 }
 
+/* Botón de regreso */
+.back-button {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-right: 12px;
+}
+
+.back-button:hover {
+    background: rgba(255,255,255,0.3);
+    transform: translateX(-2px);
+}
+
+.back-icon {
+    width: 24px;
+    height: 24px;
+    filter: brightness(0) invert(1);
+}
+
 /* Carreras */
-.carreras-container {
-    max-width: 1200px;
+.carreras-dashboard-container {
+    max-width: 1000px;
     margin: 0 auto;
     padding: 20px 0;
 }
 
-.carreras-grid {
+.carreras-dashboard-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 28px;
+    gap: 14px;
 }
 
-.carrera-card {
+.carrera-dashboard-card {
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
-.carrera-card:hover {
+.carrera-dashboard-card:hover {
     transform: scale(1.05);
 }
 
-.carrera-img {
+.carrera-dashboard-img {
     width: 100%;
     aspect-ratio: 1 / 1;
     background: white;
@@ -52,12 +77,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 28px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     overflow: hidden;
 }
 
-.carrera-img img {
+.carrera-dashboard-img img {
     width: 100%;
     height: 100%;
     object-fit: contain;
@@ -130,7 +155,7 @@
     margin-bottom: 24px;
 }
 
-/* Filtro - más corto */
+/* Filtro */
 .modal-filtro {
     display: flex;
     align-items: center;
@@ -157,22 +182,6 @@
 }
 
 /* Botón dentro del modal */
-.btn-descargar-modal {
-    background: #0891b2;
-    color: white;
-    border: none;
-    padding: 8px 20px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    border-radius: 40px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    white-space: nowrap;
-}
-
 .btn-descargar-modal {
     background: #0891b2;
     color: white;
@@ -228,11 +237,197 @@
     background: #f1f5f9;
 }
 
+/* Perfil de maestro */
+.perfil-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.perfil-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 32px;
+}
+
+.foto-perfil {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.avatar-grande {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #06b6d4, #10b981);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.avatar-iniciales-grande {
+    color: white;
+    font-size: 3rem;
+    font-weight: 600;
+}
+
+.btn-subir-foto {
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+    padding: 8px 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-subir-foto:hover {
+    background: #e5e7eb;
+}
+
+.perfil-titulo {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.seccion-titulo {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-top: 32px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.tutor-badge {
+    display: inline-block;
+    background: #10b981;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 30px;
+    margin-left: 12px;
+    vertical-align: middle;
+}
+
+.datos-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px 40px;
+}
+
+.dato-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.dato-item label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.dato-valor {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #1f2937;
+}
+
+.carreras-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+.carrera-item {
+    background: #f9fafb;
+    border-radius: 10px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.carrera-icono {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.carrera-nombre {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.grupos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+}
+
+.grupo-item {
+    background: #f9fafb;
+    border-radius: 10px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.grupo-icono {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.grupo-nombre {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.sin-grupo {
+    color: #9ca3af;
+    font-style: italic;
+    padding: 16px;
+    text-align: center;
+    background: #f9fafb;
+    border-radius: 12px;
+}
+
 /* Responsive para desktop mediano */
 @media (max-width: 900px) {
     .carreras-grid {
         grid-template-columns: repeat(5, 1fr);
-        gap: 24px;
+        gap: 16px;
     }
 }
 
@@ -240,11 +435,11 @@
 @media (max-width: 600px) {
     .carreras-grid {
         grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
+        gap: 16px;
     }
     
     .carrera-img {
-        padding: 20px;
+        padding: 16px;
     }
     
     .maestro-buttons {
@@ -264,5 +459,28 @@
     .btn-descargar-modal {
         justify-content: center;
         white-space: normal;
+    }
+    
+    .perfil-container {
+        padding: 24px;
+    }
+    
+    .datos-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .avatar-grande {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .avatar-iniciales-grande {
+        font-size: 2rem;
+    }
+    
+    .carreras-grid,
+    .grupos-grid {
+        grid-template-columns: 1fr;
     }
 }
