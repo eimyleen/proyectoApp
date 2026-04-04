@@ -1,40 +1,8 @@
-/* Botón superior */
-.maestro-buttons {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 40px;
-}
-
-.btn-lista-global {
-    background: #0891b2;
-    color: white;
-    border: none;
-    padding: 16px 32px;
-    font-size: 1.2rem;
-    font-weight: 600;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.btn-lista-global:hover {
-    background: #059669;
-    transform: translateY(-2px);
-}
-
-.btn-icon {
-    width: 24px;
-    height: 24px;
-    filter: brightness(0) invert(1);
-}
-
-/* Carreras */
+/* Carreras - Versión simplificada y segura */
 .carreras-container {
     max-width: 1200px;
     margin: 0 auto;
+    padding: 20px 0;
 }
 
 .carreras-grid {
@@ -71,6 +39,114 @@
     object-fit: contain;
 }
 
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 900px;
+    max-height: 80vh;
+    overflow: hidden;
+    box-shadow: 0 20px 35px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    background: #0e7c7c;
+    color: white;
+}
+
+.modal-header h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.modal-close {
+    font-size: 1.8rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    line-height: 1;
+}
+
+.modal-close:hover {
+    transform: scale(1.1);
+}
+
+.modal-body {
+    padding: 24px;
+    max-height: calc(80vh - 70px);
+    overflow-y: auto;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.btn-descargar-modal {
+    background: #0891b2;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-descargar-modal:hover {
+    background: #059669;
+}
+
+.tabla-container {
+    overflow-x: auto;
+}
+
+.tabla-alumnos-global {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-alumnos-global th {
+    text-align: left;
+    padding: 12px 16px;
+    background: #f9fafb;
+    font-weight: 600;
+    color: #374151;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.tabla-alumnos-global td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e5e7eb;
+    color: #4b5563;
+}
+
+.tabla-alumnos-global tr:hover td {
+    background: #f1f5f9;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
     .carreras-grid {
@@ -97,9 +173,54 @@
         padding: 12px 24px;
         font-size: 1rem;
     }
-    
-    .btn-icon {
-        width: 20px;
-        height: 20px;
-    }
+}
+
+/* Botón superior */
+.maestro-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 40px;
+}
+
+.btn-lista-global {
+    background: #0891b2;
+    color: white;
+    border: none;
+    padding: 16px 32px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-lista-global:hover {
+    background: #059669;
+    transform: translateY(-2px);
+}
+
+/* Botón dentro del modal con ícono */
+.btn-descargar-modal {
+    background: #0891b2;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-descargar-modal:hover {
+    background: #059669;
+}
+
+.btn-icon-modal {
+    width: 18px;
+    height: 18px;
+    filter: brightness(0) invert(1);
 }

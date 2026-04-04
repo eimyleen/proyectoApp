@@ -14,99 +14,103 @@
 @section('content')
     <!-- Botones superiores -->
     <div class="maestro-buttons">
-        <button class="btn-lista-global">
-            <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon">
-            Descargar lista global
-        </button>
+        <button class="btn-lista-global" id="btnListaGlobal">Ver lista de alumnos global</button>
     </div>
 
     <!-- Carreras -->
     <div class="carreras-container">
         <div class="carreras-grid">
-            <!-- Ingeniería en Alimentos -->
-            <div class="carrera-card">
-                <div class="carrera-img">
-                    <img src="{{ asset('img/carreras/ing_alimentos.png') }}" alt="Ingeniería en Alimentos">
-                </div>
-            </div>
+            @php
+                $carreras = [
+                    ['img' => 'ing_alimentos.png', 'alt' => 'Ingeniería en Alimentos'],
+                    ['img' => 'ing_civil.png', 'alt' => 'Ingeniería Civil'],
+                    ['img' => 'ing_inte_artificial.png', 'alt' => 'Ingeniería Artificial'],
+                    ['img' => 'ing_logistica.png', 'alt' => 'Ingeniería Logística'],
+                    ['img' => 'ing_mant_industrial.png', 'alt' => 'Ingeniería Mantenimiento Industrial'],
+                    ['img' => 'ing_mecatronica.png', 'alt' => 'Ingeniería Mecatrónica'],
+                    ['img' => 'ing_micro_semic.png', 'alt' => 'Ingeniería Micro Semiconductores'],
+                    ['img' => 'ing_tec_info.png', 'alt' => 'Ingeniería Tecnologías Información'],
+                    ['img' => 'lic_admin.png', 'alt' => 'Licenciatura Administración'],
+                    ['img' => 'lic_gastro.png', 'alt' => 'Gastronomía'],
+                    ['img' => 'lic_merca.png', 'alt' => 'Licenciatura Mercadotecnia'],
+                    ['img' => 'lic_psicologia.png', 'alt' => 'Psicología'],
+                    ['img' => 'lic_seg_publ.png', 'alt' => 'Seguridad Pública'],
+                    ['img' => 'lic_turismo.png', 'alt' => 'Licenciatura Turismo'],
+                ];
+            @endphp
 
-            <div class="carrera-card">
-                <div class="carrera-img">
-                    <img src="{{ asset('img/carreras/ing_civil.png') }}" alt="Ingeniería Civil">
+            @foreach($carreras as $carrera)
+                <div class="carrera-card">
+                    <div class="carrera-img">
+                        <img src="{{ asset('img/carreras/' . $carrera['img']) }}" alt="{{ $carrera['alt'] }}">
+                    </div>
                 </div>
-            </div>
+            @endforeach
+        </div>
+    </div>
 
-            <div class="carrera-card">
-                <div class="carrera-img">
-                    <img src="{{ asset('img/carreras/ing_inte_artificial.png') }}" alt="Ingeniería Artificial">
+    <!-- Modal -->
+    <div id="modalListaGlobal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Lista de alumnos global</h3>
+                <span class="modal-close" id="closeModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="modal-buttons">
+                    <button class="btn-descargar-modal">
+                        <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-modal">
+                        Descargar lista
+                    </button>
                 </div>
-            </div>
-
-            <div class="carrera-card">
-                <div class="carrera-img">
-                    <img src="{{ asset('img/carreras/ing_logistica.png') }}" alt="Ingeniería Logística">
-                </div>
-            </div>
-
-            <div class="carrera-card">
-                <div class="carrera-img">
-                    <img src="{{ asset('img/carreras/ing_mant_industrial.png') }}" alt="Ingeniería Mantenimiento Industrial">
-                </div>
-            </div>
-
-            <div class="carrera-card">
-                <div class="carrera-img">
-                    <img src="{{ asset('img/carreras/ing_mecatronica.png') }}" alt="Ingeniería Mecatrónica">
-                </div>
-            </div>
-
-            <div class="carrera-card">
-                <div class="carrera-img">
-                    <img src="{{ asset('img/carreras/ing_micro_semic.png') }}" alt="Ingeniería Micro Semiconductores">
-                </div>
-            </div>
-
-            <div class="carrera-card">
-                <div class="carrera-img">
-                    <img src="{{ asset('img/carreras/ing_tec_info.png') }}" alt="Ingeniería Tecnologías Información">
-                </div>
-            </div>
-
-            <div class="carrera-card">
-                <div class="carrera-img">
-                    <img src="{{ asset('img/carreras/lic_admin.png') }}" alt="Licenciatura Administración">
-                </div>
-            </div>
-
-            <div class="carrera-card">
-                <div class="carrera-img">
-                    <img src="{{ asset('img/carreras/lic_gastro.png') }}" alt="Gastronomía">
-                </div>
-            </div>
-
-            <div class="carrera-card">
-                <div class="carrera-img">
-                    <img src="{{ asset('img/carreras/lic_merca.png') }}" alt="Licenciatura Mercadotecnia">
-                </div>
-            </div>
-
-            <div class="carrera-card">
-                <div class="carrera-img">
-                    <img src="{{ asset('img/carreras/lic_psicologia.png') }}" alt="Psicología">
-                </div>
-            </div>
-
-            <div class="carrera-card">
-                <div class="carrera-img">
-                    <img src="{{ asset('img/carreras/lic_seg_publ.png') }}" alt="Seguridad Pública">
-                </div>
-            </div>
-
-            <div class="carrera-card">
-                <div class="carrera-img">
-                    <img src="{{ asset('img/carreras/lic_turismo.png') }}" alt="Licenciatura Turismo">
+                <div class="tabla-container">
+                    <table class="tabla-alumnos-global">
+                        <thead>
+                            <tr>
+                                <th>Matrícula</th>
+                                <th>Nombre</th>
+                                <th>Carrera</th>
+                                <th>Grupo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for($i = 0; $i < 5; $i++)
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            @endfor
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    // Modal
+    const modal = document.getElementById('modalListaGlobal');
+    const btn = document.getElementById('btnListaGlobal');
+    const closeBtn = document.getElementById('closeModal');
+
+    if (btn && modal && closeBtn) {
+        btn.addEventListener('click', function() {
+            modal.style.display = 'flex';
+        });
+
+        closeBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        });
+    }
+</script>
+@endpush
