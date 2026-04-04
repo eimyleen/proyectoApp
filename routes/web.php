@@ -33,3 +33,11 @@ Route::get('/dashboard/maestro', function () {
 Route::get('/dashboard/maestro/perfil', function () {
     return view('dashboard.maestro.perfil_maestro');
 });
+
+Route::get('/dashboard/maestro/grupos', function () {
+    return view('dashboard.maestro.grupos');
+});
+
+Route::get('/dashboard/maestro/expediente/alumno', function () {
+    return view('dashboard.maestro.expediente_alumno_maestro');
+});
