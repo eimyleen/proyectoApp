@@ -1,4 +1,28 @@
-/* Carreras - Versión simplificada y segura */
+/* Botón superior */
+.maestro-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 40px;
+}
+
+.btn-lista-global {
+    background: #0891b2;
+    color: white;
+    border: none;
+    padding: 16px 32px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-lista-global:hover {
+    background: #059669;
+    transform: translateY(-2px);
+}
+
+/* Carreras */
 .carreras-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -97,28 +121,85 @@
     overflow-y: auto;
 }
 
-.modal-buttons {
+/* Contenedor de acciones (filtro + botón) */
+.modal-actions {
     display: flex;
-    justify-content: flex-end;
-    margin-bottom: 20px;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+/* Filtro - más corto */
+.modal-filtro {
+    display: flex;
+    align-items: center;
+    background: #f9fafb;
+    border-radius: 40px;
+    padding: 8px 16px;
+    border: 1px solid #e5e7eb;
+    width: 260px;
+}
+
+.lupa-icon-modal {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    opacity: 0.6;
+}
+
+.input-busqueda-modal {
+    border: none;
+    outline: none;
+    font-size: 0.85rem;
+    width: 100%;
+    background: transparent;
+}
+
+/* Botón dentro del modal */
+.btn-descargar-modal {
+    background: #0891b2;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
 }
 
 .btn-descargar-modal {
     background: #0891b2;
     color: white;
     border: none;
-    padding: 10px 20px;
-    font-size: 0.9rem;
+    padding: 8px 20px;
+    font-size: 0.85rem;
     font-weight: 600;
-    border-radius: 30px;
+    border-radius: 40px;
     cursor: pointer;
     transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
 }
 
 .btn-descargar-modal:hover {
     background: #059669;
 }
 
+.btn-icon-modal {
+    width: 16px;
+    height: 16px;
+    filter: brightness(0) invert(1);
+}
+
+/* Tabla */
 .tabla-container {
     overflow-x: auto;
 }
@@ -147,7 +228,7 @@
     background: #f1f5f9;
 }
 
-/* Responsive */
+/* Responsive para desktop mediano */
 @media (max-width: 900px) {
     .carreras-grid {
         grid-template-columns: repeat(5, 1fr);
@@ -155,6 +236,7 @@
     }
 }
 
+/* Responsive para móvil */
 @media (max-width: 600px) {
     .carreras-grid {
         grid-template-columns: repeat(3, 1fr);
@@ -173,54 +255,14 @@
         padding: 12px 24px;
         font-size: 1rem;
     }
-}
-
-/* Botón superior */
-.maestro-buttons {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 40px;
-}
-
-.btn-lista-global {
-    background: #0891b2;
-    color: white;
-    border: none;
-    padding: 16px 32px;
-    font-size: 1.2rem;
-    font-weight: 600;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.btn-lista-global:hover {
-    background: #059669;
-    transform: translateY(-2px);
-}
-
-/* Botón dentro del modal con ícono */
-.btn-descargar-modal {
-    background: #0891b2;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    border-radius: 30px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.btn-descargar-modal:hover {
-    background: #059669;
-}
-
-.btn-icon-modal {
-    width: 18px;
-    height: 18px;
-    filter: brightness(0) invert(1);
+    
+    .modal-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .btn-descargar-modal {
+        justify-content: center;
+        white-space: normal;
+    }
 }

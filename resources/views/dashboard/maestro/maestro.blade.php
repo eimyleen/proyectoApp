@@ -49,22 +49,27 @@
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Modal con filtro dentro -->
     <div id="modalListaGlobal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Lista de alumnos global</h3>
                 <span class="modal-close" id="closeModal">&times;</span>
             </div>
+
             <div class="modal-body">
-                <div class="modal-buttons">
+                <div class="modal-actions">
+                    <div class="modal-filtro">
+                        <img src="{{ asset('img/lupa.png') }}" alt="Buscar" class="lupa-icon-modal">
+                        <input type="text" id="busquedaModal" placeholder="Buscar por nombre o matrícula..." class="input-busqueda-modal">
+                    </div>
                     <button class="btn-descargar-modal">
                         <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-modal">
                         Descargar lista
                     </button>
                 </div>
                 <div class="tabla-container">
-                    <table class="tabla-alumnos-global">
+                    <table class="tabla-alumnos-global" id="tablaAlumnosModal">
                         <thead>
                             <tr>
                                 <th>Matrícula</th>
@@ -86,9 +91,7 @@
                     </table>
                 </div>
             </div>
-        </div>
-    </div>
-@endsection
+            @endsection
 
 @push('scripts')
 <script>
@@ -110,6 +113,27 @@
             if (event.target == modal) {
                 modal.style.display = 'none';
             }
+        });
+    }
+
+    // Filtro dentro del modal
+    const inputBusquedaModal = document.getElementById('busquedaModal');
+    const tablaBody = document.querySelector('#tablaAlumnosModal tbody');
+    const filas = tablaBody ? tablaBody.querySelectorAll('tr') : [];
+
+    if (inputBusquedaModal) {
+        inputBusquedaModal.addEventListener('input', function() {
+            const busqueda = this.value.toLowerCase();
+            const filasActuales = document.querySelectorAll('#tablaAlumnosModal tbody tr');
+            
+            filasActuales.forEach(fila => {
+                const texto = fila.innerText.toLowerCase();
+                if (texto.includes(busqueda) || busqueda === '') {
+                    fila.style.display = '';
+                } else {
+                    fila.style.display = 'none';
+                }
+            });
         });
     }
 </script>
