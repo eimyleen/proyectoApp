@@ -1157,3 +1157,136 @@ tr:hover td {
     padding: 16px 24px 24px;
     background: white;
 }
+
+/* Acciones superiores */
+.acciones-superiores {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.btn-editar-perfil {
+    background: #0e7c7c;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-editar-perfil:hover {
+    background: #0891b2;
+}
+
+.btn-eliminar-perfil {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-eliminar-perfil:hover {
+    background: #dc2626;
+}
+
+/* Logo de carrera */
+.carrera-info-expediente {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    padding: 20px;
+    background: #f9fafb;
+    border-radius: 16px;
+}
+
+.logo-circular-carrera {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.logo-circular-carrera img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.logo-texto-carrera {
+    font-size: 0.7rem;
+    color: #6b7280;
+    text-align: center;
+}
+
+/* Modal pequeño */
+.modal-small {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-small .modal-content {
+    max-width: 550px;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+.modal-small .modal-header {
+    padding: 20px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.modal-small .modal-header h3 {
+    font-size: 1.2rem;
+}
+
+.modal-small .modal-close {
+    font-size: 1.5rem;
+}
+
+.modal-small .modal-body {
+    padding: 24px;
+}
+
+.modal-small .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 24px 24px;
+    background: white;
+    position: sticky;
+    bottom: 0;
+    border-top: 1px solid #e5e7eb;
+}

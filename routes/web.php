@@ -49,3 +49,11 @@ Route::get('/dashboard/admin/carrera', function () {
 Route::get('/dashboard/admin', function () {
     return view('dashboard.admin.admin');
 });
+
+Route::get('/dashboard/admin/alumno/expediente', function () {
+    return view('dashboard.admin.admin_alumno_expediente');
+});
+
+Route::get('/dashboard/admin/maestro/perfil', function () {
+    return view('dashboard.admin.admin_maestro_perfil');
+});

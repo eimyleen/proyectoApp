@@ -909,3 +909,77 @@
         font-size: 0.85rem;
     }
 }
+/* Clave de la carrera */
+.carrera-clave {
+    font-size: 0.85rem;
+    color: #0e7c7c;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+/* Panel de información del tutor */
+.tutor-info-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f9fafb;
+    border-radius: 16px;
+    padding: 16px 24px;
+    margin-bottom: 24px;
+    border: 1px solid #e5e7eb;
+}
+
+.tutor-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.tutor-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+}
+
+.tutor-nombre {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #1f2937;
+}
+
+/* Columnas de tabla */
+.col-numero {
+    width: 60px;
+    text-align: center;
+}
+
+.col-matricula {
+    width: 20%;
+}
+
+.col-nombre {
+    width: 35%;
+}
+
+.col-acciones {
+    width: auto;
+    white-space: nowrap;
+}
+
+/* Botón eliminar en tabla */
+.btn-eliminar {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    font-size: 0.75rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-left: 8px;
+}
+
+.btn-eliminar:hover {
+    background: #dc2626;
+}
