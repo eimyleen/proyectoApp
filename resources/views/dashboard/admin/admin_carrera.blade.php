@@ -7,17 +7,18 @@
 @section('welcome-message', '[Nombre de la Carrera]')
 @section('subtitle', 'Gestiona los grupos y maestros de esta carrera')
 
+@section('back-button')
+    <!-- Activa el botón de regreso -->
+@endsection
+
+@section('back-url', '/dashboard/admin')
+
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/dashboard_admin.css') }}">
 @endpush
 
 @section('content')
     <div class="carrera-container">
-        <!-- Flecha de regreso -->
-        <div class="back-button-custom" id="backButton">
-            <img src="{{ asset('img/flecha.png') }}" alt="Regresar" class="back-icon-custom">
-        </div>
-
         <!-- Header de la carrera -->
         <div class="carrera-header">
             <div class="carrera-logo">
@@ -32,7 +33,7 @@
             </div>
             <div class="carrera-acciones">
                 <button class="btn-editar" id="btnEditarCarrera">
-                    <img src="{{ asset('img/editar.png') }}" alt="Editar" class="btn-icon"> Editar carrera
+                    <img src="{{ asset('img/editar.png') }}" alt="Editar" class="btn-icono"> Editar carrera
                 </button>
                 <button class="btn-eliminar-carrera" id="btnEliminarCarrera">
                     ✕ Eliminar carrera
@@ -51,10 +52,6 @@
             <div class="filtro-grupo">
                 <select class="grupo-select" id="filtroGrupo">
                     <option value="">Seleccionar grupo</option>
-                    <option value="A">Grupo A</option>
-                    <option value="B">Grupo B</option>
-                    <option value="C">Grupo C</option>
-                    <option value="D">Grupo D</option>
                 </select>
                 <button class="btn-agregar" id="btnAgregarAlumno">
                     + Agregar alumno
@@ -110,7 +107,7 @@
                                 <td class="col-numero">{{ $i }}</td>
                                 <td class="col-nombre"></td>
                                 <td class="col-correo"></td>
-                                <td class="col-acciones">>
+                                <td class="col-acciones">
                                     <button class="btn-ver-perfil">Ver perfil</button>
                                     <button class="btn-eliminar">Eliminar</button>
 </td>
@@ -135,17 +132,17 @@
                     <input type="text" id="matriculaAlumno" placeholder="Ej: UTN-2024-001">
                 </div>
                 <div class="form-group">
-                    <label>Nombre completo</label>
-                    <input type="text" id="nombreAlumno" placeholder="Ej: Juan Pérez García">
+                    <label>Nombre(s)</label>
+                    <input type="text" id="nombreAlumno" placeholder="Ej: Juan">
+                </div>
+                <div class="form-group">
+                    <label>Apellidos</label>
+                    <input type="text" id="apellidosAlumno" placeholder="Ej: Pérez García">
                 </div>
                 <div class="form-group">
                     <label>Grupo</label>
                     <select id="grupoAlumno">
                         <option value="">Seleccionar grupo</option>
-                        <option value="A">Grupo A</option>
-                        <option value="B">Grupo B</option>
-                        <option value="C">Grupo C</option>
-                        <option value="D">Grupo D</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -173,8 +170,12 @@
                     <input type="text" id="numEmpleado" placeholder="Ej: EMP-2024-001">
                 </div>
                 <div class="form-group">
-                    <label>Nombre completo</label>
-                    <input type="text" id="nombreMaestro" placeholder="Ej: Roberto Sánchez Hernández">
+                    <label>Nombre(s)</label>
+                    <input type="text" id="nombreMaestro" placeholder="Ej: Roberto">
+                </div>
+                <div class="form-group">
+                    <label>Apellidos</label>
+                    <input type="text" id="apellidosMaestro" placeholder="Ej: Sánchez Hernández">
                 </div>
                 <div class="form-group">
                     <label>Correo electrónico</label>
@@ -221,10 +222,10 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Flecha de regreso
-        const backBtn = document.getElementById('backButton');
-        if (backBtn) {
-            backBtn.addEventListener('click', function() {
+        // Flecha de regreso (usa el mismo sistema que las otras interfaces)
+        const backButton = document.getElementById('backButton');
+        if (backButton) {
+            backButton.addEventListener('click', function() {
                 window.location.href = '/dashboard/admin';
             });
         }
@@ -234,11 +235,11 @@
         const tabContents = document.querySelectorAll('.tab-content');
 
         tabBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const tabId = btn.getAttribute('data-tab');
+            btn.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
                 tabBtns.forEach(b => b.classList.remove('active'));
                 tabContents.forEach(c => c.classList.remove('active'));
-                btn.classList.add('active');
+                this.classList.add('active');
                 document.getElementById(`tab-${tabId}`).classList.add('active');
             });
         });
@@ -250,15 +251,17 @@
         const cancelarAlumno = document.getElementById('cancelarAlumno');
 
         if (btnAgregarAlumno) {
-            btnAgregarAlumno.addEventListener('click', () => modalAlumno.style.display = 'flex');
+            btnAgregarAlumno.onclick = function() {
+                modalAlumno.style.display = 'flex';
+            };
         }
 
         function cerrarModalAlumno() {
             modalAlumno.style.display = 'none';
         }
 
-        if (closeModalAlumno) closeModalAlumno.addEventListener('click', cerrarModalAlumno);
-        if (cancelarAlumno) cancelarAlumno.addEventListener('click', cerrarModalAlumno);
+        if (closeModalAlumno) closeModalAlumno.onclick = cerrarModalAlumno;
+        if (cancelarAlumno) cancelarAlumno.onclick = cerrarModalAlumno;
 
         // Modal Agregar Maestro
         const modalMaestro = document.getElementById('modalAgregarMaestro');
@@ -267,15 +270,17 @@
         const cancelarMaestro = document.getElementById('cancelarMaestro');
 
         if (btnAgregarMaestro) {
-            btnAgregarMaestro.addEventListener('click', () => modalMaestro.style.display = 'flex');
+            btnAgregarMaestro.onclick = function() {
+                modalMaestro.style.display = 'flex';
+            };
         }
 
         function cerrarModalMaestro() {
             modalMaestro.style.display = 'none';
         }
 
-        if (closeModalMaestro) closeModalMaestro.addEventListener('click', cerrarModalMaestro);
-        if (cancelarMaestro) cancelarMaestro.addEventListener('click', cerrarModalMaestro);
+        if (closeModalMaestro) closeModalMaestro.onclick = cerrarModalMaestro;
+        if (cancelarMaestro) cancelarMaestro.onclick = cerrarModalMaestro;
 
         // Modal Editar Carrera
         const modalCarrera = document.getElementById('modalCarrera');
@@ -284,67 +289,71 @@
         const cancelarCarrera = document.getElementById('cancelarCarrera');
 
         if (btnEditarCarrera) {
-            btnEditarCarrera.addEventListener('click', () => modalCarrera.style.display = 'flex');
+            btnEditarCarrera.onclick = function() {
+                modalCarrera.style.display = 'flex';
+            };
         }
 
         function cerrarModalCarrera() {
             modalCarrera.style.display = 'none';
         }
 
-        if (closeModalCarrera) closeModalCarrera.addEventListener('click', cerrarModalCarrera);
-        if (cancelarCarrera) cancelarCarrera.addEventListener('click', cerrarModalCarrera);
+        if (closeModalCarrera) closeModalCarrera.onclick = cerrarModalCarrera;
+        if (cancelarCarrera) cancelarCarrera.onclick = cerrarModalCarrera;
 
         // Cerrar modales al hacer clic fuera
-        window.addEventListener('click', (e) => {
+        window.onclick = function(e) {
             if (e.target === modalAlumno) cerrarModalAlumno();
             if (e.target === modalMaestro) cerrarModalMaestro();
             if (e.target === modalCarrera) cerrarModalCarrera();
-        });
+        };
 
         // Guardar alumno
         const guardarAlumno = document.getElementById('guardarAlumno');
         if (guardarAlumno) {
-            guardarAlumno.addEventListener('click', () => {
+            guardarAlumno.onclick = function() {
                 const matricula = document.getElementById('matriculaAlumno').value;
                 const nombre = document.getElementById('nombreAlumno').value;
-                if (matricula && nombre) {
-                    alert('Alumno agregado correctamente');
+                const apellidos = document.getElementById('apellidosAlumno').value;
+                if (matricula && nombre && apellidos) {
+                    alert('Alumno agregado correctamente: ' + nombre + ' ' + apellidos);
                     cerrarModalAlumno();
-                    // Limpiar campos
                     document.getElementById('matriculaAlumno').value = '';
                     document.getElementById('nombreAlumno').value = '';
+                    document.getElementById('apellidosAlumno').value = '';
                     document.getElementById('grupoAlumno').value = '';
                     document.getElementById('correoAlumno').value = '';
                 } else {
-                    alert('Por favor complete los campos obligatorios');
+                    alert('Por favor complete Matrícula, Nombre y Apellidos');
                 }
-            });
+            };
         }
 
         // Guardar maestro
         const guardarMaestro = document.getElementById('guardarMaestro');
         if (guardarMaestro) {
-            guardarMaestro.addEventListener('click', () => {
+            guardarMaestro.onclick = function() {
                 const nombre = document.getElementById('nombreMaestro').value;
+                const apellidos = document.getElementById('apellidosMaestro').value;
                 const correo = document.getElementById('correoMaestro').value;
-                if (nombre && correo) {
-                    alert('Maestro agregado correctamente');
+                if (nombre && apellidos && correo) {
+                    alert('Maestro agregado correctamente: ' + nombre + ' ' + apellidos);
                     cerrarModalMaestro();
-                    // Limpiar campos
                     document.getElementById('numEmpleado').value = '';
                     document.getElementById('nombreMaestro').value = '';
+                    document.getElementById('apellidosMaestro').value = '';
                     document.getElementById('correoMaestro').value = '';
                     document.getElementById('telefonoMaestro').value = '';
                 } else {
-                    alert('Por favor complete los campos obligatorios');
+                    alert('Por favor complete Nombre, Apellidos y Correo');
                 }
-            });
+            };
         }
 
         // Guardar carrera
         const guardarCarrera = document.getElementById('guardarCarrera');
         if (guardarCarrera) {
-            guardarCarrera.addEventListener('click', () => {
+            guardarCarrera.onclick = function() {
                 const nombre = document.getElementById('nombreCarrera').value;
                 if (nombre) {
                     alert('Carrera actualizada: ' + nombre);
@@ -353,22 +362,21 @@
                 } else {
                     alert('Por favor ingrese el nombre de la carrera');
                 }
-            });
+            };
         }
 
         // Eliminar carrera
         const btnEliminarCarrera = document.getElementById('btnEliminarCarrera');
         if (btnEliminarCarrera) {
-            btnEliminarCarrera.addEventListener('click', () => {
+            btnEliminarCarrera.onclick = function() {
                 if (confirm('¿Estás seguro de eliminar esta carrera?')) {
                     alert('Carrera eliminada');
-                    // window.location.href = '/dashboard/admin';
                 }
-            });
+            };
         }
 
         // Botones de acciones
-        document.addEventListener('click', (e) => {
+        document.addEventListener('click', function(e) {
             if (e.target.classList.contains('btn-ver-expediente')) {
                 alert('Ver expediente del alumno');
             }

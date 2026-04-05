@@ -41,3 +41,7 @@ Route::get('/dashboard/maestro/grupos', function () {
 Route::get('/dashboard/maestro/expediente/alumno', function () {
     return view('dashboard.maestro.expediente_alumno_maestro');
 });
+
+Route::get('/dashboard/admin/carrera', function () {
+    return view('dashboard.admin.admin_carrera');
+});
