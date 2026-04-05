@@ -1,218 +1,94 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Administrador - Detalle de Carrera')
-@section('user-role', 'Administrador')
-@section('avatar-iniciales', 'AD')
-@section('nombre-completo', 'Admin User')
-@section('welcome-message', '[Nombre de la Carrera]')
-@section('subtitle', 'Gestiona los grupos y maestros de esta carrera')
+@section('title', 'Panel Maestro')
+@section('user-role', 'Maestro')
+@section('avatar-iniciales', 'CS')
+@section('nombre-completo', 'Carlos Sánchez')
+@section('welcome-message', '¡Bienvenido, Carlos!')
+@section('subtitle', 'Selecciona una carrera para gestionar sus grupos')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/dashboard_admin.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/dashboard_maestro.css') }}">
 @endpush
 
 @section('content')
-    <div class="carrera-container">
-        <!-- Flecha de regreso -->
-        <div class="back-button-custom" id="backButton">
-            <img src="{{ asset('img/flecha.png') }}" alt="Regresar" class="back-icon-custom">
-        </div>
+    <!-- Botones superiores -->
+    <div class="maestro-buttons">
+        <button class="btn-lista-global" id="btnListaGlobal">Ver lista de alumnos global</button>
+    </div>
 
-        <!-- Header de la carrera -->
-        <div class="carrera-header">
-            <div class="carrera-logo">
-                <div class="logo-circular">
-                    <img src="{{ asset('img/carreras/ing_alimentos.png') }}" alt="Logo de la carrera">
+    <!-- Carreras -->
+    <div class="carreras-container">
+        <div class="carreras-grid">
+            @php
+                $carreras = [
+                    ['img' => 'ing_alimentos.png', 'alt' => 'Ingeniería en Alimentos'],
+                    ['img' => 'ing_civil.png', 'alt' => 'Ingeniería Civil'],
+                    ['img' => 'ing_inte_artificial.png', 'alt' => 'Ingeniería Artificial'],
+                    ['img' => 'ing_logistica.png', 'alt' => 'Ingeniería Logística'],
+                    ['img' => 'ing_mant_industrial.png', 'alt' => 'Ingeniería Mantenimiento Industrial'],
+                    ['img' => 'ing_mecatronica.png', 'alt' => 'Ingeniería Mecatrónica'],
+                    ['img' => 'ing_micro_semic.png', 'alt' => 'Ingeniería Micro Semiconductores'],
+                    ['img' => 'ing_tec_info.png', 'alt' => 'Ingeniería Tecnologías Información'],
+                    ['img' => 'lic_admin.png', 'alt' => 'Licenciatura Administración'],
+                    ['img' => 'lic_gastro.png', 'alt' => 'Gastronomía'],
+                    ['img' => 'lic_merca.png', 'alt' => 'Licenciatura Mercadotecnia'],
+                    ['img' => 'lic_psicologia.png', 'alt' => 'Psicología'],
+                    ['img' => 'lic_seg_publ.png', 'alt' => 'Seguridad Pública'],
+                    ['img' => 'lic_turismo.png', 'alt' => 'Licenciatura Turismo'],
+                ];
+            @endphp
+
+            @foreach($carreras as $carrera)
+                <div class="carrera-card" data-carrera="{{ $carrera['alt'] }}">
+                    <div class="carrera-img">
+                        <img src="{{ asset('img/carreras/' . $carrera['img']) }}" alt="{{ $carrera['alt'] }}">
+                    </div>
                 </div>
-                <span class="logo-texto">Logo de la carrera</span>
-            </div>
-            <div class="carrera-info">
-                <h2>[Nombre de la Carrera]</h2>
-                <p>Gestión de la carrera</p>
-            </div>
-            <div class="carrera-acciones">
-                <button class="btn-editar" id="btnEditarCarrera">
-                    <img src="{{ asset('img/editar.png') }}" alt="Editar" class="btn-icon"> Editar carrera
-                </button>
-                <button class="btn-eliminar-carrera" id="btnEliminarCarrera">
-                    ✕ Eliminar carrera
-                </button>
-            </div>
+            @endforeach
         </div>
+    </div>
 
-        <!-- Pestañas -->
-        <div class="tabs">
-            <button class="tab-btn active" data-tab="grupos">Grupos</button>
-            <button class="tab-btn" data-tab="maestros">Maestros</button>
-        </div>
-
-        <!-- Contenido Grupos -->
-        <div class="tab-content active" id="tab-grupos">
-            <div class="filtro-grupo">
-                <select class="grupo-select" id="filtroGrupo">
-                    <option value="">Seleccionar grupo</option>
-                    <option value="A">Grupo A</option>
-                    <option value="B">Grupo B</option>
-                    <option value="C">Grupo C</option>
-                    <option value="D">Grupo D</option>
-                </select>
-                <button class="btn-agregar" id="btnAgregarAlumno">
-                    + Agregar alumno
-                </button>
+    <!-- Modal para lista global de alumnos -->
+    <div id="modalListaGlobal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Lista de alumnos global</h3>
+                <span class="modal-close" id="closeModal">&times;</span>
             </div>
-            <div class="tabla-container">
-                <table class="tabla-alumnos">
-                    <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>Matrícula</th>
-                            <th>Nombre</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="alumnosBody">
-                        @for($i = 1; $i <= 4; $i++)
+            <div class="modal-body">
+                <div class="modal-actions">
+                    <div class="modal-filtro">
+                        <img src="{{ asset('img/lupa.png') }}" alt="Buscar" class="lupa-icon-modal">
+                        <input type="text" id="busquedaModal" placeholder="Buscar por nombre o matrícula..." class="input-busqueda-modal">
+                    </div>
+                    <button class="btn-descargar-modal">
+                        <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-modal">
+                        Descargar lista
+                    </button>
+                </div>
+                <div class="tabla-container">
+                    <table class="tabla-alumnos-global" id="tablaAlumnosModal">
+                        <thead>
                             <tr>
-                                <td class="col-numero">{{ $i }}</td>
-                                <td class="col-matricula"></td>
-                                <td class="col-nombre"></td>
-                                <td class="col-acciones">
-                                    <button class="btn-ver-expediente">Ver expediente</button>
-                                    <button class="btn-eliminar">Eliminar</button>
-</td>
+                                <th>Matrícula</th>
+                                <th>Nombre</th>
+                                <th>Carrera</th>
+                                <th>Grupo</th>
                             </tr>
-                        @endfor
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Contenido Maestros -->
-        <div class="tab-content" id="tab-maestros">
-            <div class="filtro-grupo" style="justify-content: flex-end;">
-                <button class="btn-agregar" id="btnAgregarMaestro">
-                    + Agregar maestro
-                </button>
-            </div>
-            <div class="tabla-container">
-                <table class="tabla-maestros">
-                    <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>Nombre</th>
-                            <th>Correo</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="maestrosBody">
-                        @for($i = 1; $i <= 4; $i++)
-                            <tr>
-                                <td class="col-numero">{{ $i }}</td>
-                                <td class="col-nombre"></td>
-                                <td class="col-correo"></td>
-                                <td class="col-acciones">>
-                                    <button class="btn-ver-perfil">Ver perfil</button>
-                                    <button class="btn-eliminar">Eliminar</button>
-</td>
-                            </tr>
-                        @endfor
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal para agregar alumno -->
-    <div id="modalAgregarAlumno" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Agregar alumno</h3>
-                <span class="modal-close" id="closeModalAlumno">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label>Matrícula</label>
-                    <input type="text" id="matriculaAlumno" placeholder="Ej: UTN-2024-001">
+                        </thead>
+                        <tbody>
+                            @for($i = 0; $i < 5; $i++)
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            @endfor
+                        </tbody>
+                    </table>
                 </div>
-                <div class="form-group">
-                    <label>Nombre completo</label>
-                    <input type="text" id="nombreAlumno" placeholder="Ej: Juan Pérez García">
-                </div>
-                <div class="form-group">
-                    <label>Grupo</label>
-                    <select id="grupoAlumno">
-                        <option value="">Seleccionar grupo</option>
-                        <option value="A">Grupo A</option>
-                        <option value="B">Grupo B</option>
-                        <option value="C">Grupo C</option>
-                        <option value="D">Grupo D</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Correo electrónico</label>
-                    <input type="email" id="correoAlumno" placeholder="ejemplo@utnay.edu.mx">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-cancelar" id="cancelarAlumno">Cancelar</button>
-                <button class="btn-guardar" id="guardarAlumno">Guardar alumno</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal para agregar maestro -->
-    <div id="modalAgregarMaestro" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Agregar maestro</h3>
-                <span class="modal-close" id="closeModalMaestro">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label>Número de empleado</label>
-                    <input type="text" id="numEmpleado" placeholder="Ej: EMP-2024-001">
-                </div>
-                <div class="form-group">
-                    <label>Nombre completo</label>
-                    <input type="text" id="nombreMaestro" placeholder="Ej: Roberto Sánchez Hernández">
-                </div>
-                <div class="form-group">
-                    <label>Correo electrónico</label>
-                    <input type="email" id="correoMaestro" placeholder="ejemplo@utnay.edu.mx">
-                </div>
-                <div class="form-group">
-                    <label>Teléfono</label>
-                    <input type="text" id="telefonoMaestro" placeholder="Ej: 311-123-4567">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-cancelar" id="cancelarMaestro">Cancelar</button>
-                <button class="btn-guardar" id="guardarMaestro">Guardar maestro</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal para editar carrera -->
-    <div id="modalCarrera" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Editar carrera</h3>
-                <span class="modal-close" id="closeModalCarrera">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label>Nombre de la carrera</label>
-                    <input type="text" id="nombreCarrera" value="[Nombre de la Carrera]">
-                </div>
-                <div class="form-group">
-                    <label>Logo de la carrera</label>
-                    <input type="file" id="logoCarrera" accept="image/*">
-                    <small class="form-text">Selecciona una nueva imagen para el logo</small>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-cancelar" id="cancelarCarrera">Cancelar</button>
-                <button class="btn-guardar" id="guardarCarrera">Guardar cambios</button>
             </div>
         </div>
     </div>
@@ -221,166 +97,52 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Flecha de regreso
-        const backBtn = document.getElementById('backButton');
-        if (backBtn) {
-            backBtn.addEventListener('click', function() {
-                window.location.href = '/dashboard/admin';
+        // Modal lista global
+        const modal = document.getElementById('modalListaGlobal');
+        const btn = document.getElementById('btnListaGlobal');
+        const closeBtn = document.getElementById('closeModal');
+
+        if (btn && modal && closeBtn) {
+            btn.addEventListener('click', function() {
+                modal.style.display = 'flex';
             });
-        }
 
-        // Cambio de pestañas
-        const tabBtns = document.querySelectorAll('.tab-btn');
-        const tabContents = document.querySelectorAll('.tab-content');
-
-        tabBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const tabId = btn.getAttribute('data-tab');
-                tabBtns.forEach(b => b.classList.remove('active'));
-                tabContents.forEach(c => c.classList.remove('active'));
-                btn.classList.add('active');
-                document.getElementById(`tab-${tabId}`).classList.add('active');
+            closeBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
             });
-        });
 
-        // Modal Agregar Alumno
-        const modalAlumno = document.getElementById('modalAgregarAlumno');
-        const btnAgregarAlumno = document.getElementById('btnAgregarAlumno');
-        const closeModalAlumno = document.getElementById('closeModalAlumno');
-        const cancelarAlumno = document.getElementById('cancelarAlumno');
-
-        if (btnAgregarAlumno) {
-            btnAgregarAlumno.addEventListener('click', () => modalAlumno.style.display = 'flex');
-        }
-
-        function cerrarModalAlumno() {
-            modalAlumno.style.display = 'none';
-        }
-
-        if (closeModalAlumno) closeModalAlumno.addEventListener('click', cerrarModalAlumno);
-        if (cancelarAlumno) cancelarAlumno.addEventListener('click', cerrarModalAlumno);
-
-        // Modal Agregar Maestro
-        const modalMaestro = document.getElementById('modalAgregarMaestro');
-        const btnAgregarMaestro = document.getElementById('btnAgregarMaestro');
-        const closeModalMaestro = document.getElementById('closeModalMaestro');
-        const cancelarMaestro = document.getElementById('cancelarMaestro');
-
-        if (btnAgregarMaestro) {
-            btnAgregarMaestro.addEventListener('click', () => modalMaestro.style.display = 'flex');
-        }
-
-        function cerrarModalMaestro() {
-            modalMaestro.style.display = 'none';
-        }
-
-        if (closeModalMaestro) closeModalMaestro.addEventListener('click', cerrarModalMaestro);
-        if (cancelarMaestro) cancelarMaestro.addEventListener('click', cerrarModalMaestro);
-
-        // Modal Editar Carrera
-        const modalCarrera = document.getElementById('modalCarrera');
-        const btnEditarCarrera = document.getElementById('btnEditarCarrera');
-        const closeModalCarrera = document.getElementById('closeModalCarrera');
-        const cancelarCarrera = document.getElementById('cancelarCarrera');
-
-        if (btnEditarCarrera) {
-            btnEditarCarrera.addEventListener('click', () => modalCarrera.style.display = 'flex');
-        }
-
-        function cerrarModalCarrera() {
-            modalCarrera.style.display = 'none';
-        }
-
-        if (closeModalCarrera) closeModalCarrera.addEventListener('click', cerrarModalCarrera);
-        if (cancelarCarrera) cancelarCarrera.addEventListener('click', cerrarModalCarrera);
-
-        // Cerrar modales al hacer clic fuera
-        window.addEventListener('click', (e) => {
-            if (e.target === modalAlumno) cerrarModalAlumno();
-            if (e.target === modalMaestro) cerrarModalMaestro();
-            if (e.target === modalCarrera) cerrarModalCarrera();
-        });
-
-        // Guardar alumno
-        const guardarAlumno = document.getElementById('guardarAlumno');
-        if (guardarAlumno) {
-            guardarAlumno.addEventListener('click', () => {
-                const matricula = document.getElementById('matriculaAlumno').value;
-                const nombre = document.getElementById('nombreAlumno').value;
-                if (matricula && nombre) {
-                    alert('Alumno agregado correctamente');
-                    cerrarModalAlumno();
-                    // Limpiar campos
-                    document.getElementById('matriculaAlumno').value = '';
-                    document.getElementById('nombreAlumno').value = '';
-                    document.getElementById('grupoAlumno').value = '';
-                    document.getElementById('correoAlumno').value = '';
-                } else {
-                    alert('Por favor complete los campos obligatorios');
+            window.addEventListener('click', function(event) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
                 }
             });
         }
 
-        // Guardar maestro
-        const guardarMaestro = document.getElementById('guardarMaestro');
-        if (guardarMaestro) {
-            guardarMaestro.addEventListener('click', () => {
-                const nombre = document.getElementById('nombreMaestro').value;
-                const correo = document.getElementById('correoMaestro').value;
-                if (nombre && correo) {
-                    alert('Maestro agregado correctamente');
-                    cerrarModalMaestro();
-                    // Limpiar campos
-                    document.getElementById('numEmpleado').value = '';
-                    document.getElementById('nombreMaestro').value = '';
-                    document.getElementById('correoMaestro').value = '';
-                    document.getElementById('telefonoMaestro').value = '';
-                } else {
-                    alert('Por favor complete los campos obligatorios');
-                }
+        // Filtro dentro del modal
+        const inputBusquedaModal = document.getElementById('busquedaModal');
+        if (inputBusquedaModal) {
+            inputBusquedaModal.addEventListener('input', function() {
+                const busqueda = this.value.toLowerCase();
+                const filas = document.querySelectorAll('#tablaAlumnosModal tbody tr');
+                
+                filas.forEach(fila => {
+                    const texto = fila.innerText.toLowerCase();
+                    if (texto.includes(busqueda) || busqueda === '') {
+                        fila.style.display = '';
+                    } else {
+                        fila.style.display = 'none';
+                    }
+                });
             });
         }
 
-        // Guardar carrera
-        const guardarCarrera = document.getElementById('guardarCarrera');
-        if (guardarCarrera) {
-            guardarCarrera.addEventListener('click', () => {
-                const nombre = document.getElementById('nombreCarrera').value;
-                if (nombre) {
-                    alert('Carrera actualizada: ' + nombre);
-                    cerrarModalCarrera();
-                    document.querySelector('.carrera-info h2').textContent = nombre;
-                } else {
-                    alert('Por favor ingrese el nombre de la carrera');
-                }
+        // Click en carrera
+        document.querySelectorAll('.carrera-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const carrera = this.getAttribute('data-carrera');
+                alert('Navegar a grupos de: ' + carrera);
+                // window.location.href = '/dashboard/maestro/grupos';
             });
-        }
-
-        // Eliminar carrera
-        const btnEliminarCarrera = document.getElementById('btnEliminarCarrera');
-        if (btnEliminarCarrera) {
-            btnEliminarCarrera.addEventListener('click', () => {
-                if (confirm('¿Estás seguro de eliminar esta carrera?')) {
-                    alert('Carrera eliminada');
-                    // window.location.href = '/dashboard/admin';
-                }
-            });
-        }
-
-        // Botones de acciones
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('btn-ver-expediente')) {
-                alert('Ver expediente del alumno');
-            }
-            if (e.target.classList.contains('btn-ver-perfil')) {
-                alert('Ver perfil del maestro');
-            }
-            if (e.target.classList.contains('btn-eliminar')) {
-                if (confirm('¿Estás seguro de eliminar este elemento?')) {
-                    const row = e.target.closest('tr');
-                    if (row) row.remove();
-                }
-            }
         });
     });
 </script>

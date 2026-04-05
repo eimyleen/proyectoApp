@@ -29,6 +29,7 @@
             </div>
             <div class="carrera-info">
                 <h2>[Nombre de la Carrera]</h2>
+                <p class="carrera-clave">Clave: IC</p>
                 <p>Gestión de la carrera</p>
             </div>
             <div class="carrera-acciones">
@@ -49,13 +50,27 @@
 
         <!-- Contenido Grupos -->
         <div class="tab-content active" id="tab-grupos">
+            <!-- Panel de información del tutor -->
+            <div class="tutor-info-panel">
+                <div class="tutor-info">
+                    <span class="tutor-label">Tutor:</span>
+                    <span class="tutor-nombre" id="tutorNombre"></span>
+                </div>
+            </div>
+
             <div class="filtro-grupo">
                 <select class="grupo-select" id="filtroGrupo">
                     <option value="">Seleccionar grupo</option>
+                    <!-- Los grupos se cargarán dinámicamente desde el backend -->
                 </select>
-                <button class="btn-agregar" id="btnAgregarAlumno">
-                    + Agregar alumno
-                </button>
+                <div class="botones-accion">
+                    <button class="btn-agregar" id="btnAgregarAlumno">
+                        + Agregar alumno
+                    </button>
+                    <button class="btn-descargar-lista" id="btnDescargarGrupos">
+                        <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-descarga"> Descargar lista de grupos
+                    </button>
+                </div>
             </div>
             <div class="tabla-container">
                 <table class="tabla-alumnos">
@@ -87,9 +102,14 @@
         <!-- Contenido Maestros -->
         <div class="tab-content" id="tab-maestros">
             <div class="filtro-grupo" style="justify-content: flex-end;">
-                <button class="btn-agregar" id="btnAgregarMaestro">
-                    + Agregar maestro
-                </button>
+                <div class="botones-accion">
+                    <button class="btn-agregar" id="btnAgregarMaestro">
+                        + Agregar maestro
+                    </button>
+                    <button class="btn-descargar-lista" id="btnDescargarMaestros">
+                        <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-descarga"> Descargar lista de maestros
+                    </button>
+                </div>
             </div>
             <div class="tabla-container">
                 <table class="tabla-maestros">
@@ -206,6 +226,10 @@
                     <input type="text" id="nombreCarrera" value="[Nombre de la Carrera]">
                 </div>
                 <div class="form-group">
+                    <label>Clave de la carrera</label>
+                    <input type="text" id="claveCarrera" value="IC">
+                </div>
+                <div class="form-group">
                     <label>Logo de la carrera</label>
                     <input type="file" id="logoCarrera" accept="image/*">
                     <small class="form-text">Selecciona una nueva imagen para el logo</small>
@@ -222,7 +246,7 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Flecha de regreso (usa el mismo sistema que las otras interfaces)
+        // Flecha de regreso
         const backButton = document.getElementById('backButton');
         if (backButton) {
             backButton.addEventListener('click', function() {
@@ -244,6 +268,22 @@
             });
         });
 
+        // Tutor (ejemplo, backend llenará)
+        const tutorNombreSpan = document.getElementById('tutorNombre');
+        const filtroGrupo = document.getElementById('filtroGrupo');
+
+        function cargarTutor(grupo) {
+            if (tutorNombreSpan) {
+                tutorNombreSpan.textContent = '';
+            }
+        }
+
+        if (filtroGrupo) {
+            filtroGrupo.addEventListener('change', function() {
+                cargarTutor(this.value);
+            });
+        }
+
         // Modal Agregar Alumno
         const modalAlumno = document.getElementById('modalAgregarAlumno');
         const btnAgregarAlumno = document.getElementById('btnAgregarAlumno');
@@ -258,6 +298,11 @@
 
         function cerrarModalAlumno() {
             modalAlumno.style.display = 'none';
+            document.getElementById('matriculaAlumno').value = '';
+            document.getElementById('nombreAlumno').value = '';
+            document.getElementById('apellidosAlumno').value = '';
+            document.getElementById('grupoAlumno').value = '';
+            document.getElementById('correoAlumno').value = '';
         }
 
         if (closeModalAlumno) closeModalAlumno.onclick = cerrarModalAlumno;
@@ -277,6 +322,11 @@
 
         function cerrarModalMaestro() {
             modalMaestro.style.display = 'none';
+            document.getElementById('numEmpleado').value = '';
+            document.getElementById('nombreMaestro').value = '';
+            document.getElementById('apellidosMaestro').value = '';
+            document.getElementById('correoMaestro').value = '';
+            document.getElementById('telefonoMaestro').value = '';
         }
 
         if (closeModalMaestro) closeModalMaestro.onclick = cerrarModalMaestro;
@@ -316,13 +366,8 @@
                 const nombre = document.getElementById('nombreAlumno').value;
                 const apellidos = document.getElementById('apellidosAlumno').value;
                 if (matricula && nombre && apellidos) {
-                    alert('Alumno agregado correctamente: ' + nombre + ' ' + apellidos);
+                    alert('Alumno agregado correctamente');
                     cerrarModalAlumno();
-                    document.getElementById('matriculaAlumno').value = '';
-                    document.getElementById('nombreAlumno').value = '';
-                    document.getElementById('apellidosAlumno').value = '';
-                    document.getElementById('grupoAlumno').value = '';
-                    document.getElementById('correoAlumno').value = '';
                 } else {
                     alert('Por favor complete Matrícula, Nombre y Apellidos');
                 }
@@ -337,13 +382,8 @@
                 const apellidos = document.getElementById('apellidosMaestro').value;
                 const correo = document.getElementById('correoMaestro').value;
                 if (nombre && apellidos && correo) {
-                    alert('Maestro agregado correctamente: ' + nombre + ' ' + apellidos);
+                    alert('Maestro agregado correctamente');
                     cerrarModalMaestro();
-                    document.getElementById('numEmpleado').value = '';
-                    document.getElementById('nombreMaestro').value = '';
-                    document.getElementById('apellidosMaestro').value = '';
-                    document.getElementById('correoMaestro').value = '';
-                    document.getElementById('telefonoMaestro').value = '';
                 } else {
                     alert('Por favor complete Nombre, Apellidos y Correo');
                 }
@@ -355,12 +395,14 @@
         if (guardarCarrera) {
             guardarCarrera.onclick = function() {
                 const nombre = document.getElementById('nombreCarrera').value;
-                if (nombre) {
+                const clave = document.getElementById('claveCarrera').value;
+                if (nombre && clave) {
                     alert('Carrera actualizada: ' + nombre);
                     cerrarModalCarrera();
                     document.querySelector('.carrera-info h2').textContent = nombre;
+                    document.querySelector('.carrera-clave').textContent = 'Clave: ' + clave;
                 } else {
-                    alert('Por favor ingrese el nombre de la carrera');
+                    alert('Por favor ingrese el nombre y la clave de la carrera');
                 }
             };
         }
@@ -372,6 +414,21 @@
                 if (confirm('¿Estás seguro de eliminar esta carrera?')) {
                     alert('Carrera eliminada');
                 }
+            };
+        }
+
+        // Botones de descarga
+        const btnDescargarGrupos = document.getElementById('btnDescargarGrupos');
+        if (btnDescargarGrupos) {
+            btnDescargarGrupos.onclick = function() {
+                alert('Descargar lista de grupos');
+            };
+        }
+
+        const btnDescargarMaestros = document.getElementById('btnDescargarMaestros');
+        if (btnDescargarMaestros) {
+            btnDescargarMaestros.onclick = function() {
+                alert('Descargar lista de maestros');
             };
         }
 

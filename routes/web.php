@@ -45,3 +45,7 @@ Route::get('/dashboard/maestro/expediente/alumno', function () {
 Route::get('/dashboard/admin/carrera', function () {
     return view('dashboard.admin.admin_carrera');
 });
+
+Route::get('/dashboard/admin', function () {
+    return view('dashboard.admin.admin');
+});

@@ -47,29 +47,29 @@
     filter: brightness(0) invert(1);
 }
 
-/* Carreras */
-.carreras-dashboard-container {
-    max-width: 1000px;
+/* Carreras - Grid principal */
+.carreras-container {
+    max-width: 1200px;
     margin: 0 auto;
     padding: 20px 0;
 }
 
-.carreras-dashboard-grid {
+.carreras-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 14px;
+    gap: 20px;
 }
 
-.carrera-dashboard-card {
+.carrera-card {
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
-.carrera-dashboard-card:hover {
+.carrera-card:hover {
     transform: scale(1.05);
 }
 
-.carrera-dashboard-img {
+.carrera-img {
     width: 100%;
     aspect-ratio: 1 / 1;
     background: white;
@@ -77,18 +77,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 12px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     overflow: hidden;
 }
 
-.carrera-dashboard-img img {
+.carrera-img img {
     width: 100%;
     height: 100%;
     object-fit: contain;
 }
 
-/* Modal */
+/* Modal grande (lista global) */
 .modal {
     display: none;
     position: fixed;
@@ -104,10 +104,10 @@
 
 .modal-content {
     background: white;
-    border-radius: 20px;
-    width: 90%;
-    max-width: 900px;
-    max-height: 80vh;
+    border-radius: 24px;
+    width: 95%;
+    max-width: 1200px;
+    max-height: 85vh;
     overflow: hidden;
     box-shadow: 0 20px 35px rgba(0,0,0,0.2);
 }
@@ -116,23 +116,23 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 24px;
+    padding: 24px 32px;
     border-bottom: 1px solid #e5e7eb;
     background: #0e7c7c;
     color: white;
+    border-radius: 24px 24px 0 0;
 }
 
 .modal-header h3 {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     font-weight: 600;
     margin: 0;
 }
 
 .modal-close {
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.2s;
     line-height: 1;
 }
 
@@ -141,60 +141,59 @@
 }
 
 .modal-body {
-    padding: 24px;
-    max-height: calc(80vh - 70px);
+    padding: 32px;
+    max-height: calc(85vh - 80px);
     overflow-y: auto;
 }
 
-/* Contenedor de acciones (filtro + botón) */
+/* Acciones dentro del modal */
 .modal-actions {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
+    gap: 20px;
+    margin-bottom: 28px;
 }
 
-/* Filtro */
 .modal-filtro {
     display: flex;
     align-items: center;
     background: #f9fafb;
-    border-radius: 40px;
-    padding: 8px 16px;
+    border-radius: 50px;
+    padding: 12px 20px;
     border: 1px solid #e5e7eb;
-    width: 260px;
+    flex: 1;
+    max-width: 350px;
 }
 
 .lupa-icon-modal {
-    width: 16px;
-    height: 16px;
-    margin-right: 8px;
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
     opacity: 0.6;
 }
 
 .input-busqueda-modal {
     border: none;
     outline: none;
-    font-size: 0.85rem;
+    font-size: 1rem;
     width: 100%;
     background: transparent;
 }
 
-/* Botón dentro del modal */
 .btn-descargar-modal {
     background: #0891b2;
     color: white;
     border: none;
-    padding: 8px 20px;
-    font-size: 0.85rem;
+    padding: 12px 28px;
+    font-size: 1rem;
     font-weight: 600;
-    border-radius: 40px;
+    border-radius: 50px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     white-space: nowrap;
 }
 
@@ -203,12 +202,12 @@
 }
 
 .btn-icon-modal {
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     filter: brightness(0) invert(1);
 }
 
-/* Tabla */
+/* Tabla dentro del modal */
 .tabla-container {
     overflow-x: auto;
 }
@@ -220,7 +219,7 @@
 
 .tabla-alumnos-global th {
     text-align: left;
-    padding: 12px 16px;
+    padding: 14px 20px;
     background: #f9fafb;
     font-weight: 600;
     color: #374151;
@@ -228,7 +227,7 @@
 }
 
 .tabla-alumnos-global td {
-    padding: 12px 16px;
+    padding: 14px 20px;
     border-bottom: 1px solid #e5e7eb;
     color: #4b5563;
 }
@@ -350,142 +349,7 @@
     color: #1f2937;
 }
 
-.carreras-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 12px;
-}
-
-.carrera-item {
-    background: #f9fafb;
-    border-radius: 10px;
-    padding: 10px 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.carrera-icono {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    background: #e5e7eb;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-}
-
-.carrera-nombre {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #374151;
-}
-
-.grupos-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 12px;
-}
-
-.grupo-item {
-    background: #f9fafb;
-    border-radius: 10px;
-    padding: 10px 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.grupo-icono {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    background: #e5e7eb;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-}
-
-.grupo-nombre {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #374151;
-}
-
-.sin-grupo {
-    color: #9ca3af;
-    font-style: italic;
-    padding: 16px;
-    text-align: center;
-    background: #f9fafb;
-    border-radius: 12px;
-}
-
-/* Responsive para desktop mediano */
-@media (max-width: 900px) {
-    .carreras-grid {
-        grid-template-columns: repeat(5, 1fr);
-        gap: 16px;
-    }
-}
-
-/* Responsive para móvil */
-@media (max-width: 600px) {
-    .carreras-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 16px;
-    }
-    
-    .carrera-img {
-        padding: 16px;
-    }
-    
-    .maestro-buttons {
-        justify-content: center;
-    }
-    
-    .btn-lista-global {
-        padding: 12px 24px;
-        font-size: 1rem;
-    }
-    
-    .modal-actions {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    .btn-descargar-modal {
-        justify-content: center;
-        white-space: normal;
-    }
-    
-    .perfil-container {
-        padding: 24px;
-    }
-    
-    .datos-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-    
-    .avatar-grande {
-        width: 100px;
-        height: 100px;
-    }
-    
-    .avatar-iniciales-grande {
-        font-size: 2rem;
-    }
-    
-    .carreras-grid,
-    .grupos-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* Grupos */
+/* Grupos del maestro */
 .grupos-container {
     max-width: 1000px;
     margin: 0 auto;
@@ -526,7 +390,6 @@
     box-shadow: 0 0 0 2px rgba(14, 124, 124, 0.1);
 }
 
-/* Panel de información */
 .carrera-info-panel {
     display: flex;
     justify-content: space-between;
@@ -582,7 +445,7 @@
     filter: brightness(0) invert(1);
 }
 
-/* Tabla de alumnos */
+/* Tabla de alumnos en grupos */
 .tabla-alumnos {
     width: 100%;
     border-collapse: collapse;
@@ -622,25 +485,58 @@
     background: #0891b2;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .grupos-container {
-        padding: 24px;
-    }
-    
-    .carrera-info-panel {
-        flex-direction: column;
-        gap: 16px;
-        text-align: center;
-    }
-    
-    .tutor-info {
-        flex-direction: column;
-    }
-    
-    .grupo-select {
-        max-width: 100%;
-    }
+/* Header de carrera con logo */
+.carrera-header-grupos {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.carrera-logo-grupos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo-circular-grupos {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.logo-circular-grupos img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.logo-texto-grupos {
+    font-size: 0.7rem;
+    color: #6b7280;
+    text-align: center;
+}
+
+.carrera-info-grupos h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 4px;
+}
+
+.carrera-info-grupos p {
+    color: #6b7280;
+    font-size: 0.85rem;
 }
 
 /* Expediente del alumno (vista maestro) */
@@ -683,73 +579,6 @@
     width: 18px;
     height: 18px;
     filter: brightness(0) invert(1);
-}
-
-.perfil-section {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 32px;
-}
-
-.avatar-grande {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #06b6d4, #10b981);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
-
-.avatar-iniciales-grande {
-    color: white;
-    font-size: 2.5rem;
-    font-weight: 600;
-}
-
-.seccion-titulo {
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: #1f2937;
-    margin-top: 32px;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 2px solid #e5e7eb;
-}
-
-.seccion-titulo:first-of-type {
-    margin-top: 0;
-}
-
-.datos-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px 40px;
-}
-
-.dato-item {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.dato-item label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #6b7280;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.dato-valor {
-    font-size: 1rem;
-    font-weight: 500;
-    color: #1f2937;
-}
-
-.tabla-container {
-    overflow-x: auto;
 }
 
 .tabla-calificaciones,
@@ -823,226 +652,18 @@
     background: #d1d5db;
 }
 
-/* Modal */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-}
-
-.modal-content {
-    background: white;
-    border-radius: 20px;
-    width: 90%;
-    max-width: 500px;
-    box-shadow: 0 20px 35px rgba(0,0,0,0.2);
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 24px;
-    border-bottom: 1px solid #e5e7eb;
-    background: #0e7c7c;
-    color: white;
-    border-radius: 20px 20px 0 0;
-}
-
-.modal-header h3 {
-    font-size: 1.2rem;
-    font-weight: 600;
-}
-
-.modal-close {
-    font-size: 1.5rem;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.modal-body {
-    padding: 24px;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #374151;
-    margin-bottom: 8px;
-}
-
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    font-size: 0.9rem;
-    font-family: inherit;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: #0e7c7c;
-}
-
-.modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    padding: 16px 24px 24px;
-}
-
-.btn-guardar {
-    background: #0891b2;
-    color: white;
-    border: none;
-    padding: 10px 24px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    border-radius: 30px;
-    cursor: pointer;
-}
-
-.btn-guardar:hover {
-    background: #059669;
-}
-
-.btn-cancelar {
-    background: #e5e7eb;
-    color: #374151;
-    border: none;
-    padding: 10px 24px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    border-radius: 30px;
-    cursor: pointer;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .expediente-container {
-        padding: 24px;
-    }
-    
-    .datos-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-    
-    .tutorias-header {
-        flex-direction: column;
-        gap: 12px;
-        align-items: stretch;
-    }
-}
-
-/* Separador visual entre secciones */
 .separador-secciones {
     height: 2px;
     background: linear-gradient(90deg, transparent, #cbd5e1, transparent);
     margin: 40px 0;
 }
 
-/* Ajuste del título de tutorías */
 .tutorias-titulo {
     margin-top: 0 !important;
     border-bottom: none !important;
     padding-bottom: 0 !important;
 }
 
-/* Header de carrera con logo */
-.carrera-header-grupos {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    margin-bottom: 32px;
-    padding-bottom: 24px;
-    border-bottom: 2px solid #e5e7eb;
-}
-
-.carrera-logo-grupos {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-}
-
-.logo-circular-grupos {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    overflow: hidden;
-}
-
-.logo-circular-grupos img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-.logo-texto-grupos {
-    font-size: 0.7rem;
-    color: #6b7280;
-    text-align: center;
-}
-
-.carrera-info-grupos h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #1f2937;
-    margin-bottom: 4px;
-}
-
-.carrera-info-grupos p {
-    color: #6b7280;
-    font-size: 0.85rem;
-}
-
-/* Botón ver expediente */
-.btn-ver-expediente {
-    background: #0e7c7c;
-    color: white;
-    border: none;
-    padding: 6px 14px;
-    font-size: 0.8rem;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.btn-ver-expediente:hover {
-    background: #0891b2;
-}
-
-/* Responsive para grupos */
-@media (max-width: 768px) {
-    .carrera-header-grupos {
-        flex-direction: column;
-        text-align: center;
-    }
-}
-
-/* Filtro de período en expediente */
 .filtro-periodo-expediente {
     display: flex;
     justify-content: flex-end;
@@ -1080,4 +701,211 @@
 .periodo-select-expediente select:hover {
     background: #f3f4f6;
     border-color: #0e7c7c;
+}
+
+/* Modal pequeño (agregar/editar) */
+.modal-small {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-small .modal-content {
+    max-width: 500px;
+    max-height: none;
+}
+
+.modal-small .modal-header {
+    padding: 20px 24px;
+}
+
+.modal-small .modal-header h3 {
+    font-size: 1.2rem;
+}
+
+.modal-small .modal-close {
+    font-size: 1.5rem;
+}
+
+.modal-small .modal-body {
+    padding: 24px;
+}
+
+.modal-small .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 24px 24px;
+    background: white;
+}
+
+/* Formularios */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #0e7c7c;
+}
+
+.btn-guardar {
+    background: #0891b2;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+.btn-guardar:hover {
+    background: #059669;
+}
+
+.btn-cancelar {
+    background: #e5e7eb;
+    color: #374151;
+    border: none;
+    padding: 10px 24px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+/* Responsive general */
+@media (max-width: 900px) {
+    .carreras-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .grupos-container,
+    .perfil-container,
+    .expediente-container {
+        padding: 24px;
+    }
+    
+    .carrera-header-grupos {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .carrera-info-panel {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+    
+    .tutor-info {
+        flex-direction: column;
+    }
+    
+    .grupo-select {
+        max-width: 100%;
+    }
+    
+    .datos-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .tutorias-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+    }
+    
+    .modal-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .modal-filtro {
+        max-width: 100%;
+    }
+    
+    .btn-descargar-modal {
+        justify-content: center;
+        white-space: normal;
+    }
+    
+    .avatar-grande {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .avatar-iniciales-grande {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .carreras-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+    }
+    
+    .carrera-img {
+        padding: 16px;
+    }
+    
+    .maestro-buttons {
+        justify-content: center;
+    }
+    
+    .btn-lista-global {
+        padding: 12px 24px;
+        font-size: 1rem;
+    }
+    
+    .modal-header {
+        padding: 18px 24px;
+    }
+    
+    .modal-header h3 {
+        font-size: 1.2rem;
+    }
+    
+    .modal-body {
+        padding: 20px;
+    }
+    
+    .tabla-alumnos-global th,
+    .tabla-alumnos-global td {
+        padding: 10px 12px;
+        font-size: 0.85rem;
+    }
 }
