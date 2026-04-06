@@ -57,3 +57,7 @@ Route::get('/dashboard/admin/alumno/expediente', function () {
 Route::get('/dashboard/admin/maestro/perfil', function () {
     return view('dashboard.admin.admin_maestro_perfil');
 });
+
+Route::get('/dashboard/admin/perfil', function () {
+    return view('dashboard.admin.admin_perfil');
+});

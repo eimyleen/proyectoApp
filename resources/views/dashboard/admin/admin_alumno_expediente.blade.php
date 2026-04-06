@@ -2,8 +2,8 @@
 
 @section('title', 'Administrador - Perfil del Alumno')
 @section('user-role', 'Administrador')
-@section('avatar-iniciales', 'SR')
-@section('nombre-completo', 'Santiago Ramírez')
+@section('avatar-iniciales', 'RR')
+@section('nombre-completo', 'Raúl Ramírez')
 @section('welcome-message', 'Perfil del Alumno')
 @section('subtitle', 'Consulta y edita la información del alumno')
 
@@ -31,7 +31,7 @@
                 <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icono"> Descargar expediente
             </button>
         </div>
-        
+
         <!-- Foto de perfil -->
         <div class="perfil-section">
             <div class="foto-perfil">
@@ -99,10 +99,38 @@
             </div>
             <span class="logo-texto-carrera">Logo de la carrera</span>
         </div>
+
+        <!-- Sección de tutorías -->
+        <h3 class="seccion-titulo">Tutorías</h3>
+        <div class="tutorias-header">
+            <button class="btn-agregar-tutoria" id="btnAgregarTutoria">+ Agregar tutoría</button>
+        </div>
+        <div class="tabla-container">
+            <table class="tabla-tutorias">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Tema</th>
+                        <th>Notas</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tutoriasBody">
+                    @for($i = 0; $i < 2; $i++)
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><button class="btn-editar-tutoria">Editar</button> <button class="btn-eliminar-tutoria">Eliminar</button></td>
+                        </tr>
+                    @endfor
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Modal para editar alumno -->
-    <div id="modalEditarAlumno" class="modal-small">
+    <div id="modalEditarAlumno" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Editar alumno</h3>
@@ -170,6 +198,34 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal para agregar/editar tutoría -->
+    <div id="modalTutoria" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTutoriaTitulo">Agregar tutoría</h3>
+                <span class="modal-close" id="closeModalTutoria">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Fecha</label>
+                    <input type="date" id="fechaTutoria">
+                </div>
+                <div class="form-group">
+                    <label>Tema</label>
+                    <input type="text" id="temaTutoria" placeholder="Ej: Revisión de calificaciones">
+                </div>
+                <div class="form-group">
+                    <label>Notas</label>
+                    <textarea id="notasTutoria" rows="3" placeholder="Observaciones adicionales..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancelar" id="cancelarTutoria">Cancelar</button>
+                <button class="btn-guardar" id="guardarTutoria">Guardar tutoría</button>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('scripts')
@@ -186,8 +242,8 @@
         // Modal Editar Alumno
         const modalEditar = document.getElementById('modalEditarAlumno');
         const btnEditar = document.getElementById('btnEditarAlumno');
-        const closeModal = document.getElementById('closeModalEditar');
-        const cancelar = document.getElementById('cancelarEditar');
+        const closeModalEditar = document.getElementById('closeModalEditar');
+        const cancelarEditar = document.getElementById('cancelarEditar');
 
         if (btnEditar) {
             btnEditar.onclick = function() {
@@ -195,22 +251,17 @@
             };
         }
 
-        function cerrarModal() {
+        function cerrarModalEditar() {
             modalEditar.style.display = 'none';
         }
 
-        if (closeModal) closeModal.onclick = cerrarModal;
-        if (cancelar) cancelar.onclick = cerrarModal;
+        if (closeModalEditar) closeModalEditar.onclick = cerrarModalEditar;
+        if (cancelarEditar) cancelarEditar.onclick = cerrarModalEditar;
 
-        window.onclick = function(e) {
-            if (e.target === modalEditar) cerrarModal();
-        };
-
-        // Guardar cambios
-        const guardar = document.getElementById('guardarEditar');
-        if (guardar) {
-            guardar.onclick = function() {
-                // Actualizar valores en la vista
+        // Guardar cambios alumno
+        const guardarEditar = document.getElementById('guardarEditar');
+        if (guardarEditar) {
+            guardarEditar.onclick = function() {
                 document.getElementById('datoNombre').textContent = document.getElementById('editNombre').value;
                 document.getElementById('datoApellidos').textContent = document.getElementById('editApellidos').value;
                 document.getElementById('datoMatricula').textContent = document.getElementById('editMatricula').value;
@@ -230,14 +281,13 @@
                 document.getElementById('datoCorreo').textContent = document.getElementById('editCorreo').value;
                 document.getElementById('datoTelefono').textContent = document.getElementById('editTelefono').value;
                 
-                // Actualizar iniciales del avatar
                 const nombre = document.getElementById('editNombre').value;
                 const apellidos = document.getElementById('editApellidos').value;
                 const iniciales = (nombre ? nombre.charAt(0) : '') + (apellidos ? apellidos.charAt(0) : '');
                 document.querySelector('.avatar-iniciales-grande').textContent = iniciales.toUpperCase();
                 
                 alert('Alumno actualizado correctamente');
-                cerrarModal();
+                cerrarModalEditar();
             };
         }
 
@@ -248,6 +298,14 @@
                 if (confirm('¿Estás seguro de eliminar este alumno?')) {
                     alert('Alumno eliminado');
                 }
+            };
+        }
+
+        // Descargar expediente
+        const btnDescargarExpediente = document.getElementById('btnDescargarExpediente');
+        if (btnDescargarExpediente) {
+            btnDescargarExpediente.onclick = function() {
+                alert('Descargar expediente del alumno');
             };
         }
 
@@ -269,6 +327,92 @@
                 reader.readAsDataURL(e.target.files[0]);
             }
         });
+
+        // Modal Tutorías
+        const modalTutoria = document.getElementById('modalTutoria');
+        const btnAgregarTutoria = document.getElementById('btnAgregarTutoria');
+        const closeModalTutoria = document.getElementById('closeModalTutoria');
+        const cancelarTutoria = document.getElementById('cancelarTutoria');
+        const guardarTutoria = document.getElementById('guardarTutoria');
+        let editandoTutoria = false;
+        let filaEditando = null;
+
+        if (btnAgregarTutoria) {
+            btnAgregarTutoria.onclick = function() {
+                editandoTutoria = false;
+                filaEditando = null;
+                document.getElementById('modalTutoriaTitulo').textContent = 'Agregar tutoría';
+                document.getElementById('fechaTutoria').value = '';
+                document.getElementById('temaTutoria').value = '';
+                document.getElementById('notasTutoria').value = '';
+                modalTutoria.style.display = 'flex';
+            };
+        }
+
+        function cerrarModalTutoria() {
+            modalTutoria.style.display = 'none';
+        }
+
+        if (closeModalTutoria) closeModalTutoria.onclick = cerrarModalTutoria;
+        if (cancelarTutoria) cancelarTutoria.onclick = cerrarModalTutoria;
+
+        if (guardarTutoria) {
+            guardarTutoria.onclick = function() {
+                const fecha = document.getElementById('fechaTutoria').value;
+                const tema = document.getElementById('temaTutoria').value;
+                const notas = document.getElementById('notasTutoria').value;
+                
+                if (fecha && tema) {
+                    if (editandoTutoria && filaEditando) {
+                        filaEditando.cells[0].textContent = fecha;
+                        filaEditando.cells[1].textContent = tema;
+                        filaEditando.cells[2].textContent = notas;
+                        alert('Tutoría actualizada correctamente');
+                    } else {
+                        const tbody = document.getElementById('tutoriasBody');
+                        const row = tbody.insertRow();
+                        row.innerHTML = `
+                            <td>${fecha}</td>
+                            <td>${tema}</td>
+                            <td>${notas}</td>
+                            <td><button class="btn-editar-tutoria">Editar</button> <button class="btn-eliminar-tutoria">Eliminar</button></td>
+                        `;
+                        alert('Tutoría agregada correctamente');
+                    }
+                    cerrarModalTutoria();
+                } else {
+                    alert('Por favor complete la fecha y el tema');
+                }
+            };
+        }
+
+        // Editar y eliminar tutorías
+        document.getElementById('tutoriasBody')?.addEventListener('click', function(e) {
+            if (e.target.classList.contains('btn-editar-tutoria')) {
+                const row = e.target.closest('tr');
+                filaEditando = row;
+                editandoTutoria = true;
+                document.getElementById('modalTutoriaTitulo').textContent = 'Editar tutoría';
+                document.getElementById('fechaTutoria').value = row.cells[0].textContent;
+                document.getElementById('temaTutoria').value = row.cells[1].textContent;
+                document.getElementById('notasTutoria').value = row.cells[2].textContent;
+                modalTutoria.style.display = 'flex';
+            }
+            
+            if (e.target.classList.contains('btn-eliminar-tutoria')) {
+                if (confirm('¿Estás seguro de eliminar esta tutoría?')) {
+                    const row = e.target.closest('tr');
+                    row.remove();
+                    alert('Tutoría eliminada');
+                }
+            }
+        });
+
+        // Cerrar modales al hacer clic fuera
+        window.onclick = function(e) {
+            if (e.target === modalEditar) cerrarModalEditar();
+            if (e.target === modalTutoria) cerrarModalTutoria();
+        };
     });
 </script>
 @endpush

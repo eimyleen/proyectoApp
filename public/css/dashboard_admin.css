@@ -2533,3 +2533,134 @@ tr:hover td {
     background: #059669;
     transform: translateY(-2px);
 }
+
+/* Botón cambiar contraseña */
+.btn-cambiar-contrasena {
+    background: #6b7280;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-cambiar-contrasena:hover {
+    background: #4b5563;
+}
+
+/* Tutorías */
+.tutorias-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.btn-agregar-tutoria {
+    background: #0e7c7c;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-agregar-tutoria:hover {
+    background: #0891b2;
+}
+
+.tabla-tutorias {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-tutorias th {
+    text-align: left;
+    padding: 12px 16px;
+    background: #f9fafb;
+    font-weight: 600;
+    color: #374151;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.tabla-tutorias td {
+    padding: 10px 16px;
+    border-bottom: 1px solid #e5e7eb;
+    color: #4b5563;
+}
+
+.tabla-tutorias tr:hover td {
+    background: #f1f5f9;
+}
+
+.btn-editar-tutoria {
+    background: #e5e7eb;
+    color: #374151;
+    border: none;
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-right: 6px;
+}
+
+.btn-editar-tutoria:hover {
+    background: #d1d5db;
+}
+
+.btn-eliminar-tutoria {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.btn-eliminar-tutoria:hover {
+    background: #dc2626;
+}
+
+.modal .form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.modal .form-group textarea:focus {
+    outline: none;
+    border-color: #0e7c7c;
+}
+
+.btn-descargar-expediente {
+    background: #0891b2;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-descargar-expediente:hover {
+    background: #059669;
+    transform: translateY(-2px);
+}
