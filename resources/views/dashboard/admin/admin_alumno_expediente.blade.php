@@ -1,10 +1,10 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Administrador - Expediente del Alumno')
+@section('title', 'Administrador - Perfil del Alumno')
 @section('user-role', 'Administrador')
-@section('avatar-iniciales', 'JP')
-@section('nombre-completo', 'Juan Pérez')
-@section('welcome-message', 'Expediente del Alumno')
+@section('avatar-iniciales', 'SR')
+@section('nombre-completo', 'Santiago Ramírez')
+@section('welcome-message', 'Perfil del Alumno')
 @section('subtitle', 'Consulta y edita la información del alumno')
 
 @section('back-button')
@@ -18,7 +18,7 @@
 @endpush
 
 @section('content')
-    <div class="expediente-container">
+    <div class="perfil-container">
         <!-- Botones de acción -->
         <div class="acciones-superiores">
             <button class="btn-editar-perfil" id="btnEditarAlumno">
@@ -27,64 +27,67 @@
             <button class="btn-eliminar-perfil" id="btnEliminarAlumno">
                 ✕ Eliminar alumno
             </button>
+            <button class="btn-descargar-expediente" id="btnDescargarExpediente">
+                <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icono"> Descargar expediente
+            </button>
         </div>
-
+        
         <!-- Foto de perfil -->
         <div class="perfil-section">
             <div class="foto-perfil">
                 <div class="avatar-grande">
-                    <span class="avatar-iniciales-grande">JP</span>
+                    <span class="avatar-iniciales-grande"></span>
                 </div>
                 <button class="btn-subir-foto" id="btnCambiarFoto">Cambiar foto</button>
             </div>
         </div>
 
         <!-- Datos personales -->
-        <h3 class="seccion-titulo">Datos personales</h3>
+        <h3 class="perfil-titulo">Datos personales</h3>
         <div class="datos-grid">
             <div class="dato-item">
                 <label>Nombre(s)</label>
-                <span class="dato-valor" id="datoNombre">Juan</span>
+                <span class="dato-valor" id="datoNombre"></span>
             </div>
             <div class="dato-item">
                 <label>Apellidos</label>
-                <span class="dato-valor" id="datoApellidos">Pérez García</span>
+                <span class="dato-valor" id="datoApellidos"></span>
             </div>
             <div class="dato-item">
                 <label>Matrícula</label>
-                <span class="dato-valor" id="datoMatricula">UTN-2024-001</span>
+                <span class="dato-valor" id="datoMatricula"></span>
             </div>
             <div class="dato-item">
                 <label>Carrera</label>
-                <span class="dato-valor" id="datoCarrera">Ingeniería en Alimentos</span>
+                <span class="dato-valor" id="datoCarrera"></span>
             </div>
             <div class="dato-item">
                 <label>Grupo</label>
-                <span class="dato-valor" id="datoGrupo">8A</span>
+                <span class="dato-valor" id="datoGrupo"></span>
             </div>
             <div class="dato-item">
                 <label>CURP</label>
-                <span class="dato-valor" id="datoCURP">PEGJ040101HDFRRR09</span>
+                <span class="dato-valor" id="datoCURP"></span>
             </div>
             <div class="dato-item">
                 <label>Edad</label>
-                <span class="dato-valor" id="datoEdad">21 años</span>
+                <span class="dato-valor" id="datoEdad"></span>
             </div>
             <div class="dato-item">
                 <label>Sexo</label>
-                <span class="dato-valor" id="datoSexo">Masculino</span>
+                <span class="dato-valor" id="datoSexo"></span>
             </div>
             <div class="dato-item">
                 <label>Fecha de nacimiento</label>
-                <span class="dato-valor" id="datoFechaNac">01 de enero de 2004</span>
+                <span class="dato-valor" id="datoFechaNac"></span>
             </div>
             <div class="dato-item">
                 <label>Correo electrónico</label>
-                <span class="dato-valor" id="datoCorreo">juan.perez@utnay.edu.mx</span>
+                <span class="dato-valor" id="datoCorreo"></span>
             </div>
             <div class="dato-item">
                 <label>Teléfono</label>
-                <span class="dato-valor" id="datoTelefono">311-123-4567</span>
+                <span class="dato-valor" id="datoTelefono"></span>
             </div>
         </div>
 
@@ -108,51 +111,52 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Nombre(s)</label>
-                    <input type="text" id="editNombre" value="Juan">
+                    <input type="text" id="editNombre">
                 </div>
                 <div class="form-group">
                     <label>Apellidos</label>
-                    <input type="text" id="editApellidos" value="Pérez García">
+                    <input type="text" id="editApellidos">
                 </div>
                 <div class="form-group">
                     <label>Matrícula</label>
-                    <input type="text" id="editMatricula" value="UTN-2024-001">
+                    <input type="text" id="editMatricula">
                 </div>
                 <div class="form-group">
                     <label>Carrera</label>
-                    <input type="text" id="editCarrera" value="Ingeniería en Alimentos">
+                    <input type="text" id="editCarrera">
                 </div>
                 <div class="form-group">
                     <label>Grupo</label>
-                    <input type="text" id="editGrupo" value="8A">
+                    <input type="text" id="editGrupo">
                 </div>
                 <div class="form-group">
                     <label>CURP</label>
-                    <input type="text" id="editCURP" value="PEGJ040101HDFRRR09">
+                    <input type="text" id="editCURP">
                 </div>
                 <div class="form-group">
                     <label>Edad</label>
-                    <input type="text" id="editEdad" value="21">
+                    <input type="text" id="editEdad">
                 </div>
                 <div class="form-group">
                     <label>Sexo</label>
                     <select id="editSexo">
-                        <option value="Masculino" selected>Masculino</option>
+                        <option value="">Seleccionar</option>
+                        <option value="Masculino">Masculino</option>
                         <option value="Femenino">Femenino</option>
                         <option value="Otro">Otro</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>Fecha de nacimiento</label>
-                    <input type="date" id="editFechaNac" value="2004-01-01">
+                    <input type="date" id="editFechaNac">
                 </div>
                 <div class="form-group">
                     <label>Correo electrónico</label>
-                    <input type="email" id="editCorreo" value="juan.perez@utnay.edu.mx">
+                    <input type="email" id="editCorreo">
                 </div>
                 <div class="form-group">
                     <label>Teléfono</label>
-                    <input type="text" id="editTelefono" value="311-123-4567">
+                    <input type="text" id="editTelefono">
                 </div>
                 <div class="form-group">
                     <label>Foto de perfil</label>
@@ -206,13 +210,14 @@
         const guardar = document.getElementById('guardarEditar');
         if (guardar) {
             guardar.onclick = function() {
+                // Actualizar valores en la vista
                 document.getElementById('datoNombre').textContent = document.getElementById('editNombre').value;
                 document.getElementById('datoApellidos').textContent = document.getElementById('editApellidos').value;
                 document.getElementById('datoMatricula').textContent = document.getElementById('editMatricula').value;
                 document.getElementById('datoCarrera').textContent = document.getElementById('editCarrera').value;
                 document.getElementById('datoGrupo').textContent = document.getElementById('editGrupo').value;
                 document.getElementById('datoCURP').textContent = document.getElementById('editCURP').value;
-                document.getElementById('datoEdad').textContent = document.getElementById('editEdad').value + ' años';
+                document.getElementById('datoEdad').textContent = document.getElementById('editEdad').value ? document.getElementById('editEdad').value + ' años' : '';
                 document.getElementById('datoSexo').textContent = document.getElementById('editSexo').value;
                 
                 const fecha = document.getElementById('editFechaNac').value;
@@ -225,9 +230,10 @@
                 document.getElementById('datoCorreo').textContent = document.getElementById('editCorreo').value;
                 document.getElementById('datoTelefono').textContent = document.getElementById('editTelefono').value;
                 
+                // Actualizar iniciales del avatar
                 const nombre = document.getElementById('editNombre').value;
                 const apellidos = document.getElementById('editApellidos').value;
-                const iniciales = nombre.charAt(0) + apellidos.charAt(0);
+                const iniciales = (nombre ? nombre.charAt(0) : '') + (apellidos ? apellidos.charAt(0) : '');
                 document.querySelector('.avatar-iniciales-grande').textContent = iniciales.toUpperCase();
                 
                 alert('Alumno actualizado correctamente');

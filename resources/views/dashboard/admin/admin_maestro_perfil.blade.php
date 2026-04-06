@@ -33,77 +33,70 @@
         <div class="perfil-section">
             <div class="foto-perfil">
                 <div class="avatar-grande">
-                    <span class="avatar-iniciales-grande">RS</span>
+                    <span class="avatar-iniciales-grande"></span>
                 </div>
                 <button class="btn-subir-foto" id="btnCambiarFoto">Cambiar foto</button>
             </div>
         </div>
 
         <!-- Datos personales -->
-        <h3 class="seccion-titulo">
+        <h3 class="perfil-titulo">
             Datos personales
-            <span class="tutor-badge" id="tutorBadge">Tutor</span>
+            <span class="tutor-badge" id="tutorBadge" style="display: none;">Tutor</span>
         </h3>
         <div class="datos-grid">
             <div class="dato-item">
                 <label>Nombre(s)</label>
-                <span class="dato-valor" id="datoNombre">Roberto</span>
+                <span class="dato-valor" id="datoNombre"></span>
             </div>
             <div class="dato-item">
                 <label>Apellidos</label>
-                <span class="dato-valor" id="datoApellidos">Sánchez Hernández</span>
+                <span class="dato-valor" id="datoApellidos"></span>
             </div>
             <div class="dato-item">
                 <label>Número de empleado</label>
-                <span class="dato-valor" id="datoEmpleado">EMP-2024-001</span>
+                <span class="dato-valor" id="datoEmpleado"></span>
             </div>
             <div class="dato-item">
                 <label>RFC</label>
-                <span class="dato-valor" id="datoRFC">SAHC840101HDFRRR09</span>
+                <span class="dato-valor" id="datoRFC"></span>
             </div>
             <div class="dato-item">
                 <label>Edad</label>
-                <span class="dato-valor" id="datoEdad">42 años</span>
+                <span class="dato-valor" id="datoEdad"></span>
             </div>
             <div class="dato-item">
                 <label>Sexo</label>
-                <span class="dato-valor" id="datoSexo">Masculino</span>
+                <span class="dato-valor" id="datoSexo"></span>
             </div>
             <div class="dato-item">
                 <label>Fecha de nacimiento</label>
-                <span class="dato-valor" id="datoFechaNac">01 de enero de 1982</span>
+                <span class="dato-valor" id="datoFechaNac"></span>
             </div>
             <div class="dato-item">
                 <label>Correo electrónico</label>
-                <span class="dato-valor" id="datoCorreo">roberto.sanchez@utnay.edu.mx</span>
+                <span class="dato-valor" id="datoCorreo"></span>
             </div>
             <div class="dato-item">
                 <label>Teléfono</label>
-                <span class="dato-valor" id="datoTelefono">311-987-6543</span>
+                <span class="dato-valor" id="datoTelefono"></span>
             </div>
         </div>
 
         <!-- Carreras que imparte -->
         <h3 class="seccion-titulo">Carreras que imparte</h3>
-        <div class="carreras-grid-perfil">
-            <div class="carrera-item-perfil">
-                <div class="carrera-icono-perfil">📘</div>
-                <span class="carrera-nombre-perfil">Ingeniería en Alimentos</span>
-            </div>
-            <div class="carrera-item-perfil">
-                <div class="carrera-icono-perfil">📘</div>
-                <span class="carrera-nombre-perfil">Ingeniería Civil</span>
-            </div>
+        <div class="carreras-grid-perfil" id="carrerasContainer">
+            <!-- Las carreras se cargarán dinámicamente -->
         </div>
 
         <!-- Grupo tutorado -->
         <h3 class="seccion-titulo">Grupo tutorado</h3>
         <div class="grupo-tutorado-info">
-            <span class="grupo-nombre-perfil" id="grupoTutorado">8A</span>
+            <span class="grupo-nombre-perfil" id="grupoTutorado"></span>
         </div>
     </div>
 
-    <!-- Modal para editar maestro -->
+    <!-- Modal para editar maestro (con un solo scroll) -->
     <div id="modalEditarMaestro" class="modal-small">
         <div class="modal-content">
             <div class="modal-header">
@@ -113,54 +106,56 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Nombre(s)</label>
-                    <input type="text" id="editNombre" value="Roberto">
+                    <input type="text" id="editNombre">
                 </div>
                 <div class="form-group">
                     <label>Apellidos</label>
-                    <input type="text" id="editApellidos" value="Sánchez Hernández">
+                    <input type="text" id="editApellidos">
                 </div>
                 <div class="form-group">
                     <label>Número de empleado</label>
-                    <input type="text" id="editEmpleado" value="EMP-2024-001">
+                    <input type="text" id="editEmpleado">
                 </div>
                 <div class="form-group">
                     <label>RFC</label>
-                    <input type="text" id="editRFC" value="SAHC840101HDFRRR09">
+                    <input type="text" id="editRFC">
                 </div>
                 <div class="form-group">
                     <label>Edad</label>
-                    <input type="text" id="editEdad" value="42">
+                    <input type="text" id="editEdad">
                 </div>
                 <div class="form-group">
                     <label>Sexo</label>
                     <select id="editSexo">
-                        <option value="Masculino" selected>Masculino</option>
+                        <option value="">Seleccionar</option>
+                        <option value="Masculino">Masculino</option>
                         <option value="Femenino">Femenino</option>
                         <option value="Otro">Otro</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>Fecha de nacimiento</label>
-                    <input type="date" id="editFechaNac" value="1982-01-01">
+                    <input type="date" id="editFechaNac">
                 </div>
                 <div class="form-group">
                     <label>Correo electrónico</label>
-                    <input type="email" id="editCorreo" value="roberto.sanchez@utnay.edu.mx">
+                    <input type="email" id="editCorreo">
                 </div>
                 <div class="form-group">
                     <label>Teléfono</label>
-                    <input type="text" id="editTelefono" value="311-987-6543">
+                    <input type="text" id="editTelefono">
                 </div>
                 <div class="form-group">
                     <label>¿Es tutor?</label>
                     <select id="editEsTutor">
-                        <option value="1" selected>Sí</option>
+                        <option value="">Seleccionar</option>
+                        <option value="1">Sí</option>
                         <option value="0">No</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>Grupo tutorado</label>
-                    <input type="text" id="editGrupoTutorado" value="8A">
+                    <input type="text" id="editGrupoTutorado">
                 </div>
                 <div class="form-group">
                     <label>Foto de perfil</label>
@@ -210,16 +205,15 @@
             if (e.target === modalEditar) cerrarModal();
         };
 
-        // Guardar cambios
+        // Guardar cambios (actualiza la vista con los nuevos valores)
         const guardar = document.getElementById('guardarEditar');
         if (guardar) {
             guardar.onclick = function() {
-                // Actualizar valores en la vista
                 document.getElementById('datoNombre').textContent = document.getElementById('editNombre').value;
                 document.getElementById('datoApellidos').textContent = document.getElementById('editApellidos').value;
                 document.getElementById('datoEmpleado').textContent = document.getElementById('editEmpleado').value;
                 document.getElementById('datoRFC').textContent = document.getElementById('editRFC').value;
-                document.getElementById('datoEdad').textContent = document.getElementById('editEdad').value + ' años';
+                document.getElementById('datoEdad').textContent = document.getElementById('editEdad').value ? document.getElementById('editEdad').value + ' años' : '';
                 document.getElementById('datoSexo').textContent = document.getElementById('editSexo').value;
                 
                 const fecha = document.getElementById('editFechaNac').value;
@@ -233,17 +227,15 @@
                 document.getElementById('datoTelefono').textContent = document.getElementById('editTelefono').value;
                 document.getElementById('grupoTutorado').textContent = document.getElementById('editGrupoTutorado').value;
                 
-                // Actualizar badge de tutor
                 const esTutor = document.getElementById('editEsTutor').value === '1';
                 const tutorBadge = document.getElementById('tutorBadge');
                 if (tutorBadge) {
                     tutorBadge.style.display = esTutor ? 'inline-block' : 'none';
                 }
                 
-                // Actualizar iniciales del avatar
                 const nombre = document.getElementById('editNombre').value;
                 const apellidos = document.getElementById('editApellidos').value;
-                const iniciales = nombre.charAt(0) + apellidos.charAt(0);
+                const iniciales = (nombre ? nombre.charAt(0) : '') + (apellidos ? apellidos.charAt(0) : '');
                 document.querySelector('.avatar-iniciales-grande').textContent = iniciales.toUpperCase();
                 
                 alert('Maestro actualizado correctamente');

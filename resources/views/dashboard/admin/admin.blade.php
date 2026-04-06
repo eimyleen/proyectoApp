@@ -83,8 +83,8 @@
         </div>
     </div>
 
-    <!-- Modal para lista global de alumnos (igual que en maestro) -->
-    <div id="modalListaGlobal" class="modal">
+    <!-- Modal para lista global de alumnos - CORREGIDO -->
+    <div id="modalListaGlobal" class="modal-lista-global">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Lista de alumnos global</h3>
@@ -168,7 +168,7 @@
             };
         }
 
-        // Modal Lista Global de Alumnos
+        // Modal Lista Global de Alumnos 
         const modalListaGlobal = document.getElementById('modalListaGlobal');
         const btnListaGlobal = document.getElementById('btnListaGlobal');
         const closeModalListaGlobal = document.getElementById('closeModalListaGlobal');
