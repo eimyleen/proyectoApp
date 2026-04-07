@@ -1,3 +1,4 @@
+<!-- Dashboard Admin - Módulo de gestión de carreras y usuarios -->
 @extends('layouts.dashboard')
 
 @section('title', 'Administrador - Carreras')
