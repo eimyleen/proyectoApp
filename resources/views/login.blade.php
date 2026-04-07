@@ -1,3 +1,4 @@
+<!-- Login - Módulo de autenticación de usuarios -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
