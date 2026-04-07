@@ -1,3 +1,4 @@
+<!-- Layout base - Módulo de estructura principal -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
