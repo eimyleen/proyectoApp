@@ -1,3 +1,4 @@
+<!-- Dashboard Alumno - Módulo de materias y horarios -->
 @extends('layouts.dashboard')
 
 @section('title', 'Mi Panel - Alumno')
