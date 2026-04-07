@@ -1,3 +1,4 @@
+<!-- Dashboard Maestro - Módulo de carreras que imparte -->
 @extends('layouts.dashboard')
 
 @section('title', 'Panel Maestro')
