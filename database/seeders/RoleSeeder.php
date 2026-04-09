@@ -14,29 +14,59 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Crear Roles
+        // -- Creación de Roles --
         $root = Role::create(['name' => 'root']);
         $admin = Role::create(['name' => 'admin']);
         $maestro = Role::create(['name' => 'maestro']);
         $alumno = Role::create(['name' => 'alumno']);
 
-        // 1. Permisos solo root
-        // Solo root puede gestionar carreras
-        Permission::create(['name' => 'gestionar carreras'])->assignRole($root);
+        // --- Permisos de CRUD en Carreras ---
 
-        // 2. Permisos de Usuarios (Root y Admin)
-        // En el controlador se define que el Admin:
-        // Solo puede gestionar a maestros y alumnos, no a otros admins ni al root
-        Permission::create(['name' => 'crear usuarios'])->syncRoles([$root, $admin]);
-        Permission::create(['name' => 'editar usuarios'])->syncRoles([$root, $admin]);
-        Permission::create(['name' => 'eliminar usuarios'])->syncRoles([$root, $admin]);
+        Permission::create(['name' => 'carreras.ver'])->syncRoles([$root]);
+        Permission::create(['name' => 'carreras.crear'])->syncRoles($root);
+        Permission::create(['name' => 'carreras.editar'])->syncRoles($root);
+        Permission::create(['name' => 'carreras.eliminar'])->syncRoles($root);
 
-        // 3. Permisos de Grupos y Asignación (Root y Admin)
-        Permission::create(['name' => 'gestionar grupos'])->syncRoles([$root, $admin]);
-        Permission::create(['name' => 'asignar tutor'])->syncRoles([$root, $admin]);
+        // --- Permisos de CRUD en Usuarios ---
 
-        // 4. Permisos de Maestro
-        Permission::create(['name' => 'ver grupos asignados'])->assignRole($maestro);
-        Permission::create(['name' => 'gestionar tutorados'])->assignRole($maestro);
+        Permission::create(['name' => 'administradores.ver'])->syncRoles([$root, $admin]);
+        Permission::create(['name' => 'administradores.crear'])->syncRoles([$root]);
+        Permission::create(['name' => 'administradores.editar'])->syncRoles([$root]);
+        Permission::create(['name' => 'administradores.eliminar'])->syncRoles([$root]);
+
+        Permission::create(['name' => 'maestros.ver'])->syncRoles([$root, $admin]);
+        Permission::create(['name' => 'maestros.crear'])->syncRoles([$root, $admin]);
+        Permission::create(['name' => 'maestros.editar'])->syncRoles([$root, $admin]);
+        Permission::create(['name' => 'maestros.eliminar'])->syncRoles([$root, $admin]);
+
+        Permission::create(['name' => 'alumnos.ver'])->syncRoles([$root, $admin]);
+        Permission::create(['name' => 'alumnos.crear'])->syncRoles([$root, $admin]);
+        Permission::create(['name' => 'alumnos.editar'])->syncRoles([$root, $admin]);
+        Permission::create(['name' => 'alumnos.eliminar'])->syncRoles([$root, $admin]);
+
+        // --- Permisos de CRUD en Grupos ---
+
+        Permission::create(['name' => 'grupos.ver'])->syncRoles([$root, $admin]);
+        Permission::create(['name' => 'grupos.crear'])->syncRoles([$root, $admin]);
+        Permission::create(['name' => 'grupos.editar'])->syncRoles([$root, $admin]);
+        Permission::create(['name' => 'grupos.eliminar'])->syncRoles([$root, $admin]);
+        Permission::create(['name' => 'grupos.asignar-tutores'])->syncRoles([$root, $admin]);
+        Permission::create(['name' => 'grupos.asignar-maestros'])->syncRoles([$root, $admin]);
+        Permission::create(['name' => 'grupos.asignar-alumnos'])->syncRoles([$root, $admin]);
+
+        // --- Permisos de Tutor (Maestro con permisos de tutor) ---
+
+        Permission::create(['name' => 'expedientes.ver'])->syncRoles([$root, $admin, $maestro]);
+        Permission::create(['name' => 'expedientes.crear'])->syncRoles([$root, $admin, $maestro]);
+
+        // --- Permisos de Maestro ---
+
+        Permission::create(['name' => 'grupos.ver-asignados'])->syncRoles($maestro);
+        Permission::create(['name' => 'calificaciones.gestionar'])->syncRoles($maestro);
+
+        // --- Permisos de Alumno ---
+
+        Permission::create(['name' => 'expediente.ver-propio'])->syncRoles([$alumno]);
+        Permission::create(['name' => 'calificaciones.ver-propio'])->syncRoles([$alumno]);
     }
 }
