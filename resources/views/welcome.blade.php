@@ -238,29 +238,29 @@
             <div class="rol-card alumno">
                 <h2>Alumno</h2>
                 <ul>
-                    <li><a href="/dashboard/alumno">Dashboard principal</a><span class="badge">Materias y Horario</span></li>
-                    <li><a href="/dashboard/alumno/expediente">Expediente personal</a><span class="badge">Datos + Foto carrera</span></li>
-                    <li><a href="/dashboard/alumno/calificaciones">Calificaciones</a><span class="badge">Filtro por periodo</span></li>
+                    <li><a href="{{ route('dashboard.alumno') }}">Dashboard principal</a><span class="badge">Materias y Horario</span></li>
+                    <li><a href="{{ route('alumno.expediente') }}">Expediente personal</a><span class="badge">Datos + Foto carrera</span></li>
+                    <li><a href="{{ route('alumno.calificaciones') }}">Calificaciones</a><span class="badge">Filtro por periodo</span></li>
                 </ul>
             </div>
             <div class="rol-card maestro">
                 <h2>Maestro</h2>
                 <ul>
-                    <li><a href="/dashboard/maestro">Dashboard principal</a><span class="badge">Carreras que imparte</span></li>
-                    <li><a href="/dashboard/maestro/perfil">Mi Perfil</a><span class="badge">Datos + Carreras + Grupo tutorado</span></li>
-                    <li><a href="/dashboard/maestro/grupos">Grupos de carrera</a><span class="badge">Lista de alumnos por grupo</span></li>
-                    <li><a href="/dashboard/maestro/expediente/alumno">Expediente del alumno</a><span class="badge">Datos + Calificaciones + Tutorias</span></li>
+                    <li><a href="{{ route('dashboard.maestro') }}">Dashboard principal</a><span class="badge">Carreras que imparte</span></li>
+                    <li><a href="{{ route('maestro.perfil') }}">Mi Perfil</a><span class="badge">Datos + Carreras + Grupo tutorado</span></li>
+                    <li><a href="{{ route('maestro.grupos') }}">Grupos de carrera</a><span class="badge">Lista de alumnos por grupo</span></li>
+                    <li><a href="{{ route('maestro.expediente_alumno') }}">Expediente del alumno</a><span class="badge">Datos + Calificaciones + Tutorias</span></li>
                 </ul>
             </div>
             <div class="rol-card admin">
                 <h2>Administrador</h2>
                 <ul>
-                    <li><a href="/dashboard/admin">Dashboard principal</a><span class="badge">Todas las carreras</span></li>
-                    <li><a href="/dashboard/admin/carrera">Detalle de carrera</a><span class="badge">Grupos + Maestros</span></li>
-                    <li><a href="/dashboard/admin/perfil">Mi Perfil</a><span class="badge">Editar perfil + Cambiar contrasena</span></li>
-                    <li><a href="/dashboard/admin/maestro/perfil">Perfil de maestro</a><span class="badge">Editar/Eliminar</span></li>
-                    <li><a href="/dashboard/admin/alumno/perfil">Perfil de alumno</a><span class="badge">Editar/Eliminar + Tutorias</span></li>
-                    <li><a href="/dashboard/admin/alumno/expediente">Expediente de alumno</a><span class="badge">Vista completa</span></li>
+                    <li><a href="{{ route('dashboard.admin') }}">Dashboard principal</a><span class="badge">Todas las carreras</span></li>
+                    <li><a href="{{ route('admin.carrera') }}">Detalle de carrera</a><span class="badge">Grupos + Maestros</span></li>
+                    <li><a href="{{ route('admin.perfil') }}">Mi Perfil</a><span class="badge">Editar perfil + Cambiar contrasena</span></li>
+                    <li><a href="{{ route('admin.perfil.maestro') }}">Perfil de maestro</a><span class="badge">Editar/Eliminar</span></li>
+                    <li><a href="{{ route('admin.perfil.alumno') }}">Perfil de alumno</a><span class="badge">Editar/Eliminar + Tutorias</span></li>
+                    <li><a href="{{ route('admin.expediente.alumno') }}">Expediente de alumno</a><span class="badge">Vista completa</span></li>
                 </ul>
             </div>
         </div>
