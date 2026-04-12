@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 
 // Ruta de login (breeze lo maneja)
 require __DIR__.'/auth.php';
+Route::get('/', function () {
+    return redirect('/login');
+});
 
 // Grupo protegido por autenticación y nuestro redireccionador
 Route::middleware(['auth', 'role.redirect'])->group(function () {

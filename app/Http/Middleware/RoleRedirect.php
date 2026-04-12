@@ -19,6 +19,13 @@ class RoleRedirect
         if (Auth::check()) {
         /** @var \App\Models\User $user */
         $user = Auth::user();
+            
+            // Si la URL actual coincide con el rol del usuario 
+            if (($user->hasRole(['root', 'admin']) && $request->is('dashboard/admin*')) ||
+                ($user->hasRole('maestro') && $request->is('dashboard/maestro*')) ||
+                ($user->hasRole('alumno') && $request->is('dashboard/alumno*'))) {
+                return $next($request);
+            }
 
             // Redirección basada en el primer rol encontrado
             if ($user->hasRole('root') || $user->hasRole('admin')) {
