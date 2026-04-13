@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Maestro;
+
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -23,6 +25,12 @@ class User extends Authenticatable
         'role',
         'foto',
     ];
+
+    public function maestro()
+    {
+        // Un usuario tiene un registro de maestro
+        return $this->hasOne(Maestro::class);
+    }
 
     /**
      * Get the attributes that should be cast.

@@ -36,40 +36,32 @@
         </h3>
         <div class="datos-grid">
             <div class="dato-item">
-                <label>Nombre</label>
-                <span class="dato-valor"></span>
+                <label>Nombre(s)</label>
+                <span class="dato-valor">{{ Auth::user()->name }}</span>
             </div>
             <div class="dato-item">
                 <label>Apellidos</label>
-                <span class="dato-valor"></span>
+                <span class="dato-valor">{{ Auth::user()->apellido }}</span>
             </div>
             <div class="dato-item">
                 <label>Número de empleado</label>
-                <span class="dato-valor"></span>
+                <span class="dato-valor">{{ Auth::user()->maestro->num_empleado ?? 'N/A' }}</span>
             </div>
             <div class="dato-item">
                 <label>RFC</label>
-                <span class="dato-valor"></span>
+                <span class="dato-valor">{{ Auth::user()->maestro->rfc ?? 'N/A' }}</span>
             </div>
             <div class="dato-item">
                 <label>Edad</label>
-                <span class="dato-valor"></span>
-            </div>
-            <div class="dato-item">
-                <label>Sexo</label>
-                <span class="dato-valor"></span>
-            </div>
-            <div class="dato-item">
-                <label>Fecha de nacimiento</label>
-                <span class="dato-valor"></span>
-            </div>
-            <div class="dato-item">
-                <label>Correo electrónico</label>
-                <span class="dato-valor"></span>
+                <span class="dato-valor">{{ Auth::user()->maestro->edad ?? 'N/A' }} años</span>
             </div>
             <div class="dato-item">
                 <label>Teléfono</label>
-                <span class="dato-valor"></span>
+                <span class="dato-valor">{{ Auth::user()->maestro->telefono ?? 'Sin registrar' }}</span>
+            </div>
+            <div class="dato-item">
+                <label>Correo institucional</label>
+                <span class="dato-valor">{{ Auth::user()->email }}</span>
             </div>
         </div>
 
