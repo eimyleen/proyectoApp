@@ -24,7 +24,7 @@ class CarreraController extends Controller
         $carrera -> clave = $request -> inClave;
         $carrera -> logo = $request -> inLogo;
         $carrera -> save();
-        return redirect() -> route('carrera.show', $carrera);
+        return redirect() -> route('admin.show', $carrera);
     }
 
     public function store(Request $request) {
