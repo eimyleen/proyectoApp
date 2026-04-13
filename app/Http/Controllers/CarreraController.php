@@ -19,3 +19,4 @@ class CarreraController extends Controller
         return view('dashboard.admin.admin_carrera', compact('carrera'));
     }
 
+}
