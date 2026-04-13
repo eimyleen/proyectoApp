@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard') - UTNay Expedientes</title>
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    
     @stack('styles')
 </head>
 <body>
@@ -33,7 +34,7 @@
                         
                         <div class="dropdown-container">
                             <div class="action-icon" id="btnIdioma">
-                                <img src="{{ asset('img/tuerca.png') }}" alt="Configuración" class="icon-img">
+                                <img src="{{ asset('img/idioma.png') }}" alt="Configuración" class="icon-img">
                             </div>
                             <div class="dropdown-menu" id="dropdownIdioma">
                                 <a href="#" data-idioma="es">

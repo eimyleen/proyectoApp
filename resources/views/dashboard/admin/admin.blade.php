@@ -23,64 +23,47 @@
                 + Agregar carrera
             </button>
         </div>
-
+        <form action="{{ route("admin.store") }}" method="POST">
+            @csrf
+            <div id="modalAgregarCarrera" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Agregar carrera</h3>
+                        <span class="modal-close" id="closeModalCarrera">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Nombre de la carrera</label>
+                            <input name="nombre" type="text" id="nombreCarrera" placeholder="Ej: Ingeniería en Sistemas">
+                        </div>
+                        <div class="form-group">
+                            <label>Clave de la carrera</label>
+                            <input name="clave" type="text" id="claveCarrera" placeholder="Ej: ISC">
+                        </div>
+                        <div class="form-group">
+                            <label>Logo de la carrera</label>
+                            <input name="logo" type="file" id="logoCarrera" accept="image/*">
+                            <small class="form-text">Selecciona una imagen para el logo</small>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn-cancelar" onclick="" id="cancelarCarrera">Cancelar</button>
+                        <button type="submit" class="btn-guardar" id="guardarCarrera">Guardar carrera</button>
+                    </div>
+                </div>
+            </div>
+        </form>
         <!-- Grid de carreras -->
         <div class="carreras-grid">
-            @php
-                $carreras = [
-                    ['img' => 'ing_alimentos.png', 'alt' => 'Ingeniería en Alimentos'],
-                    ['img' => 'ing_civil.png', 'alt' => 'Ingeniería Civil'],
-                    ['img' => 'ing_inte_artificial.png', 'alt' => 'Ingeniería Artificial'],
-                    ['img' => 'ing_logistica.png', 'alt' => 'Ingeniería Logística'],
-                    ['img' => 'ing_mant_industrial.png', 'alt' => 'Ingeniería Mantenimiento Industrial'],
-                    ['img' => 'ing_mecatronica.png', 'alt' => 'Ingeniería Mecatrónica'],
-                    ['img' => 'ing_micro_semic.png', 'alt' => 'Ingeniería Micro Semiconductores'],
-                    ['img' => 'ing_tec_info.png', 'alt' => 'Ingeniería Tecnologías Información'],
-                    ['img' => 'lic_admin.png', 'alt' => 'Licenciatura Administración'],
-                    ['img' => 'lic_gastro.png', 'alt' => 'Gastronomía'],
-                    ['img' => 'lic_merca.png', 'alt' => 'Licenciatura Mercadotecnia'],
-                    ['img' => 'lic_psicologia.png', 'alt' => 'Psicología'],
-                    ['img' => 'lic_seg_publ.png', 'alt' => 'Seguridad Pública'],
-                    ['img' => 'lic_turismo.png', 'alt' => 'Licenciatura Turismo'],
-                ];
-            @endphp
-
-            @foreach($carreras as $carrera)
-                <div class="carrera-card" data-carrera="{{ $carrera['alt'] }}">
+            @foreach ($var_carreras as $carrera)
+                <div class="carrera-card" data-carrera="{{ $carrera->nombre }}">
                     <div class="carrera-img">
-                        <img src="{{ asset('img/carreras/' . $carrera['img']) }}" alt="{{ $carrera['alt'] }}">
+                        <a href="{{ route("admin.show", $carrera) }}">
+                            <img src="{{ asset('img/carreras/' . $carrera->imagen) }}" alt="{{ $carrera->nombre }}">
+                        </a>
                     </div>
                 </div>
             @endforeach
-        </div>
-    </div>
-
-    <!-- Modal para agregar carrera -->
-    <div id="modalAgregarCarrera" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Agregar carrera</h3>
-                <span class="modal-close" id="closeModalCarrera">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label>Nombre de la carrera</label>
-                    <input type="text" id="nombreCarrera" placeholder="Ej: Ingeniería en Sistemas">
-                </div>
-                <div class="form-group">
-                    <label>Clave de la carrera</label>
-                    <input type="text" id="claveCarrera" placeholder="Ej: ISC">
-                </div>
-                <div class="form-group">
-                    <label>Logo de la carrera</label>
-                    <input type="file" id="logoCarrera" accept="image/*">
-                    <small class="form-text">Selecciona una imagen para el logo</small>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-cancelar" id="cancelarCarrera">Cancelar</button>
-                <button class="btn-guardar" id="guardarCarrera">Guardar carrera</button>
-            </div>
         </div>
     </div>
 
@@ -154,21 +137,6 @@
         if (closeModalCarrera) closeModalCarrera.onclick = cerrarModalCarrera;
         if (cancelarCarrera) cancelarCarrera.onclick = cerrarModalCarrera;
 
-        // Guardar carrera
-        const guardarCarrera = document.getElementById('guardarCarrera');
-        if (guardarCarrera) {
-            guardarCarrera.onclick = function() {
-                const nombre = document.getElementById('nombreCarrera').value;
-                const clave = document.getElementById('claveCarrera').value;
-                if (nombre && clave) {
-                    alert('Carrera agregada: ' + nombre + ' (' + clave + ')');
-                    cerrarModalCarrera();
-                } else {
-                    alert('Por favor complete el nombre y la clave de la carrera');
-                }
-            };
-        }
-
         // Modal Lista Global de Alumnos 
         const modalListaGlobal = document.getElementById('modalListaGlobal');
         const btnListaGlobal = document.getElementById('btnListaGlobal');
@@ -208,15 +176,6 @@
                 });
             });
         }
-
-        // Click en carrera para ir al detalle
-        document.querySelectorAll('.carrera-card').forEach(card => {
-            card.addEventListener('click', function() {
-                const nombre = this.getAttribute('data-carrera');
-                alert('Navegar a detalle de: ' + nombre);
-                // window.location.href = '/dashboard/admin/carrera';
-            });
-        });
     });
 </script>
 @endpush

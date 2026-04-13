@@ -23,22 +23,25 @@
         <div class="carrera-header">
             <div class="carrera-logo">
                 <div class="logo-circular">
-                    <img src="{{ asset('img/carreras/ing_alimentos.png') }}" alt="Logo de la carrera">
+                    <img src="{{ asset('img/carreras/'.$var_carrera->nombre.'.png') }}" alt='{{ $var_carrera->nombre }}'>
                 </div>
                 <span class="logo-texto">Logo de la carrera</span>
             </div>
             <div class="carrera-info">
-                <h2>[Nombre de la Carrera]</h2>
-                <p class="carrera-clave">Clave: IC</p>
+                <h2>[{{ $var_carrera->nombre }}]</h2>
+                <p class="carrera-clave">Clave: {{ $var_carrera->clave }}</p>
                 <p>Gestión de la carrera</p>
             </div>
             <div class="carrera-acciones">
                 <button class="btn-editar" id="btnEditarCarrera">
                     <img src="{{ asset('img/editar.png') }}" alt="Editar" class="btn-icono"> Editar carrera
                 </button>
-                <button class="btn-eliminar-carrera" id="btnEliminarCarrera">
-                    ✕ Eliminar carrera
-                </button>
+                <form action="{{ route("admin.delete", $var_carrera) }}" method="POST">
+                    @csrf @method('DELETE')
+                    <button type="submit" class="btn-eliminar-carrera" id="btnEliminarCarrera">
+                        ✕ Eliminar carrera
+                    </button>
+                </form>
             </div>
         </div>
 
@@ -91,7 +94,7 @@
                                 <td class="col-acciones">
                                     <button class="btn-ver-expediente">Ver expediente</button>
                                     <button class="btn-eliminar">Eliminar</button>
-</td>
+                                </td>
                             </tr>
                         @endfor
                     </tbody>
@@ -130,7 +133,7 @@
                                 <td class="col-acciones">
                                     <button class="btn-ver-perfil">Ver perfil</button>
                                     <button class="btn-eliminar">Eliminar</button>
-</td>
+                                </td>
                             </tr>
                         @endfor
                     </tbody>
@@ -214,33 +217,37 @@
     </div>
 
     <!-- Modal para editar carrera -->
-    <div id="modalCarrera" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Editar carrera</h3>
-                <span class="modal-close" id="closeModalCarrera">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label>Nombre de la carrera</label>
-                    <input type="text" id="nombreCarrera" value="[Nombre de la Carrera]">
+    <form action="{{ route("admin.update", $var_carrera) }}" method="POST">
+        @csrf
+        @method('PATCH')
+        <div id="modalCarrera" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Editar carrera</h3>
+                    <span class="modal-close" id="closeModalCarrera">&times;</span>
                 </div>
-                <div class="form-group">
-                    <label>Clave de la carrera</label>
-                    <input type="text" id="claveCarrera" value="IC">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nombre de la carrera</label>
+                        <input name="inNombre" type="text" id="nombreCarrera" value="{{ $var_carrera->nombre }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Clave de la carrera</label>
+                        <input name="inClave" type="text" id="claveCarrera" value="{{ $var_carrera->clave }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Logo de la carrera</label>
+                        <input name="inLogo" type="file" id="logoCarrera" accept="image/*">
+                        <small class="form-text">Selecciona una nueva imagen para el logo</small>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Logo de la carrera</label>
-                    <input type="file" id="logoCarrera" accept="image/*">
-                    <small class="form-text">Selecciona una nueva imagen para el logo</small>
+                <div class="modal-footer">
+                    <button class="btn-cancelar" onsubmit="return false" id="cancelarCarrera">Cancelar</button>
+                    <button type="submit" class="btn-guardar">Guardar cambios</button>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-cancelar" id="cancelarCarrera">Cancelar</button>
-                <button class="btn-guardar" id="guardarCarrera">Guardar cambios</button>
             </div>
         </div>
-    </div>
+    </form>
 @endsection
 
 @push('scripts')
@@ -397,7 +404,7 @@
                 const nombre = document.getElementById('nombreCarrera').value;
                 const clave = document.getElementById('claveCarrera').value;
                 if (nombre && clave) {
-                    alert('Carrera actualizada: ' + nombre);
+                    //alert('Carrera actualizada: ' + nombre);
                     cerrarModalCarrera();
                     document.querySelector('.carrera-info h2').textContent = nombre;
                     document.querySelector('.carrera-clave').textContent = 'Clave: ' + clave;
