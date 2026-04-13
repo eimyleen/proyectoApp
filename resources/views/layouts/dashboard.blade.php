@@ -51,20 +51,22 @@
                             </div>
                         </div>
 
-                        <!-- Dropdown de navegación (puntitos) -->
-                        <div class="dropdown-container">
-                            <div class="action-icon" id="btnMenu">
-                                <img src="{{ asset('img/puntitos.png') }}" alt="Más opciones" class="icon-img">
-                            </div>
-                            <div class="dropdown-menu dropdown-menu-nav" id="dropdownMenu">
-                                <a href="#" id="menuInicio">
-                                    <img src="{{ asset('img/inicio.png') }}" alt="Inicio" class="dropdown-icon"> Inicio
-                                </a>
-                                <a href="#" id="menuPerfil">
-                                    <img src="{{ asset('img/perfil.png') }}" alt="Perfil" class="dropdown-icon"> Mi Perfil
-                                </a>
-                            </div>
+                    <!-- Dropdown de navegación (puntitos) -->
+                    <div class="dropdown-container">
+                        <div class="action-icon" id="btnMenu">
+                            <img src="{{ asset('img/puntitos.png') }}" alt="Más opciones" class="icon-img">
                         </div>
+                        <div class="dropdown-menu dropdown-menu-nav" id="dropdownMenu">
+                            <a href="#" id="menuInicio">
+                                <img src="{{ asset('img/inicio.png') }}" alt="Inicio" class="dropdown-icon"> Inicio
+                            </a>
+                            <a href="#" id="menuPerfil">
+                                <img src="{{ asset('img/perfil.png') }}" alt="Perfil" class="dropdown-icon"> Mi Perfil
+                            </a>
+                            <a href="#" id="menuLogout">Cerrar sesión</a>
+                        </div>
+                    </div>
+
                         <a href="https://www.utnay.edu.mx/">
                             <img src="{{ asset('img/jaguar.png') }}" alt="Jaguar" class="jaguar-img">
                         </a>
@@ -83,7 +85,7 @@
 
     <script src="{{ asset('js/dashboard.js') }}"></script>
     @stack('scripts')
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Flecha de regreso
@@ -159,6 +161,16 @@
                     dropdownIdioma.classList.remove('show');
                 });
             });
+
+            // cerrar sesión
+            const menuLogout = document.getElementById('menuLogout');
+            if (menuLogout) {
+                menuLogout.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    alert('Cerrar sesión');
+                    // window.location.href = '/logout';
+                });
+            }
         });
     </script>
 </body>
