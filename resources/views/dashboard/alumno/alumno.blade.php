@@ -2,10 +2,7 @@
 @extends('layouts.dashboard')
 
 @section('title', 'Mi Panel - Alumno')
-@section('user-role', 'Alumno')
-@section('avatar-iniciales', 'CM')
-@section('nombre-completo', 'Carlos Martínez')
-@section('welcome-message', '¡Bienvenido, Carlos!')
+
 @section('subtitle', 'Aquí puedes consultar tu información académica')
 
 @push('styles')

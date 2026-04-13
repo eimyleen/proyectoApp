@@ -2,13 +2,13 @@
 
 @section('title', 'Mi Expediente - Alumno')
 
-@section('back-button')
-    
-@endsection
-
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/dashboard_alumno.css') }}">
 @endpush
+
+@section('back-button')
+    <!-- Botón de regresar -->
+@endsection
 
 @section('content')
     <div class="contenido-con-botones">

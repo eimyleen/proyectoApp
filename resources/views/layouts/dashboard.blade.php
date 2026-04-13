@@ -16,9 +16,12 @@
                 <div class="profile-top">
                     <div class="profile-left">
                         @hasSection('back-button')
-                            <div class="back-button" id="backButton">
-                                <img src="{{ asset('img/flecha.png') }}" alt="Regresar" class="back-icon">
-                            </div>
+                            <a href="{{ Auth::user()->role == 'admin' ? route('admin.index') : (Auth::user()->role == 'maestro' ? route('maestro.index') : route('alumno.index')) }}" 
+                            style="text-decoration: none;">
+                                <div class="back-button" id="backButton">
+                                    <img src="{{ asset('img/flecha.png') }}" alt="Regresar" class="back-icon">
+                                </div>
+                            </a>
                         @endif
                         
                         <div class="avatar-circle">

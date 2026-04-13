@@ -2,10 +2,7 @@
 @extends('layouts.dashboard')
 
 @section('title', 'Administrador - Carreras')
-@section('user-role', 'Administrador')
-@section('avatar-iniciales', 'AD')
-@section('nombre-completo', 'Admin User')
-@section('welcome-message', '¡Bienvenido, Administrador!')
+
 @section('subtitle', 'Gestiona las carreras de la universidad')
 
 @push('styles')

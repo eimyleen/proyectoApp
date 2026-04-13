@@ -2,10 +2,7 @@
 @extends('layouts.dashboard')
 
 @section('title', 'Panel Maestro')
-@section('user-role', 'Maestro')
-@section('avatar-iniciales', 'CS')
-@section('nombre-completo', 'Carlos Sánchez')
-@section('welcome-message', '¡Bienvenido, Carlos!')
+
 @section('subtitle', 'Selecciona una carrera para gestionar sus grupos')
 
 @push('styles')

@@ -1,14 +1,11 @@
 @extends('layouts.dashboard')
 
 @section('title', 'Mi Perfil - Maestro')
-@section('user-role', 'Maestro')
-@section('avatar-iniciales', 'CS')
-@section('nombre-completo', 'Carlos Sánchez')
 @section('welcome-message', 'Mi Perfil')
 @section('subtitle', 'Aquí puedes consultar y editar tu información personal')
 
 @section('back-button')
-    <!-- Activa el botón de regreso -->
+    <!-- Botón de regresar -->
 @endsection
 
 @section('back-url', '/dashboard/maestro')

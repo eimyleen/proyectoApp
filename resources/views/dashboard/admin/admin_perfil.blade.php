@@ -5,7 +5,7 @@
 @section('subtitle', 'Consulta tu información personal')
 
 @section('back-button')
-    
+    <!-- Botón de regresar -->
 @endsection
 
 @push('styles')
