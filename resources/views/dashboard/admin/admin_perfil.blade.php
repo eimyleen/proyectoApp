@@ -1,17 +1,12 @@
 @extends('layouts.dashboard')
 
 @section('title', 'Mi Perfil - Administrador')
-@section('user-role', 'Administrador')
-@section('avatar-iniciales', 'AD')
-@section('nombre-completo', 'Admin User')
 @section('welcome-message', 'Mi Perfil')
-@section('subtitle', 'Consulta y edita tu información personal')
+@section('subtitle', 'Consulta tu información personal')
 
 @section('back-button')
-    <!-- Activa el botón de regreso -->
+    
 @endsection
-
-@section('back-url', '/dashboard/admin')
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/dashboard_admin.css') }}">
@@ -19,7 +14,6 @@
 
 @section('content')
     <div class="perfil-container">
-        <!-- Botones de acción -->
         <div class="acciones-superiores">
             <button class="btn-editar-perfil" id="btnEditarPerfil">
                 <img src="{{ asset('img/editar.png') }}" alt="Editar" class="btn-icono"> Editar perfil
@@ -29,47 +23,46 @@
             </button>
         </div>
 
-        <!-- Foto de perfil -->
         <div class="perfil-section">
             <div class="foto-perfil">
                 <div class="avatar-grande">
-                    <span class="avatar-iniciales-grande">AD</span>
+                    @if(Auth::user()->foto)
+                        <img src="{{ asset('storage/' . Auth::user()->foto) }}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+                    @else
+                        <span class="avatar-iniciales-grande">
+                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}{{ strtoupper(substr(Auth::user()->apellido, 0, 1)) }}
+                        </span>
+                    @endif
                 </div>
                 <button class="btn-subir-foto" id="btnCambiarFoto">Cambiar foto</button>
             </div>
         </div>
 
-        <!-- Datos personales -->
         <h3 class="perfil-titulo">Datos personales</h3>
         <div class="datos-grid">
             <div class="dato-item">
                 <label>Nombre(s)</label>
-                <span class="dato-valor" id="datoNombre">Admin</span>
+                <span class="dato-valor" id="datoNombre">{{ Auth::user()->name }}</span>
             </div>
             <div class="dato-item">
                 <label>Apellidos</label>
-                <span class="dato-valor" id="datoApellidos">Usuario</span>
+                <span class="dato-valor" id="datoApellidos">{{ Auth::user()->apellido }}</span>
             </div>
             <div class="dato-item">
                 <label>Correo electrónico</label>
-                <span class="dato-valor" id="datoCorreo">admin@utnay.edu.mx</span>
-            </div>
-            <div class="dato-item">
-                <label>Teléfono</label>
-                <span class="dato-valor" id="datoTelefono">311-123-4567</span>
+                <span class="dato-valor" id="datoCorreo">{{ Auth::user()->email }}</span>
             </div>
             <div class="dato-item">
                 <label>Rol</label>
-                <span class="dato-valor" id="datoRol">Administrador</span>
+                <span class="dato-valor" id="datoRol">{{ ucfirst(Auth::user()->role) }}</span>
             </div>
             <div class="dato-item">
-                <label>Fecha de registro</label>
-                <span class="dato-valor" id="datoFechaRegistro">01 de enero de 2024</span>
+                <label>Miembro desde</label>
+                <span class="dato-valor" id="datoFechaRegistro">{{ Auth::user()->created_at->format('d/m/Y') }}</span>
             </div>
         </div>
     </div>
 
-    <!-- Modal para editar perfil -->
     <div id="modalEditarPerfil" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -77,36 +70,30 @@
                 <span class="modal-close" id="closeModalEditar">&times;</span>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label>Nombre(s)</label>
-                    <input type="text" id="editNombre" value="Admin">
-                </div>
-                <div class="form-group">
-                    <label>Apellidos</label>
-                    <input type="text" id="editApellidos" value="Usuario">
-                </div>
-                <div class="form-group">
-                    <label>Correo electrónico</label>
-                    <input type="email" id="editCorreo" value="admin@utnay.edu.mx">
-                </div>
-                <div class="form-group">
-                    <label>Teléfono</label>
-                    <input type="text" id="editTelefono" value="311-123-4567">
-                </div>
-                <div class="form-group">
-                    <label>Foto de perfil</label>
-                    <input type="file" id="editFoto" accept="image/*">
-                    <small class="form-text">Selecciona una nueva imagen para la foto</small>
-                </div>
+                <form action="#" method="POST" enctype="multipart/form-data" id="formEditarPerfil">
+                    @csrf
+                    <div class="form-group">
+                        <label>Nombre(s)</label>
+                        <input type="text" name="name" value="{{ Auth::user()->name }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Apellidos</label>
+                        <input type="text" name="apellido" value="{{ Auth::user()->apellido }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Correo electrónico</label>
+                        <input type="email" name="email" value="{{ Auth::user()->email }}">
+                    </div>
+                    <input type="file" id="editFoto" name="foto" style="display:none;" accept="image/*">
+                </form>
             </div>
             <div class="modal-footer">
                 <button class="btn-cancelar" id="cancelarEditar">Cancelar</button>
-                <button class="btn-guardar" id="guardarEditar">Guardar cambios</button>
+                <button class="btn-guardar" type="submit" form="formEditarPerfil">Guardar cambios</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal para cambiar contraseña -->
     <div id="modalCambiarContrasena" class="modal">
         <div class="modal-content">
             <div class="modal-header">
