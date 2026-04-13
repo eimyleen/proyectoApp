@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CarreraController;
 
 // Ruta de login (breeze lo maneja)
 require __DIR__.'/auth.php';
@@ -18,10 +19,6 @@ Route::middleware(['auth', 'role.redirect'])->group(function () {
     })->name('dashboard');
 
     // Rutas específicas
-    Route::get('/dashboard/admin', function () { 
-        return view('dashboard.admin.admin');
-    })->name('admin.dashboard');
-
     Route::get('/dashboard/maestro', function () { 
         return view('dashboard.maestro.maestro'); 
     })->name('maestro.dashboard');
@@ -29,16 +26,21 @@ Route::middleware(['auth', 'role.redirect'])->group(function () {
     Route::get('/dashboard/alumno', function () { 
         return view('dashboard.alumno.alumno'); 
     })->name('alumno.dashboard');
+
+    // Ruta para ver el panel de administración (Lista de carreras)
+    Route::get('/dashboard/admin', [CarreraController::class, 'index'])->name('admin.dashboard');
+
+    // Ruta para GUARDAR una nueva carrera (Método POST)
+    Route::post('/carreras', [CarreraController::class, 'store'])->name('carreras.store');
+
+    // Ruta para VER el detalle de una carrera específica (Método GET)
+    Route::get('/carreras/{id}', [CarreraController::class, 'show'])->name('carreras.show');
 });
 
 /*
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

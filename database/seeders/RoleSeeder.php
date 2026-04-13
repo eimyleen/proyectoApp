@@ -15,31 +15,30 @@ class RoleSeeder extends Seeder
     public function run(): void
     {
         // -- Creación de Roles --
-        $root = Role::firstOrCreate(['name' => 'root']);
         $admin = Role::firstOrCreate(['name' => 'admin']);
         $maestro = Role::firstOrCreate(['name' => 'maestro']);
         $alumno = Role::firstOrCreate(['name' => 'alumno']);
 
         $permisos = [
-            'carreras.ver'               => [$root],
-            'carreras.crear'             => [$root],
-            'carreras.editar'            => [$root],
-            'carreras.eliminar'          => [$root],
+            'carreras.ver'               => [$admin],
+            'carreras.crear'             => [$admin],
+            'carreras.editar'            => [$admin],
+            'carreras.eliminar'          => [$admin],
             
-            'administradores.ver'        => [$root, $admin],
-            'administradores.crear'      => [$root],
+            'administradores.ver'        => [$admin],
+            'administradores.crear'      => [$admin],
             
-            'maestros.ver'               => [$root, $admin],
-            'maestros.crear'             => [$root, $admin],
+            'maestros.ver'               => [$admin],
+            'maestros.crear'             => [$admin],
             
-            'alumnos.ver'                => [$root, $admin],
-            'alumnos.crear'              => [$root, $admin],
+            'alumnos.ver'                => [$admin],
+            'alumnos.crear'              => [$admin],
             
-            'grupos.ver'                 => [$root, $admin],
-            'grupos.asignar-tutores'     => [$root, $admin],
+            'grupos.ver'                 => [$admin],
+            'grupos.asignar-tutores'     => [$admin],
             
-            'expedientes.ver'            => [$root, $admin, $maestro],
-            'expedientes.crear'          => [$root, $admin, $maestro],
+            'expedientes.ver'            => [$admin, $maestro],
+            'expedientes.crear'          => [$admin, $maestro],
             
             'grupos.ver-asignados'       => [$maestro],
             'calificaciones.gestionar'   => [$maestro],

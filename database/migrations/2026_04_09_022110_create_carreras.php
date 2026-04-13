@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('carreras', function (Blueprint $table) {
             $table->id();
             $table->string('nombre')->unique();
-            $table->string('siglas', 10)->unique(); 
+            $table->string('siglas', 20)->unique(); 
+            $table->string('imagen')->nullable();
             $table->timestamps();
         });
     }

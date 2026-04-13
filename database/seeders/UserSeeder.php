@@ -20,16 +20,6 @@ class UserSeeder extends Seeder
             ['nombre' => 'Ingeniería en Desarrollo de Software']
         );
 
-        // Usuario ROOT
-        $root = User::create([
-            'name' => 'Manuel Root',
-            'apellido_paterno' => 'Admin',
-            'apellido_materno' => 'Principal',
-            'email' => 'root@utnay.edu.mx',
-            'password' => Hash::make('password'),
-        ]);
-        $root->assignRole('root');
-
         // Usuario ADMIN 
         $admin = User::create([
             'name' => 'Admin',
