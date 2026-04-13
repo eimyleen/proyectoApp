@@ -28,7 +28,7 @@ class RoleRedirect
             }
 
             // Redirección basada en el primer rol encontrado
-            if ($user->hasRole('root') || $user->hasRole('admin')) {
+            if ($user->hasRole('admin')) {
                 return redirect()->intended('/dashboard/admin');
             } elseif ($user->hasRole('maestro')) {
                 return redirect()->intended('/dashboard/maestro');
