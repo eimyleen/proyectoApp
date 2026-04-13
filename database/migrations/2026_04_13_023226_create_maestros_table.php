@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('maestros', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('num_empleado')->unique();
+            $table->string('rfc')->unique();
+            $table->int('edad')->unique();
+            $table->string('sexo');
+            $table->date('fecha_nacimiento');
+            $table->string('telefono');
+            $table->boolean('es_tutor')->default(false);
             $table->timestamps();
         });
     }

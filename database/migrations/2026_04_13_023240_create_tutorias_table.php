@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('tutorias', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('alumno_id')->constrained('alumnos')->onDelete('cascade');
+            $table->foreignId('maestro_id')->constrained('maestros')->onDelete('cascade');
+            $table->date('fecha');
+            $table->string('tema');
+            $table->text('notas')->nullable();
             $table->timestamps();
         });
     }

@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('materias', function (Blueprint $table) {
             $table->id();
+            $table->string('nombre');
+            $table->foreignId('carrera_id')->constrained('carreras')->onDelete('cascade');
+            $table->string('docente');
             $table->timestamps();
         });
     }
