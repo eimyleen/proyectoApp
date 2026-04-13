@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
 
+// Redirección raíz al login
+Route::redirect('/', '/login');
+
 // --- Rutas de autenticación ---
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -22,19 +25,19 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard/admin/carrera', function () {
         return view('dashboard.admin.admin_carrera');
-    });
+    })->middleware('role:admin')->name('admin.carrera');
 
     Route::get('/dashboard/admin/alumno/expediente', function () {
         return view('dashboard.admin.admin_alumno_expediente');
-    });
+    })->middleware('role:admin')->name('admin.alumno.expediente');
 
     Route::get('/dashboard/admin/maestro/perfil', function () {
         return view('dashboard.admin.admin_maestro_perfil');
-    });
+    })->middleware('role:admin')->name('admin.maestro.perfil');
 
     Route::get('/dashboard/admin/perfil', function () {
         return view('dashboard.admin.admin_perfil');
-    });
+    })->middleware('role:admin')->name('admin.perfil');
 
     // --- Rutas para el Maestro ---
 
@@ -44,15 +47,15 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard/maestro/perfil', function () {
         return view('dashboard.maestro.perfil_maestro');
-    });
+    })->middleware('role:maestro')->name('maestro.perfil');
 
     Route::get('/dashboard/maestro/grupos', function () {
         return view('dashboard.maestro.grupos');
-    });
+    })->middleware('role:maestro')->name('maestro.grupos');
 
     Route::get('/dashboard/maestro/expediente/alumno', function () {
         return view('dashboard.maestro.expediente_alumno_maestro');
-    });
+    })->middleware('role:maestro')->name('maestro.alumno.expediente');
 
 
     // --- Rutas para el Alumno ---
@@ -63,16 +66,16 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard/alumno/expediente', function () {
         return view('dashboard.alumno.alumno_expediente');
-    });
+    })->middleware('role:alumno')->name('alumno.expediente');
 
     Route::get('/dashboard/alumno/calificaciones', function () {
         return view('dashboard.alumno.alumno_calificaciones');
-    });
+    })->middleware('role:alumno')->name('alumno.calificaciones');
 });
 
 
 
-Route::get('/', function () {
+Route::get('/welcome', function () {
     return view('welcome');
 });
 
