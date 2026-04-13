@@ -19,18 +19,17 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->group(function () {
     
     // --- Rutas para el Admin ---
+
+    // --- Rutas referentes a la gestión de carreras ---
+
     // Ruta para el Admin - AÑADIDO ->name('admin.index')
     Route::get('/admin/dashboard', [CarreraController::class, 'index'])->middleware('role:admin')->name('admin.index');
-
     // Ruta para GUARDAR una nueva carrera (Método POST)
     Route::post('/admin/dashboard', [CarreraController::class, 'store'])->middleware('role:admin')->name('admin.store');
-
     // Ruta para VER el detalle-información de una carrera específica (Método GET)
     Route::get('/carrera/{id}', [CarreraController::class, 'show'])->middleware('role:admin')->name('admin.show');
-
     // Ruta para EDITAR el detalle de una carrera específica (Método PATCH)
     Route::patch('/carrera/{id}', [CarreraController::class, 'update'])->middleware('role:admin')->name('admin.update');
-
     // Ruta para BORRAR una carrera específica y REDIRIGIR a la principal (Método DELETE)
     Route::delete('/carrera/{id}', [CarreraController::class, 'delete'])->name('admin.delete');
 
@@ -55,17 +54,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/maestro/dashboard', function () {
         return view('dashboard.maestro.maestro');
     })->middleware('role:maestro')->name('maestro.index');
-
-    // Ruta para el Alumno - AÑADIDO ->name('alumno.index')
-    Route::get('/alumno/dashboard', function () {
-        return view('dashboard.alumno.alumno');
-    })->middleware('role:alumno')->name('alumno.index');
-
-    Route::get('/dashboard/alumno', function () { 
-        return view('dashboard.alumno.alumno');
-    })->name('alumno.dashboard');
-
-
 
     Route::get('/dashboard/maestro/perfil', function () {
         return view('dashboard.maestro.perfil_maestro');

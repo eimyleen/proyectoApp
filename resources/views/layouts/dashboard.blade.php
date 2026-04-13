@@ -58,7 +58,10 @@
                                 </a>
                                 
                                 <hr>
-                                <a href="#" id="menuPerfil">
+                                <a href="{{ 
+                                    Auth::user()->role == 'admin' ? route('admin.perfil') : 
+                                    (Auth::user()->role == 'maestro' ? route('maestro.perfil') : route('alumno.expediente')) 
+                                }}" id="menuPerfil">
                                     <img src="{{ asset('img/perfil.png') }}" alt="Perfil" class="dropdown-icon"> Mi Perfil
                                 </a>
                                 <hr>
