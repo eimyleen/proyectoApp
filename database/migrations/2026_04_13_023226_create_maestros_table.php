@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('num_empleado')->unique();
             $table->string('rfc')->unique();
-            $table->int('edad')->unique();
+            $table->integer('edad')->unique();
             $table->string('sexo');
             $table->date('fecha_nacimiento');
             $table->string('telefono');

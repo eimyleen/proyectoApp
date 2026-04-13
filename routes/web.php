@@ -1,13 +1,38 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::middleware(['auth'])->group(function () {
+    
+    // Ruta para el Admin - AÑADIDO ->name('admin.index')
+    Route::get('/admin/dashboard', function () {
+        return view('dashboard.admin.admin');
+    })->middleware('role:admin')->name('admin.index');
+
+    // Ruta para el Maestro - AÑADIDO ->name('maestro.index')
+    Route::get('/maestro/dashboard', function () {
+        return view('dashboard.maestro.maestro');
+    })->middleware('role:maestro')->name('maestro.index');
+
+    // Ruta para el Alumno - AÑADIDO ->name('alumno.index')
+    Route::get('/alumno/dashboard', function () {
+        return view('dashboard.alumno.alumno');
+    })->middleware('role:alumno')->name('alumno.index');
+
+});
+
+
+
+
+
 
 Route::get('/', function () {
     return view('welcome');
-});
-
-Route::get('/login', function () {
-    return view('login');
 });
 
 Route::get('/dashboard', function () {

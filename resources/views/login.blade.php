@@ -22,33 +22,22 @@
             <h2>Inicio de Sesión</h2>
             <p>¡Bienvenido, ingresa tus credenciales para acceder!</p>
 
-            <form>
+            <form action="{{ route('login.post') }}" method="POST">
                 @csrf
 
                 <!-- Correo -->
                 <div class="form-group">
                     <label for="correo">Correo</label>
-                    <input 
-                        type="email" 
-                        name="correo" 
-                        id="correo" 
-                        class="inputCredenciales" 
-                        placeholder="Ingresa tu correo" 
-                        required
-                    >
+                    <input type="email" name="correo" id="correo" value="{{ old('correo') }}" class="inputCredenciales" placeholder="Ingresa tu correo" required>
+                    @error('correo')
+                        <span style="color: red;">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <!-- Contraseña -->
                 <div class="form-group">
                     <label for="password">Contraseña</label>
-                    <input 
-                        type="password" 
-                        name="password" 
-                        id="password" 
-                        class="inputCredenciales" 
-                        placeholder="Ingresa tu contraseña" 
-                        required
-                    >
+                    <input type="password" name="password" id="password" class="inputCredenciales" placeholder="Ingresa tu contraseña" required>
                 </div>
 
                 <!-- Mostrar contraseña -->
