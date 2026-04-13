@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Maestro;
+use App\Models\Alumno;
 
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
@@ -30,6 +31,11 @@ class User extends Authenticatable
     {
         // Un usuario tiene un registro de maestro
         return $this->hasOne(Maestro::class);
+    }
+
+    public function alumno()
+    {
+        return $this->hasOne(Alumno::class);
     }
 
     /**

@@ -6,6 +6,8 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Maestro;
+use App\Models\Carrera;
+use App\Models\Alumno;
 use Illuminate\Support\Facades\Hash;
 
 class UsuariosSeeder extends Seeder
@@ -33,7 +35,8 @@ class UsuariosSeeder extends Seeder
             'role' => 'maestro',
         ]);
 
-        \App\Models\Maestro::create([
+        // Datos de prueba para el maestro
+        Maestro::create([
             'user_id' => $maestroUser->id,
             'num_empleado' => 'EMP12345',
             'rfc' => 'PEPJ900101ABC',
@@ -45,12 +48,32 @@ class UsuariosSeeder extends Seeder
         ]);
 
         // Usuario Alumno
-        User::create([
+        $userAlumno = User::create([
             'name' => 'Luis',
             'apellido' => 'García',
             'email' => 'alumno@utnay.edu.mx',
             'password' => Hash::make('password123'),
             'role' => 'alumno',
+        ]);
+
+        // Carrera de prueba
+        $carrera = Carrera::create([
+            'nombre' => 'Ingeniería en Tecnologías de la Información e Innovación Digital',
+            'clave' => 'ITIID',
+            'logo' => 'img/carreras/ing_tec_info.png',
+        ]);
+
+        // Datos de prueba para el alumno
+        Alumno::create([
+            'user_id' => $userAlumno->id,
+            'matricula' => 'TIC-310000',
+            'carrera_id' => $carrera->id,
+            'grupo' => 'TI-41',
+            'curp' => 'GARL000101HNTNNN01',
+            'edad' => '21',
+            'sexo' => 'Masculino',
+            'fecha_nacimiento' => '2005-01-01',
+            'telefono' => '3111234567',
         ]);
     }
 }
