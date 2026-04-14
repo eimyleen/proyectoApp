@@ -65,9 +65,16 @@ Route::middleware(['auth'])->group(function () {
         AdminCarreraController::class, 'delete'
     ])->middleware('role:admin')->name('admin.delete');
 
-    Route::get('/admin/respaldos', function() {
-        return view("dashboard.admin.admin_respaldo_auto");
-    })->middleware('role:admin')->name('admin.respaldo');
+    Route::get('/dashboard/admin/logs', [
+        LogController::class, 'index'
+    ])->middleware(['auth', 'role:admin'])->name('admin.logs');
+
+    // --- Ruta para DESCARGAR el PDF con la lista de alumnos completa ---
+    Route::get('/dashboard/admin/descargar-alumnos', [
+        AdminCarreraController::class, 'descargarAlumnosPDF'
+    ])->middleware(['auth', 'role:admin'])->name('admin.alumnos.pdf');
+
+    Route::post('/admin/dashboard/respaldo', [AdminCarreraController::class, 'saveBackup'])->middleware('role:admin')->name('admin.respaldo');
 
     // ----- Rutas referentes a la gestión de usuarios -----
 

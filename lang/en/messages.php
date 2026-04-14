@@ -2,6 +2,7 @@
 
 return [
     // --- Titles and General ---
+    'title_welcome_dashboard' => 'Welcome',
     'title_teacher_profile' => 'Teacher Profile',
     'sub_teacher_profile' => 'Consult and edit teacher information',
     'title_personal_data' => 'Personal Data',

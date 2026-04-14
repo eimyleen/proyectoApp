@@ -66,7 +66,11 @@
                     <div class="carrera-img">
                         <a href="{{ route('admin.show', $carrera) }}">
                             @if($carrera->logo)
-                                <img src="{{ asset($carrera->logo) }}" alt="{{ $carrera->nombre }}">
+                                @if(file_exists($carrera->logo))
+                                    <img src="{{ asset($carrera->logo) }}" alt="{{ $carrera->nombre }}">
+                                @else
+                                    <img src="{{ asset('img/jaguar.png') }}" alt="Sin logo">
+                                @endif
                             @else
                                 <img src="{{ asset('img/jaguar.png') }}" alt="{{ __('messages.admin_no_logo') }}">
                             @endif
@@ -136,6 +140,9 @@
                     <button type="submit" class="btn-guardar" id="btnRespaldosAutoExec">{{ __('messages.modal_btn_backup_auto') }}</button>
                 </a>
             </div>
+            <form class="modal-body" action="{{ route("admin.respaldo") }}" method="POST">
+                <button type="submit" class="btn-guardar" id="btnRespaldosExec">Respaldo Ahora</button>
+            </form>
         </div>
     </div>
 @endsection
