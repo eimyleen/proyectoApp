@@ -19,6 +19,6 @@ class CheckRole
         if (Auth::check() && Auth::user()->role == $role) {
             return $next($request);
         }
-        return redirect('/login'); // O a una página de "No autorizado"
+        return redirect('/login'); // Redirige al login si el usuario no tiene el rol adecuado
     }
 }

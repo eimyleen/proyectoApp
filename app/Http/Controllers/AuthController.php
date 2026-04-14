@@ -22,7 +22,7 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-        // 2. Se autentica
+        // Se autentica
         // Mapeamos 'correo' del form a 'email' de la DB
         if (Auth::attempt(['email' => $credentials['correo'], 'password' => $credentials['password']])) {
             $request->session()->regenerate();
@@ -43,12 +43,13 @@ class AuthController extends Controller
             return redirect()->intended('login');
         }
 
-        // 3. Si falla, regresar con error
+        // Si falla, regresar con error
         return back()->withErrors([
             'correo' => 'Las credenciales no coinciden.',
         ])->onlyInput('correo');
     }
 
+    // Cierra la sesión del usuario
     public function logout(Request $request)
     {
         Auth::logout();
