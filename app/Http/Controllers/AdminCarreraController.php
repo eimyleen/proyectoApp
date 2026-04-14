@@ -6,11 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\Carrera;
 use App\Models\Alumno;
 
-class AdminCarreraController extends Controller
-{
+class AdminCarreraController extends Controller {
     public function index() {
         // Obtenemos todas las carreras de la BD
         $var_carreras = Carrera::all();
+        // Y Alumnos con el nombre de su carrera y nombre de usuario*
         $alumnos = Alumno::with(['carrera:id,nombre','user:id,name'])->get();
         return view('dashboard.admin.admin', compact('var_carreras', 'alumnos'));
     }

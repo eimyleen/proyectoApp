@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Carrera;
+use App\Models\Alumno;
 
 class MaestroCarreraController extends Controller
 {
@@ -12,9 +13,11 @@ class MaestroCarreraController extends Controller
      */
     public function index()
     {
-        //
+        // Obtenemos todas las carreras de la BD
         $carreras = Carrera::all();
-        return view("dashboard.maestro.maestro", compact('carreras'));
+        // Y Alumnos con el nombre de su carrera y nombre de usuario*
+        $alumnos = Alumno::with(['carrera:id,nombre','user:id,name'])->get();
+        return view("dashboard.maestro.maestro", compact('carreras', 'alumnos'));
     }
 
     /**

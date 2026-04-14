@@ -13,6 +13,9 @@
     <div class="admin-dashboard-container">
         <!-- Botones superiores -->
         <div class="admin-buttons">
+            <button class="btn-lista-global" id="btnRespaldos">
+                Respaldos
+            </button>
             <button class="btn-lista-global" id="btnListaGlobal">
                 Ver lista de alumnos global
             </button>
@@ -44,7 +47,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn-cancelar" onclick="" id="cancelarCarrera">Cancelar</button>
+                        <button class="btn-cancelar" onclick="cerrarModalCarrera()" id="cancelarCarrera">Cancelar</button>
                         <button type="submit" class="btn-guardar" id="guardarCarrera">Guardar carrera</button>
                     </div>
                 </div>
@@ -52,6 +55,7 @@
         </form>
         <!-- Grid de carreras -->
         <div class="carreras-grid">
+            
             @foreach ($var_carreras as $carrera)
                 <div class="carrera-card" data-carrera="{{ $carrera->nombre }}">
                     <div class="carrera-img">
@@ -96,7 +100,7 @@
                             @foreach($alumnos as $alumno)
                                 <tr>
                                     <td>{{ $alumno->matricula }}</td>
-                                    <td> {{ $alumno->usuario?->name }}</td>
+                                    <td>{{ $alumno->user?->name }}</td>
                                     <td>{{ $alumno->carrera?->nombre }}</td>
                                     <td>{{ $alumno->grupo }}</td>
                                 </tr>

@@ -59,14 +59,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @for($i = 0; $i < 5; $i++)
+                            @foreach($alumnos as $alumno)
                                 <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>{{ $alumno->matricula }}</td>
+                                    <td>{{ $alumno->user?->name }}</td>
+                                    <td>{{ $alumno->carrera?->nombre }}</td>
+                                    <td>{{ $alumno->grupo }}</td>
                                 </tr>
-                            @endfor
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
