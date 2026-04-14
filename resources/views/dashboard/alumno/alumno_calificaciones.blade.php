@@ -1,5 +1,9 @@
 @extends('layouts.dashboard')
 
+@section('title', __('messages.title_my_grades'))
+
+@section('subtitle', __('messages.subtitle_grades'))
+
 @section('title', 'Mis Calificaciones - Alumno')
 
 @section('subtitle', 'Aquí puedes consultar tus calificaciones por período')
@@ -18,12 +22,12 @@
         <div class="botones-laterales">
             <a href="{{ route('alumno.expediente') }}" style="text-decoration: none;">
                 <button class="btn-expediente {{ Request::routeIs('alumno.expediente') ? 'active' : '' }}">
-                    Expediente
+                    {{ __('messages.btn_record') }}
                 </button>
             </a>
             <a href="{{ route('alumno.calificaciones') }}" style="text-decoration: none;">
                 <button class="btn-calificaciones {{ Request::routeIs('alumno.calificaciones') ? 'active' : '' }}">
-                    Calificaciones
+                    {{ __('messages.btn_grades') }}
                 </button>
             </a>
             
@@ -38,7 +42,7 @@
                         <img src="{{ asset('img/jaguar.png') }}" alt="UTNay">
                     @endif
                 </div>
-                <span class="logo-texto">Logo de la carrera</span>
+                <span class="logo-texto">{{ __('messages.career_logo_alt') }}</span>
             </div>
         </div>
 
@@ -47,9 +51,9 @@
             <!-- Filtro de período -->
             <div class="filtro-periodo">
                 <div class="periodo-select">
-                    <label>Período:</label>
+                    <label>{{ __('messages.label_period') }}</label>
                     <select>
-                        <option value="">Seleccionar período</option>
+                        <option value="">{{ __('messages.select_period') }}</option>
                     </select>
                 </div>
             </div>
@@ -59,8 +63,8 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Materia</th>
-                            <th>Calificación</th>
+                           <th>{{ __('messages.th_subject') }}</th>
+                            <th>{{ __('messages.th_grade') }}</th>
                         </tr>
                     </thead>
                     <tbody>

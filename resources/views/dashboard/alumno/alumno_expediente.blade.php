@@ -1,5 +1,8 @@
 @extends('layouts.dashboard')
 
+@section('title', __('messages.title_my_record'))
+@section('subtitle', __('messages.subtitle_record'))
+
 @section('title', 'Mi Expediente - Alumno')
 
 @push('styles')
@@ -15,12 +18,12 @@
         <div class="botones-laterales">
             <a href="{{ route('alumno.expediente') }}" style="text-decoration: none;">
                 <button class="btn-expediente {{ Request::routeIs('alumno.expediente') ? 'active' : '' }}">
-                    Expediente
+                    {{ __('messages.btn_record') }}
                 </button>
             </a>
             <a href="{{ route('alumno.calificaciones') }}" style="text-decoration: none;">
                 <button class="btn-calificaciones {{ Request::routeIs('alumno.calificaciones') ? 'active' : '' }}">
-                    Calificaciones
+                    {{ __('messages.btn_grades') }}
                 </button>
             </a>
             
@@ -48,50 +51,50 @@
                                 </span>
                             @endif
                         </div>
-                        <button class="btn-subir-foto">Subir foto</button>
+                        <button class="btn-subir-foto">{{ __('messages.btn_upload_photo') }}</button>
                     </div>
                 </div>
 
-                <h3 class="datos-titulo">Expediente Personal</h3>
+                <h3 class="datos-titulo">{{ __('messages.title_personal_record') }}</h3>
                 <div class="datos-grid">
                     <div class="dato-item">
-                        <label>Nombre</label>
+                        <label>{{ __('messages.th_nombre') }}</label>
                         <span class="dato-valor">{{ Auth::user()->name }}</span>
                     </div>
                     <div class="dato-item">
-                        <label>Apellidos</label>
+                        <label>{{ __('messages.label_apellidos') }}</label>
                         <span class="dato-valor">{{ Auth::user()->apellido }}</span>
                     </div>
                     <div class="dato-item">
-                        <label>Carrera</label>
+                        <label><label>{{ __('messages.label_major') }}</label></label>
                         <span class="dato-valor">{{ Auth::user()->alumno->carrera->nombre ?? 'No asignada' }}</span>
                     </div>
                     <div class="dato-item">
-                        <label>Grupo</label>
+                        <label>{{ __('messages.label_group') }}</label>
                         <span class="dato-valor">{{ Auth::user()->alumno->grupo ?? 'N/A' }}</span>
                     </div>
                     <div class="dato-item">
-                        <label>Matrícula</label>
+                        <label>{{ __('messages.label_id_number') }}</label>
                         <span class="dato-valor">{{ Auth::user()->alumno->matricula ?? 'N/A' }}</span>
                     </div>
                     <div class="dato-item">
-                        <label>CURP</label>
+                       <label>{{ __('messages.label_curp') }}</label>
                         <span class="dato-valor">{{ Auth::user()->alumno->curp ?? 'N/A' }}</span>
                     </div>
                     <div class="dato-item">
-                        <label>Edad</label>
+                        <label>{{ __('messages.label_age') }}</label>
                         <span class="dato-valor">{{ Auth::user()->alumno->edad ?? 'N/A' }} años</span>
                     </div>
                     <div class="dato-item">
-                        <label>Sexo</label>
+                        <label>{{ __('messages.label_gender') }}</label>
                         <span class="dato-valor">{{ Auth::user()->alumno->sexo ?? 'N/A' }}</span>
                     </div>
                     <div class="dato-item">
-                        <label>Fecha de nacimiento</label>
+                        <label>{{ __('messages.label_birthdate') }}</label>
                         <span class="dato-valor">{{ Auth::user()->alumno->fecha_nacimiento ?? 'N/A' }}</span>
                     </div>
                     <div class="dato-item">
-                        <label>Correo electrónico</label>
+                        <label>{{ __('messages.th_email') }}</label>
                         <span class="dato-valor">{{ Auth::user()->email }}</span>
                     </div>
                 </div>

@@ -47,10 +47,10 @@
                                 <img src="{{ asset('img/idioma.png') }}" alt="Configuración" class="icon-img">
                             </div>
                             <div class="dropdown-menu" id="dropdownIdioma">
-                                <a href="#" data-idioma="es">
+                                <a href="{{ route('set_language', 'es') }}" data-idioma="es">
                                     <img src="{{ asset('img/idioma.png') }}" alt="Idioma" class="dropdown-icon"> Español
                                 </a>
-                                <a href="#" data-idioma="en">
+                                <a href="{{ route('set_language', 'en') }}" data-idioma="en">
                                     <img src="{{ asset('img/idioma.png') }}" alt="Idioma" class="dropdown-icon"> English
                                 </a>
                             </div>
