@@ -88,6 +88,11 @@ Route::middleware(['auth'])->group(function () {
         MaestroCarreraController::class, 'index'
     ])->middleware('role:maestro')->name('maestro.index');
 
+    // --- Ruta para DESCARGAR el PDF con la lista de alumnos completa ---
+    Route::get('/dashboard/maestro/descargar-alumnos', [
+        MaestroCarreraController::class, 'descargarAlumnosPDF'
+    ])->middleware(['auth', 'role:maestro'])->name('maestro.alumnos.pdf');
+
     // --- Ruta para VER el detalle-información de una carrera específica desde la perspectiva del Maestro ---
     Route::get('/maestro/carrera/{id}', [
         MaestroCarreraController::class, 'show'
