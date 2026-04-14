@@ -13,8 +13,16 @@
     <div class="contenido-con-botones">
         <!-- Botones laterales -->
         <div class="botones-laterales">
-            <button class="btn-expediente">Expediente</button>
-            <button class="btn-calificaciones">Calificaciones</button>
+            <a href="{{ route('alumno.expediente') }}" style="text-decoration: none;">
+                <button class="btn-expediente {{ Request::routeIs('alumno.expediente') ? 'active' : '' }}">
+                    Expediente
+                </button>
+            </a>
+            <a href="{{ route('alumno.calificaciones') }}" style="text-decoration: none;">
+                <button class="btn-calificaciones {{ Request::routeIs('alumno.calificaciones') ? 'active' : '' }}">
+                    Calificaciones
+                </button>
+            </a>
         </div>
 
         <!-- Tablas -->
