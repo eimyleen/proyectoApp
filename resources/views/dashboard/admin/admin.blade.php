@@ -55,13 +55,19 @@
         </form>
         <!-- Grid de carreras -->
         <div class="carreras-grid">
-            
             @foreach ($var_carreras as $carrera)
                 <div class="carrera-card" data-carrera="{{ $carrera->nombre }}">
                     <div class="carrera-img">
-                        <a href="{{ route("admin.show", $carrera) }}">
-                            <img src="{{ asset('img/carreras/' . $carrera->imagen) }}" alt="{{ $carrera->nombre }}">
+                        <a href="{{ route('admin.show', $carrera) }}">
+                            @if($carrera->logo)
+                                <img src="{{ asset($carrera->logo) }}" alt="{{ $carrera->nombre }}">
+                            @else
+                                <img src="{{ asset('img/carreras/jaguar.png') }}" alt="Sin logo">
+                            @endif
                         </a>
+                    </div>
+                    <div class="carrera-info">
+                        <p>{{ $carrera->nombre }}</p>
                     </div>
                 </div>
             @endforeach

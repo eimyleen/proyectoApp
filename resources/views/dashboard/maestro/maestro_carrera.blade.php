@@ -75,17 +75,17 @@
                         </tr>
                     </thead>
                     <tbody id="alumnosBody">
-                        @for($i = 1; $i <= 4; $i++)
+                        @foreach($alumnos as $i => $alumno)
                             <tr>
-                                <td class="col-numero">{{ $i }}</td>
-                                <td class="col-matricula"></td>
-                                <td class="col-nombre"></td>
+                                <td class="col-numero">{{ $i+1 }}</td>
+                                <td class="col-matricula">{{ $alumno->matricula }}</td>
+                                <td class="col-nombre">{{ $alumno->user?->name }}</td>
                                 <td class="col-acciones">
                                     <button class="btn-ver-expediente">Ver expediente</button>
                                     <button class="btn-eliminar">Eliminar</button>
                                 </td>
                             </tr>
-                        @endfor
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -114,17 +114,17 @@
                         </tr>
                     </thead>
                     <tbody id="maestrosBody">
-                        @for($i = 1; $i <= 4; $i++)
+                        @foreach($maestros as $i => $maestro)
                             <tr>
-                                <td class="col-numero">{{ $i }}</td>
-                                <td class="col-nombre"></td>
-                                <td class="col-correo"></td>
+                                <td class="col-numero">{{ $i+1 }}</td>
+                                <td class="col-nombre">{{ $maestro->user?->name }}</td>
+                                <td class="col-correo">{{ $maestro->user?->email }}</td>
                                 <td class="col-acciones">
                                     <button class="btn-ver-perfil">Ver perfil</button>
                                     <button class="btn-eliminar">Eliminar</button>
                                 </td>
                             </tr>
-                        @endfor
+                        @endforeach
                     </tbody>
                 </table>
             </div>

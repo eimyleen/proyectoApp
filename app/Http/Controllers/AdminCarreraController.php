@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Maestro;
 use Illuminate\Http\Request;
 use App\Models\Carrera;
 use App\Models\Alumno;
@@ -17,7 +18,9 @@ class AdminCarreraController extends Controller {
     
     public function show($id) {
         $var_carrera = Carrera::findOrFail($id);
-        return view('dashboard.admin.admin_carrera', compact('var_carrera'));
+        $alumnos = Alumno::with('user:id,name')->get();
+        $maestros = Maestro::with('user:id,name,email')->get();
+        return view('dashboard.admin.admin_carrera', compact('var_carrera', 'alumnos', 'maestros'));
     }
 
     public function update(Request $request, string $id) {

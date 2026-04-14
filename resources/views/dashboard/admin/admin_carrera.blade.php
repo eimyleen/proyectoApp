@@ -1,10 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('title', 'Administrador - Detalle de Carrera')
-@section('user-role', 'Administrador')
-@section('avatar-iniciales', 'AD')
-@section('nombre-completo', 'Admin User')
-@section('welcome-message', '[Nombre de la Carrera]')
+
 @section('subtitle', 'Gestiona los grupos y maestros de esta carrera')
 
 @section('back-button')
@@ -22,13 +19,18 @@
         <!-- Header de la carrera -->
         <div class="carrera-header">
             <div class="carrera-logo">
-                <div class="logo-circular">
-                    <img src="{{ asset('img/carreras/'.$var_carrera->nombre.'.png') }}" alt='{{ $var_carrera->nombre }}'>
+                <div class="logo-circular" style="width: 120px; height: 120px; overflow: hidden;">
+                    @if($var_carrera->logo)
+                        <img src="{{ asset($var_carrera->logo) }}" 
+                            alt="{{ $var_carrera->nombre }}"
+                            style="width: 100%; height: 100%; object-fit: contain;">
+                    @else
+                        <img src="{{ asset('img/carreras/default_carrera.png') }}" alt="Sin logo">
+                    @endif
                 </div>
-                <span class="logo-texto">Logo de la carrera</span>
             </div>
             <div class="carrera-info">
-                <h2>[{{ $var_carrera->nombre }}]</h2>
+                <h2>{{ $var_carrera->nombre }}</h2>
                 <p class="carrera-clave">Clave: {{ $var_carrera->clave }}</p>
                 <p>Gestión de la carrera</p>
             </div>
@@ -86,17 +88,17 @@
                         </tr>
                     </thead>
                     <tbody id="alumnosBody">
-                        @for($i = 1; $i <= 4; $i++)
+                        @foreach($alumnos as $i => $alumno)
                             <tr>
-                                <td class="col-numero">{{ $i }}</td>
-                                <td class="col-matricula"></td>
-                                <td class="col-nombre"></td>
+                                <td class="col-numero">{{ $i+1 }}</td>
+                                <td class="col-matricula">{{ $alumno->matricula }}</td>
+                                <td class="col-nombre">{{ $alumno->user?->name }}</td>
                                 <td class="col-acciones">
                                     <button class="btn-ver-expediente">Ver expediente</button>
                                     <button class="btn-eliminar">Eliminar</button>
                                 </td>
                             </tr>
-                        @endfor
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -125,17 +127,17 @@
                         </tr>
                     </thead>
                     <tbody id="maestrosBody">
-                        @for($i = 1; $i <= 4; $i++)
+                        @foreach($maestros as $i => $maestro)
                             <tr>
-                                <td class="col-numero">{{ $i }}</td>
-                                <td class="col-nombre"></td>
-                                <td class="col-correo"></td>
+                                <td class="col-numero">{{ $i+1 }}</td>
+                                <td class="col-nombre">{{ $maestro->user?->name }}</td>
+                                <td class="col-correo">{{ $maestro->user?->email }}</td>
                                 <td class="col-acciones">
                                     <button class="btn-ver-perfil">Ver perfil</button>
                                     <button class="btn-eliminar">Eliminar</button>
                                 </td>
                             </tr>
-                        @endfor
+                        @endforeach
                     </tbody>
                 </table>
             </div>

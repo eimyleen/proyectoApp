@@ -111,8 +111,6 @@ Route::middleware(['auth'])->group(function () {
     })->middleware('role:alumno')->name('alumno.calificaciones');
 });
 
-
-
 Route::get('/welcome', function () {
     return view('welcome');
 });

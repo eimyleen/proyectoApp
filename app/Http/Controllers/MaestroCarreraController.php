@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Carrera;
 use App\Models\Alumno;
+use App\Models\Maestro;
 
 class MaestroCarreraController extends Controller
 {
@@ -43,7 +44,9 @@ class MaestroCarreraController extends Controller
     {
         //
         $carrera = Carrera::findOrFail($id);
-        return view('dashboard.maestro.maestro_carrera', compact('carrera'));
+        $alumnos = Alumno::with('user:id,name')->get();
+        $maestros = Maestro::with('user:id,name,email')->get();
+        return view('dashboard.maestro.maestro_carrera', compact('carrera', 'alumnos', 'maestros'));
     }
 
     /**
