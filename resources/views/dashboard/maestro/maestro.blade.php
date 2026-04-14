@@ -53,10 +53,12 @@
                         <img src="{{ asset('img/lupa.png') }}" alt="Buscar" class="lupa-icon-modal">
                         <input type="text" id="busquedaModal" placeholder="{{ __('messages.placeholder_search_modal') }}" class="input-busqueda-modal">
                     </div>
-                    <button class="btn-descargar-modal">
-                        <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-modal">
-                        {{ __('messages.btn_download_list') }}
-                    </button>
+                    <a href="{{ route('maestro.alumnos.pdf') }}" style="text-decoration: none;">
+                        <button class="btn-descargar-modal">
+                            <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-modal">
+                            {{ __('messages.btn_download_list') }}
+                        </button>
+                    </a>
                 </div>
                 <div class="tabla-container">
                     <table class="tabla-alumnos-global" id="tablaAlumnosModal">

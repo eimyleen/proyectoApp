@@ -88,10 +88,12 @@
                         <img src="{{ asset('img/lupa.png') }}" alt="Buscar" class="lupa-icon-modal">
                         <input type="text" id="busquedaModal" placeholder="Buscar por nombre o matrícula..." class="input-busqueda-modal">
                     </div>
-                    <button class="btn-descargar-modal">
-                        <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-modal">
-                        Descargar lista
-                    </button>
+                    <a href="{{ route('admin.alumnos.pdf') }}" style="text-decoration: none;">
+                        <button class="btn-lista-global">
+                            <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icono">
+                            Descargar lista global
+                        </button>
+                    </a>
                 </div>
                 <div class="tabla-container">
                     <table class="tabla-alumnos-global" id="tablaAlumnosModal">

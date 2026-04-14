@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Carrera;
 use App\Models\Alumno;
 use App\Models\Maestro;
+use App\Models\Log;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class MaestroCarreraController extends Controller
 {
@@ -79,5 +81,19 @@ class MaestroCarreraController extends Controller
         $alumno = Alumno::with(['user', 'carrera'])->findOrFail($id);
 
         return view('dashboard.maestro.expediente_alumno_maestro', compact('alumno'));
+    }
+
+    public function descargarAlumnosPDF()
+    {
+        // Obtenemos los alumnos con sus relaciones
+        $alumnos = Alumno::with('user', 'carrera')->get();
+
+        Log::registrar('Descarga PDF', 'El maestro descargó la lista global de alumnos');
+
+        // Cargamos una vista específica para el PDF y le pasamos los datos
+        $pdf = Pdf::loadView('pdf.lista_alumnos_maestro', compact('alumnos'));
+
+        // Retornamos el archivo para descarga con un nombre dinámico
+        return $pdf->download('lista_global_alumnos_' . now()->format('d-m-Y') . '.pdf');
     }
 }
