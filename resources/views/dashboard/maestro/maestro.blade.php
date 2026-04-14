@@ -31,9 +31,6 @@
                             @endif
                         </a>
                     </div>
-                    <div class="carrera-info">
-                        <p>{{ $carrera->nombre }}</p>
-                    </div>
                 </div>
             @endforeach
         </div>

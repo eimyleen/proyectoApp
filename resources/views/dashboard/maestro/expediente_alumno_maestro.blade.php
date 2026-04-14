@@ -1,10 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('title', 'Expediente del Alumno - Maestro')
-@section('user-role', 'Maestro')
-@section('avatar-iniciales', 'JP')
-@section('nombre-completo', 'Juan Pérez')
-@section('welcome-message', 'Expediente del Alumno')
+
 @section('subtitle', 'Consulta la información académica del alumno')
 
 @section('back-button')

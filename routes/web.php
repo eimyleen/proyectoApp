@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\App;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminCarreraController;
 use App\Http\Controllers\MaestroCarreraController;
@@ -92,9 +94,9 @@ Route::middleware(['auth'])->group(function () {
     })->middleware('role:maestro')->name('maestro.grupos');
 
     // --- Ruta del expediente de un Alumno desde la perspectiva del Maestro ---
-    Route::get('/dashboard/maestro/expediente/alumno', function () {
-        return view('dashboard.maestro.expediente_alumno_maestro');
-    })->middleware('role:maestro')->name('maestro.alumno.expediente');
+    Route::get('/dashboard/maestro/expediente/alumno/{id}', [
+        MaestroCarreraController::class, 'verExpedienteAlumno'
+    ])->middleware('role:maestro')->name('maestro.alumno.expediente');
 
 
     // ---------- Rutas para el Alumno ----------

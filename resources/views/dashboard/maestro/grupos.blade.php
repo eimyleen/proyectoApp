@@ -22,7 +22,7 @@
         <!-- Header de la carrera -->
         <div class="carrera-header-grupos">
             <div class="carrera-logo-grupos">
-                <div class="logo-circular-grupos">
+                <div class="logo-circular-grupos" style="width: 120px; height: 120px; overflow: hidden;">
                     @if($carrera->logo)
                         <img src="{{ asset($carrera->logo) }}" 
                             alt="{{ $carrera->nombre }}"
@@ -31,10 +31,9 @@
                         <img src="{{ asset('img/jaguar.png') }}" alt="Sin logo">
                     @endif
                 </div>
-                <span class="logo-texto-grupos">Logo de la carrera</span>
             </div>
             <div class="carrera-info-grupos">
-                <h2>[{{ $carrera->nombre }}]</h2>
+                <h2>{{ $carrera->nombre }}</h2>
                 <p class="carrera-clave">Clave: {{ $carrera->clave }}</p>
                 <p>Gestión de grupos y alumnos</p>
             </div>
@@ -80,7 +79,9 @@
                             <td class="col-nombre">{{ $alumno->user?->name }}</td>
                             <td class="col-nombre">{{ $alumno->user?->apellido }}</td>
                             <td class="col-acciones">
-                                <button class="btn-ver-expediente">Ver expediente</button>
+                                <a href="{{ route('maestro.alumno.expediente', $alumno->id) }}" style="text-decoration: none;">
+                                    <button class="btn-ver-expediente">Ver expediente</button>
+                                </a>
                             </td>
                         </tr>
                     @endforeach
@@ -124,13 +125,6 @@
                 alert('Descargar lista del grupo');
             });
         }
-
-        // Botón ver expediente
-        document.querySelectorAll('.btn-ver-expediente').forEach(btn => {
-            btn.addEventListener('click', function() {
-                alert('Ver expediente del alumno');
-            });
-        });
     });
 </script>
 @endpush

@@ -72,4 +72,12 @@ class MaestroCarreraController extends Controller
     {
         //
     }
+
+    // Funcion para ver el expediente de un alumno desde la perspectiva del maestro
+    public function verExpedienteAlumno($id)
+    {
+        $alumno = Alumno::with(['user', 'carrera'])->findOrFail($id);
+
+        return view('dashboard.maestro.expediente_alumno_maestro', compact('alumno'));
+    }
 }
