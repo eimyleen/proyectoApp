@@ -2,8 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CarreraController;
-
+use App\Http\Controllers\AdminCarreraController;
+use App\Http\Controllers\MaestroCarreraController;
 
 // Redirección raíz al login
 Route::redirect('/', '/login');
@@ -23,19 +23,19 @@ Route::middleware(['auth'])->group(function () {
     // --- Rutas referentes a la gestión de carreras ---
 
     // Ruta para el Admin - AÑADIDO ->name('admin.index')
-    Route::get('/admin/dashboard', [CarreraController::class, 'index'])->middleware('role:admin')->name('admin.index');
-    // Ruta para GUARDAR una nueva carrera (Método POST)
-    Route::post('/admin/dashboard', [CarreraController::class, 'store'])->middleware('role:admin')->name('admin.store');
-    // Ruta para VER el detalle-información de una carrera específica (Método GET)
-    Route::get('/carrera/{id}', [CarreraController::class, 'show'])->middleware('role:admin')->name('admin.show');
-    // Ruta para EDITAR el detalle de una carrera específica (Método PATCH)
-    Route::patch('/carrera/{id}', [CarreraController::class, 'update'])->middleware('role:admin')->name('admin.update');
-    // Ruta para BORRAR una carrera específica y REDIRIGIR a la principal (Método DELETE)
-    Route::delete('/carrera/{id}', [CarreraController::class, 'delete'])->name('admin.delete');
+    Route::get('/admin/dashboard', [AdminCarreraController::class, 'index'])->middleware('role:admin')->name('admin.index');
 
-    Route::get('/dashboard/admin/carrera', function () {
-        return view('dashboard.admin.admin_carrera');
-    })->middleware('role:admin')->name('admin.carrera');
+    // Ruta para GUARDAR una nueva carrera (Método POST)
+    Route::post('/admin/dashboard', [AdminCarreraController::class, 'store'])->middleware('role:admin')->name('admin.store');
+
+    // Ruta para VER el detalle-información de una carrera específica (Método GET)
+    Route::get('/admin/carrera/{id}', [AdminCarreraController::class, 'show'])->middleware('role:admin')->name('admin.show');
+
+    // Ruta para EDITAR el detalle de una carrera específica (Método PATCH)
+    Route::patch('/admin/carrera/{id}', [AdminCarreraController::class, 'update'])->middleware('role:admin')->name('admin.update');
+
+    // Ruta para BORRAR una carrera específica y REDIRIGIR a la principal (Método DELETE)
+    Route::delete('/admin/carrera/{id}', [AdminCarreraController::class, 'delete'])->middleware('role:admin')->name('admin.delete');
 
     Route::get('/dashboard/admin/alumno/expediente', function () {
         return view('dashboard.admin.admin_alumno_expediente');
@@ -51,9 +51,20 @@ Route::middleware(['auth'])->group(function () {
 
     // --- Rutas para el Maestro ---
 
-    Route::get('/maestro/dashboard', function () {
-        return view('dashboard.maestro.maestro');
-    })->middleware('role:maestro')->name('maestro.index');
+    Route::get('/maestro/dashboard', [MaestroCarreraController::class, 'index'])->middleware('role:maestro')->name('maestro.index');
+
+    Route::get('/maestro/carrera/{id}', [MaestroCarreraController::class, 'show'])->middleware('role:maestro')->name('maestro.show');
+
+    // Ruta para el Alumno - AÑADIDO ->name('alumno.index')
+    Route::get('/alumno/dashboard', function () {
+        return view('dashboard.alumno.alumno');
+    })->middleware('role:alumno')->name('alumno.index');
+
+    Route::get('/dashboard/alumno', function () { 
+        return view('dashboard.alumno.alumno');
+    })->name('alumno.dashboard');
+
+
 
     Route::get('/dashboard/maestro/perfil', function () {
         return view('dashboard.maestro.perfil_maestro');

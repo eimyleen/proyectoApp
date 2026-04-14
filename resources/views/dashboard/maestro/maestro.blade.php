@@ -18,29 +18,12 @@
     <!-- Carreras -->
     <div class="carreras-container">
         <div class="carreras-grid">
-            @php
-                $carreras = [
-                    ['img' => 'ing_alimentos.png', 'alt' => 'Ingeniería en Alimentos'],
-                    ['img' => 'ing_civil.png', 'alt' => 'Ingeniería Civil'],
-                    ['img' => 'ing_inte_artificial.png', 'alt' => 'Ingeniería Artificial'],
-                    ['img' => 'ing_logistica.png', 'alt' => 'Ingeniería Logística'],
-                    ['img' => 'ing_mant_industrial.png', 'alt' => 'Ingeniería Mantenimiento Industrial'],
-                    ['img' => 'ing_mecatronica.png', 'alt' => 'Ingeniería Mecatrónica'],
-                    ['img' => 'ing_micro_semic.png', 'alt' => 'Ingeniería Micro Semiconductores'],
-                    ['img' => 'ing_tec_info.png', 'alt' => 'Ingeniería Tecnologías Información'],
-                    ['img' => 'lic_admin.png', 'alt' => 'Licenciatura Administración'],
-                    ['img' => 'lic_gastro.png', 'alt' => 'Gastronomía'],
-                    ['img' => 'lic_merca.png', 'alt' => 'Licenciatura Mercadotecnia'],
-                    ['img' => 'lic_psicologia.png', 'alt' => 'Psicología'],
-                    ['img' => 'lic_seg_publ.png', 'alt' => 'Seguridad Pública'],
-                    ['img' => 'lic_turismo.png', 'alt' => 'Licenciatura Turismo'],
-                ];
-            @endphp
-
-            @foreach($carreras as $carrera)
-                <div class="carrera-card" data-carrera="{{ $carrera['alt'] }}">
+            @foreach ($carreras as $carrera)
+                <div class="carrera-card" data-carrera="{{ $carrera->nombre }}">
                     <div class="carrera-img">
-                        <img src="{{ asset('img/carreras/' . $carrera['img']) }}" alt="{{ $carrera['alt'] }}">
+                        <a href="{{ route("maestro.show", $carrera) }}">
+                            <img src="{{ asset('img/carreras/' . $carrera->imagen) }}" alt="{{ $carrera->nombre }}">
+                        </a>
                     </div>
                 </div>
             @endforeach
@@ -133,15 +116,6 @@
                 });
             });
         }
-
-        // Click en carrera
-        document.querySelectorAll('.carrera-card').forEach(card => {
-            card.addEventListener('click', function() {
-                const carrera = this.getAttribute('data-carrera');
-                alert('Navegar a grupos de: ' + carrera);
-                // window.location.href = '/dashboard/maestro/grupos';
-            });
-        });
     });
 </script>
 @endpush
