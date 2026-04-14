@@ -140,7 +140,9 @@
                                 <td class="col-nombre">{{ $maestro->user?->apellido }}</td>
                                 <td class="col-correo">{{ $maestro->user?->email }}</td>
                                 <td class="col-acciones">
-                                    <button class="btn-ver-perfil">Ver perfil</button>
+                                    <a href="{{ route('admin.maestro.perfil', $maestro->id) }}" style="text-decoration: none;">
+                                        <button class="btn-ver-perfil">Ver perfil</button>
+                                    </a>
                                     <button class="btn-eliminar">Eliminar</button>
                                 </td>
                             </tr>
@@ -447,9 +449,6 @@
 
         // Botones de acciones
         document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('btn-ver-perfil')) {
-                alert('Ver perfil del maestro');
-            }
             if (e.target.classList.contains('btn-eliminar')) {
                 if (confirm('¿Estás seguro de eliminar este elemento?')) {
                     const row = e.target.closest('tr');

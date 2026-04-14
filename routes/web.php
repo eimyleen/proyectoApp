@@ -61,9 +61,9 @@ Route::middleware(['auth'])->group(function () {
         ])->middleware('role:admin')->name('admin.alumno.expediente');
 
     // --- Ruta para VER el detalle-información de un Maestro específico desde la perspectiva del Admin ---
-    Route::get('/dashboard/admin/maestro/perfil', function () {
-        return view('dashboard.admin.admin_maestro_perfil');
-    })->middleware('role:admin')->name('admin.maestro.perfil');
+    Route::get('/dashboard/admin/maestro/perfil/{id}', [
+        AdminCarreraController::class, 'verPerfilMaestro'
+    ])->middleware('role:admin')->name('admin.maestro.perfil');
 
     // --- Ruta del perfil del Admin ---
     Route::get('/dashboard/admin/perfil', function () {

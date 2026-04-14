@@ -62,4 +62,12 @@ class AdminCarreraController extends Controller {
 
         return view('dashboard.admin.admin_alumno_expediente', compact('alumno'));
     }
+
+    // Método para mostrar el perfil de un maestro específico desde la perspectiva del Admin
+    public function verPerfilMaestro($id)
+    {
+        $maestro = Maestro::with('user')->findOrFail($id);
+
+        return view('dashboard.admin.admin_maestro_perfil', compact('maestro'));
+    }
 }

@@ -1,10 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('title', 'Administrador - Perfil del Maestro')
-@section('user-role', 'Administrador')
-@section('avatar-iniciales', 'RS')
-@section('nombre-completo', 'Roberto Sánchez')
-@section('welcome-message', 'Perfil del Maestro')
+
 @section('subtitle', 'Consulta y edita la información del maestro')
 
 @section('back-button')
@@ -33,55 +30,60 @@
         <div class="perfil-section">
             <div class="foto-perfil">
                 <div class="avatar-grande">
-                    <span class="avatar-iniciales-grande"></span>
+                    @if($maestro->user->foto)
+                        <img src="{{ asset('storage/' . $maestro->user->foto) }}" alt="Foto" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+                    @else
+                        <span class="avatar-iniciales-grande">
+                            {{ strtoupper(substr($maestro->user->name, 0, 1)) }}{{ strtoupper(substr($maestro->user->apellido, 0, 1)) }}
+                        </span>
+                    @endif
                 </div>
                 <button class="btn-subir-foto" id="btnCambiarFoto">Cambiar foto</button>
             </div>
         </div>
 
         <!-- Datos personales -->
-        <h3 class="perfil-titulo">
-            Datos personales
-            <span class="tutor-badge" id="tutorBadge" style="display: none;">Tutor</span>
-        </h3>
+        <h3 class="perfil-seccion-titulo">Datos personales</h3>
         <div class="datos-grid">
-            <div class="dato-item">
-                <label>Nombre(s)</label>
-                <span class="dato-valor" id="datoNombre"></span>
-            </div>
-            <div class="dato-item">
-                <label>Apellidos</label>
-                <span class="dato-valor" id="datoApellidos"></span>
-            </div>
-            <div class="dato-item">
-                <label>Número de empleado</label>
-                <span class="dato-valor" id="datoEmpleado"></span>
-            </div>
-            <div class="dato-item">
-                <label>RFC</label>
-                <span class="dato-valor" id="datoRFC"></span>
-            </div>
-            <div class="dato-item">
-                <label>Edad</label>
-                <span class="dato-valor" id="datoEdad"></span>
-            </div>
-            <div class="dato-item">
-                <label>Sexo</label>
-                <span class="dato-valor" id="datoSexo"></span>
-            </div>
-            <div class="dato-item">
-                <label>Fecha de nacimiento</label>
-                <span class="dato-valor" id="datoFechaNac"></span>
-            </div>
-            <div class="dato-item">
-                <label>Correo electrónico</label>
-                <span class="dato-valor" id="datoCorreo"></span>
-            </div>
-            <div class="dato-item">
-                <label>Teléfono</label>
-                <span class="dato-valor" id="datoTelefono"></span>
-            </div>
+        <div class="dato-item">
+            <label>Nombre(s)</label>
+            <span class="dato-valor" id="datoNombre">{{ $maestro->user->name }}</span>
         </div>
+        <div class="dato-item">
+            <label>Apellidos</label>
+            <span class="dato-valor" id="datoApellidos">{{ $maestro->user->apellido }}</span>
+        </div>
+        <div class="dato-item">
+            <label>Número de empleado</label>
+            <span class="dato-valor" id="datoEmpleado">{{ $maestro->num_empleado }}</span>
+        </div>
+        <div class="dato-item">
+            <label>RFC</label>
+            <span class="dato-valor" id="datoRFC">{{ $maestro->rfc }}</span>
+        </div>
+        <div class="dato-item">
+            <label>Edad</label>
+            <span class="dato-valor" id="datoEdad">{{ $maestro->edad }} años</span>
+        </div>
+        <div class="dato-item">
+            <label>Sexo</label>
+            <span class="dato-valor" id="datoSexo">{{ $maestro->sexo }}</span>
+        </div>
+        <div class="dato-item">
+            <label>Fecha de nacimiento</label>
+            <span class="dato-valor" id="datoFechaNac">
+                {{ \Carbon\Carbon::parse($maestro->fecha_nacimiento)->format('d/m/Y') }}
+            </span>
+        </div>
+        <div class="dato-item">
+            <label>Correo electrónico</label>
+            <span class="dato-valor" id="datoCorreo">{{ $maestro->user->email }}</span>
+        </div>
+        <div class="dato-item">
+            <label>Teléfono</label>
+            <span class="dato-valor" id="datoTelefono">{{ $maestro->telefono }}</span>
+        </div>
+    </div>
 
         <!-- Carreras que imparte -->
         <h3 class="seccion-titulo">Carreras que imparte</h3>
