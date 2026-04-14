@@ -10,17 +10,17 @@ use App\Models\Alumno;
 class AdminCarreraController extends Controller {
     public function index() {
         // Obtenemos todas las carreras de la BD
-        $var_carreras = Carrera::all();
+        $carreras = Carrera::all();
         // Y Alumnos con el nombre de su carrera y nombre de usuario*
         $alumnos = Alumno::with(['carrera:id,nombre','user:id,name'])->get();
-        return view('dashboard.admin.admin', compact('var_carreras', 'alumnos'));
+        return view('dashboard.admin.admin', compact('carreras', 'alumnos'));
     }
     
     public function show($id) {
-        $var_carrera = Carrera::findOrFail($id);
+        $carrera = Carrera::findOrFail($id);
         $alumnos = Alumno::with('user:id,name,apellido')->get();
         $maestros = Maestro::with('user:id,name,apellido,email')->get();
-        return view('dashboard.admin.admin_carrera', compact('var_carrera', 'alumnos', 'maestros'));
+        return view('dashboard.admin.admin_carrera', compact('carrera', 'alumnos', 'maestros'));
     }
 
     public function update(Request $request, string $id) {
