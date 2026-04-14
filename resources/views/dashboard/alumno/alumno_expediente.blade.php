@@ -51,7 +51,15 @@
                                 </span>
                             @endif
                         </div>
-                        <button class="btn-subir-foto">{{ __('messages.btn_upload_photo') }}</button>
+
+                        <form action="{{ route('perfil.foto.update') }}" method="POST" enctype="multipart/form-data" id="fotoForm">
+                            @csrf
+                            @method('PUT')
+                            <input type="file" name="foto" id="inputFoto" style="display: none;" accept="image/*" onchange="document.getElementById('fotoForm').submit();">
+                            <button type="button" class="btn-subir-foto" onclick="document.getElementById('inputFoto').click();">
+                                Subir Foto
+                            </button>
+                        </form>
                     </div>
                 </div>
 

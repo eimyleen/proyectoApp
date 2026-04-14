@@ -19,6 +19,11 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // ---------- Grupos de rutas protegidas por autenticación ----------
 
 Route::middleware(['auth'])->group(function () {
+
+    // --- Ruta para actualizar la foto de perfil (Método PUT) ---
+    Route::put('/perfil/foto', [
+        AuthController::class, 'updateFoto'
+    ])->name('perfil.foto.update');
     
     // ---------- Rutas para el Admin ----------
 

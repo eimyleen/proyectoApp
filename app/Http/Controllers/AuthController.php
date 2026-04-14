@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -56,5 +58,35 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/login');
+    }
+
+    public function updateFoto(Request $request)
+    {
+        // Validar que el archivo sea una imagen válida y no exceda los 2MB
+        $request->validate([
+            'foto' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Buscamos al usuario usando el Modelo User 
+        $user = User::find(Auth::id()); 
+
+        if ($request->hasFile('foto')) {
+            
+            // Borrar la foto anterior si existe
+            if ($user->foto) {
+                Storage::disk('public')->delete($user->foto);
+            }
+
+            // Guarda la nueva imagen
+            // Se almacena en: storage/app/public/perfiles/ 
+            $path = $request->file('foto')->store('perfiles', 'public');
+
+            // Actualiza la ruta en la base de datos
+            $user->update([
+                'foto' => $path
+            ]);
+        }
+
+        return back()->with('success', 'Foto actualizada correctamente.');
     }
 }
