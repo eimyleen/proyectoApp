@@ -27,8 +27,14 @@
         <!-- Foto de perfil -->
         <div class="perfil-section">
             <div class="avatar-grande">
-                <span class="avatar-iniciales-grande"></span>
-            </div>
+                    @if($alumno->user->foto)
+                        <img src="{{ asset('storage/' . $alumno->user->foto) }}" style="width:100%; height:100%; object-fit:cover;">
+                    @else
+                        <span class="avatar-iniciales-grande">
+                            {{ strtoupper(substr($alumno->user->name, 0, 1)) }}{{ strtoupper(substr($alumno->user->apellido, 0, 1)) }}
+                        </span>
+                    @endif
+                </div>
         </div>
 
         <!-- Datos personales del alumno -->

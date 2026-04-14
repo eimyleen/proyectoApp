@@ -27,6 +27,23 @@
                     <span class="avatar-iniciales-grande"></span>
                 </div>
                 <button class="btn-subir-foto">{{ __('messages.profile_upload_photo') }}</button>
+                            @if(Auth::user()->foto)
+                                <img src="{{ asset('storage/' . Auth::user()->foto) }}" alt="Foto" class="foto-perfil-img">
+                            @else
+                                <span class="avatar-iniciales-grande">
+                                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}{{ strtoupper(substr(Auth::user()->apellido, 0, 1)) }}
+                                </span>
+                            @endif
+                        </div>
+
+                        <form action="{{ route('perfil.foto.update') }}" method="POST" enctype="multipart/form-data" id="fotoForm">
+                            @csrf
+                            @method('PUT')
+                            <input type="file" name="foto" id="inputFoto" style="display: none;" accept="image/*" onchange="document.getElementById('fotoForm').submit();">
+                            <button type="button" class="btn-subir-foto" onclick="document.getElementById('inputFoto').click();">
+                                Subir Foto
+                            </button>
+                        </form>
             </div>
         </div>
 
