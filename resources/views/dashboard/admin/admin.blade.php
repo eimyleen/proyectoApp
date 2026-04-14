@@ -1,6 +1,8 @@
 <!-- Dashboard Admin - Módulo de gestión de carreras y usuarios -->
 @extends('layouts.dashboard')
 
+@section('title', __('messages.admin_title'))
+@section('subtitle', __('messages.admin_subtitle'))
 @section('title', 'Administrador - Carreras')
 
 @section('subtitle', 'Gestiona las carreras de la universidad')
@@ -15,44 +17,44 @@
         <div class="admin-buttons">
             <a href="{{ route('admin.logs') }}" style="text-decoration: none;">
                 <button class="btn-lista-global" id="btnLogs">
-                    Logs del sistema
+                    {{ __('messages.admin_btn_logs') }}
                 </button>
             </a>
             <button class="btn-lista-global" id="btnRespaldos">
-                Respaldos
+                {{ __('messages.admin_btn_backups') }}
             </button>
             <button class="btn-lista-global" id="btnListaGlobal">
-                Ver lista de alumnos global
+                {{ __('messages.admin_btn_global_list') }}
             </button>
             <button class="btn-agregar-carrera" id="btnAgregarCarrera">
-                + Agregar carrera
+                {{ __('messages.admin_btn_add_career') }}
             </button>
         </div>
-        <form action="{{ route("admin.store") }}" method="POST">
+        <form action="{{ route("admin.store") }}" method="POST" >
             @csrf
             <div id="modalAgregarCarrera" class="modal">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h3>Agregar carrera</h3>
+                        <h3>{{ __('messages.modal_add_career_title') }}</h3>
                         <span class="modal-close" id="closeModalCarrera">&times;</span>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label>Nombre de la carrera</label>
-                            <input name="nombre" type="text" id="nombreCarrera" placeholder="Ej: Ingeniería en Sistemas">
+                            <label>{{ __('messages.modal_career_name') }}</label>
+                            <input name="nombre" type="text" id="nombreCarrera" placeholder="{{ __('messages.modal_career_name_placeholder') }}">
                         </div>
                         <div class="form-group">
-                            <label>Clave de la carrera</label>
-                            <input name="clave" type="text" id="claveCarrera" placeholder="Ej: ISC">
+                            <label>{{ __('messages.modal_career_key') }}</label>
+                            <input name="clave" type="text" id="claveCarrera" placeholder="{{ __('messages.modal_career_key_placeholder') }}">
                         </div>
                         <div class="form-group">
-                            <label>Logo de la carrera</label>
+                            <label>{{ __('messages.modal_career_logo') }}</label>
                             <input name="logo" type="file" id="logoCarrera" accept="image/*">
-                            <small class="form-text">Selecciona una imagen para el logo</small>
+                            <small class="form-text">{{ __('messages.modal_career_logo_helper') }}</small>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn-guardar" id="guardarCarrera">Guardar carrera</button>
+                        <button type="submit" class="btn-guardar" id="guardarCarrera">{{ __('messages.modal_save_career') }}</button>
                     </div>
                 </div>
             </div>
@@ -70,7 +72,7 @@
                                     <img src="{{ asset('img/jaguar.png') }}" alt="Sin logo">
                                 @endif
                             @else
-                                <img src="{{ asset('img/jaguar.png') }}" alt="Sin logo">
+                                <img src="{{ asset('img/jaguar.png') }}" alt="{{ __('messages.admin_no_logo') }}">
                             @endif
                         </a>
                     </div>
@@ -83,19 +85,19 @@
     <div id="modalListaGlobal" class="modal-lista-global">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Lista de alumnos global</h3>
+                <h3>{{ __('messages.modal_global_list_title') }}</h3>
                 <span class="modal-close" id="closeModalListaGlobal">&times;</span>
             </div>
             <div class="modal-body">
                 <div class="modal-actions">
                     <div class="modal-filtro">
                         <img src="{{ asset('img/lupa.png') }}" alt="Buscar" class="lupa-icon-modal">
-                        <input type="text" id="busquedaModal" placeholder="Buscar por nombre o matrícula..." class="input-busqueda-modal">
+                        <input type="text" id="busquedaModal" placeholder= "{{ __('messages.modal_search_placeholder') }}" class="input-busqueda-modal">
                     </div>
                     <a href="{{ route('admin.alumnos.pdf') }}" style="text-decoration: none;">
                         <button class="btn-lista-global">
                             <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icono">
-                            Descargar lista global
+                            {{ __('messages.modal_btn_download_list') }}
                         </button>
                     </a>
                 </div>
@@ -103,11 +105,11 @@
                     <table class="tabla-alumnos-global" id="tablaAlumnosModal">
                         <thead>
                             <tr>
-                                <th>Matrícula</th>
-                                <th>Nombre</th>
-                                <th>Apellidos</th>
-                                <th>Carrera</th>
-                                <th>Grupo</th>
+                                <th>{{ __('messages.expedient_id') }}</th>
+                                <th>{{ __('messages.expedient_name') }}</th>
+                                <th>{{ __('messages.expedient_last_names') }}</th>
+                                <th>{{ __('messages.expedient_career') }}</th>
+                                <th>{{ __('messages.expedient_group') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -129,7 +131,7 @@
      <div id="modalRespaldos" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Respaldos</h3>
+                <h3>{{ __('messages.modal_backups_title') }}</h3>
                 <span class="modal-close" id="closeModalRespaldos">&times;</span>
             </div>
             <form class="modal-body" action="/respaldo" method="POST">
