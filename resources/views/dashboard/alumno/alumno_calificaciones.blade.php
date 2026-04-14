@@ -1,10 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('title', 'Mis Calificaciones - Alumno')
-@section('user-role', 'Alumno')
-@section('avatar-iniciales', 'CM')
-@section('nombre-completo', 'Carlos Martínez')
-@section('welcome-message', 'Mis Calificaciones')
+
 @section('subtitle', 'Aquí puedes consultar tus calificaciones por período')
 
 @section('back-button')
@@ -19,16 +16,26 @@
     <div class="contenido-con-botones">
         <!-- Botones laterales -->
         <div class="botones-laterales">
-            <button class="btn-expediente">Expediente</button>
-            <button class="btn-calificaciones active">Calificaciones</button>
+            <a href="{{ route('alumno.expediente') }}" style="text-decoration: none;">
+                <button class="btn-expediente {{ Request::routeIs('alumno.expediente') ? 'active' : '' }}">
+                    Expediente
+                </button>
+            </a>
+            <a href="{{ route('alumno.calificaciones') }}" style="text-decoration: none;">
+                <button class="btn-calificaciones {{ Request::routeIs('alumno.calificaciones') ? 'active' : '' }}">
+                    Calificaciones
+                </button>
+            </a>
             
             <!-- Logo circular de la carrera -->
             <div class="carrera-logo">
                 <div class="logo-circular">
-                    @if(isset($carrera->logo))
-                        <img src="{{ asset('storage/' . $carrera->logo) }}" alt="{{ $carrera->nombre }}">
+                    @if(Auth::user()->alumno->carrera->logo)
+                        <img src="{{ asset(Auth::user()->alumno->carrera->logo) }}" 
+                            alt="Logo {{ Auth::user()->alumno->carrera->nombre }}"
+                            style="width: 100%; height: 100%; object-fit: contain;">
                     @else
-
+                        <img src="{{ asset('img/jaguar.png') }}" alt="UTNay">
                     @endif
                 </div>
                 <span class="logo-texto">Logo de la carrera</span>

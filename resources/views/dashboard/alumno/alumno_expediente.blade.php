@@ -13,8 +13,16 @@
 @section('content')
     <div class="contenido-con-botones">
         <div class="botones-laterales">
-            <button class="btn-expediente active">Expediente</button>
-            <button class="btn-calificaciones" onclick="window.location.href='/dashboard/alumno/calificaciones'">Calificaciones</button>
+            <a href="{{ route('alumno.expediente') }}" style="text-decoration: none;">
+                <button class="btn-expediente {{ Request::routeIs('alumno.expediente') ? 'active' : '' }}">
+                    Expediente
+                </button>
+            </a>
+            <a href="{{ route('alumno.calificaciones') }}" style="text-decoration: none;">
+                <button class="btn-calificaciones {{ Request::routeIs('alumno.calificaciones') ? 'active' : '' }}">
+                    Calificaciones
+                </button>
+            </a>
             
             <div class="logo-circular">
                 @if(Auth::user()->alumno->carrera->logo)
