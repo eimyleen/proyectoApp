@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ProcessDBBackup;
 use App\Models\Maestro;
+use Auth;
 use Illuminate\Http\Request;
 use App\Models\Carrera;
 use App\Models\Alumno;
-use App\Models\Log;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdminCarreraController extends Controller {
     public function index() {
@@ -37,9 +37,8 @@ class AdminCarreraController extends Controller {
     public function store(Request $request) {
         request()->validate(
             [
-                'nombre'=>'required|alpha',
-                'clave'=>'required|alpha',
-                'logo'=>''
+                'nombre'=>'required',
+                'clave'=>'required|alpha'
             ]
         );
         Carrera::create([
@@ -73,16 +72,8 @@ class AdminCarreraController extends Controller {
         return view('dashboard.admin.admin_maestro_perfil', compact('maestro'));
     }
 
-    public function descargarAlumnosPDF()
-    {
-        // Obtenemos todos los alumnos
-        $alumnos = Alumno::with('user', 'carrera')->get();
-
-        Log::registrar('Descarga PDF', 'El administrador descargó la lista global de alumnos');
-        
-        // Reutilizamos la vista de PDF que ya creamos
-        $pdf = Pdf::loadView('pdf.lista_alumnos_maestro', compact('alumnos'));
-
-        return $pdf->download('reporte_global_alumnos_' . now()->format('d-m-Y') . '.pdf');
+    public function handleBackup() {
+        $userId = Auth::id();
+        ProcessDbBackup::dispatch($userId);
     }
 }

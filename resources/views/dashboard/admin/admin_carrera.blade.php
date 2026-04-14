@@ -246,7 +246,7 @@
                     </div>
                     <div class="form-group">
                         <label>Logo de la carrera</label>
-                        <input name="inLogo" type="file" id="logoCarrera" accept="image/*">
+                        <input name="inLogo" type="file" id="logoCarrera" accept="image/*" value="{{ $carrera->logo }}">
                         <small class="form-text">Selecciona una nueva imagen para el logo</small>
                     </div>
                 </div>

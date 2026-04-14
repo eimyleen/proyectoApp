@@ -65,9 +65,7 @@ Route::middleware(['auth'])->group(function () {
         AdminCarreraController::class, 'delete'
     ])->middleware('role:admin')->name('admin.delete');
 
-    Route::get('/admin/respaldos', function() {
-        return view("dashboard.admin.admin_respaldo_auto");
-    })->middleware('role:admin')->name('admin.respaldo');
+    Route::post('/admin/dashboard/respaldo', [AdminCarreraController::class, 'saveBackup'])->middleware('role:admin')->name('admin.respaldo');
 
     // ----- Rutas referentes a la gestión de usuarios -----
 
