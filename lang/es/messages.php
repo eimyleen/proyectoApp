@@ -76,4 +76,23 @@ return [
     'not_assigned' => 'No asignada',
     'not_available' => 'N/A',
     'subtitle_record' => 'Aquí puedes consultar tu información personal y académica',
+
+    // --- Módulo Maestro ---
+    'teacher_panel' => 'Panel del Maestro',
+    'welcome_teacher' => 'Bienvenido, Prof.',
+    'my_classes' => 'Mis Clases',
+    'my_students' => 'Mis Alumnos',
+    'attendance' => 'Pasar Lista',
+    'upload_grades' => 'Subir Calificaciones',
+    'academic_unit' => 'Unidad Académica',
+    'employee_number' => 'Número de Empleado',
+
+    // --- Dashboard Maestro ---
+    'teacher_panel_title' => 'Panel Maestro',
+    'teacher_panel_subtitle' => 'Selecciona una carrera para gestionar sus grupos',
+    'btn_global_list' => 'Ver lista de alumnos global',
+    'modal_global_title' => 'Lista de alumnos global',
+    'placeholder_search_modal' => 'Buscar por nombre o matrícula...',
+    'btn_download_list' => 'Descargar lista',
+    'no_logo' => 'Sin logo',
 ];

@@ -1,6 +1,10 @@
 <!-- Dashboard Maestro - Módulo de carreras que imparte -->
 @extends('layouts.dashboard')
 
+@section('title', __('messages.teacher_panel_title'))
+
+@section('subtitle', __('messages.teacher_panel_subtitle'))
+
 @section('title', 'Panel Maestro')
 
 @section('subtitle', 'Selecciona una carrera para gestionar sus grupos')

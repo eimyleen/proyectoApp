@@ -76,4 +76,23 @@ return [
     'not_assigned' => 'Not assigned',
     'not_available' => 'N/A',
     'subtitle_record' => 'Here you can consult your personal and academic information',
+
+    // --- Teacher Module ---
+    'teacher_panel' => 'Teacher Dashboard',
+    'welcome_teacher' => 'Welcome, Prof.',
+    'my_classes' => 'My Classes',
+    'my_students' => 'My Students',
+    'attendance' => 'Take Attendance',
+    'upload_grades' => 'Upload Grades',
+    'academic_unit' => 'Academic Unit',
+    'employee_number' => 'Employee ID',
+
+    // --- Teacher Dashboard ---
+    'teacher_panel_title' => 'Teacher Panel',
+    'teacher_panel_subtitle' => 'Select a major to manage its groups',
+    'btn_global_list' => 'View global student list',
+    'modal_global_title' => 'Global Student List',
+    'placeholder_search_modal' => 'Search by name or ID...',
+    'btn_download_list' => 'Download list',
+    'no_logo' => 'No logo',
 ];
