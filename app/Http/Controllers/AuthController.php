@@ -30,13 +30,7 @@ class AuthController extends Controller
         if (Auth::attempt(['email' => $credentials['correo'], 'password' => $credentials['password']])) {
             $request->session()->regenerate();
 
-            // ... después de que el login es exitoso:
-            Log::create([
-                'user_id' => Auth::id(),
-                'accion' => 'Inicio de sesión',
-                'descripcion' => 'El usuario ha accedido al sistema',
-                'ip_address' => request()->ip()
-            ]);
+            Log::registrar('Inicio de sesión', 'El usuario entró al dashboard');
 
             // Obtener el usuario autenticado
             $user = Auth::user();
@@ -63,6 +57,7 @@ class AuthController extends Controller
     // Cierra la sesión del usuario
     public function logout(Request $request)
     {
+        Log::registrar('Cierre de sesión', 'El usuario salió del sistema');
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

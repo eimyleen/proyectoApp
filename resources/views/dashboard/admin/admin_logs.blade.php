@@ -11,7 +11,7 @@
 @section('back-url', '/dashboard/admin')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/dashboard_admin_logs.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/dashboard_admin.css') }}">
 @endpush
 
 @section('content')
@@ -29,6 +29,7 @@
                         <th>Usuario</th>
                         <th>Rol</th>
                         <th>Acción</th>
+                        <th>Descripción</th> </tr>
                     </tr>
                 </thead>
                 <tbody id="logsTableBody">
@@ -43,6 +44,7 @@
                                 </span>
                             </td>
                             <td class="accion">{{ $log->accion }}</td>
+                            <td class="descripcion">{{ $log->descripcion ?? 'Sin detalle' }}</td> </tr>
                         </tr>
                     @endforeach
                 </tbody>
