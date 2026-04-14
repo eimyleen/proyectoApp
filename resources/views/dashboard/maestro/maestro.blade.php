@@ -16,7 +16,7 @@
 @section('content')
     <!-- Botones superiores -->
     <div class="maestro-buttons">
-        <button class="btn-lista-global" id="btnListaGlobal">Ver lista de alumnos global</button>
+        <button class="btn-lista-global" id="btnListaGlobal">{{ __('messages.btn_global_list') }}</button>
     </div>
 
     <!-- Carreras -->
@@ -31,7 +31,7 @@
                                     alt="{{ $carrera->nombre }}"
                                     style="width: 100%; height: 100%; object-fit: contain;">
                             @else
-                                <img src="{{ asset('img/jaguar.png') }}" alt="Sin logo">
+                                <img src="{{ asset('img/jaguar.png') }}" alt="{{ __('messages.no_logo') }}">
                             @endif
                         </a>
                     </div>
@@ -44,34 +44,34 @@
     <div id="modalListaGlobal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Lista de alumnos global</h3>
+                <h3>{{ __('messages.modal_global_title') }}</h3>
                 <span class="modal-close" id="closeModal">&times;</span>
             </div>
             <div class="modal-body">
                 <div class="modal-actions">
                     <div class="modal-filtro">
                         <img src="{{ asset('img/lupa.png') }}" alt="Buscar" class="lupa-icon-modal">
-                        <input type="text" id="busquedaModal" placeholder="Buscar por nombre o matrícula..." class="input-busqueda-modal">
+                        <input type="text" id="busquedaModal" placeholder="{{ __('messages.placeholder_search_modal') }}" class="input-busqueda-modal">
                     </div>
                     <button class="btn-descargar-modal">
                         <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-modal">
-                        Descargar lista
+                        {{ __('messages.btn_download_list') }}
                     </button>
                 </div>
                 <div class="tabla-container">
                     <table class="tabla-alumnos-global" id="tablaAlumnosModal">
                         <thead>
                             <tr>
-                                <th>Matrícula</th>
-                                <th>Nombre</th>
-                                <th>Carrera</th>
-                                <th>Grupo</th>
+                                <th>{{ __('messages.label_id_number') }}</th>
+                                <th>{{ __('messages.th_nombre') }}</th>
+                                <th>{{ __('messages.label_major') }}</th>
+                                <th>{{ __('messages.label_group') }}</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($alumnos as $alumno)
                                 <tr>
-                                    <td>{{ $alumno->matricula }}</td>
+                                   <td>{{ $alumno->matricula }}</td>
                                     <td>{{ $alumno->user?->name }}</td>
                                     <td>{{ $alumno->carrera?->nombre }}</td>
                                     <td>{{ $alumno->grupo }}</td>
