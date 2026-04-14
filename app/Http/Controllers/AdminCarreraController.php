@@ -19,7 +19,7 @@ class AdminCarreraController extends Controller {
     public function show($id) {
         $var_carrera = Carrera::findOrFail($id);
         $alumnos = Alumno::with('user:id,name')->get();
-        $maestros = Maestro::with('user:id,name,email')->get();
+        $maestros = Maestro::with('user:id,name,apellido,email')->get();
         return view('dashboard.admin.admin_carrera', compact('var_carrera', 'alumnos', 'maestros'));
     }
 

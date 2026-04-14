@@ -47,7 +47,6 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn-cancelar" onclick="cerrarModalCarrera()" id="cancelarCarrera">Cancelar</button>
                         <button type="submit" class="btn-guardar" id="guardarCarrera">Guardar carrera</button>
                     </div>
                 </div>
@@ -98,6 +97,7 @@
                             <tr>
                                 <th>Matrícula</th>
                                 <th>Nombre</th>
+                                <th>Apellidos</th>
                                 <th>Carrera</th>
                                 <th>Grupo</th>
                             </tr>
@@ -107,6 +107,7 @@
                                 <tr>
                                     <td>{{ $alumno->matricula }}</td>
                                     <td>{{ $alumno->user?->name }}</td>
+                                    <td>{{ $alumno->user?->apellido }}</td>
                                     <td>{{ $alumno->carrera?->nombre }}</td>
                                     <td>{{ $alumno->grupo }}</td>
                                 </tr>
