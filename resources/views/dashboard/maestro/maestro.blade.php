@@ -22,7 +22,13 @@
                 <div class="carrera-card" data-carrera="{{ $carrera->nombre }}">
                     <div class="carrera-img">
                         <a href="{{ route("maestro.show", $carrera) }}">
-                            <img src="{{ asset('img/carreras/' . $carrera->imagen) }}" alt="{{ $carrera->nombre }}">
+                            @if($carrera->logo)
+                                <img src="{{ asset($carrera->logo) }}" 
+                                    alt="{{ $carrera->nombre }}"
+                                    style="width: 100%; height: 100%; object-fit: contain;">
+                            @else
+                                <img src="{{ asset('img/jaguar.png') }}" alt="Sin logo">
+                            @endif
                         </a>
                     </div>
                 </div>

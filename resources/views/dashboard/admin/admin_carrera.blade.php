@@ -25,7 +25,7 @@
                             alt="{{ $var_carrera->nombre }}"
                             style="width: 100%; height: 100%; object-fit: contain;">
                     @else
-                        <img src="{{ asset('img/carreras/default_carrera.png') }}" alt="Sin logo">
+                        <img src="{{ asset('img/jaguar.png') }}" alt="Sin logo">
                     @endif
                 </div>
             </div>
@@ -124,6 +124,7 @@
                         <tr>
                             <th>No.</th>
                             <th>Nombre</th>
+                            <th>Apellidos</th>
                             <th>Correo</th>
                             <th>Acciones</th>
                         </tr>
@@ -133,6 +134,7 @@
                             <tr>
                                 <td class="col-numero">{{ $i+1 }}</td>
                                 <td class="col-nombre">{{ $maestro->user?->name }}</td>
+                                <td class="col-nombre">{{ $maestro->user?->apellido }}</td>
                                 <td class="col-correo">{{ $maestro->user?->email }}</td>
                                 <td class="col-acciones">
                                     <button class="btn-ver-perfil">Ver perfil</button>

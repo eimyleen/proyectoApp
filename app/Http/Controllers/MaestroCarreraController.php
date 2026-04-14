@@ -44,7 +44,7 @@ class MaestroCarreraController extends Controller
     {
         //
         $carrera = Carrera::findOrFail($id);
-        $alumnos = Alumno::with('user:id,name')->get();
+        $alumnos = Alumno::with('user:id,name,apellido')->get();
         $maestros = Maestro::with('user:id,name,apellido,email')->get();
         return view('dashboard.maestro.maestro_carrera', compact('carrera', 'alumnos', 'maestros'));
     }

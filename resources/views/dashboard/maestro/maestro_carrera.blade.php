@@ -23,7 +23,13 @@
         <div class="carrera-header">
             <div class="carrera-logo">
                 <div class="logo-circular">
-                    <img src="{{ asset('img/carreras/'.$carrera->nombre.'.png') }}" alt='{{ $carrera->nombre }}'>
+                    @if($carrera->logo)
+                        <img src="{{ asset($carrera->logo) }}" 
+                            alt="{{ $carrera->nombre }}"
+                            style="width: 100%; height: 100%; object-fit: contain;">
+                    @else
+                        <img src="{{ asset('img/jaguar.png') }}" alt="Sin logo">
+                    @endif
                 </div>
                 <span class="logo-texto">Logo de la carrera</span>
             </div>
@@ -71,6 +77,7 @@
                             <th>No.</th>
                             <th>Matrícula</th>
                             <th>Nombre</th>
+                            <th>Apellidos</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -80,6 +87,7 @@
                                 <td class="col-numero">{{ $i+1 }}</td>
                                 <td class="col-matricula">{{ $alumno->matricula }}</td>
                                 <td class="col-nombre">{{ $alumno->user?->name }}</td>
+                                <td class="col-nombre">{{ $alumno->user?->apellido }}</td>
                                 <td class="col-acciones">
                                     <button class="btn-ver-expediente">Ver expediente</button>
                                     <button class="btn-eliminar">Eliminar</button>
@@ -109,6 +117,7 @@
                         <tr>
                             <th>No.</th>
                             <th>Nombre</th>
+                            <th>Apellidos</th>
                             <th>Correo</th>
                             <th>Acciones</th>
                         </tr>
@@ -118,6 +127,7 @@
                             <tr>
                                 <td class="col-numero">{{ $i+1 }}</td>
                                 <td class="col-nombre">{{ $maestro->user?->name }}</td>
+                                <td class="col-nombre">{{ $maestro->user?->apellido }}</td>
                                 <td class="col-correo">{{ $maestro->user?->email }}</td>
                                 <td class="col-acciones">
                                     <button class="btn-ver-perfil">Ver perfil</button>
@@ -163,7 +173,6 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn-cancelar" id="cancelarAlumno">Cancelar</button>
                 <button class="btn-guardar" id="guardarAlumno">Guardar alumno</button>
             </div>
         </div>
@@ -199,7 +208,6 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn-cancelar" id="cancelarMaestro">Cancelar</button>
                 <button class="btn-guardar" id="guardarMaestro">Guardar maestro</button>
             </div>
         </div>
