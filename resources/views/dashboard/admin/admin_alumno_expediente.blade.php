@@ -88,14 +88,13 @@
                 </div>
 
                 <div class="carrera-info-expediente">
-                    <div class="logo-circular-carrera" style="width: 80px; height: 80px; overflow: hidden; border-radius: 50%;">
+                    <div class="logo-circular-carrera" style="width: 120px; height: 120px; overflow: hidden; border-radius: 50%;">
                         @if($alumno->carrera && $alumno->carrera->logo)
                             <img src="{{ asset($alumno->carrera->logo) }}" alt="Logo" style="width: 100%; height: 100%; object-fit: contain;">
                         @else
                             <img src="{{ asset('img/carreras/default.png') }}" alt="Sin logo">
                         @endif
                     </div>
-                    <span class="logo-texto-carrera">{{ $alumno->carrera->nombre ?? 'Sin Carrera' }}</span>
                 </div>
 
         <!-- Sección de tutorías -->
