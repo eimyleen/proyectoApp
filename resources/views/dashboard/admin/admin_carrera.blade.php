@@ -20,9 +20,9 @@
         <div class="carrera-header">
             <div class="carrera-logo">
                 <div class="logo-circular" style="width: 120px; height: 120px; overflow: hidden;">
-                    @if($var_carrera->logo)
-                        <img src="{{ asset($var_carrera->logo) }}" 
-                            alt="{{ $var_carrera->nombre }}"
+                    @if($carrera->logo)
+                        <img src="{{ asset($carrera->logo) }}" 
+                            alt="{{ $carrera->nombre }}"
                             style="width: 100%; height: 100%; object-fit: contain;">
                     @else
                         <img src="{{ asset('img/jaguar.png') }}" alt="Sin logo">
@@ -30,15 +30,15 @@
                 </div>
             </div>
             <div class="carrera-info">
-                <h2>{{ $var_carrera->nombre }}</h2>
-                <p class="carrera-clave">Clave: {{ $var_carrera->clave }}</p>
+                <h2>{{ $carrera->nombre }}</h2>
+                <p class="carrera-clave">Clave: {{ $carrera->clave }}</p>
                 <p>Gestión de la carrera</p>
             </div>
             <div class="carrera-acciones">
                 <button class="btn-editar" id="btnEditarCarrera">
                     <img src="{{ asset('img/editar.png') }}" alt="Editar" class="btn-icono"> Editar carrera
                 </button>
-                <form action="{{ route("admin.delete", $var_carrera) }}" method="POST">
+                <form action="{{ route("admin.delete", $carrera) }}" method="POST">
                     @csrf @method('DELETE')
                     <button type="submit" class="btn-eliminar-carrera" id="btnEliminarCarrera">
                         ✕ Eliminar carrera
@@ -221,7 +221,7 @@
     </div>
 
     <!-- Modal para editar carrera -->
-    <form action="{{ route("admin.update", $var_carrera) }}" method="POST">
+    <form action="{{ route("admin.update", $carrera) }}" method="POST">
         @csrf
         @method('PATCH')
         <div id="modalCarrera" class="modal">
@@ -233,11 +233,11 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Nombre de la carrera</label>
-                        <input name="inNombre" type="text" id="nombreCarrera" value="{{ $var_carrera->nombre }}">
+                        <input name="inNombre" type="text" id="nombreCarrera" value="{{ $carrera->nombre }}">
                     </div>
                     <div class="form-group">
                         <label>Clave de la carrera</label>
-                        <input name="inClave" type="text" id="claveCarrera" value="{{ $var_carrera->clave }}">
+                        <input name="inClave" type="text" id="claveCarrera" value="{{ $carrera->clave }}">
                     </div>
                     <div class="form-group">
                         <label>Logo de la carrera</label>

@@ -23,13 +23,19 @@
         <div class="carrera-header-grupos">
             <div class="carrera-logo-grupos">
                 <div class="logo-circular-grupos">
-                    <img src="{{ asset('img/carreras/ing_alimentos.png') }}" alt="Logo de la carrera">
+                    @if($carrera->logo)
+                        <img src="{{ asset($carrera->logo) }}" 
+                            alt="{{ $carrera->nombre }}"
+                            style="width: 100%; height: 100%; object-fit: contain;">
+                    @else
+                        <img src="{{ asset('img/jaguar.png') }}" alt="Sin logo">
+                    @endif
                 </div>
                 <span class="logo-texto-grupos">Logo de la carrera</span>
             </div>
             <div class="carrera-info-grupos">
-                <h2>[Nombre de la Carrera]</h2>
-                <p class="carrera-clave">Clave: IC</p>
+                <h2>[{{ $carrera->nombre }}]</h2>
+                <p class="carrera-clave">Clave: {{ $carrera->clave }}</p>
                 <p>Gestión de grupos y alumnos</p>
             </div>
         </div>
@@ -62,20 +68,22 @@
                         <th>No.</th>
                         <th>Matrícula</th>
                         <th>Nombre</th>
+                        <th>Apellidos</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody id="alumnosBody">
-                    @for($i = 1; $i <= 4; $i++)
+                    @foreach($alumnos as $i => $alumno)
                         <tr>
-                            <td class="col-numero">{{ $i }}</td>
-                            <td class="col-matricula"></td>
-                            <td class="col-nombre"></td>
+                            <td class="col-numero">{{ $i+1 }}</td>
+                            <td class="col-matricula">{{ $alumno->matricula }}</td>
+                            <td class="col-nombre">{{ $alumno->user?->name }}</td>
+                            <td class="col-nombre">{{ $alumno->user?->apellido }}</td>
                             <td class="col-acciones">
                                 <button class="btn-ver-expediente">Ver expediente</button>
-</td>
+                            </td>
                         </tr>
-                    @endfor
+                    @endforeach
                 </tbody>
             </table>
         </div>
