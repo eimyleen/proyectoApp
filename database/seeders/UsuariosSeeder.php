@@ -66,6 +66,84 @@ class UsuariosSeeder extends Seeder
             'logo' => 'img/carreras/ing_tec_info.png',
         ]);
 
+        Carrera::create([
+            'nombre' => 'Ingeniería en Alimentos',
+            'clave' => 'IAL',
+            'logo' => 'img/carreras/ing_alimentos.png',
+        ]);
+
+        Carrera::create([
+            'nombre' => 'Ingeniería Civil',
+            'clave' => 'IC',
+            'logo' => 'img/carreras/ing_civil.png',
+        ]);
+
+        Carrera::create([
+            'nombre' => 'T.S.U. en Inteligencia Artificial',
+            'clave' => 'IA',
+            'logo' => 'img/carreras/ing_inte_artificial.png',
+        ]);
+
+        Carrera::create([
+            'nombre' => 'Ingeniería en Logística Internacional',
+            'clave' => 'ILI',
+            'logo' => 'img/carreras/ing_logistica.png',
+        ]);
+
+        Carrera::create([
+            'nombre' => 'Ingeniería en Mantenimiento Industrial',
+            'clave' => 'IMI',
+            'logo' => 'img/carreras/ing_mant_industrial.png',
+        ]);
+
+        Carrera::create([
+            'nombre' => 'Ingeniería en Mecatrónica',
+            'clave' => 'IMT',
+            'logo' => 'img/carreras/ing_mecatronica.png',
+        ]);
+
+        Carrera::create([
+            'nombre' => 'Ingeniería en Microelectrónica y Semiconductores',
+            'clave' => 'IMS',
+            'logo' => 'img/carreras/ing_micro_semic.png',
+        ]);
+
+        Carrera::create([
+            'nombre' => 'Licenciatura en Administración',
+            'clave' => 'LAD',
+            'logo' => 'img/carreras/lic_admin.png',
+        ]);
+
+        Carrera::create([
+            'nombre' => 'Licenciatura en Gastronomía',
+            'clave' => 'LGT',
+            'logo' => 'img/carreras/lic_gastro.png',
+        ]);
+
+        Carrera::create([
+            'nombre' => 'Licenciatura en Negocios y Mercadotecnia',
+            'clave' => 'LNM',
+            'logo' => 'img/carreras/lic_merca.png',
+        ]);
+
+        Carrera::create([
+            'nombre' => 'Licenciatura en Psicología',
+            'clave' => 'LPS',
+            'logo' => 'img/carreras/lic_psicologia.png',
+        ]);
+
+        Carrera::create([
+            'nombre' => 'Licenciatura en Seguridad Pública',
+            'clave' => 'LSP',
+            'logo' => 'img/carreras/lic_seg_publ.png',
+        ]);
+
+        Carrera::create([
+            'nombre' => 'Licenciatura en Gestión y Desarrollo Turístico',
+            'clave' => 'LGDT',
+            'logo' => 'img/carreras/lic_turismo.png',
+        ]);
+
         // Datos de prueba para el alumno
         $alumnoModelo = Alumno::create([
             'user_id' => $userAlumno->id,
