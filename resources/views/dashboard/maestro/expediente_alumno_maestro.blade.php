@@ -34,47 +34,56 @@
         <!-- Datos personales del alumno -->
         <h3 class="seccion-titulo">Datos personales</h3>
         <div class="datos-grid">
-            <div class="dato-item">
-                <label>Nombre</label>
-                <span class="dato-valor"></span>
-            </div>
-            <div class="dato-item">
-                <label>Apellidos</label>
-                <span class="dato-valor"></span>
-            </div>
-            <div class="dato-item">
-                <label>Matrícula</label>
-                <span class="dato-valor"></span>
-            </div>
-            <div class="dato-item">
-                <label>Carrera</label>
-                <span class="dato-valor"></span>
-            </div>
-            <div class="dato-item">
-                <label>Grupo</label>
-                <span class="dato-valor"></span>
-            </div>
-            <div class="dato-item">
-                <label>CURP</label>
-                <span class="dato-valor"></span>
-            </div>
-            <div class="dato-item">
-                <label>Edad</label>
-                <span class="dato-valor"></span>
-            </div>
-            <div class="dato-item">
-                <label>Sexo</label>
-                <span class="dato-valor"></span>
-            </div>
-            <div class="dato-item">
-                <label>Fecha de nacimiento</label>
-                <span class="dato-valor"></span>
-            </div>
-            <div class="dato-item">
-                <label>Correo electrónico</label>
-                <span class="dato-valor"></span>
-            </div>
+        <div class="dato-item">
+            <label>Nombre</label>
+            <span class="dato-valor">{{ $alumno->user->name }}</span> {{--  --}}
         </div>
+        
+        <div class="dato-item">
+            <label>Apellidos</label>
+            <span class="dato-valor">{{ $alumno->user->apellido }}</span> {{-- [cite: 4] --}}
+        </div>
+
+        <div class="dato-item">
+            <label>Matrícula</label>
+            <span class="dato-valor">{{ $alumno->matricula }}</span> {{-- [cite: 4, 5] --}}
+        </div>
+
+        <div class="dato-item">
+            <label>Carrera</label>
+            <span class="dato-valor">{{ $alumno->carrera->nombre ?? 'N/A' }}</span> {{-- [cite: 5] --}}
+        </div>
+
+        <div class="dato-item">
+            <label>Grupo</label>
+            <span class="dato-valor">{{ $alumno->grupo }}</span> {{-- [cite: 5, 6] --}}
+        </div>
+
+        <div class="dato-item">
+            <label>CURP</label>
+            <span class="dato-valor">{{ $alumno->curp }}</span> {{-- [cite: 6] --}}
+        </div>
+
+        <div class="dato-item">
+            <label>Edad</label>
+            <span class="dato-valor">{{ $alumno->edad }} años</span> {{-- [cite: 7] --}}
+        </div>
+
+        <div class="dato-item">
+            <label>Sexo</label>
+            <span class="dato-valor">{{ $alumno->sexo }}</span> {{-- [cite: 7] --}}
+        </div>
+
+        <div class="dato-item">
+            <label>Fecha de nacimiento</label>
+            <span class="dato-valor">{{ $alumno->fecha_nacimiento }}</span> {{-- [cite: 8] --}}
+        </div>
+
+        <div class="dato-item">
+            <label>Correo electrónico</label>
+            <span class="dato-valor">{{ $alumno->user->email }}</span> {{-- [cite: 8, 9] --}}
+        </div>
+    </div>
 
         <!-- Sección de calificaciones con filtro de período -->
         <h3 class="seccion-titulo">Calificaciones</h3>
