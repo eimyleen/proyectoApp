@@ -169,3 +169,14 @@ button:active {
         font-size: 1.3rem;
     }
 }
+
+a{
+    cursor: pointer;
+    font-family: inherit;
+    display: flex;
+    padding-bottom: 20px;
+}
+
+a:hover{
+    color:blueviolet;
+}

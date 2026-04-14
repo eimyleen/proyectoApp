@@ -1,5 +1,7 @@
 @extends('layouts.dashboard')
 
+@section('title', __('messages.career_detail_title'))
+@section('subtitle', __('messages.career_detail_subtitle'))
 @section('title', 'Administrador - Detalle de Carrera')
 
 @section('subtitle', 'Gestiona los grupos y maestros de esta carrera')
@@ -25,23 +27,23 @@
                             alt="{{ $carrera->nombre }}"
                             style="width: 100%; height: 100%; object-fit: contain;">
                     @else
-                        <img src="{{ asset('img/jaguar.png') }}" alt="Sin logo">
+                        <img src="{{ asset('img/jaguar.png') }}" alt="{{ __('messages.admin_no_logo') }}">
                     @endif
                 </div>
             </div>
             <div class="carrera-info">
                 <h2>{{ $carrera->nombre }}</h2>
                 <p class="carrera-clave">Clave: {{ $carrera->clave }}</p>
-                <p>Gestión de la carrera</p>
+                <p>{{ __('messages.career_management') }}</p>
             </div>
             <div class="carrera-acciones">
                 <button class="btn-editar" id="btnEditarCarrera">
-                    <img src="{{ asset('img/editar.png') }}" alt="Editar" class="btn-icono"> Editar carrera
+                    <img src="{{ asset('img/editar.png') }}" alt="Editar" class="btn-icono"> {{ __('messages.btn_edit_career') }}
                 </button>
                 <form action="{{ route("admin.delete", $carrera) }}" method="POST">
                     @csrf @method('DELETE')
                     <button type="submit" class="btn-eliminar-carrera" id="btnEliminarCarrera">
-                        ✕ Eliminar carrera
+                        ✕ {{ __('messages.btn_delete_career') }}
                     </button>
                 </form>
             </div>
@@ -49,8 +51,8 @@
 
         <!-- Pestañas -->
         <div class="tabs">
-            <button class="tab-btn active" data-tab="grupos">Grupos</button>
-            <button class="tab-btn" data-tab="maestros">Maestros</button>
+            <button class="tab-btn active" data-tab="grupos">{{ __('messages.tab_groups') }}</button>
+            <button class="tab-btn" data-tab="maestros">{{ __('messages.tab_teachers') }}</button>
         </div>
 
         <!-- Contenido Grupos -->
@@ -58,22 +60,22 @@
             <!-- Panel de información del tutor -->
             <div class="tutor-info-panel">
                 <div class="tutor-info">
-                    <span class="tutor-label">Tutor:</span>
+                    <span class="tutor-label">{{ __('messages.tutor_label') }}</span>
                     <span class="tutor-nombre" id="tutorNombre"></span>
                 </div>
             </div>
 
             <div class="filtro-grupo">
                 <select class="grupo-select" id="filtroGrupo">
-                    <option value="">Seleccionar grupo</option>
+                    <option value="">{{ __('messages.select_group') }}</option>
                     <!-- Los grupos se cargarán dinámicamente desde el backend -->
                 </select>
                 <div class="botones-accion">
                     <button class="btn-agregar" id="btnAgregarAlumno">
-                        + Agregar alumno
+                        {{ __('messages.btn_add_student') }}
                     </button>
                     <button class="btn-descargar-lista" id="btnDescargarGrupos">
-                        <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-descarga"> Descargar lista de grupos
+                        <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-descarga"> {{ __('messages.btn_download_groups') }}
                     </button>
                 </div>
             </div>
@@ -81,11 +83,11 @@
                 <table class="tabla-alumnos">
                     <thead>
                         <tr>
-                            <th>No.</th>
-                            <th>Matrícula</th>
-                            <th>Nombre</th>
-                            <th>Apellidos</th>
-                            <th>Acciones</th>
+                            <th>{{ __('messages.column_number') }}</th>
+                            <th>{{ __('messages.column_id') }}</th>
+                            <th>{{ __('messages.column_name') }}</th>
+                            <th>{{ __('messages.column_lastname') }}</th>
+                            <th>{{ __('messages.column_actions') }}</th>
                         </tr>
                     </thead>
                     <tbody id="alumnosBody">
@@ -97,10 +99,10 @@
                                 <td class="col-nombre">{{ $alumno->user?->apellido }}</td>
                                 <td class="col-acciones">
                                     <a href="{{ route('admin.alumno.expediente', $alumno->id) }}" style="text-decoration: none;">
-                                        <button class="btn-ver-expediente">Ver expediente</button>
+                                        <button class="btn-ver-expediente">{{ __('messages.btn_view_record') }}</button>
                                     </a>
                                     
-                                    <button class="btn-eliminar">Eliminar</button>
+                                    <button class="btn-eliminar">{{ __('messages.btn_delete') }}</button>
                                 </td>
                             </tr>
                         @endforeach
@@ -114,10 +116,10 @@
             <div class="filtro-grupo" style="justify-content: flex-end;">
                 <div class="botones-accion">
                     <button class="btn-agregar" id="btnAgregarMaestro">
-                        + Agregar maestro
+                        {{ __('messages.btn_add_teacher') }}
                     </button>
                     <button class="btn-descargar-lista" id="btnDescargarMaestros">
-                        <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-descarga"> Descargar lista de maestros
+                        <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-descarga"> {{ __('messages.btn_download_teachers') }}
                     </button>
                 </div>
             </div>
@@ -125,11 +127,11 @@
                 <table class="tabla-maestros">
                     <thead>
                         <tr>
-                            <th>No.</th>
-                            <th>Nombre</th>
-                            <th>Apellidos</th>
-                            <th>Correo</th>
-                            <th>Acciones</th>
+                            <th>{{ __('messages.column_number') }}</th>
+                            <th>{{ __('messages.column_name') }}</th>
+                            <th>{{ __('messages.column_lastname') }}</th>
+                            <th>{{ __('messages.column_email') }}</th>
+                            <th>{{ __('messages.column_actions') }}</th>
                         </tr>
                     </thead>
                     <tbody id="maestrosBody">
@@ -141,9 +143,9 @@
                                 <td class="col-correo">{{ $maestro->user?->email }}</td>
                                 <td class="col-acciones">
                                     <a href="{{ route('admin.maestro.perfil', $maestro->id) }}" style="text-decoration: none;">
-                                        <button class="btn-ver-perfil">Ver perfil</button>
+                                        <button class="btn-ver-perfil">{{ __('messages.btn_view_profile') }}</button>
                                     </a>
-                                    <button class="btn-eliminar">Eliminar</button>
+                                    <button class="btn-eliminar">{{ __('messages.btn_delete') }}</button>
                                 </td>
                             </tr>
                         @endforeach
@@ -157,7 +159,7 @@
     <div id="modalAgregarAlumno" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Agregar alumno</h3>
+                <h3>{{ __('messages.modal_add_student') }}</h3>
                 <span class="modal-close" id="closeModalAlumno">&times;</span>
             </div>
             <form action="{{ route("admin.carrera.storeAlumno", $carrera) }}" method="POST">
@@ -225,33 +227,33 @@
     <div id="modalAgregarMaestro" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Agregar maestro</h3>
+                <h3>{{ __('messages.modal_add_teacher') }}</h3>
                 <span class="modal-close" id="closeModalMaestro">&times;</span>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Número de empleado</label>
-                    <input type="text" id="numEmpleado" placeholder="Ej: EMP-2024-001">
+                    <label>{{ __('messages.field_employee_num') }}</label>
+                    <input type="text" id="numEmpleado" placeholder="{{ __('messages.placeholder_id_teacher') }}">
                 </div>
                 <div class="form-group">
-                    <label>Nombre(s)</label>
-                    <input type="text" id="nombreMaestro" placeholder="Ej: Roberto">
+                    <label>{{ __('messages.field_firstname') }}</label>
+                    <input type="text" id="nombreMaestro" placeholder="{ __('messages.placeholder_name') }}">
                 </div>
                 <div class="form-group">
-                    <label>Apellidos</label>
-                    <input type="text" id="apellidosMaestro" placeholder="Ej: Sánchez Hernández">
+                    <label>{{ __('messages.field_lastname') }}</label>
+                    <input type="text" id="apellidosMaestro" placeholder="{{ __('messages.placeholder_lastname') }}">
                 </div>
                 <div class="form-group">
-                    <label>Correo electrónico</label>
-                    <input type="email" id="correoMaestro" placeholder="ejemplo@utnay.edu.mx">
+                    <label>{{ __('messages.field_email') }}</label>
+                    <input type="email" id="correoMaestro" placeholder="{{ __('messages.placeholder_email') }}">
                 </div>
                 <div class="form-group">
-                    <label>Teléfono</label>
-                    <input type="text" id="telefonoMaestro" placeholder="Ej: 311-123-4567">
+                    <label>{{ __('messages.field_phone') }}</label>
+                    <input type="text" id="telefonoMaestro" placeholder="{{ __('messages.placeholder_phone') }}">
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn-guardar" id="guardarMaestro">Guardar maestro</button>
+                <button class="btn-guardar" id="guardarMaestro">{{ __('messages.btn_save') }}</button>
             </div>
         </div>
     </div>
@@ -263,26 +265,26 @@
         <div id="modalCarrera" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3>Editar carrera</h3>
+                    <h3>{{ __('messages.modal_edit_career') }}</h3>
                     <span class="modal-close" id="closeModalCarrera">&times;</span>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Nombre de la carrera</label>
+                        <label>{{ __('messages.field_career_name') }}</label>
                         <input name="inNombre" type="text" id="nombreCarrera" value="{{ $carrera->nombre }}">
                     </div>
                     <div class="form-group">
-                        <label>Clave de la carrera</label>
+                        <label>{{ __('messages.field_career_key') }}</label>
                         <input name="inClave" type="text" id="claveCarrera" value="{{ $carrera->clave }}">
                     </div>
                     <div class="form-group">
-                        <label>Logo de la carrera</label>
+                        <label>{{ __('messages.field_career_logo') }}</label>
                         <input name="inLogo" type="file" id="logoCarrera" accept="image/*" value="{{ $carrera->logo }}">
-                        <small class="form-text">Selecciona una nueva imagen para el logo</small>
+                        <small class="form-text">{{ __('messages.helper_logo') }}</small>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn-guardar">Guardar cambios</button>
+                    <button type="submit" class="btn-guardar">{{ __('messages.btn_save_changes') }}</button>
                 </div>
             </div>
         </div>

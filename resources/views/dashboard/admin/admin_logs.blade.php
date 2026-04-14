@@ -1,5 +1,9 @@
 @extends('layouts.dashboard')
 
+@section('title', __('messages.logs_title'))
+
+@section('subtitle', __('messages.logs_subtitle'))
+
 @section('title', 'Logs del Sistema')
 
 @section('subtitle', 'Consulta el historial de actividades')
@@ -17,19 +21,19 @@
 @section('content')
     <div class="logs-container">
         <div class="page-header">
-            <h2>Registro de actividades</h2>
+            <h2>{{ __('messages.logs_header') }}</h2>
         </div>
 
         <div class="tabla-logs">
             <table>
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Fecha y hora</th>
-                        <th>Usuario</th>
-                        <th>Rol</th>
-                        <th>Acción</th>
-                        <th>Descripción</th> </tr>
+                        <th>{{ __('messages.column_id_log') }}</th>
+                        <th>{{ __('messages.column_datetime') }}</th>
+                        <th>{{ __('messages.column_user') }}</th>
+                        <th>{{ __('messages.column_role') }}</th>
+                        <th>{{ __('messages.column_action') }}</th>
+                        <th>{{ __('messages.column_description') }}</th>
                     </tr>
                 </thead>
                 <tbody id="logsTableBody">
@@ -44,7 +48,7 @@
                                 </span>
                             </td>
                             <td class="accion">{{ $log->accion }}</td>
-                            <td class="descripcion">{{ $log->descripcion ?? 'Sin detalle' }}</td> </tr>
+                            <td class="descripcion">{{ $log->descripcion ?? __('messages.log_no_detail') }}</td> </tr>
                         </tr>
                     @endforeach
                 </tbody>
