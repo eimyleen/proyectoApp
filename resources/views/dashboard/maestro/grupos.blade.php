@@ -1,5 +1,6 @@
 @extends('layouts.dashboard')
-
+@section('title', __('messages.groups_title'))
+@section('subtitle', __('messages.groups_subtitle'))
 @section('title', 'Grupos - Maestro')
 @section('user-role', 'Maestro')
 @section('avatar-iniciales', 'CS')
@@ -34,15 +35,15 @@
             </div>
             <div class="carrera-info-grupos">
                 <h2>{{ $carrera->nombre }}</h2>
-                <p class="carrera-clave">Clave: {{ $carrera->clave }}</p>
-                <p>Gestión de grupos y alumnos</p>
+                <p class="carrera-clave">{{ __('messages.groups_id_card') }}: {{ $carrera->clave }}</p>
+               <p>{{ __('messages.groups_management') }}</p>
             </div>
         </div>
 
         <!-- Filtro de grupos -->
         <div class="filtro-grupos">
             <select class="grupo-select" id="grupoSelect">
-                <option value="">Seleccionar grupo</option>
+                <option value="">{{ __('messages.groups_select') }}</option>
                 <!-- Los grupos se cargarán dinámicamente desde el backend -->
             </select>
         </div>
@@ -50,12 +51,12 @@
         <!-- Panel de información del tutor -->
         <div class="tutor-info-panel">
             <div class="tutor-info">
-                <span class="tutor-label">Tutor:</span>
+                <span class="tutor-label">{{ __('messages.groups_tutor') }}:</span>
                 <span class="tutor-nombre" id="tutorNombre"></span>
             </div>
             <button class="btn-descargar-grupo" id="btnDescargarGrupo">
                 <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-descarga">
-                Descargar lista del grupo
+                {{ __('messages.groups_download_list') }}
             </button>
         </div>
 
@@ -64,11 +65,11 @@
             <table class="tabla-alumnos" id="tablaAlumnos">
                 <thead>
                     <tr>
-                        <th>No.</th>
-                        <th>Matrícula</th>
-                        <th>Nombre</th>
-                        <th>Apellidos</th>
-                        <th>Acciones</th>
+                        <th>{{ __('messages.groups_no') }}</th>
+                        <th>{{ __('messages.groups_id_card') }}</th>
+                        <th>{{ __('messages.groups_name') }}</th>
+                        <th>{{ __('messages.groups_last_name') }}</th>
+                        <th>{{ __('messages.groups_actions') }}</th>
                     </tr>
                 </thead>
                 <tbody id="alumnosBody">
@@ -80,7 +81,7 @@
                             <td class="col-nombre">{{ $alumno->user?->apellido }}</td>
                             <td class="col-acciones">
                                 <a href="{{ route('maestro.alumno.expediente', $alumno->id) }}" style="text-decoration: none;">
-                                    <button class="btn-ver-expediente">Ver expediente</button>
+                                    <button class="btn-ver-expediente">{{ __('messages.groups_view_record') }}</button>
                                 </a>
                             </td>
                         </tr>

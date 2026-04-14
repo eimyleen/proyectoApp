@@ -41,7 +41,7 @@
                             @method('PUT')
                             <input type="file" name="foto" id="inputFoto" style="display: none;" accept="image/*" onchange="document.getElementById('fotoForm').submit();">
                             <button type="button" class="btn-subir-foto" onclick="document.getElementById('inputFoto').click();">
-                                Subir Foto
+                                {{ __('messages.profile_upload_photo') }}
                             </button>
                         </form>
             </div>
