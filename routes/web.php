@@ -50,9 +50,9 @@ Route::middleware(['auth'])->group(function () {
     // ----- Rutas referentes a la gestión de usuarios -----
 
     // --- Ruta para VER el detalle-información de un Alumno específico desde la perspectiva del Admin ---
-    Route::get('/dashboard/admin/alumno/expediente', function () {
-        return view('dashboard.admin.admin_alumno_expediente');
-    })->middleware('role:admin')->name('admin.alumno.expediente');
+    Route::get('/dashboard/admin/alumno/expediente/{id}', [
+        AdminCarreraController::class, 'verExpediente'
+        ])->middleware('role:admin')->name('admin.alumno.expediente');
 
     // --- Ruta para VER el detalle-información de un Maestro específico desde la perspectiva del Admin ---
     Route::get('/dashboard/admin/maestro/perfil', function () {

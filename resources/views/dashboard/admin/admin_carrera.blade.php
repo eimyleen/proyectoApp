@@ -96,7 +96,10 @@
                                 <td class="col-nombre">{{ $alumno->user?->name }}</td>
                                 <td class="col-nombre">{{ $alumno->user?->apellido }}</td>
                                 <td class="col-acciones">
-                                    <button class="btn-ver-expediente">Ver expediente</button>
+                                    <a href="{{ route('admin.alumno.expediente', $alumno->id) }}" style="text-decoration: none;">
+                                        <button class="btn-ver-expediente">Ver expediente</button>
+                                    </a>
+                                    
                                     <button class="btn-eliminar">Eliminar</button>
                                 </td>
                             </tr>
@@ -444,9 +447,6 @@
 
         // Botones de acciones
         document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('btn-ver-expediente')) {
-                alert('Ver expediente del alumno');
-            }
             if (e.target.classList.contains('btn-ver-perfil')) {
                 alert('Ver perfil del maestro');
             }

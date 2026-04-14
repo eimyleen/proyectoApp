@@ -54,4 +54,12 @@ class AdminCarreraController extends Controller {
         $Item -> delete();
         return redirect() -> route("admin.index");
     }
+
+    // Método para mostrar el expediente de un alumno específico desde la perspectiva del Admin
+    public function verExpediente($id)
+    {
+        $alumno = Alumno::with(['user', 'carrera'])->findOrFail($id);
+
+        return view('dashboard.admin.admin_alumno_expediente', compact('alumno'));
+    }
 }
