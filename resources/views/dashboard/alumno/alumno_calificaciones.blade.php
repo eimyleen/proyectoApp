@@ -42,7 +42,7 @@
                         <img src="{{ asset('img/jaguar.png') }}" alt="UTNay">
                     @endif
                 </div>
-                <span class="logo-texto">{{ __('messages.career_logo_alt') }}</span>
+                
             </div>
         </div>
 
