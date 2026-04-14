@@ -65,6 +65,10 @@ Route::middleware(['auth'])->group(function () {
         AdminCarreraController::class, 'delete'
     ])->middleware('role:admin')->name('admin.delete');
 
+    Route::post('/admin/carrera/{id}', [
+        AdminCarreraController::class, 'storeAlumno'
+    ])->middleware('role:admin')->name('admin.carrera.storeAlumno');
+
     Route::get('/dashboard/admin/logs', [
         LogController::class, 'index'
     ])->middleware(['auth', 'role:admin'])->name('admin.logs');

@@ -160,33 +160,64 @@
                 <h3>Agregar alumno</h3>
                 <span class="modal-close" id="closeModalAlumno">&times;</span>
             </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label>Matrícula</label>
-                    <input type="text" id="matriculaAlumno" placeholder="Ej: UTN-2024-001">
+            <form action="{{ route("admin.carrera.storeAlumno", $carrera) }}" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nombre(s)</label>
+                        <input name="name" type="text" id="nombreAlumno" placeholder="Ej: Juan">
+                    </div>
+                    <div class="form-group">
+                        <label>Apellidos</label>
+                        <input name="apellido" type="text" id="apellidosAlumno" placeholder="Ej: Pérez García">
+                    </div>
+                    <div class="form-group">
+                        <label>Grupo</label>
+                        <select name="grupo" id="grupoAlumno">
+                            <option value=""></option>
+                            <option value="TI-XX">TI-XX</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Matrícula</label>
+                        <input name="matricula" type="text" id="matriculaAlumno" placeholder="Ej: UTN-2024-001">
+                    </div>
+                    <div class="form-group">
+                        <label>Correo electrónico</label>
+                        <input name="email" type="email" id="correoAlumno" placeholder="ejemplo@utnay.edu.mx">
+                    </div>
+                    <div class="form-group">
+                        <label>CURP</label>
+                        <input name="curp" type="input" id="" placeholder="48932HJFIE">
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Nacimiento</label>
+                        <input name="fecha_nacimiento" type="date" id="" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label>Edad</label>
+                        <input name="edad" type="number" value="18" min="18" max="80" id="" placeholder="18">
+                    </div>
+                    <div class="form-group">
+                        <label>Sexo</label>
+                        <table>
+                            <tr style="text-align: center">
+                                <td><label>Masculino</label></td>
+                                <td><label>Femenino</label></td>
+                                <td><label>Otro</label></td>
+                            </tr>
+                            <tr>
+                                <td><input name="sexo" type="radio" value="Masculino"></td>
+                                <td><input name="sexo" type="radio" value="Femenino"></td>
+                                <td><input name="sexo" type="radio" value="Otro"></td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Nombre(s)</label>
-                    <input type="text" id="nombreAlumno" placeholder="Ej: Juan">
+                <div class="modal-footer">
+                    <button type="submit" class="btn-guardar" id="">Guardar alumno</button>
                 </div>
-                <div class="form-group">
-                    <label>Apellidos</label>
-                    <input type="text" id="apellidosAlumno" placeholder="Ej: Pérez García">
-                </div>
-                <div class="form-group">
-                    <label>Grupo</label>
-                    <select id="grupoAlumno">
-                        <option value="">Seleccionar grupo</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Correo electrónico</label>
-                    <input type="email" id="correoAlumno" placeholder="ejemplo@utnay.edu.mx">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-guardar" id="guardarAlumno">Guardar alumno</button>
-            </div>
+            </form>
         </div>
     </div>
 
@@ -381,7 +412,6 @@
                 const nombre = document.getElementById('nombreAlumno').value;
                 const apellidos = document.getElementById('apellidosAlumno').value;
                 if (matricula && nombre && apellidos) {
-                    alert('Alumno agregado correctamente');
                     cerrarModalAlumno();
                 } else {
                     alert('Por favor complete Matrícula, Nombre y Apellidos');
@@ -397,7 +427,6 @@
                 const apellidos = document.getElementById('apellidosMaestro').value;
                 const correo = document.getElementById('correoMaestro').value;
                 if (nombre && apellidos && correo) {
-                    alert('Maestro agregado correctamente');
                     cerrarModalMaestro();
                 } else {
                     alert('Por favor complete Nombre, Apellidos y Correo');
@@ -412,7 +441,6 @@
                 const nombre = document.getElementById('nombreCarrera').value;
                 const clave = document.getElementById('claveCarrera').value;
                 if (nombre && clave) {
-                    //alert('Carrera actualizada: ' + nombre);
                     cerrarModalCarrera();
                     document.querySelector('.carrera-info h2').textContent = nombre;
                     document.querySelector('.carrera-clave').textContent = 'Clave: ' + clave;

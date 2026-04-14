@@ -6,12 +6,14 @@ use App\Jobs\ProcessDBBackup;
 use App\Jobs\RunBackupJob;
 use App\Models\Log;
 use App\Models\Maestro;
+use App\Models\User;
 use Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use App\Models\Carrera;
 use App\Models\Alumno;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Hash;
 
 class AdminCarreraController extends Controller {
     public function index() {
@@ -27,6 +29,44 @@ class AdminCarreraController extends Controller {
         $alumnos = Alumno::with('user:id,name,apellido')->get();
         $maestros = Maestro::with('user:id,name,apellido,email')->get();
         return view('dashboard.admin.admin_carrera', compact('carrera', 'alumnos', 'maestros'));
+    }
+
+    public function storeAlumno($carreraId) {
+        request()->validate(
+            [
+                'name'=>'required',
+                'apellido'=>'required',
+                'email'=>'required',
+                'matricula'=>'required|alpha',
+                'grupo'=>'required|alpha'
+            ]
+        );
+
+        $usuario = User::create([
+            'name'=>request('name'),
+            'apellido'=>request('apellido'),
+            'email'=>request('email'),
+            'role'=>'alumno',
+            'foto'=>'',
+            'password'=>Hash::make('password')
+        ]);
+
+        $alumno = Alumno::create([
+            'user_id'=>$usuario->id,
+            'matricula'=>request('matricula'),
+            'carrera_id'=>$carreraId,
+            'grupo'=>request('grupo'),
+            'curp'=>request('curp'),
+            'edad'=>request('edad'),
+            'sexo'=>request('sexo'),
+            'fecha_nacimiento'=>request('fecha_nacimiento'),
+            'telefono'=>request('telefono')
+        ]);
+
+        echo $usuario;
+        echo $alumno;
+
+        return redirect() -> route('admin.show', $carreraId);
     }
 
     public function update(Request $request, string $id) {
