@@ -78,6 +78,7 @@ class AdminCarreraController extends Controller {
 
     public function handleBackup() {
         $user_id = Auth::id();
+        Log::registrar('Respaldo de BD', 'El administrador genero un respaldo manual.');
         ProcessDbBackup::dispatch($user_id);
         return redirect()->route("admin.index");
     }

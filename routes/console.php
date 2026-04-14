@@ -7,4 +7,4 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::command("app:data-base-backup-command")->everyFiveMinutes();
+Schedule::command("app:data-base-backup-command")->everyFifteenMinutes();

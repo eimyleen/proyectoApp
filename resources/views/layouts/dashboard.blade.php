@@ -88,7 +88,7 @@
                         <img src="{{ asset('img/jaguar.png') }}" alt="Jaguar" class="jaguar-img">
                     </div>
                 </div>
-                <h1 class="profile-name">¡Bienvenido, {{ Auth::user()->name }}!</h1>
+                <h1 class="profile-name">¡{{ __('messages.title_welcome_dashboard') }}, {{ Auth::user()->name }}!</h1>
                 <div class="profile-subtitle">@yield('subtitle', 'Aquí puedes consultar tu información')</div>
             </div>
         </div>
