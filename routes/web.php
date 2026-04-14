@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\App;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminCarreraController;
 use App\Http\Controllers\MaestroCarreraController;
+use App\Http\Controllers\LogController;
 
 // Redirección raíz al login
 Route::redirect('/', '/login');
@@ -31,6 +32,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/dashboard', [
         AdminCarreraController::class, 'index'
     ])->middleware('role:admin')->name('admin.index');
+
+    Route::get('/dashboard/admin/logs', [
+        LogController::class, 'index'
+    ])->middleware(['auth', 'role:admin'])->name('admin.logs');
 
     // ----- Rutas referentes a la gestión de carreras -----
 

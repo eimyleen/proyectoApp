@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Log;
 
 class AuthController extends Controller
 {
@@ -28,6 +29,14 @@ class AuthController extends Controller
         // Mapeamos 'correo' del form a 'email' de la DB
         if (Auth::attempt(['email' => $credentials['correo'], 'password' => $credentials['password']])) {
             $request->session()->regenerate();
+
+            // ... después de que el login es exitoso:
+            Log::create([
+                'user_id' => Auth::id(),
+                'accion' => 'Inicio de sesión',
+                'descripcion' => 'El usuario ha accedido al sistema',
+                'ip_address' => request()->ip()
+            ]);
 
             // Obtener el usuario autenticado
             $user = Auth::user();

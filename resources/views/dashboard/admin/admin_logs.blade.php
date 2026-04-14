@@ -1,10 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('title', 'Logs del Sistema')
-@section('user-role', 'Administrador')
-@section('avatar-iniciales', 'AD')
-@section('nombre-completo', 'Admin User')
-@section('welcome-message', 'Logs del Sistema')
+
 @section('subtitle', 'Consulta el historial de actividades')
 
 @section('back-button')
@@ -35,15 +32,19 @@
                     </tr>
                 </thead>
                 <tbody id="logsTableBody">
-                    @for($i = 0; $i < 8; $i++)
+                    @foreach($logs as $log)
                         <tr>
-                            <td class="id"></td>
-                            <td class="fecha"></td>
-                            <td class="usuario"></td>
-                            <td class="rol"></td>
-                            <td class="accion"></td>
+                            <td class="id">{{ $log->id }}</td>
+                            <td class="fecha">{{ $log->created_at->format('d/m/Y H:i:s') }}</td>
+                            <td class="usuario">{{ $log->user->name }} {{ $log->user->apellido }}</td>
+                            <td class="rol">
+                                <span class="badge-rol {{ $log->user->role }}">
+                                    {{ ucfirst($log->user->role) }}
+                                </span>
+                            </td>
+                            <td class="accion">{{ $log->accion }}</td>
                         </tr>
-                    @endfor
+                    @endforeach
                 </tbody>
             </table>
         </div>

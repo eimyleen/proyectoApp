@@ -13,6 +13,11 @@
     <div class="admin-dashboard-container">
         <!-- Botones superiores -->
         <div class="admin-buttons">
+            <a href="{{ route('admin.logs') }}" style="text-decoration: none;">
+                <button class="btn-lista-global" id="btnLogs">
+                    Logs del sistema
+                </button>
+            </a>
             <button class="btn-lista-global" id="btnRespaldos">
                 Respaldos
             </button>
