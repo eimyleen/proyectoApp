@@ -29,14 +29,23 @@ class DataBaseBackupCommand extends Command
             $port = env('DB_PORT');
 
              // Backup file name (compressed)
-            $gzip_file_name = $database.'_backup_'.now()->format("d-m-Y-H-m-s").'.sql.gz';
+            $gzip_file_name = $database.'_backup_'.now()->format("d-m-Y-H-m-s").'.sql';
             $gzip_file_path = storage_path("app/backups/$gzip_file_name");
 
             // MySQL dump command, streamed directly into gzip
-            $backup_cmd = "mysqldump --user=$username --password=$password --host=$host --port=$port --single-transaction --quick --lock-tables=false $database | gzip > $gzip_file_path";
+            $backup_cmd = "mysqldump --user=$username --password=$password --host=$host --port=$port --single-transaction --quick --lock-tables=false $database";
 
             // Execute the command
             $process_command = Process::run($backup_cmd);
+
+            if ($process_command->failed()) {
+                $this->error('Falló el backup');
+                $this->error($process_command->errorOutput());
+                return;
+            }
+
+            $this->info('Backup generado correctamente');
+            $this->info($gzip_file_name);
 
             return $gzip_file_name;
         } catch (\Exception $e) {

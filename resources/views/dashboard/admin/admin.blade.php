@@ -132,7 +132,8 @@
                 <h3>Respaldos</h3>
                 <span class="modal-close" id="closeModalRespaldos">&times;</span>
             </div>
-            <form class="modal-body" action="{{ route("admin.respaldo") }}" method="POST">
+            <form class="modal-body" action="/respaldo" method="POST">
+                @csrf
                 <button type="submit" class="btn-guardar" id="btnRespaldosExec">Respaldo Ahora</button>
             </form>
         </div>

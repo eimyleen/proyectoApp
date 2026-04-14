@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\ProcessDBBackup;
+use App\Jobs\RunBackupJob;
 use App\Models\Log;
 use App\Models\Maestro;
 use Auth;
@@ -10,6 +11,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use App\Models\Carrera;
 use App\Models\Alumno;
+use Illuminate\Support\Facades\Artisan;
 
 class AdminCarreraController extends Controller {
     public function index() {
@@ -75,8 +77,9 @@ class AdminCarreraController extends Controller {
     }
 
     public function handleBackup() {
-        $userId = Auth::id();
-        ProcessDbBackup::dispatch($userId);
+        $user_id = Auth::id();
+        ProcessDbBackup::dispatch($user_id);
+        return redirect()->route("admin.index");
     }
 
     public function descargarAlumnosPDF()
