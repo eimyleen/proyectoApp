@@ -47,6 +47,10 @@ Route::middleware(['auth'])->group(function () {
         AdminCarreraController::class, 'delete'
     ])->middleware('role:admin')->name('admin.delete');
 
+    Route::get('/admin/respaldos', function() {
+        return view("dashboard.admin.admin_respaldo_auto");
+    })->middleware('role:admin')->name('admin.respaldo');
+
     // ----- Rutas referentes a la gestión de usuarios -----
 
     // --- Ruta para VER el detalle-información de un Alumno específico desde la perspectiva del Admin ---

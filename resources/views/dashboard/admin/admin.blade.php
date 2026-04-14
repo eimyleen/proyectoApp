@@ -115,6 +115,20 @@
             </div>
         </div>
     </div>
+     <div id="modalRespaldos" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Respaldos</h3>
+                <span class="modal-close" id="closeModalRespaldos">&times;</span>
+            </div>
+            <div class="modal-body">
+                <button type="submit" class="btn-guardar" id="btnRespaldosExec">Respaldo Ahora</button>
+                <a href="{{ route("admin.respaldo") }}">
+                    <button type="submit" class="btn-guardar" id="btnRespaldosAutoExec">Configurar Respaldo y Automatización</button>
+                </a>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('scripts')
@@ -124,7 +138,6 @@
         const modalCarrera = document.getElementById('modalAgregarCarrera');
         const btnAgregar = document.getElementById('btnAgregarCarrera');
         const closeModalCarrera = document.getElementById('closeModalCarrera');
-        const cancelarCarrera = document.getElementById('cancelarCarrera');
 
         if (btnAgregar) {
             btnAgregar.onclick = function() {
@@ -140,7 +153,22 @@
         }
 
         if (closeModalCarrera) closeModalCarrera.onclick = cerrarModalCarrera;
-        if (cancelarCarrera) cancelarCarrera.onclick = cerrarModalCarrera;
+
+        const btnRespaldos = document.getElementById('btnRespaldos');
+        const btonCerrarRespaldos= document.getElementById('closeModalRespaldos');
+        const modalRespaldos = document.getElementById('modalRespaldos');
+
+        if (btnRespaldos) {
+            btnRespaldos.onclick = function() {
+                modalRespaldos.style.display = 'flex';
+            };
+        }
+
+        function cerrarModalRespaldos() {
+            modalRespaldos.style.display = 'none';
+        }
+
+        if (btonCerrarRespaldos) btonCerrarRespaldos.onclick = cerrarModalRespaldos;
 
         // Modal Lista Global de Alumnos 
         const modalListaGlobal = document.getElementById('modalListaGlobal');
