@@ -1,5 +1,9 @@
 @extends('layouts.dashboard')
 
+@section('title', __('messages.profile_admin_title'))
+@section('welcome-message', __('messages.profile_welcome'))
+@section('subtitle', __('messages.profile_admin_subtitle'))
+
 @section('title', 'Mi Perfil - Administrador')
 @section('welcome-message', 'Mi Perfil')
 @section('subtitle', 'Consulta tu información personal')
@@ -16,10 +20,10 @@
     <div class="perfil-container">
         <div class="acciones-superiores">
             <button class="btn-editar-perfil" id="btnEditarPerfil">
-                <img src="{{ asset('img/editar.png') }}" alt="Editar" class="btn-icono"> Editar perfil
+                <img src="{{ asset('img/editar.png') }}" alt="Editar" class="btn-icono"> {{ __('messages.btn_edit_profile') }}
             </button>
             <button class="btn-cambiar-contrasena" id="btnCambiarContrasena">
-                <img src="{{ asset('img/candado.png') }}" alt="Cambiar contraseña" class="btn-icono"> Cambiar contraseña
+                <img src="{{ asset('img/candado.png') }}" alt="Cambiar contraseña" class="btn-icono"> {{ __('messages.btn_change_password') }}
             </button>
         </div>
 
@@ -40,32 +44,32 @@
                             @method('PUT')
                             <input type="file" name="foto" id="inputFoto" style="display: none;" accept="image/*" onchange="document.getElementById('fotoForm').submit();">
                             <button type="button" class="btn-subir-foto" onclick="document.getElementById('inputFoto').click();">
-                                Subir Foto
+                                {{ __('messages.btn_upload_photo') }}
                             </button>
                         </form>
             </div>
         </div>
 
-        <h3 class="perfil-titulo">Datos personales</h3>
+        <h3 class="perfil-titulo">{{ __('messages.personal_data') }}</h3>
         <div class="datos-grid">
             <div class="dato-item">
-                <label>Nombre(s)</label>
+                <label>{{ __('messages.field_firstname') }}</label>
                 <span class="dato-valor" id="datoNombre">{{ Auth::user()->name }}</span>
             </div>
             <div class="dato-item">
-                <label>Apellidos</label>
+                <label>{{ __('messages.field_lastname') }}</label>
                 <span class="dato-valor" id="datoApellidos">{{ Auth::user()->apellido }}</span>
             </div>
             <div class="dato-item">
-                <label>Correo electrónico</label>
+                <label>{{ __('messages.field_email') }}</label>
                 <span class="dato-valor" id="datoCorreo">{{ Auth::user()->email }}</span>
             </div>
             <div class="dato-item">
-                <label>Rol</label>
+                <label>{{ __('messages.field_role') }}</label>
                 <span class="dato-valor" id="datoRol">{{ ucfirst(Auth::user()->role) }}</span>
             </div>
             <div class="dato-item">
-                <label>Miembro desde</label>
+                <label>{{ __('messages.field_member_since') }}</label>
                 <span class="dato-valor" id="datoFechaRegistro">{{ Auth::user()->created_at->format('d/m/Y') }}</span>
             </div>
         </div>
@@ -74,30 +78,30 @@
     <div id="modalEditarPerfil" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Editar perfil</h3>
+                <h3>{{ __('messages.modal_edit_profile') }}</h3>
                 <span class="modal-close" id="closeModalEditar">&times;</span>
             </div>
             <div class="modal-body">
                 <form action="#" method="POST" enctype="multipart/form-data" id="formEditarPerfil">
                     @csrf
                     <div class="form-group">
-                        <label>Nombre(s)</label>
+                        <label>{{ __('messages.field_firstname') }}</label>
                         <input type="text" name="name" value="{{ Auth::user()->name }}">
                     </div>
                     <div class="form-group">
-                        <label>Apellidos</label>
+                        <label>{{ __('messages.field_lastname') }}</label>
                         <input type="text" name="apellido" value="{{ Auth::user()->apellido }}">
                     </div>
                     <div class="form-group">
-                        <label>Correo electrónico</label>
+                        <label>{{ __('messages.field_email') }}</label>
                         <input type="email" name="email" value="{{ Auth::user()->email }}">
                     </div>
                     <input type="file" id="editFoto" name="foto" style="display:none;" accept="image/*">
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn-cancelar" id="cancelarEditar">Cancelar</button>
-                <button class="btn-guardar" type="submit" form="formEditarPerfil">Guardar cambios</button>
+                <button class="btn-cancelar" id="cancelarEditar">{{ __('messages.btn_cancel') }}</button>
+                <button class="btn-guardar" type="submit" form="formEditarPerfil">{{ __('messages.btn_save_changes') }}</button>
             </div>
         </div>
     </div>
@@ -105,26 +109,26 @@
     <div id="modalCambiarContrasena" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Cambiar contraseña</h3>
+                <h3>{{ __('messages.modal_change_password') }}</h3>
                 <span class="modal-close" id="closeModalContrasena">&times;</span>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Contraseña actual</label>
-                    <input type="password" id="contrasenaActual" placeholder="Ingrese su contraseña actual">
+                    <label>{{ __('messages.field_current_password') }}</label>
+                    <input type="password" id="contrasenaActual" placeholder="{{ __('messages.placeholder_current_password') }}">
                 </div>
                 <div class="form-group">
-                    <label>Nueva contraseña</label>
-                    <input type="password" id="nuevaContrasena" placeholder="Ingrese su nueva contraseña">
+                    <label>{{ __('messages.field_new_password') }}</label>
+                    <input type="password" id="nuevaContrasena" placeholder="{{ __('messages.placeholder_new_password') }}">
                 </div>
                 <div class="form-group">
-                    <label>Confirmar nueva contraseña</label>
-                    <input type="password" id="confirmarContrasena" placeholder="Confirme su nueva contraseña">
+                    <label>{{ __('messages.field_confirm_password') }}</label>
+                    <input type="password" id="confirmarContrasena" placeholder="{{ __('messages.placeholder_confirm_password') }}">
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn-cancelar" id="cancelarContrasena">Cancelar</button>
-                <button class="btn-guardar" id="guardarContrasena">Guardar cambios</button>
+                <button class="btn-cancelar" id="cancelarContrasena">{{ __('messages.btn_cancel') }}</button>
+                <button class="btn-guardar" id="guardarContrasena">{{ __('messages.btn_save_changes') }}</button>
             </div>
         </div>
     </div>

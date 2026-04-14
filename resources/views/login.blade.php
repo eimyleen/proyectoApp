@@ -46,6 +46,7 @@
                     <label for="mostrarPassword">Mostrar contraseña</label>
                 </div>
 
+                <a href="#">¿Olvidaste tu contraseña?</a>
                 <!-- Botón -->
                 <button type="submit">Iniciar sesión</button>
 
