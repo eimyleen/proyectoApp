@@ -9,13 +9,15 @@ use Illuminate\Support\Facades\Session;
 
 class SetLocale
 {
-    public function handle(Request $request, Closure $next)
-    {
-        // Si hay un idioma guardado en la sesión, lo aplicamos
-        if (Session::has('locale')) {
-            App::setLocale(Session::get('locale'));
-        }
-
-        return $next($request);
+   public function handle(Request $request, Closure $next)
+{
+    // Si la sesión tiene un idioma, lo usa; si no, usa el del config (que ahora es 'es')
+    if (Session::has('locale')) {
+        App::setLocale(Session::get('locale'));
+    } else {
+        App::setLocale(config('app.locale'));
     }
+
+    return $next($request);
+}
 }
