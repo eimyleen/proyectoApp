@@ -24,9 +24,16 @@
                             </a>
                         @endif
                         
-                        <div class="avatar-circle">
-                            <span class="avatar-iniciales">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
-                        </div>
+                        <a href="{{ 
+                            Auth::user()->role == 'admin' ? route('admin.perfil') : 
+                            (Auth::user()->role == 'maestro' ? route('maestro.perfil') : route('alumno.expediente')) 
+                        }}" style="text-decoration: none;">
+                            <div class="avatar-circle">
+                                <span class="avatar-iniciales">
+                                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}{{ strtoupper(substr(Auth::user()->apellido, 0, 1)) }}
+                                </span>
+                            </div>
+                        </a>
                         <div class="profile-nombre">
                             <span class="nombre-completo">{{ Auth::user()->name }} {{ Auth::user()->apellido }}</span>
                         </div>
