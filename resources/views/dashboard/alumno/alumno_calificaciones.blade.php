@@ -52,8 +52,11 @@
             <div class="filtro-periodo">
                 <div class="periodo-select">
                     <label>{{ __('messages.label_period') }}</label>
-                    <select>
+                    <select name="periodo" id="periodoSelect">
                         <option value="">{{ __('messages.select_period') }}</option>
+                        @foreach($periodos as $periodo)
+                            <option value="{{ $periodo }}">{{ $periodo }}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
@@ -68,34 +71,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td></td>
-                            <td class="calificacion"></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td class="calificacion"></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td class="calificacion"></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td class="calificacion"></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td class="calificacion"></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td class="calificacion"></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td class="calificacion"></td>
-                        </tr>
+                        @forelse($calificaciones as $cal)
+                            <tr>
+                                <td>{{ $cal->materia->nombre }}</td>
+                                <td class="calificacion {{ $cal->calificacion >= 8 ? 'aprobado' : 'reprobado' }}">
+                                    {{ number_format($cal->calificacion, 1) }}
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="2" style="text-align: center;">No hay calificaciones registradas aún.</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

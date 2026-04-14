@@ -44,11 +44,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td></td><td></td></tr>
-                        <tr><td></td><td></td></tr>
-                        <tr><td></td><td></td></tr>
-                        <tr><td></td><td></td></tr>
-                        <tr><td></td><td></td></tr>
+                        @forelse($materias as $materia)
+                            <tr>
+                                <td>{{ $materia->nombre }}</td>
+                                <td>{{ $materia->docente }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="2">No tienes materias asignadas.</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -66,11 +71,35 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td>{{ __('messages.day_monday') }}</td><td></td></tr>
-                        <tr><td>{{ __('messages.day_tuesday') }}</td><td></td></tr>
-                        <tr><td>{{ __('messages.day_wednesday') }}</td><td></td></tr>
-                        <tr><td>{{ __('messages.day_thursday') }}</td><td></td></tr>
-                        <tr><td>{{ __('messages.day_friday') }}</td><td></td></tr>
+                        @php
+                            $diasSemana = [
+                                'Lunes' => __('messages.day_monday'),
+                                'Martes' => __('messages.day_tuesday'),
+                                'Miércoles' => __('messages.day_wednesday'),
+                                'Jueves' => __('messages.day_thursday'),
+                                'Viernes' => __('messages.day_friday')
+                            ];
+                        @endphp
+
+                        @foreach($diasSemana as $diaNombre => $diaTraduccion)
+                            <tr>
+                                <td>{{ $diaTraduccion }}</td>
+                                <td>
+                                    @if(isset($horarios[$diaNombre]))
+                                        @foreach($horarios[$diaNombre] as $clase)
+                                            <div class="clase-item">
+                                                <strong>{{ $clase->materia->nombre }}</strong><br>
+                                                <small>{{ \Carbon\Carbon::parse($clase->hora_inicio)->format('H:i') }} - {{ \Carbon\Carbon::parse($clase->hora_fin)->format('H:i') }} | {{ $clase->aula }}</small>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <span class="sin-clase">Sin clases</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                        
+                        {{-- Fines de semana bloqueados como ya los tenías --}}
                         <tr><td>{{ __('messages.day_saturday') }}</td><td class="dia-bloqueado">{{ __('messages.no_classes') }}</td></tr>
                         <tr><td>{{ __('messages.day_sunday') }}</td><td class="dia-bloqueado">{{ __('messages.no_classes') }}</td></tr>
                     </tbody>

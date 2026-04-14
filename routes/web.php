@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminCarreraController;
 use App\Http\Controllers\MaestroCarreraController;
 use App\Http\Controllers\LogController;
+use App\Http\Controllers\AlumnoController;
 
 // Redirección raíz al login
 Route::redirect('/', '/login');
@@ -122,9 +123,9 @@ Route::middleware(['auth'])->group(function () {
     // ---------- Rutas para el Alumno ----------
 
     // --- Ruta del dashboard del Alumno
-    Route::get('/alumno/dashboard', function () {
-        return view('dashboard.alumno.alumno');
-    })->middleware('role:alumno')->name('alumno.index');
+    Route::get('/alumno/dashboard', [
+        AlumnoController::class, 'index'
+    ])->middleware(['auth', 'role:alumno'])->name('alumno.index');
 
     // --- Ruta del perfil del Alumno ---
     Route::get('/dashboard/alumno/expediente', function () {
@@ -132,9 +133,9 @@ Route::middleware(['auth'])->group(function () {
     })->middleware('role:alumno')->name('alumno.expediente');
 
     // --- Ruta de las calificaciones del Alumno ---
-    Route::get('/dashboard/alumno/calificaciones', function () {
-        return view('dashboard.alumno.alumno_calificaciones');
-    })->middleware('role:alumno')->name('alumno.calificaciones');
+    Route::get('/dashboard/alumno/calificaciones', [
+        AlumnoController::class, 'calificaciones'
+    ])->middleware(['auth', 'role:alumno'])->name('alumno.calificaciones');
 });
 
 Route::get('/welcome', function () {

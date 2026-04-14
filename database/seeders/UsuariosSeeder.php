@@ -8,6 +8,9 @@ use App\Models\User;
 use App\Models\Maestro;
 use App\Models\Carrera;
 use App\Models\Alumno;
+use App\Models\Materia;
+use App\Models\Horario;
+use App\Models\Calificacion;
 use Illuminate\Support\Facades\Hash;
 
 class UsuariosSeeder extends Seeder
@@ -64,7 +67,7 @@ class UsuariosSeeder extends Seeder
         ]);
 
         // Datos de prueba para el alumno
-        Alumno::create([
+        $alumnoModelo = Alumno::create([
             'user_id' => $userAlumno->id,
             'matricula' => 'TIC-310000',
             'carrera_id' => $carrera->id,
@@ -75,5 +78,82 @@ class UsuariosSeeder extends Seeder
             'fecha_nacimiento' => '2005-01-01',
             'telefono' => '3111234567',
         ]);
+
+        // Materias de prueba para la carrera ITIID
+        $m1 = Materia::create(['nombre' => 'Base de Datos para Aplicaciones', 'carrera_id' => $carrera->id, 'docente' => 'Juan Pérez']);
+        $m2 = Materia::create(['nombre' => 'Desarrollo Web Profesional', 'carrera_id' => $carrera->id, 'docente' => 'Juan Pérez']);
+        $m3 = Materia::create(['nombre' => 'Aplicaciones Móviles Multiplataforma', 'carrera_id' => $carrera->id, 'docente' => 'Ing. Ricardo Silva']);
+        $m4 = Materia::create(['nombre' => 'Seguridad Informática', 'carrera_id' => $carrera->id, 'docente' => 'Mtra. Elena Ramos']);
+        $m5 = Materia::create(['nombre' => 'Inglés IX', 'carrera_id' => $carrera->id, 'docente' => 'Lic. Karen Wood']);
+
+        // Horarios para el grupo TI-41
+        $horarios = [
+            // Lunes
+            ['grupo' => 'TI-41', 'dia' => 'Lunes', 'hora_inicio' => '07:00:00', 'hora_fin' => '09:00:00', 'materia_id' => $m1->id, 'aula' => 'Lab 1'],
+            ['grupo' => 'TI-41', 'dia' => 'Lunes', 'hora_inicio' => '09:00:00', 'hora_fin' => '11:00:00', 'materia_id' => $m2->id, 'aula' => 'Lab 10'],
+            ['grupo' => 'TI-41', 'dia' => 'Lunes', 'hora_inicio' => '11:00:00', 'hora_fin' => '13:00:00', 'materia_id' => $m3->id, 'aula' => 'Lab 1'],
+
+            // Martes
+            ['grupo' => 'TI-41', 'dia' => 'Martes', 'hora_inicio' => '07:00:00', 'hora_fin' => '09:00:00', 'materia_id' => $m4->id, 'aula' => 'Lab 5'],
+            ['grupo' => 'TI-41', 'dia' => 'Martes', 'hora_inicio' => '09:00:00', 'hora_fin' => '11:00:00', 'materia_id' => $m5->id, 'aula' => 'Lab 8'],
+            ['grupo' => 'TI-41', 'dia' => 'Martes', 'hora_inicio' => '11:00:00', 'hora_fin' => '13:00:00', 'materia_id' => $m1->id, 'aula' => 'Lab 1'],
+
+            // Miércoles
+            ['grupo' => 'TI-41', 'dia' => 'Miércoles', 'hora_inicio' => '07:00:00', 'hora_fin' => '09:00:00', 'materia_id' => $m2->id, 'aula' => 'Lab 10'],
+            ['grupo' => 'TI-41', 'dia' => 'Miércoles', 'hora_inicio' => '09:00:00', 'hora_fin' => '11:00:00', 'materia_id' => $m3->id, 'aula' => 'Lab 1'],
+            ['grupo' => 'TI-41', 'dia' => 'Miércoles', 'hora_inicio' => '11:00:00', 'hora_fin' => '13:00:00', 'materia_id' => $m4->id, 'aula' => 'Lab 5'],
+
+            // Jueves
+            ['grupo' => 'TI-41', 'dia' => 'Jueves', 'hora_inicio' => '07:00:00', 'hora_fin' => '09:00:00', 'materia_id' => $m5->id, 'aula' => 'Lab 8'],
+            ['grupo' => 'TI-41', 'dia' => 'Jueves', 'hora_inicio' => '09:00:00', 'hora_fin' => '11:00:00', 'materia_id' => $m1->id, 'aula' => 'Lab 1'],
+            ['grupo' => 'TI-41', 'dia' => 'Jueves', 'hora_inicio' => '11:00:00', 'hora_fin' => '13:00:00', 'materia_id' => $m2->id, 'aula' => 'Lab 10'],
+
+            // Viernes
+            ['grupo' => 'TI-41', 'dia' => 'Viernes', 'hora_inicio' => '07:00:00', 'hora_fin' => '09:00:00', 'materia_id' => $m3->id, 'aula' => 'Lab 1'],
+            ['grupo' => 'TI-41', 'dia' => 'Viernes', 'hora_inicio' => '09:00:00', 'hora_fin' => '11:00:00', 'materia_id' => $m4->id, 'aula' => 'Lab 5'],
+            ['grupo' => 'TI-41', 'dia' => 'Viernes', 'hora_inicio' => '11:00:00', 'hora_fin' => '13:00:00', 'materia_id' => $m5->id, 'aula' => 'Lab 8'],
+        ];
+
+        foreach ($horarios as $h) {
+            Horario::create($h);
+        }
+
+        // Calificaciones de prueba para el alumno
+        $calificaciones = [
+            [
+                'alumno_id' => $alumnoModelo->id, 
+                'materia_id' => $m1->id,
+                'periodo' => 'Enero - Abril 2026',
+                'calificacion' => 9.5,
+            ],
+            [
+                'alumno_id' => $alumnoModelo->id,
+                'materia_id' => $m2->id,
+                'periodo' => 'Enero - Abril 2026',
+                'calificacion' => 10.0,
+            ],
+            [
+                'alumno_id' => $alumnoModelo->id,
+                'materia_id' => $m3->id,
+                'periodo' => 'Enero - Abril 2026',
+                'calificacion' => 8.8,
+            ],
+            [
+                'alumno_id' => $alumnoModelo->id,
+                'materia_id' => $m4->id,
+                'periodo' => 'Enero - Abril 2026',
+                'calificacion' => 9.2,
+            ],
+            [
+                'alumno_id' => $alumnoModelo->id,
+                'materia_id' => $m5->id,
+                'periodo' => 'Enero - Abril 2026',
+                'calificacion' => 9.7,
+            ],
+        ];
+
+        foreach ($calificaciones as $c) {
+            Calificacion::create($c);
+        }
     }
 }
