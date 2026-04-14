@@ -37,6 +37,11 @@ Route::middleware(['auth'])->group(function () {
         LogController::class, 'index'
     ])->middleware(['auth', 'role:admin'])->name('admin.logs');
 
+    // --- Ruta para DESCARGAR el PDF con la lista de alumnos completa ---
+    Route::get('/dashboard/admin/descargar-alumnos', [
+        AdminCarreraController::class, 'descargarAlumnosPDF'
+    ])->middleware(['auth', 'role:admin'])->name('admin.alumnos.pdf');
+
     // ----- Rutas referentes a la gestión de carreras -----
 
     // Ruta para GUARDAR una nueva carrera (Método POST)

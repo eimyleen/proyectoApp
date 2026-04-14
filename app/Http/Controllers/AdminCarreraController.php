@@ -6,6 +6,8 @@ use App\Models\Maestro;
 use Illuminate\Http\Request;
 use App\Models\Carrera;
 use App\Models\Alumno;
+use App\Models\Log;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdminCarreraController extends Controller {
     public function index() {
@@ -69,5 +71,18 @@ class AdminCarreraController extends Controller {
         $maestro = Maestro::with('user')->findOrFail($id);
 
         return view('dashboard.admin.admin_maestro_perfil', compact('maestro'));
+    }
+
+    public function descargarAlumnosPDF()
+    {
+        // Obtenemos todos los alumnos
+        $alumnos = Alumno::with('user', 'carrera')->get();
+
+        Log::registrar('Descarga PDF', 'El administrador descargó la lista global de alumnos');
+        
+        // Reutilizamos la vista de PDF que ya creamos
+        $pdf = Pdf::loadView('pdf.lista_alumnos_maestro', compact('alumnos'));
+
+        return $pdf->download('reporte_global_alumnos_' . now()->format('d-m-Y') . '.pdf');
     }
 }
