@@ -215,6 +215,10 @@
                             </tr>
                         </table>
                     </div>
+                    <div class="form-group">
+                        <label>Telefono</label>
+                        <input name="telefono" type="input" id="" placeholder="3110006785">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn-guardar" id="">Guardar alumno</button>
@@ -342,15 +346,6 @@
             btnAgregarAlumno.onclick = function() {
                 modalAlumno.style.display = 'flex';
             };
-        }
-
-        function cerrarModalAlumno() {
-            modalAlumno.style.display = 'none';
-            document.getElementById('matriculaAlumno').value = '';
-            document.getElementById('nombreAlumno').value = '';
-            document.getElementById('apellidosAlumno').value = '';
-            document.getElementById('grupoAlumno').value = '';
-            document.getElementById('correoAlumno').value = '';
         }
 
         if (closeModalAlumno) closeModalAlumno.onclick = cerrarModalAlumno;

@@ -32,42 +32,45 @@ class AdminCarreraController extends Controller {
     }
 
     public function storeAlumno($carreraId) {
-        request()->validate(
-            [
-                'name'=>'required',
-                'apellido'=>'required',
-                'email'=>'required',
-                'matricula'=>'required|alpha',
-                'grupo'=>'required|alpha'
-            ]
-        );
+    // 1. Validación corregida (quitamos 'alpha' para permitir números/guiones)
+    $data = request()->validate([
+        'name'             => 'required|string|max:255',
+        'apellido'         => 'required|string|max:255',
+        'email'            => 'required|email|unique:users,email',
+        'matricula'        => 'required|string|unique:alumnos,matricula',
+        'grupo'            => 'required|string',
+        'curp'             => 'required|string|max:18',
+        'fecha_nacimiento' => 'required|date',
+        'edad'             => 'required|integer',
+        'sexo'             => 'required',
+        'telefono'      => 'required' 
+    ]);
 
-        $usuario = User::create([
-            'name'=>request('name'),
-            'apellido'=>request('apellido'),
-            'email'=>request('email'),
-            'role'=>'alumno',
-            'foto'=>'',
-            'password'=>Hash::make('password')
-        ]);
+    // 2. Crear Usuario
+    $usuario = User::create([
+        'name'     => $data['name'],
+        'apellido' => $data['apellido'],
+        'email'    => $data['email'],
+        'role'     => 'alumno',
+        'foto'     => '',
+        'password' => Hash::make('password') // Considera una lógica de password más segura
+    ]);
 
-        $alumno = Alumno::create([
-            'user_id'=>$usuario->id,
-            'matricula'=>request('matricula'),
-            'carrera_id'=>$carreraId,
-            'grupo'=>request('grupo'),
-            'curp'=>request('curp'),
-            'edad'=>request('edad'),
-            'sexo'=>request('sexo'),
-            'fecha_nacimiento'=>request('fecha_nacimiento'),
-            'telefono'=>request('telefono')
-        ]);
+    // 3. Crear Alumno
+    $alumno = Alumno::create([
+        'user_id'          => $usuario->id,
+        'matricula'        => $data['matricula'],
+        'carrera_id'       => $carreraId,
+        'grupo'            => $data['grupo'],
+        'curp'             => $data['curp'],
+        'edad'             => $data['edad'],
+        'sexo'             => $data['sexo'],
+        'fecha_nacimiento' => $data['fecha_nacimiento'],
+        'telefono'         => request('telefono') ?? 'Sin teléfono' // Evita el error de nulo
+    ]);
 
-        echo $usuario;
-        echo $alumno;
-
-        return redirect() -> route('admin.show', $carreraId);
-    }
+    return redirect()->route('admin.show', $carreraId)->with('success', 'Alumno registrado');
+}
 
     public function update(Request $request, string $id) {
         $carrera = Carrera::findOrFail($id);
