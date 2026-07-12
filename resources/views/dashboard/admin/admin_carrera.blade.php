@@ -92,19 +92,21 @@
                     </thead>
                     <tbody id="alumnosBody">
                         @foreach($alumnos as $i => $alumno)
-                            <tr>
-                                <td class="col-numero">{{ $i+1 }}</td>
-                                <td class="col-matricula">{{ $alumno->matricula }}</td>
-                                <td class="col-nombre">{{ $alumno->user?->name }}</td>
-                                <td class="col-nombre">{{ $alumno->user?->apellido }}</td>
-                                <td class="col-acciones">
-                                    <a href="{{ route('admin.alumno.expediente', $alumno->id) }}" style="text-decoration: none;">
-                                        <button class="btn-ver-expediente">{{ __('messages.btn_view_record') }}</button>
-                                    </a>
-                                    
-                                    <button class="btn-eliminar">{{ __('messages.btn_delete') }}</button>
-                                </td>
-                            </tr>
+                            @if($alumno->carrera_id == $carrera->id)
+                                <tr>
+                                    <td class="col-numero">{{ $i+1 }}</td>
+                                    <td class="col-matricula">{{ $alumno->matricula }}</td>
+                                    <td class="col-nombre">{{ $alumno->user?->name }}</td>
+                                    <td class="col-nombre">{{ $alumno->user?->apellido }}</td>
+                                    <td class="col-acciones">
+                                        <a href="{{ route('admin.alumno.expediente', $alumno->id) }}" style="text-decoration: none;">
+                                            <button class="btn-ver-expediente">{{ __('messages.btn_view_record') }}</button>
+                                        </a>
+                                        
+                                        <button class="btn-eliminar">{{ __('messages.btn_delete') }}</button>
+                                    </td>
+                                </tr>
+                            @endif
                         @endforeach
                     </tbody>
                 </table>
@@ -136,18 +138,21 @@
                     </thead>
                     <tbody id="maestrosBody">
                         @foreach($maestros as $i => $maestro)
-                            <tr>
-                                <td class="col-numero">{{ $i+1 }}</td>
-                                <td class="col-nombre">{{ $maestro->user?->name }}</td>
-                                <td class="col-nombre">{{ $maestro->user?->apellido }}</td>
-                                <td class="col-correo">{{ $maestro->user?->email }}</td>
-                                <td class="col-acciones">
-                                    <a href="{{ route('admin.maestro.perfil', $maestro->id) }}" style="text-decoration: none;">
-                                        <button class="btn-ver-perfil">{{ __('messages.btn_view_profile') }}</button>
-                                    </a>
-                                    <button class="btn-eliminar">{{ __('messages.btn_delete') }}</button>
-                                </td>
-                            </tr>
+                        //TODO: aqui se necesita en el backend una referencia clara con las materias y carreras con el maestro y alumno para los filtros...
+                            @if ($maestro->carrera_id == $carrera->id)
+                                <tr>
+                                    <td class="col-numero">{{ $i+1 }}</td>
+                                    <td class="col-nombre">{{ $maestro->user?->name }}</td>
+                                    <td class="col-nombre">{{ $maestro->user?->apellido }}</td>
+                                    <td class="col-correo">{{ $maestro->user?->email }}</td>
+                                    <td class="col-acciones">
+                                        <a href="{{ route('admin.maestro.perfil', $maestro->id) }}" style="text-decoration: none;">
+                                            <button class="btn-ver-perfil">{{ __('messages.btn_view_profile') }}</button>
+                                        </a>
+                                        <button class="btn-eliminar">{{ __('messages.btn_delete') }}</button>
+                                    </td>
+                                </tr>
+                            @endif
                         @endforeach
                     </tbody>
                 </table>
@@ -190,15 +195,15 @@
                     </div>
                     <div class="form-group">
                         <label>CURP</label>
-                        <input name="curp" type="input" id="" placeholder="48932HJFIE">
+                        <input name="curp" type="input" id="curpAlumno" placeholder="48932HJFIE">
                     </div>
                     <div class="form-group">
                         <label>Fecha Nacimiento</label>
-                        <input name="fecha_nacimiento" type="date" id="" placeholder="">
+                        <input name="fecha_nacimiento" type="date" id="fechaNacAlumno" placeholder="">
                     </div>
                     <div class="form-group">
                         <label>Edad</label>
-                        <input name="edad" type="number" value="18" min="18" max="80" id="" placeholder="18">
+                        <input name="edad" type="number" value="18" min="18" max="80" id="edadAlumno" placeholder="18">
                     </div>
                     <div class="form-group">
                         <label>Sexo</label>
@@ -209,15 +214,15 @@
                                 <td><label>Otro</label></td>
                             </tr>
                             <tr>
-                                <td><input name="sexo" type="radio" value="Masculino"></td>
-                                <td><input name="sexo" type="radio" value="Femenino"></td>
-                                <td><input name="sexo" type="radio" value="Otro"></td>
+                                <td><input id="sexoAlumnoMas" name="sexo" type="radio" value="Masculino"></td>
+                                <td><input id="sexoAlumnoFem" name="sexo" type="radio" value="Femenino"></td>
+                                <td><input id="sexoAlumnoOt" name="sexo" type="radio" value="Otro"></td>
                             </tr>
                         </table>
                     </div>
                     <div class="form-group">
                         <label>Telefono</label>
-                        <input name="telefono" type="input" id="" placeholder="3110006785">
+                        <input name="telefono" type="input" id="telefonoAlumno" placeholder="3110006785">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -241,7 +246,7 @@
                 </div>
                 <div class="form-group">
                     <label>{{ __('messages.field_firstname') }}</label>
-                    <input type="text" id="nombreMaestro" placeholder="{ __('messages.placeholder_name') }}">
+                    <input type="text" id="nombreMaestro" placeholder="{{  __('messages.placeholder_name')  }}">
                 </div>
                 <div class="form-group">
                     <label>{{ __('messages.field_lastname') }}</label>
@@ -346,6 +351,22 @@
             btnAgregarAlumno.onclick = function() {
                 modalAlumno.style.display = 'flex';
             };
+        }
+
+        function cerrarModalAlumno() {
+            modalAlumno.style.display = 'none';
+            document.getElementById('nombreAlumno').value = '';
+            document.getElementById('apellidosAlumno').value = '';
+            document.getElementById('grupoAlumno').value = '';
+            document.getElementById('matriculaAlumno').value = '';
+            document.getElementById('correoAlumno').value = '';
+            document.getElementById('curpAlumno').value = '';
+            document.getElementById('fechaNacAlumno').value = '';
+            document.getElementById('edadAlumno').value = '';
+            document.getElementById('sexoAlumnoMas').checked = false;
+            document.getElementById('sexoAlumnoFem').checked = false;
+            document.getElementById('sexoAlumnoOt').checked = false;
+            document.getElementById('telefonoAlumno').value = '';
         }
 
         if (closeModalAlumno) closeModalAlumno.onclick = cerrarModalAlumno;

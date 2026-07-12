@@ -8,11 +8,12 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+    <link rel="shortcut icon" href="{{ asset('img/IconUTNAY.png') }}" type="image/x-icon">
 </head>
 <body>
 
     <div class="contenedor-general">
-
+        <img src="{{ asset('img/IconUTNAY.png') }}" alt="IconUTNAY" style="width: 10%;">
         <h1 class="titulo-principal">
             Portal de Expedientes de la UTNay
         </h1>

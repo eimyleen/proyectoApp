@@ -128,22 +128,47 @@
             </div>
         </div>
     </div>
-     <div id="modalRespaldos" class="modal">
+    <div id="modalRespaldos" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>{{ __('messages.modal_backups_title') }}</h3>
                 <span class="modal-close" id="closeModalRespaldos">&times;</span>
             </div>
-            <form class="modal-body" action="/respaldo" method="POST">
-                @csrf
-                <button type="submit" class="btn-guardar" id="btnRespaldosExec">Respaldo Ahora</button>
-            </form>
+            
+            
+            <div class="modal-body">
+                <form action="/respaldo" method="POST">
+                    @csrf
+                    <button type="submit" style="margin: 4px 4px;" class="btn-guardar" id="btnRespaldosExec">Respaldo Ahora</button>
+                </form>
+                <button style="margin: 4px 4px;" class="btn-guardar" id="btnRespaldosAuto">Respaldos Automatizado</button>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="modalRespaldosAuto" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Respaldos Automatizados</h3>
+                <span class="modal-close" id="closeModalRespaldosAuto">&times;</span>
+            </div>
+            <div class="modal-body">
+                dsadasda
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-guardar" id="btnRespaldosGuardarIniAuto">Guardar y Iniciar</button>
+                <button class="btn-guardar" id="btnRespaldosMainRegreso">Regresar</button>
+            </div>
+
         </div>
     </div>
 @endsection
 
 @push('scripts')
 <script>
+    //sección donde se maneja cosas de frontend del HTML y CSS (Modales)
     document.addEventListener('DOMContentLoaded', function() {
         // Modal Agregar Carrera
         const modalCarrera = document.getElementById('modalAgregarCarrera');
@@ -165,9 +190,14 @@
 
         if (closeModalCarrera) closeModalCarrera.onclick = cerrarModalCarrera;
 
+        //modal respaldos base
         const btnRespaldos = document.getElementById('btnRespaldos');
+        const btnRespaldosAuto = document.getElementById('btnRespaldosAuto');
         const btonCerrarRespaldos= document.getElementById('closeModalRespaldos');
         const modalRespaldos = document.getElementById('modalRespaldos');
+
+        const modalRespaldosAuto = document.getElementById('modalRespaldosAuto');
+
 
         if (btnRespaldos) {
             btnRespaldos.onclick = function() {
@@ -179,7 +209,30 @@
             modalRespaldos.style.display = 'none';
         }
 
+        function abrirModalRespaldosAuto() {
+            modalRespaldos.style.display = 'none';
+            modalRespaldosAuto.style.display = 'flex';
+        }
+
         if (btonCerrarRespaldos) btonCerrarRespaldos.onclick = cerrarModalRespaldos;
+        
+        if(btnRespaldosAuto) btnRespaldosAuto.onclick = abrirModalRespaldosAuto
+
+        //modal respaldos automatizados
+        const closeModalRespaldosAuto = document.getElementById('closeModalRespaldosAuto');
+        const btnRespaldosMainRegreso = document.getElementById('btnRespaldosMainRegreso');
+
+        function cerrarModalRespaldosAuto() {
+            modalRespaldosAuto.style.display = 'none';
+        }
+
+        function regresarModalRespaldos() {
+            modalRespaldos.style.display = 'flex';
+            modalRespaldosAuto.style.display = 'none';
+        }
+
+        if (closeModalRespaldosAuto) closeModalRespaldosAuto.onclick = cerrarModalRespaldosAuto;
+        if (btnRespaldosMainRegreso) btnRespaldosMainRegreso.onclick = regresarModalRespaldos;
 
         // Modal Lista Global de Alumnos 
         const modalListaGlobal = document.getElementById('modalListaGlobal');
@@ -202,6 +255,8 @@
         window.onclick = function(e) {
             if (e.target === modalCarrera) cerrarModalCarrera();
             if (e.target === modalListaGlobal) cerrarModalListaGlobal();
+            if (e.target === modalRespaldos) cerrarModalRespaldos();
+            if (e.target === modalRespaldosAuto) cerrarModalRespaldosAuto();
         };
 
         // Filtro dentro del modal de lista global
