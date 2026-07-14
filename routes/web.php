@@ -27,6 +27,15 @@ Route::middleware(['auth', 'role.redirect'])->group(function () {
         return view('dashboard.alumno.alumno'); 
     })->name('alumno.dashboard');
 
+    //Rutas del perfil de alumno (expediente y calificaciones)
+    Route::get('/dashboard/alumno/calificaciones', function () {
+    return view('dashboard.alumno.alumno_calificaciones');
+    })->name('alumno.calificaciones');
+
+    Route::get('/dashboard/alumno/expediente', function () {
+        return view('dashboard.alumno.alumno_expediente');
+    })->name('alumno.expediente');
+
     // Ruta para ver el panel de administración (Lista de carreras)
     Route::get('/dashboard/admin', [CarreraController::class, 'index'])->name('admin.dashboard');
 
@@ -35,6 +44,8 @@ Route::middleware(['auth', 'role.redirect'])->group(function () {
 
     // Ruta para VER el detalle de una carrera específica (Método GET)
     Route::get('/carreras/{id}', [CarreraController::class, 'show'])->name('carreras.show');
+
+    
 });
 
 /*
