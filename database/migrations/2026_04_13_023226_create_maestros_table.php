@@ -11,17 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('maestros', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('num_empleado')->unique();
-            $table->string('rfc')->unique();
-            $table->integer('edad')->unique();
-            $table->string('sexo');
-            $table->date('fecha_nacimiento');
-            $table->string('telefono');
+        Schema::table('maestros', function (Blueprint $table) {
+            $table->dropColumn('apellido_paterno');
+            $table->dropColumn('apellido_materno');
+
             $table->boolean('es_tutor')->default(false);
-            $table->timestamps();
         });
     }
 

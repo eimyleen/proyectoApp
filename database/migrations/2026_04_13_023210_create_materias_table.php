@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('materias', function (Blueprint $table) {
-            $table->id();
-            $table->string('nombre');
-            $table->foreignId('carrera_id')->constrained('carreras')->onDelete('cascade');
+        Schema::table('materias', function (Blueprint $table) {
+            $table->dropColumn('clave');
             $table->string('docente');
-            $table->timestamps();
         });
     }
 

@@ -138,8 +138,7 @@
                     </thead>
                     <tbody id="maestrosBody">
                         @foreach($maestros as $i => $maestro)
-                        //TODO: aqui se necesita en el backend una referencia clara con las materias y carreras con el maestro y alumno para los filtros...
-                            @if ($maestro->carrera_id == $carrera->id)
+                            @if ($maestro->carreras->contains('id', $carrera->id))
                                 <tr>
                                     <td class="col-numero">{{ $i+1 }}</td>
                                     <td class="col-nombre">{{ $maestro->user?->name }}</td>

@@ -21,4 +21,8 @@ class Maestro extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function carreras() {
+        return $this->belongsToMany(Carrera::class);
+    }
 }

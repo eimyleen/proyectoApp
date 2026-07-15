@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('calificaciones', function (Blueprint $table) {
-            $table->id();
+        Schema::table('calificaciones', function (Blueprint $table) {
+            //$table->dropColumn('expediente_id');
             $table->foreignId('alumno_id')->constrained('alumnos')->onDelete('cascade');
-            $table->foreignId('materia_id')->constrained()->onDelete('cascade');
-            $table->string('periodo');
             $table->decimal('calificacion');
-            $table->timestamps();
         });
     }
 
