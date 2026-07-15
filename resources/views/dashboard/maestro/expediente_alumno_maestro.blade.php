@@ -1,10 +1,10 @@
 @extends('layouts.dashboard')
 
+@section('title', __('messages.expedient_title'))
+@section('subtitle', __('messages.expedient_subtitle'))
+
 @section('title', 'Expediente del Alumno - Maestro')
-@section('user-role', 'Maestro')
-@section('avatar-iniciales', 'JP')
-@section('nombre-completo', 'Juan Pérez')
-@section('welcome-message', 'Expediente del Alumno')
+
 @section('subtitle', 'Consulta la información académica del alumno')
 
 @section('back-button')
@@ -23,71 +23,86 @@
         <div class="pdf-button-container">
             <button class="btn-generar-pdf">
                 <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-pdf">
-                Generar expediente PDF
+                {{ __('messages.expedient_generate_pdf') }}
             </button>
         </div>
 
         <!-- Foto de perfil -->
         <div class="perfil-section">
             <div class="avatar-grande">
-                <span class="avatar-iniciales-grande"></span>
-            </div>
+                    @if($alumno->user->foto)
+                        <img src="{{ asset('storage/' . $alumno->user->foto) }}" style="width:100%; height:100%; object-fit:cover;">
+                    @else
+                        <span class="avatar-iniciales-grande">
+                            {{ strtoupper(substr($alumno->user->name, 0, 1)) }}{{ strtoupper(substr($alumno->user->apellido, 0, 1)) }}
+                        </span>
+                    @endif
+                </div>
         </div>
 
         <!-- Datos personales del alumno -->
-        <h3 class="seccion-titulo">Datos personales</h3>
+        <h3 class="seccion-titulo">{{ __('messages.expedient_personal_data') }}</h3>
         <div class="datos-grid">
-            <div class="dato-item">
-                <label>Nombre</label>
-                <span class="dato-valor"></span>
-            </div>
-            <div class="dato-item">
-                <label>Apellidos</label>
-                <span class="dato-valor"></span>
-            </div>
-            <div class="dato-item">
-                <label>Matrícula</label>
-                <span class="dato-valor"></span>
-            </div>
-            <div class="dato-item">
-                <label>Carrera</label>
-                <span class="dato-valor"></span>
-            </div>
-            <div class="dato-item">
-                <label>Grupo</label>
-                <span class="dato-valor"></span>
-            </div>
-            <div class="dato-item">
-                <label>CURP</label>
-                <span class="dato-valor"></span>
-            </div>
-            <div class="dato-item">
-                <label>Edad</label>
-                <span class="dato-valor"></span>
-            </div>
-            <div class="dato-item">
-                <label>Sexo</label>
-                <span class="dato-valor"></span>
-            </div>
-            <div class="dato-item">
-                <label>Fecha de nacimiento</label>
-                <span class="dato-valor"></span>
-            </div>
-            <div class="dato-item">
-                <label>Correo electrónico</label>
-                <span class="dato-valor"></span>
-            </div>
+        <div class="dato-item">
+            <label>{{ __('messages.expedient_name') }}</label>
+            <span class="dato-valor">{{ $alumno->user->name }}</span> {{--  --}}
+        </div>
+        
+        <div class="dato-item">
+            <label>{{ __('messages.expedient_last_names') }}</label>
+            <span class="dato-valor">{{ $alumno->user->apellido }}</span> {{-- [cite: 4] --}}
         </div>
 
+        <div class="dato-item">
+            <label>{{ __('messages.expedient_id') }}</label>
+            <span class="dato-valor">{{ $alumno->matricula }}</span> {{-- [cite: 4, 5] --}}
+        </div>
+
+        <div class="dato-item">
+            <label>{{ __('messages.expedient_career') }}</label>
+            <span class="dato-valor">{{ $alumno->carrera->nombre ?? 'N/A' }}</span> {{-- [cite: 5] --}}
+        </div>
+
+        <div class="dato-item">
+            <label>{{ __('messages.expedient_group') }}</label>
+            <span class="dato-valor">{{ $alumno->grupo }}</span> {{-- [cite: 5, 6] --}}
+        </div>
+
+        <div class="dato-item">
+            <label>{{ __('messages.expedient_curp') }}</label>
+            <span class="dato-valor">{{ $alumno->curp }}</span> {{-- [cite: 6] --}}
+        </div>
+
+        <div class="dato-item">
+            <label>{{ __('messages.expedient_age') }}</label>
+            <span class="dato-valor">{{ $alumno->edad }} {{ __('messages.profile_years') }}</span> {{-- [cite: 7] --}}
+        </div>
+
+        <div class="dato-item">
+            <label><label>{{ __('messages.expedient_gender') }}</label></label>
+            <span class="dato-valor">{{ $alumno->sexo }}</span> {{-- [cite: 7] --}}
+        </div>
+
+        <div class="dato-item">
+           <label>{{ __('messages.expedient_birth_date') }}</label>
+            <span class="dato-valor">{{ $alumno->fecha_nacimiento }}</span> {{-- [cite: 8] --}}
+        </div>
+
+        <div class="dato-item">
+            <label>{{ __('messages.expedient_email') }}</label>
+            <span class="dato-valor">{{ $alumno->user->email }}</span> {{-- [cite: 8, 9] --}}
+        </div>
+    </div>
+
         <!-- Sección de calificaciones con filtro de período -->
-        <h3 class="seccion-titulo">Calificaciones</h3>
+        <h3 class="seccion-titulo">{{ __('messages.expedient_grades') }}</h3>
         
         <!-- Filtro de período -->
         <div class="filtro-periodo-expediente">
             <div class="periodo-select-expediente">
-                <label>Período:</label>
+               <label>{{ __('messages.expedient_period') }}:</label>
                 <select id="periodoSelect">
-                    <option value="">Seleccionar período</option>
+                    <option value="">{{ __('messages.expedient_select_period') }}</option>
                     <!-- Los períodos se cargarán dinámicamente desde el backend -->
                 </select>
             </div>
@@ -98,8 +113,8 @@
             <table class="tabla-calificaciones" id="tablaCalificaciones">
                 <thead>
                     <tr>
-                        <th>Materia</th>
-                        <th>Calificación</th>
+                        <th>{{ __('messages.expedient_subject') }}</th>
+                        <th>{{ __('messages.expedient_grade') }}</th>
                     </tr>
                 </thead>
                 <tbody id="calificacionesBody">
@@ -119,17 +134,17 @@
         <!-- SECCIÓN DE TUTORÍAS - Solo visible para maestros que son TUTOR -->
         <!-- El backend debe mostrar esta sección solo si $esTutor = true -->
         <div class="tutorias-header">
-            <h3 class="seccion-titulo tutorias-titulo">Tutorías</h3>
-            <button class="btn-agregar-tutoria" id="btnAgregarTutoria">+ Agregar tutoría</button>
+            <h3 class="seccion-titulo tutorias-titulo">{{ __('messages.expedient_tutorias') }}</h3>
+            <button class="btn-agregar-tutoria" id="btnAgregarTutoria">{{ __('messages.expedient_add_tutoria') }}</button>
         </div>
         <div class="tabla-container">
             <table class="tabla-tutorias">
                 <thead>
                     <tr>
-                        <th>Fecha</th>
-                        <th>Tema</th>
-                        <th>Notas</th>
-                        <th>Acciones</th>
+                        <th>{{ __('messages.expedient_date') }}</th>
+                        <th>{{ __('messages.expedient_topic') }}</th>
+                        <th>{{ __('messages.expedient_notes') }}</th>
+                        <th>{{ __('messages.expedient_actions') }}</th>
                     </tr>
                 </thead>
                 <tbody id="tutoriasBody">
@@ -138,7 +153,7 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td><button class="btn-editar-tutoria">Editar</button></td>
+                            <td><button class="btn-editar-tutoria">{{ __('messages.expedient_edit') }}</button></td>
                         </tr>
                     @endfor
                 </tbody>
@@ -152,26 +167,26 @@
     <div id="modalTutoria" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="modalTitulo">Agregar tutoría</h3>
+                <h3 id="modalTitulo">{{ __('messages.modal_add_tutoria') }}</h3>
                 <span class="modal-close" id="closeModal">&times;</span>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Fecha</label>
+                    <label>{{ __('messages.expedient_date') }}</label>
                     <input type="date" id="fechaTutoria">
                 </div>
                 <div class="form-group">
-                    <label>Tema</label>
+                    <label>{{ __('messages.expedient_topic') }}</label>
                     <input type="text" id="temaTutoria" placeholder="Ej: Revisión de calificaciones">
                 </div>
                 <div class="form-group">
-                    <label>Notas</label>
-                    <textarea id="notasTutoria" rows="3" placeholder="Observaciones adicionales..."></textarea>
+                    <label>{{ __('messages.expedient_notes') }}</label>
+                    <textarea id="notasTutoria" rows="3" placeholder="{{ __('messages.modal_notes_placeholder') }}"></textarea>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn-cancelar" id="cancelarModal">Cancelar</button>
-                <button class="btn-guardar" id="guardarTutoria">Guardar tutoría</button>
+                <button class="btn-cancelar" id="cancelarModal">{{ __('messages.modal_cancel') }}</button>
+                <button class="btn-guardar" id="guardarTutoria">{{ __('messages.modal_save') }}</button>
             </div>
         </div>
     </div>

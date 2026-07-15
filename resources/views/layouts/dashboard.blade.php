@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {{-- 
     ============================================================
     DASHBOARD - LAYOUT BASE
@@ -13,6 +14,8 @@
     ============================================================ 
 --}}
 
+=======
+>>>>>>> origin/version_inicial
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -26,6 +29,7 @@
         los formularios contra ataques. Siempre debe estar presente.
     --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
+<<<<<<< HEAD
     
     {{-- 
         FAVICON
@@ -48,6 +52,10 @@
         colores, efectos glass, tablas, botones, etc.
         Está en: public/css/dashboard.css
     --}}
+=======
+    <link rel="shortcut icon" href="{{ asset("img/IconUTNAY.png") }}" type="image/x-icon">
+    <title>@yield('title', 'Dashboard') - UTNay Expedientes</title>
+>>>>>>> origin/version_inicial
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
     
     {{-- 
@@ -65,6 +73,7 @@
         (header arriba, contenido abajo)
     --}}
     <div class="profile-container">
+<<<<<<< HEAD
 
         {{-- ======================================================
              HEADER CON EFECTO GLASS
@@ -80,6 +89,8 @@
              - Línea separadora debajo del menú
              - Título y subtítulo de bienvenida
         --}}
+=======
+>>>>>>> origin/version_inicial
         <div class="profile-header">
             
             {{-- ==================================================
@@ -91,6 +102,7 @@
                     {{-- === COLUMNA IZQUIERDA === --}}
                     {{-- Aquí van: avatar, nombre y (opcional) botón de regreso --}}
                     <div class="profile-left">
+<<<<<<< HEAD
                         
                         {{-- 
                             BOTÓN DE REGRESO (opcional)
@@ -98,11 +110,17 @@
                             @section('back-button')
                             Es útil para volver a la página anterior.
                         --}}
+=======
+>>>>>>> origin/version_inicial
                         @hasSection('back-button')
-                            <div class="back-button" id="backButton">
-                                <img src="{{ asset('img/flecha.png') }}" alt="Regresar" class="back-icon">
-                            </div>
+                            <a href="{{ Auth::user()->role == 'admin' ? route('admin.index') : (Auth::user()->role == 'maestro' ? route('maestro.index') : route('alumno.index')) }}" 
+                            style="text-decoration: none;">
+                                <div class="back-button" id="backButton">
+                                    <img src="{{ asset('img/flecha.png') }}" alt="Regresar" class="back-icon">
+                                </div>
+                            </a>
                         @endif
+<<<<<<< HEAD
 
                         {{-- 
                             AVATAR CÍRCULAR
@@ -121,11 +139,25 @@
                             @section('nombre-completo', 'Carlos Martínez')
                             Por defecto muestra 'Usuario'
                         --}}
+=======
+                        
+                        <a href="{{ 
+                            Auth::user()->role == 'admin' ? route('admin.perfil') : 
+                            (Auth::user()->role == 'maestro' ? route('maestro.perfil') : route('alumno.expediente')) 
+                        }}" style="text-decoration: none;">
+                            <div class="avatar-circle">
+                                <span class="avatar-iniciales">
+                                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}{{ strtoupper(substr(Auth::user()->apellido, 0, 1)) }}
+                                </span>
+                            </div>
+                        </a>
+>>>>>>> origin/version_inicial
                         <div class="profile-nombre">
-                            <span class="nombre-completo">@yield('nombre-completo', 'Usuario')</span>
+                            <span class="nombre-completo">{{ Auth::user()->name }} {{ Auth::user()->apellido }}</span>
                         </div>
                     </div>
 
+<<<<<<< HEAD
                     {{-- === COLUMNA DERECHA === --}}
                     {{-- Aquí van: rol, dropdowns y logo --}}
                     <div class="profile-actions">
@@ -145,19 +177,25 @@
                              se abre un menú para cambiar el idioma.
                              (Actualmente es solo una demostración visual)
                         --}}
+=======
+                    <div class="profile-actions">
+                        <span class="role-badge">{{ ucfirst(Auth::user()->role) }}</span>
+                        
+>>>>>>> origin/version_inicial
                         <div class="dropdown-container">
                             <div class="action-icon" id="btnIdioma">
-                                <img src="{{ asset('img/tuerca.png') }}" alt="Configuración" class="icon-img">
+                                <img src="{{ asset('img/idioma.png') }}" alt="Configuración" class="icon-img">
                             </div>
                             <div class="dropdown-menu" id="dropdownIdioma">
-                                <a href="#" data-idioma="es">
+                                <a href="{{ route('set_language', 'es') }}" data-idioma="es">
                                     <img src="{{ asset('img/idioma.png') }}" alt="Idioma" class="dropdown-icon"> Español
                                 </a>
-                                <a href="#" data-idioma="en">
+                                <a href="{{ route('set_language', 'en') }}" data-idioma="en">
                                     <img src="{{ asset('img/idioma.png') }}" alt="Idioma" class="dropdown-icon"> English
                                 </a>
                             </div>
                         </div>
+<<<<<<< HEAD
 
                         {{-- ==============================================
                              DROPDOWN DE NAVEGACIÓN (puntitos)
@@ -168,18 +206,38 @@
                              - Mi Perfil (redirige al perfil del usuario)
                              - Cerrar sesión (cierra la sesión)
                         --}}
+=======
+>>>>>>> origin/version_inicial
                         <div class="dropdown-container">
                             <div class="action-icon" id="btnMenu">
                                 <img src="{{ asset('img/puntitos.png') }}" alt="Más opciones" class="icon-img">
                             </div>
                             <div class="dropdown-menu dropdown-menu-nav" id="dropdownMenu">
-                                <a href="#" id="menuInicio">
+                                <a href="{{ 
+                                    Auth::user()->role == 'admin' ? route('admin.index') : 
+                                    (Auth::user()->role == 'maestro' ? route('maestro.index') : route('alumno.index')) 
+                                }}" id="menuInicio">
                                     <img src="{{ asset('img/inicio.png') }}" alt="Inicio" class="dropdown-icon"> Inicio
                                 </a>
-                                <a href="#" id="menuPerfil">
+                                
+                                <hr>
+                                <a href="{{ 
+                                    Auth::user()->role == 'admin' ? route('admin.perfil') : 
+                                    (Auth::user()->role == 'maestro' ? route('maestro.perfil') : route('alumno.expediente')) 
+                                }}" id="menuPerfil">
                                     <img src="{{ asset('img/perfil.png') }}" alt="Perfil" class="dropdown-icon"> Mi Perfil
                                 </a>
+<<<<<<< HEAD
                                 <a href="#" id="menuLogout">Cerrar sesión</a>
+=======
+                                <hr>
+                                <form action="{{ route('logout') }}" method="POST" id="logout-form">
+                                    @csrf
+                                    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <img src="{{ asset('img/flecha.png') }}" alt="Cerrar" class="dropdown-icon"> Cerrar Sesión
+                                    </a>
+                                </form>
+>>>>>>> origin/version_inicial
                             </div>
                         </div>
 
@@ -193,6 +251,7 @@
                         </a>
                     </div>
                 </div>
+<<<<<<< HEAD
             </div>
 
             {{-- ==================================================
@@ -223,10 +282,14 @@
                     La vista hija puede cambiarlo con:
                     @section('subtitle', 'Aquí puedes consultar tu información')
                 --}}
+=======
+                <h1 class="profile-name">¡{{ __('messages.title_welcome_dashboard') }}, {{ Auth::user()->name }}!</h1>
+>>>>>>> origin/version_inicial
                 <div class="profile-subtitle">@yield('subtitle', 'Aquí puedes consultar tu información')</div>
             </div>
         </div>
 
+<<<<<<< HEAD
         {{-- ======================================================
              CONTENIDO PRINCIPAL
              ====================================================== 
@@ -234,11 +297,14 @@
              Cada vista (alumno, admin, maestro) define su propio
              contenido usando: @section('content')
         --}}
+=======
+>>>>>>> origin/version_inicial
         <div class="main-content">
             @yield('content')
         </div>
     </div>
 
+<<<<<<< HEAD
     {{-- ======================================================
          SCRIPTS
          ====================================================== --}}
@@ -289,6 +355,30 @@
             // 2. DROPDOWN DE IDIOMA (tuerca)
             // ==============================================
             // Al hacer clic en la tuerca, se abre/cierra el menú de idiomas
+=======
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Pasamos el rol directamente de Laravel a JS sin redeclarar variables conflictivas
+            const userRole = "{{ Auth::user()->role }}";
+
+            // Lógica del menú desplegable
+            const btnMenu = document.getElementById('btnMenu');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            
+            if (btnMenu && dropdownMenu) {
+                btnMenu.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    dropdownMenu.classList.toggle('show');
+                });
+            }
+
+            // Cerrar al hacer clic fuera
+            window.addEventListener('click', () => {
+                if (dropdownMenu) dropdownMenu.classList.remove('show');
+            });
+
+            // Dropdown de idioma (tuerca)
+>>>>>>> origin/version_inicial
             const btnIdioma = document.getElementById('btnIdioma');
             const dropdownIdioma = document.getElementById('dropdownIdioma');
             if (btnIdioma && dropdownIdioma) {
@@ -297,6 +387,7 @@
                     dropdownIdioma.classList.toggle('show');
                 });
             }
+<<<<<<< HEAD
 
             // ==============================================
             // 3. DROPDOWN DE NAVEGACIÓN (puntitos)
@@ -380,7 +471,10 @@
                 });
             }
 
+=======
+>>>>>>> origin/version_inicial
         });
     </script>
+    @stack('scripts')
 </body>
 </html>
