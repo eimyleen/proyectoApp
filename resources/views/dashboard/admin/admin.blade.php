@@ -61,13 +61,8 @@
         </form>
         <!-- Grid de carreras -->
         <div class="carreras-grid">
-<<<<<<< HEAD
-            @foreach($carreras as $carrera)
-                <div class="carrera-card" data-carrera="{{ $carrera['alt'] }}">
-=======
             @foreach ($carreras as $carrera)
                 <div class="carrera-card" data-carrera="{{ $carrera->nombre }}">
->>>>>>> origin/version_inicial
                     <div class="carrera-img">
                         <a href="{{ route('admin.show', $carrera) }}">
                             @if($carrera->logo)
