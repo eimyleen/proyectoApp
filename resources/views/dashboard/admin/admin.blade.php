@@ -139,9 +139,9 @@
             <div class="modal-body">
                 <form action="/respaldo" method="POST">
                     @csrf
-                    <button type="submit" style="margin: 4px 4px;" class="btn-guardar" id="btnRespaldosExec">Respaldo Ahora</button>
+                    <button type="submit" style="margin: 4px 4px;" class="btn-guardar" id="btnRespaldosExec">Generar un Respaldo Ahora</button>
                 </form>
-                <button style="margin: 4px 4px;" class="btn-guardar" id="btnRespaldosAuto">Respaldos Automatizado</button>
+                <button style="margin: 4px 4px;" class="btn-guardar" id="btnRespaldosAuto">Configurar Respaldos Automatizados</button>
             </div>
 
         </div>
@@ -154,11 +154,24 @@
                 <span class="modal-close" id="closeModalRespaldosAuto">&times;</span>
             </div>
             <div class="modal-body">
-                dsadasda
+                <h2>Datos de los Respaldos</h2>
+                <p>Estado del Respaldo Automatico: {{ 'Inexistente' }}</p>
+                <p>Fecha de Inicio de Respaldo: {{ 'Ninguno - Sin Programar' }}</p>
+                <p>Ultimo Respaldo Realizado: {{ 'Ninguno' }}</p>
+                <p>Fecha para el próximo Respaldo: {{ 'Ninguno' }}</p>
+                <br>
+                <h2>Configurar Horario de Respaldos</h2>
+                <label for="">Fecha de Inicio: </label><input type="date" id="fechaIniciarRespaldos" required min="{{ date("Y-m-d") }}"><br>
+                <p>Horario para los Próximos Respaldos:</p>
+                <label>Segundos: </label><input type="number" min="0" max="59" value="0" id="tiempoSegundosSigRespaldo" required>
+                <label>Minutos: </label><input type="number" min="0" max="59" value="0" id="tiempoMinutosSigRespaldo" required>
+                <label>Horas: </label><input type="number" min="0" max="23" value="0" id="tiempoHorasSigRespaldo" required>
+                <label>Días: </label><input type="number" min="0" max="31" value="1" id="tiempoDiasSigRespaldo" required>
             </div>
 
             <div class="modal-footer">
-                <button class="btn-guardar" id="btnRespaldosGuardarIniAuto">Guardar y Iniciar</button>
+                <button class="btn-eliminar" id="btnRespaldosBorrarAutoDum">Reiniciar Horario de los Respaldos</button>
+                <button class="btn-guardar" id="btnRespaldosGuardarIniAuto">Guardar y Iniciar Respaldo</button>
                 <button class="btn-guardar" id="btnRespaldosMainRegreso">Regresar</button>
             </div>
 
@@ -222,7 +235,22 @@
         const closeModalRespaldosAuto = document.getElementById('closeModalRespaldosAuto');
         const btnRespaldosMainRegreso = document.getElementById('btnRespaldosMainRegreso');
 
+        //Datos
+        const fechaIniciarRespaldos = document.getElementById('fechaIniciarRespaldos');
+
+        const tiempoSegundosSigRespaldo = document.getElementById('tiempoSegundosSigRespaldo');
+        const tiempoMinutosSigRespaldo = document.getElementById('tiempoMinutosSigRespaldo');
+        const tiempoHorasSigRespaldo = document.getElementById('tiempoHorasSigRespaldo');
+        const tiempoDiasSigRespaldo = document.getElementById('tiempoDiasSigRespaldo');
+
         function cerrarModalRespaldosAuto() {
+            fechaIniciarRespaldos.value = "";
+
+            tiempoSegundosSigRespaldo.value = "0";
+            tiempoMinutosSigRespaldo.value = "0";
+            tiempoHorasSigRespaldo.value = "0";
+            tiempoDiasSigRespaldo.value = "1";
+
             modalRespaldosAuto.style.display = 'none';
         }
 
