@@ -1,249 +1,266 @@
+/* ============================================================
+   RESET Y CONFIGURACIÓN GLOBAL
+   ============================================================ 
+   Elimina márgenes y paddings por defecto de todos los elementos.
+   box-sizing: border-box hace que el padding no afecte el ancho total.
+   ============================================================ */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* ============================================================
+   CUERPO DEL DOCUMENTO (BODY)
+   ============================================================ 
+   - Fuente del sistema para que sea rápida y legible.
+   - Fondo: degradado de azul a verde brillante.
+   - Ocupa toda la altura de la pantalla (min-height: 100vh).
+   - overflow-x: hidden evita scroll horizontal.
+   ============================================================ */
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background: #f5f5f5;
-    color: #1f2937;
+    background: linear-gradient(135deg, #0ea5e9 0%, #34d399 100%);
+    color: #e2e8f0;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
 }
 
-/* Contenedor principal */
+/* ============================================================
+   PATRÓN DE PUNTOS DE FONDO
+   ============================================================ 
+   ::before crea una capa flotante encima del degradado.
+   - Los puntos son blancos con opacidad 0.35.
+   - Tamaño del punto: 2.5px, separación: 28px.
+   - pointer-events: none evita que interfieran con clics.
+   ============================================================ */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.35) 2.5px, transparent 2.5px);
+    background-size: 28px 28px;
+}
+
+/* ============================================================
+   CONTENEDOR PRINCIPAL
+   ============================================================ 
+   - z-index: 1 para estar por encima de los puntos (z-index: 0).
+   - flex-direction: column para apilar header y main verticalmente.
+   ============================================================ */
 .profile-container {
-    width: 100%;
     position: relative;
+    z-index: 1;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Header con gradiente azul-verde */
+/* ============================================================
+   HEADER CON EFECTO GLASS (VIDRIO ESMERILADO)
+   ============================================================ 
+   - background: rgba(30, 41, 59, 0.65) → gris oscuro con transparencia.
+   - backdrop-filter: blur(16px) → el efecto glass.
+   - border-bottom: línea sutil para separar del contenido.
+   ============================================================ */
 .profile-header {
-    position: relative;
-    background: linear-gradient(135deg, #06b6d4 0%, #10b981 100%);
-    padding: 32px 0 70px 0;
-    margin-bottom: 0;
-    width: 100%;
-}
-
-.profile-info {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 40px;
+    background: rgba(30, 41, 59, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 32px 0 20px 0;
+    border-radius: 0;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     position: relative;
     z-index: 2;
 }
 
-.profile-actions {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 24px;
-    margin-bottom: 40px;
-}
-
-
-.role-badge {
-    color: white;
-    font-size: 1rem;
-    font-weight: 500;
-    background: rgba(255,255,255,0.2);
-    padding: 8px 18px;
-    border-radius: 40px;
-}
-
-.action-icon {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.action-icon:hover {
-    background: rgba(255,255,255,0.3);
-}
-
-.icon-img {
-    width: 28px;
-    height: 28px;
-    filter: brightness(0) invert(1);
-}
-
-.profile-name {
-    font-size: 5rem;
-    font-weight: 600;
-    color: white;
-    margin-bottom: 16px;
-    letter-spacing: -0.02em;
-}
-
-.profile-subtitle {
-    font-size: 1rem;
-    color: rgba(255,255,255,0.9);
-    margin-bottom: 16px;
-    font-weight: 400;
-}
-
-/* Contenido principal */
-.main-content {
+/* ============================================================
+   CONTENEDOR DE INFORMACIÓN (MÁRGENES INTERNOS)
+   ============================================================ 
+   - max-width: 1200px → limita el ancho en pantallas grandes.
+   - margin: 0 auto → centra el contenido.
+   - padding: 0 40px → da aire a los costados.
+   ============================================================ */
+.profile-info {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 40px 40px 60px 40px;
-    background: #f5f5f5;
-    position: relative;
-    z-index: 10;
+    padding: 0 40px;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .profile-name {
-        font-size: 2.5rem;
-    }
-    
-    .profile-header {
-        padding: 24px 0 50px 0;
-    }
-    
-    .profile-info {
-        padding: 0 20px;
-    }
-    
-    .main-content {
-        padding: 30px 20px 40px 20px;
-    }
-    
-    .role-badge {
-        font-size: 0.75rem;
-        padding: 4px 10px;
-    }
-}
-
-.jaguar-img {
-    width: 52px;
-    height: 52px;
-    filter: brightness(0) invert(1);
-    cursor: pointer;
-    transition: transform 0.2s;
-}
-
-.jaguar-img:hover {
-    transform: scale(1.05);
-}
-
+/* ============================================================
+   FILA SUPERIOR (AVATAR + NOMBRE A LA IZQUIERDA, BOTONES A LA DERECHA)
+   ============================================================ 
+   - display: flex.
+   - justify-content: space-between → empuja izquierda y derecha a los extremos.
+   - align-items: center → centra verticalmente.
+   ============================================================ */
 .profile-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 
+/* ============================================================
+   COLUMNA IZQUIERDA (AVATAR + NOMBRE)
+   ============================================================ 
+   - gap: 12px → espacio entre el avatar y el nombre.
+   ============================================================ */
 .profile-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* ============================================================
+   AVATAR (CÍRCULO CON INICIALES)
+   ============================================================ 
+   - width: 40px, height: 40px → tamaño del círculo.
+   - border-radius: 50% → lo hace circular.
+   - background: degradado de azul a verde.
+   ============================================================ */
+.avatar-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0ea5e9 0%, #34d399 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar-iniciales {
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* ============================================================
+   NOMBRE DEL USUARIO
+   ============================================================ 
+   - Color blanco para contrastar con el fondo oscuro del header.
+   - Tamaño de fuente 0.95rem.
+   ============================================================ */
+.profile-nombre .nombre-completo {
+    color: #f1f5f9;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+/* ============================================================
+   ETIQUETA DEL ROL (ALUMNO, ADMIN, MAESTRO)
+   ============================================================ 
+   - Fondo semitransparente con borde sutil.
+   - Bordes redondeados (border-radius: 40px).
+   ============================================================ */
+.role-badge {
+    color: #f1f5f9;
+    font-size: 0.85rem;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 6px 16px;
+    border-radius: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ============================================================
+   COLUMNA DERECHA (BOTONES DE ACCIÓN)
+   ============================================================ 
+   - display: flex para alinear horizontalmente.
+   - gap: 16px → espacio entre elementos.
+   ============================================================ */
+.profile-actions {
     display: flex;
     align-items: center;
     gap: 16px;
 }
 
-.avatar-circle {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.avatar-circle:hover {
-    background: rgba(255,255,255,0.3);
-}
-
-.avatar-iniciales {
-    color: white;
-    font-size: 1.2rem;
-    font-weight: 600;
-}
-
-.nombre-completo {
-    color: white;
-    font-size: 1.1rem;
-    font-weight: 500;
-}
-
-.profile-actions {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-}
-
-.role-badge {
-    color: white;
-    font-size: 1rem;
-    font-weight: 500;
-    background: rgba(255,255,255,0.2);
-    padding: 8px 18px;
-    border-radius: 40px;
-}
-
+/* ============================================================
+   BOTONES DE ACCIÓN (TUERCA, PUNTITOS)
+   ============================================================ 
+   - width: 40px, height: 40px → tamaño del botón.
+   - border-radius: 50% → lo hace circular.
+   - Fondo semitransparente con hover más claro.
+   - filter: brightness(0) invert(1) → convierte las imágenes a blanco.
+   ============================================================ */
 .action-icon {
-    width: 52px;
-    height: 52px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.08);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: all 0.3s ease;
 }
 
 .action-icon:hover {
-    background: rgba(255,255,255,0.3);
+    background: rgba(255, 255, 255, 0.18);
+    transform: translateY(-2px);
 }
 
-.icon-img {
-    width: 28px;
-    height: 28px;
+.action-icon img {
+    width: 20px;
+    height: 20px;
     filter: brightness(0) invert(1);
 }
 
+/* ============================================================
+   LOGO JAGUAR
+   ============================================================ 
+   - filter: brightness(0) invert(1) → convierte la imagen a blanco.
+   - cursor: pointer y escala al hacer hover.
+   ============================================================ */
 .jaguar-img {
-    width: 52px;
-    height: 52px;
+    width: 44px;
+    height: 44px;
     filter: brightness(0) invert(1);
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: transform 0.3s ease;
 }
 
 .jaguar-img:hover {
     transform: scale(1.05);
 }
 
-/* Dropdown containers */
+/* ============================================================
+   DROPDOWNS (MENÚS DESPLEGABLES)
+   ============================================================ 
+   - position: relative en el contenedor.
+   - position: absolute en el menú para que flote.
+   - Fondo oscuro con efecto glass y borde sutil.
+   - Opacity: 0 y visibility: hidden → ocultos por defecto.
+   - La clase .show los hace visibles.
+   ============================================================ */
 .dropdown-container {
     position: relative;
 }
 
-/* Menú desplegable */
 .dropdown-menu {
     position: absolute;
     top: 100%;
     right: 0;
-    background: white;
+    background: #1e293b;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    min-width: 160px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    min-width: 170px;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     z-index: 100;
     margin-top: 8px;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .dropdown-menu.show {
@@ -252,30 +269,242 @@ body {
     transform: translateY(0);
 }
 
-/* Estilo de los enlaces del dropdown */
 .dropdown-menu a {
     display: flex;
     align-items: center;
     gap: 10px;
     padding: 10px 16px;
-    color: #374151;
+    color: #e2e8f0;
     text-decoration: none;
     font-size: 0.85rem;
-    transition: background 0.2s;
+    transition: background 0.2s ease;
+    border-radius: 8px;
+    margin: 2px 6px;
 }
 
 .dropdown-menu a:hover {
-    background: #f3f4f6;
+    background: rgba(255, 255, 255, 0.08);
 }
 
-/* Iconos dentro del dropdown */
 .dropdown-icon {
     width: 18px;
     height: 18px;
     opacity: 0.7;
+    filter: brightness(0) invert(1);
 }
 
-/* Ancho específico para el menú de navegación */
-.dropdown-menu-nav {
-    min-width: 140px;
+/* ============================================================
+   LÍNEA DE SEPARACIÓN (EXTREMO A EXTREMO)
+   ============================================================ 
+   - Está fuera de .profile-info para que ocupe todo el ancho.
+   - width: 100% → ocupa todo el ancho disponible.
+   - padding: 0 → sin espacios a los costados.
+   - Color blanco con opacidad 0.12.
+   ============================================================ */
+.separator-line-wrapper {
+    width: 100%;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+
+.separator-line {
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.12);
+    opacity: 1;
+}
+
+/* ============================================================
+   TÍTULOS Y SUBTÍTULOS
+   ============================================================ 
+   - Título: tamaño 2.8rem, color blanco.
+   - Subtítulo: tamaño 1rem, color gris claro.
+   ============================================================ */
+.profile-name {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 4px;
+}
+
+.profile-subtitle {
+    font-size: 1rem;
+    color: #94a3b8;
+}
+
+/* ============================================================
+   CONTENIDO PRINCIPAL (ÁREA DE TABLAS, EXPEDIENTES, ETC.)
+   ============================================================ 
+   - max-width: 1200px → limita el ancho.
+   - margin: 30px auto 0 auto → centra con margen superior.
+   - padding: 0 40px 60px 40px → aire a los costados y abajo.
+   - flex: 1 → ocupa el espacio disponible.
+   ============================================================ */
+.main-content {
+    max-width: 1200px;
+    margin: 30px auto 0 auto;
+    padding: 0 40px 60px 40px;
+    flex: 1;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+}
+
+/* ============================================================
+   RESPONSIVE: AJUSTES PARA TABLETS (PANTALLAS MENORES A 768PX)
+   ============================================================ 
+   - Reduce padding y tamaños de fuente.
+   - La fila superior se pone en columna.
+   - Los botones de acción se alinean a la izquierda.
+   - Los puntos de fondo se hacen más pequeños (20px).
+   ============================================================ */
+@media (max-width: 768px) {
+    .profile-header {
+        padding: 20px 0 16px 0;
+    }
+
+    .profile-info {
+        padding: 0 20px;
+    }
+
+    .main-content {
+        padding: 0 20px 40px 20px;
+        margin-top: 20px;
+    }
+
+    .profile-name {
+        font-size: 2rem;
+    }
+
+    .profile-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .profile-actions {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 10px;
+    }
+
+    .avatar-circle {
+        width: 36px;
+        height: 36px;
+    }
+
+    .avatar-iniciales {
+        font-size: 0.8rem;
+    }
+
+    .profile-nombre .nombre-completo {
+        font-size: 0.85rem;
+    }
+
+    .action-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .action-icon img {
+        width: 18px;
+        height: 18px;
+    }
+
+    .jaguar-img {
+        width: 38px;
+        height: 38px;
+    }
+
+    .role-badge {
+        font-size: 0.75rem;
+        padding: 4px 12px;
+    }
+
+    body::before {
+        background-size: 20px 20px;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE: AJUSTES PARA MÓVILES (PANTALLAS MENORES A 480PX) 
+   ============================================================ 
+   - Reduce aún más padding y tamaños de fuente.
+   - Los botones de acción se envuelven (flex-wrap: wrap).
+   - Los puntos de fondo se hacen más pequeños (16px).
+   ============================================================ */
+@media (max-width: 480px) {
+    .profile-header {
+        padding: 16px 0 12px 0;
+    }
+
+    .profile-info {
+        padding: 0 16px;
+    }
+
+    .main-content {
+        padding: 0 16px 30px 16px;
+    }
+
+    .profile-name {
+        font-size: 1.6rem;
+    }
+
+    .profile-subtitle {
+        font-size: 0.85rem;
+    }
+
+    .profile-top {
+        gap: 10px;
+    }
+
+    .profile-actions {
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .avatar-circle {
+        width: 32px;
+        height: 32px;
+    }
+
+    .avatar-iniciales {
+        font-size: 0.7rem;
+    }
+
+    .profile-nombre .nombre-completo {
+        font-size: 0.8rem;
+    }
+
+    .profile-left {
+        gap: 8px;
+    }
+
+    .action-icon {
+        width: 32px;
+        height: 32px;
+    }
+
+    .action-icon img {
+        width: 16px;
+        height: 16px;
+    }
+
+    .jaguar-img {
+        width: 32px;
+        height: 32px;
+    }
+
+    .role-badge {
+        font-size: 0.65rem;
+        padding: 2px 10px;
+    }
+
+    .dropdown-menu {
+        min-width: 150px;
+    }
+
+    body::before {
+        background-size: 16px 16px;
+    }
 }
