@@ -6,7 +6,7 @@ use App\Jobs\ProcessDBBackup;
 use App\Jobs\RunBackupJob;
 use App\Models\Log;
 use App\Models\Maestro;
-use App\Models\Materia;
+use App\Models\Grupo;
 use App\Models\User;
 use Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -25,11 +25,13 @@ class AdminCarreraController extends Controller {
         return view('dashboard.admin.admin', compact('carreras', 'alumnos'));
     }
     
-    public function show($id) {
+    public function show($id, Request $req) {
         $carrera = Carrera::findOrFail($id);
-        $alumnos = Alumno::with('user:id,name,apellido')->get();
+        $grupos = Grupo::where('carrera_id', $id)->get();
+        //$alumnos = Alumno::with('user:id,name,apellido')->get();
+        $alumnos = Alumno::where('carrera_id', $id)->get();
         $maestros = Maestro::with('user:id,name,apellido,email')->get();
-        return view('dashboard.admin.admin_carrera', compact('carrera', 'alumnos', 'maestros'));
+        return view('dashboard.admin.admin_carrera', compact('carrera', 'alumnos', 'maestros', 'grupos'));
     }
 
     public function storeAlumno($carreraId) {

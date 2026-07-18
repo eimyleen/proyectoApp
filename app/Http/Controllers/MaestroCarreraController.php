@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Carrera;
+use App\Models\Grupo;
 use App\Models\Alumno;
 use App\Models\Maestro;
 use App\Models\Log;
@@ -46,9 +47,10 @@ class MaestroCarreraController extends Controller
     {
         //
         $carrera = Carrera::findOrFail($id);
+        $grupos = Grupo::where('carrera_id', $id)->get();
         $alumnos = Alumno::with('user:id,name,apellido')->get();
         $maestros = Maestro::with('user:id,name,apellido,email')->get();
-        return view('dashboard.maestro.grupos', compact('carrera', 'alumnos', 'maestros'));
+        return view('dashboard.maestro.grupos', compact('carrera', 'alumnos', 'maestros', 'grupos'));
     }
 
     /**
