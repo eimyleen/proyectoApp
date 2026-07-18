@@ -23,19 +23,21 @@
     <div class="carreras-container">
         <div class="carreras-grid">
             @foreach ($carreras as $carrera)
-                <div class="carrera-card" data-carrera="{{ $carrera->nombre }}">
-                    <div class="carrera-img">
-                        <a href="{{ route("maestro.show", $carrera) }}">
-                            @if($carrera->logo)
-                                <img src="{{ asset($carrera->logo) }}" 
-                                    alt="{{ $carrera->nombre }}"
-                                    style="width: 100%; height: 100%; object-fit: contain;">
-                            @else
-                                <img src="{{ asset('img/jaguar.png') }}" alt="{{ __('messages.no_logo') }}">
-                            @endif
-                        </a>
+                @if(Auth::user()->maestro?->carreras->contains('id', $carrera->id))
+                    <div class="carrera-card" data-carrera="{{ $carrera->nombre }}">
+                        <div class="carrera-img">
+                            <a href="{{ route("maestro.show", $carrera) }}">
+                                @if($carrera->logo)
+                                    <img src="{{ asset($carrera->logo) }}" 
+                                        alt="{{ $carrera->nombre }}"
+                                        style="width: 100%; height: 100%; object-fit: contain;">
+                                @else
+                                    <img src="{{ asset('img/jaguar.png') }}" alt="{{ __('messages.no_logo') }}">
+                                @endif
+                            </a>
+                        </div>
                     </div>
-                </div>
+                @endif
             @endforeach
         </div>
     </div>
