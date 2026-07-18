@@ -74,17 +74,19 @@
                 </thead>
                 <tbody id="alumnosBody">
                     @foreach($alumnos as $i => $alumno)
-                        <tr>
-                            <td class="col-numero">{{ $i+1 }}</td>
-                            <td class="col-matricula">{{ $alumno->matricula }}</td>
-                            <td class="col-nombre">{{ $alumno->user?->name }}</td>
-                            <td class="col-nombre">{{ $alumno->user?->apellido }}</td>
-                            <td class="col-acciones">
-                                <a href="{{ route('maestro.alumno.expediente', $alumno->id) }}" style="text-decoration: none;">
-                                    <button class="btn-ver-expediente">{{ __('messages.groups_view_record') }}</button>
-                                </a>
-                            </td>
-                        </tr>
+                        @if($alumno->carrera_id == $carrera->id)
+                            <tr>
+                                <td class="col-numero">{{ $i+1 }}</td>
+                                <td class="col-matricula">{{ $alumno->matricula }}</td>
+                                <td class="col-nombre">{{ $alumno->user?->name }}</td>
+                                <td class="col-nombre">{{ $alumno->user?->apellido }}</td>
+                                <td class="col-acciones">
+                                    <a href="{{ route('maestro.alumno.expediente', $alumno->id) }}" style="text-decoration: none;">
+                                        <button class="btn-ver-expediente">{{ __('messages.groups_view_record') }}</button>
+                                    </a>
+                                </td>
+                            </tr>
+                        @endif
                     @endforeach
                 </tbody>
             </table>
