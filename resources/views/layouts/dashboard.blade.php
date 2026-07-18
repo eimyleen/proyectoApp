@@ -16,8 +16,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
     {{-- viewport: Hace que la página se vea bien en celulares y tablets --}}
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     {{-- CSRF TOKEN: Necesario para enviar formularios con seguridad --}}
@@ -68,11 +68,9 @@
              - Título y subtítulo de bienvenida (dinámicos)
         --}}
         <div class="profile-header">
+            
+            {{-- FILA SUPERIOR: Avatar, Nombre y Botones (dentro de profile-info) --}}
             <div class="profile-info">
-                
-                {{-- ==================================================
-                     FILA SUPERIOR: Avatar, Nombre y Botones
-                     ================================================== --}}
                 <div class="profile-top">
                     
                     {{-- === COLUMNA IZQUIERDA: Avatar + Nombre === --}}
@@ -191,21 +189,20 @@
                         <img src="{{ asset('img/jaguar.png') }}" alt="Jaguar" class="jaguar-img">
                     </div>
                 </div>
+            </div>
 
-                {{-- ==================================================
-                     LÍNEA SEPARADORA (EXTREMO A EXTREMO)
-                     ================================================== 
-                     Esta línea gris separa visualmente el menú superior
-                     del título de bienvenida. Está diseñada para ocupar
-                     todo el ancho de la pantalla (sin padding a los costados).
-                --}}
-                <div class="separator-line-wrapper">
-                    <div class="separator-line"></div>
-                </div>
+            {{-- ==================================================
+                 LÍNEA SEPARADORA (EXTREMO A EXTREMO)
+                 ================================================== 
+                 Esta línea está FUERA de .profile-info para que ocupe
+                 todo el ancho de la pantalla (sin padding a los costados).
+            --}}
+            <div class="separator-line-wrapper">
+                <div class="separator-line"></div>
+            </div>
 
-                {{-- ==================================================
-                     TÍTULO Y SUBTÍTULO DE BIENVENIDA
-                     ================================================== --}}
+            {{-- TÍTULO Y SUBTÍTULO (dentro de profile-info) --}}
+            <div class="profile-info">
                 {{-- 
                     MENSAJE DE BIENVENIDA
                     Usa la función __() para traducción y muestra el nombre del usuario.

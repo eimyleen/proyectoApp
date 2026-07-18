@@ -40,8 +40,8 @@
         - Izquierda: Botones laterales (Expediente activo, Calificaciones, Logo carrera)
         - Derecha: Contenido del expediente (datos + documentos)
     --}}
-    <div class="contenido-con-botones">
-        <div class="botones-laterales">
+        <div class="contenido-con-botones">
+            <div class="botones-laterales">
             <a href="{{ route('alumno.expediente') }}" style="text-decoration: none;">
                 <button class="btn-expediente {{ Request::routeIs('alumno.expediente') ? 'active' : '' }}">
                     {{ __('messages.btn_record') }}
@@ -53,14 +53,17 @@
                 </button>
             </a>
             
-            <div class="logo-circular">
-                @if(Auth::user()->alumno->carrera->logo)
-                    <img src="{{ asset(Auth::user()->alumno->carrera->logo) }}" 
-                        alt="Logo {{ Auth::user()->alumno->carrera->nombre }}"
-                        style="width: 100%; height: 100%; object-fit: contain;">
-                @else
-                    <img src="{{ asset('img/jaguar.png') }}" alt="UTNay">
-                @endif
+            {{-- Logo circular de la carrera --}}
+            <div class="carrera-logo">
+                <div class="logo-circular">
+                    @if(Auth::user()->alumno->carrera->logo)
+                        <img src="{{ asset(Auth::user()->alumno->carrera->logo) }}" 
+                            alt="Logo {{ Auth::user()->alumno->carrera->nombre }}"
+                            style="width: 100%; height: 100%; object-fit: contain;">
+                    @else
+                        <img src="{{ asset('img/jaguar.png') }}" alt="UTNay">
+                    @endif
+                </div>
             </div>
         </div>
 
