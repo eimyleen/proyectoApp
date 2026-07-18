@@ -18,4 +18,8 @@ class Carrera extends Model
     public function materias() {
         return $this->hasMany(Materia::class);
     }
+
+    public function grupos() {
+        return $this->hasMany(Grupo::class);
+    }
 }

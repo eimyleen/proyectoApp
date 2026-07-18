@@ -9,6 +9,7 @@ use App\Models\Maestro;
 use App\Models\Carrera;
 use App\Models\Alumno;
 use App\Models\Materia;
+use App\Models\Grupo;
 use App\Models\Horario;
 use App\Models\Calificacion;
 use Illuminate\Support\Facades\Hash;
@@ -39,7 +40,7 @@ class UsuariosSeeder extends Seeder
         ]);
 
         // Datos de prueba para el maestro
-        Maestro::create([
+        $maestro = Maestro::create([
             'user_id' => $maestroUser->id,
             'num_empleado' => 'EMP12345',
             'rfc' => 'PEPJ900101ABC',
@@ -149,7 +150,6 @@ class UsuariosSeeder extends Seeder
             'user_id' => $userAlumno->id,
             'matricula' => 'TIC-310000',
             'carrera_id' => $carrera->id,
-            'grupo' => 'TI-41',
             'curp' => 'GARL000101HNTNNN01',
             'edad' => '21',
             'sexo' => 'Masculino',
@@ -233,5 +233,14 @@ class UsuariosSeeder extends Seeder
         foreach ($calificaciones as $c) {
             Calificacion::create($c);
         }
+
+        $maestro->carreras()->attach([$maestro->id]);
+
+        $grupo1 = Grupo::create(['nombre' => 'TI-41', 'grado' => '8', 'carrera_id' => $carrera->id]);
+        $grupo2 = Grupo::create(['nombre' => 'TI-42', 'grado' => '8', 'carrera_id' => $carrera->id]);
+        $grupo3 = Grupo::create(['nombre' => 'TI-43', 'grado' => '8', 'carrera_id' => $carrera->id]);
+        $grupo4 = Grupo::create(['nombre' => 'TI-44', 'grado' => '8', 'carrera_id' => $carrera->id]);
+
+        $grupo1->alumnos()->attach([$alumnoModelo->id]);
     }
 }
