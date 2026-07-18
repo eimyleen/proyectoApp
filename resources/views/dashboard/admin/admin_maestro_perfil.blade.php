@@ -89,6 +89,11 @@
         <h3 class="seccion-titulo">Carreras que imparte</h3>
         <div class="carreras-grid-perfil" id="carrerasContainer">
             <!-- Las carreras se cargarán dinámicamente -->
+            <ul>
+                @foreach ($maestro->carreras as $carrera)
+                    <li>{{ $carrera->nombre }}</li>
+                @endforeach
+            </ul>
         </div>
 
         <!-- Grupo tutorado -->
