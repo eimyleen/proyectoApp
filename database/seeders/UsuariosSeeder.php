@@ -21,6 +21,8 @@ class UsuariosSeeder extends Seeder
      */
     public function run(): void
     {
+        // ---------- Usuarios de prueba ----------
+
         // Usuario Administrador
         User::create([
             'name' => 'Admin',
@@ -37,18 +39,6 @@ class UsuariosSeeder extends Seeder
             'email' => 'maestro@utnay.edu.mx',
             'password' => Hash::make('password123'),
             'role' => 'maestro',
-        ]);
-
-        // Datos de prueba para el maestro
-        $maestro = Maestro::create([
-            'user_id' => $maestroUser->id,
-            'num_empleado' => 'EMP12345',
-            'rfc' => 'PEPJ900101ABC',
-            'edad' => 35,
-            'sexo' => 'Masculino',
-            'fecha_nacimiento' => '1990-01-01',
-            'telefono' => '3111234567',
-            'es_tutor' => true,
         ]);
 
         // Usuario Alumno
@@ -68,7 +58,8 @@ class UsuariosSeeder extends Seeder
             'role' => 'alumno',
         ]);
 
-        // Carrera de prueba
+        // ---------- Carreras de prueba ----------
+
         $carrera = Carrera::create([
             'nombre' => 'Ingeniería en Tecnologías de la Información e Innovación Digital',
             'clave' => 'ITIID',
@@ -153,13 +144,33 @@ class UsuariosSeeder extends Seeder
             'logo' => 'img/carreras/lic_turismo.png',
         ]);
 
+        // ---------- Datos de prueba para grupos ----------
+
+        $grupo = Grupo::create([
+            'nombre' => 'TI-92',
+            'grado' => 'Noveno',
+            'carrera_id' => $carrera->id,
+        ]);
+
+        // ---------- Datos de prueba para los usuarios ----------
+
+        // Datos de prueba para el maestro
+        $maestro = Maestro::create([
+            'user_id' => $maestroUser->id,
+            'num_empleado' => 'EMP12345',
+            'rfc' => 'PEPJ900101ABC',
+            'sexo' => 'M',
+            'fecha_nacimiento' => '1990-01-01',
+            'telefono' => '3111234567',
+            'es_tutor' => true,
+        ]);
+
         // Datos de prueba para el alumno
         $alumnoModelo = Alumno::create([
             'user_id' => $userAlumno->id,
             'matricula' => 'TIC-310000',
             'curp' => 'GARL000101HNTNNN01',
-            'edad' => '21',
-            'sexo' => 'Masculino',
+            'sexo' => 'M',
             'fecha_nacimiento' => '2005-01-01',
             'telefono' => '3111234567',
         ]);
@@ -168,52 +179,54 @@ class UsuariosSeeder extends Seeder
             'user_id' => $userAlumno2->id,
             'matricula' => 'TIC-310054',
             'curp' => 'FHJDBIVDIJ98380798',
-            'edad' => '22',
-            'sexo' => 'Masculino',
+            'sexo' => 'M',
             'fecha_nacimiento' => '2004-01-01',
             'telefono' => '3111234527',
         ]);
 
-        // Materias de prueba para la carrera ITIID
-        $m1 = Materia::create(['nombre' => 'Base de Datos para Aplicaciones', 'carrera_id' => $carrera->id, 'docente' => 'Juan Pérez']);
-        $m2 = Materia::create(['nombre' => 'Desarrollo Web Profesional', 'carrera_id' => $carrera->id, 'docente' => 'Juan Pérez']);
-        $m3 = Materia::create(['nombre' => 'Aplicaciones Móviles Multiplataforma', 'carrera_id' => $carrera->id, 'docente' => 'Ing. Ricardo Silva']);
-        $m4 = Materia::create(['nombre' => 'Seguridad Informática', 'carrera_id' => $carrera->id, 'docente' => 'Mtra. Elena Ramos']);
-        $m5 = Materia::create(['nombre' => 'Inglés IX', 'carrera_id' => $carrera->id, 'docente' => 'Lic. Karen Wood']);
+        // ---------- Materias de prueba para la carrera ITIID ----------
 
-        // Horarios para el grupo TI-41
+        $m1 = Materia::create(['nombre' => 'Base de Datos para Aplicaciones', 'carrera_id' => $carrera->id ]);
+        $m2 = Materia::create(['nombre' => 'Desarrollo Web Profesional', 'carrera_id' => $carrera->id]);
+        $m3 = Materia::create(['nombre' => 'Aplicaciones Móviles Multiplataforma', 'carrera_id' => $carrera->id]);
+        $m4 = Materia::create(['nombre' => 'Seguridad Informática', 'carrera_id' => $carrera->id]);
+        $m5 = Materia::create(['nombre' => 'Inglés IX', 'carrera_id' => $carrera->id]);
+
+        // ---------- Horarios para el grupo TI-41 ----------
+
         $horarios = [
             // Lunes
-            ['grupo' => 'TI-41', 'dia' => 'Lunes', 'hora_inicio' => '07:00:00', 'hora_fin' => '09:00:00', 'materia_id' => $m1->id, 'aula' => 'Lab 1'],
-            ['grupo' => 'TI-41', 'dia' => 'Lunes', 'hora_inicio' => '09:00:00', 'hora_fin' => '11:00:00', 'materia_id' => $m2->id, 'aula' => 'Lab 10'],
-            ['grupo' => 'TI-41', 'dia' => 'Lunes', 'hora_inicio' => '11:00:00', 'hora_fin' => '13:00:00', 'materia_id' => $m3->id, 'aula' => 'Lab 1'],
+            ['grupo_id' => $grupo->id, 'dia' => 'Lunes', 'hora_inicio' => '07:00:00', 'hora_fin' => '09:00:00', 'materia_id' => $m1->id, 'maestro_id' => $maestro->id, 'aula' => 'Lab 1'],
+            ['grupo_id' => $grupo->id, 'dia' => 'Lunes', 'hora_inicio' => '09:00:00', 'hora_fin' => '11:00:00', 'materia_id' => $m2->id, 'maestro_id' => $maestro->id, 'aula' => 'Lab 10'],
+            ['grupo_id' => $grupo->id, 'dia' => 'Lunes', 'hora_inicio' => '11:00:00', 'hora_fin' => '13:00:00', 'materia_id' => $m3->id, 'maestro_id' => $maestro->id, 'aula' => 'Lab 1'],
 
             // Martes
-            ['grupo' => 'TI-41', 'dia' => 'Martes', 'hora_inicio' => '07:00:00', 'hora_fin' => '09:00:00', 'materia_id' => $m4->id, 'aula' => 'Lab 5'],
-            ['grupo' => 'TI-41', 'dia' => 'Martes', 'hora_inicio' => '09:00:00', 'hora_fin' => '11:00:00', 'materia_id' => $m5->id, 'aula' => 'Lab 8'],
-            ['grupo' => 'TI-41', 'dia' => 'Martes', 'hora_inicio' => '11:00:00', 'hora_fin' => '13:00:00', 'materia_id' => $m1->id, 'aula' => 'Lab 1'],
+            ['grupo_id' => $grupo->id, 'dia' => 'Martes', 'hora_inicio' => '07:00:00', 'hora_fin' => '09:00:00', 'materia_id' => $m4->id, 'maestro_id' => $maestro->id, 'aula' => 'Lab 5'],
+            ['grupo_id' => $grupo->id, 'dia' => 'Martes', 'hora_inicio' => '09:00:00', 'hora_fin' => '11:00:00', 'materia_id' => $m5->id, 'maestro_id' => $maestro->id, 'aula' => 'Lab 8'],
+            ['grupo_id' => $grupo->id, 'dia' => 'Martes', 'hora_inicio' => '11:00:00', 'hora_fin' => '13:00:00', 'materia_id' => $m1->id, 'maestro_id' => $maestro->id, 'aula' => 'Lab 1'],
 
             // Miércoles
-            ['grupo' => 'TI-41', 'dia' => 'Miércoles', 'hora_inicio' => '07:00:00', 'hora_fin' => '09:00:00', 'materia_id' => $m2->id, 'aula' => 'Lab 10'],
-            ['grupo' => 'TI-41', 'dia' => 'Miércoles', 'hora_inicio' => '09:00:00', 'hora_fin' => '11:00:00', 'materia_id' => $m3->id, 'aula' => 'Lab 1'],
-            ['grupo' => 'TI-41', 'dia' => 'Miércoles', 'hora_inicio' => '11:00:00', 'hora_fin' => '13:00:00', 'materia_id' => $m4->id, 'aula' => 'Lab 5'],
+            ['grupo_id' => $grupo->id, 'dia' => 'Miércoles', 'hora_inicio' => '07:00:00', 'hora_fin' => '09:00:00', 'materia_id' => $m2->id, 'maestro_id' => $maestro->id, 'aula' => 'Lab 10'],
+            ['grupo_id' => $grupo->id, 'dia' => 'Miércoles', 'hora_inicio' => '09:00:00', 'hora_fin' => '11:00:00', 'materia_id' => $m3->id, 'maestro_id' => $maestro->id, 'aula' => 'Lab 1'],
+            ['grupo_id' => $grupo->id, 'dia' => 'Miércoles', 'hora_inicio' => '11:00:00', 'hora_fin' => '13:00:00', 'materia_id' => $m4->id, 'maestro_id' => $maestro->id, 'aula' => 'Lab 5'],
 
             // Jueves
-            ['grupo' => 'TI-41', 'dia' => 'Jueves', 'hora_inicio' => '07:00:00', 'hora_fin' => '09:00:00', 'materia_id' => $m5->id, 'aula' => 'Lab 8'],
-            ['grupo' => 'TI-41', 'dia' => 'Jueves', 'hora_inicio' => '09:00:00', 'hora_fin' => '11:00:00', 'materia_id' => $m1->id, 'aula' => 'Lab 1'],
-            ['grupo' => 'TI-41', 'dia' => 'Jueves', 'hora_inicio' => '11:00:00', 'hora_fin' => '13:00:00', 'materia_id' => $m2->id, 'aula' => 'Lab 10'],
+            ['grupo_id' => $grupo->id, 'dia' => 'Jueves', 'hora_inicio' => '07:00:00', 'hora_fin' => '09:00:00', 'materia_id' => $m5->id, 'maestro_id' => $maestro->id, 'aula' => 'Lab 8'],
+            ['grupo_id' => $grupo->id, 'dia' => 'Jueves', 'hora_inicio' => '09:00:00', 'hora_fin' => '11:00:00', 'materia_id' => $m1->id, 'maestro_id' => $maestro->id, 'aula' => 'Lab 1'],
+            ['grupo_id' => $grupo->id, 'dia' => 'Jueves', 'hora_inicio' => '11:00:00', 'hora_fin' => '13:00:00', 'materia_id' => $m2->id, 'maestro_id' => $maestro->id, 'aula' => 'Lab 10'],
 
             // Viernes
-            ['grupo' => 'TI-41', 'dia' => 'Viernes', 'hora_inicio' => '07:00:00', 'hora_fin' => '09:00:00', 'materia_id' => $m3->id, 'aula' => 'Lab 1'],
-            ['grupo' => 'TI-41', 'dia' => 'Viernes', 'hora_inicio' => '09:00:00', 'hora_fin' => '11:00:00', 'materia_id' => $m4->id, 'aula' => 'Lab 5'],
-            ['grupo' => 'TI-41', 'dia' => 'Viernes', 'hora_inicio' => '11:00:00', 'hora_fin' => '13:00:00', 'materia_id' => $m5->id, 'aula' => 'Lab 8'],
+            ['grupo_id' => $grupo->id, 'dia' => 'Viernes', 'hora_inicio' => '07:00:00', 'hora_fin' => '09:00:00', 'materia_id' => $m3->id, 'maestro_id' => $maestro->id, 'aula' => 'Lab 1'],
+            ['grupo_id' => $grupo->id, 'dia' => 'Viernes', 'hora_inicio' => '09:00:00', 'hora_fin' => '11:00:00', 'materia_id' => $m4->id, 'maestro_id' => $maestro->id, 'aula' => 'Lab 5'],
+            ['grupo_id' => $grupo->id, 'dia' => 'Viernes', 'hora_inicio' => '11:00:00', 'hora_fin' => '13:00:00', 'materia_id' => $m5->id, 'maestro_id' => $maestro->id, 'aula' => 'Lab 8'],
         ];
 
         foreach ($horarios as $h) {
             Horario::create($h);
         }
 
-        // Calificaciones de prueba para el alumno
+        // ---------- Calificaciones de prueba para el alumno ----------
+
         $calificaciones = [
             [
                 'alumno_id' => $alumnoModelo->id, 
@@ -251,14 +264,16 @@ class UsuariosSeeder extends Seeder
             Calificacion::create($c);
         }
 
-        $maestro->carreras()->attach([$maestro->id]);
+        // ---------- Cosas de gabriel ----------
 
-        $grupo1 = Grupo::create(['nombre' => 'TI-41', 'grado' => '8', 'carrera_id' => $carrera->id]);
-        $grupo2 = Grupo::create(['nombre' => 'TI-42', 'grado' => '8', 'carrera_id' => $carrera->id]);
-        $grupo3 = Grupo::create(['nombre' => 'TI-43', 'grado' => '8', 'carrera_id' => $carrera->id]);
-        $grupo4 = Grupo::create(['nombre' => 'TI-44', 'grado' => '8', 'carrera_id' => $carrera->id]);
+        //$maestro->carreras()->attach([$maestro->id]);
 
-        $grupo1->alumnos()->attach([$alumnoModelo->id]);
-        $grupo2->alumnos()->attach([$alumnoModelo2->id]);
+        //$grupo1 = Grupo::create(['nombre' => 'TI-41', 'grado' => '8', 'carrera_id' => $carrera->id]);
+        //$grupo2 = Grupo::create(['nombre' => 'TI-42', 'grado' => '8', 'carrera_id' => $carrera->id]);
+        //$grupo3 = Grupo::create(['nombre' => 'TI-43', 'grado' => '8', 'carrera_id' => $carrera->id]);
+        //$grupo4 = Grupo::create(['nombre' => 'TI-44', 'grado' => '8', 'carrera_id' => $carrera->id]);
+
+        // $grupo1->alumnos()->attach([$alumnoModelo->id]);
+        //$grupo2->alumnos()->attach([$alumnoModelo2->id]);
     }
 }

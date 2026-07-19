@@ -56,7 +56,7 @@
             {{-- Logo circular de la carrera --}}
             <div class="carrera-logo">
                 <div class="logo-circular">
-                    @if($carrera->logo)
+                    @if($carrera?->logo)
                         <img src="{{ asset($carrera->logo) }}" 
                             alt="Logo {{ $carrera->nombre }}"
                             style="width: 100%; height: 100%; object-fit: contain;">

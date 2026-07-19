@@ -19,13 +19,19 @@ class AlumnoController extends Controller
         // Obtener las materias de la carrera del alumno
         $materias = Materia::where('carrera_id', $alumno->carrera_id)->get();
 
-        // Obtener el horario filtrado por el grupo del alumno
-        $horarios = Horario::with('materia')
-            ->where('grupo', $alumno->grupo)
-            ->get()
-            ->groupBy('dia');
+        // Obtener grupo actual del alumno
+        $grupoActivo = $alumno->grupos()->first();
 
-        return view('dashboard.alumno.alumno', compact('alumno', 'materias', 'horarios', 'grupo'));
+        // Obtener el horario filtrado por el grupo del alumno
+        $horarios = [];
+        if ($grupoActivo){
+            $horarios = Horario::with('materia')
+                ->where('grupo_id', $grupoActivo->id)
+                ->get()
+                ->groupBy('dia');
+        }
+
+        return view('dashboard.alumno.alumno', compact('alumno', 'materias', 'horarios', 'grupoActivo'));
     }
 
     public function calificaciones()
