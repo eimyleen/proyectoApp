@@ -12,26 +12,29 @@ class AlumnoController extends Controller
 {
     public function index()
     {
+        //obtener alumno con el usuario activo
         $user = Auth::user();
         $alumno = $user->alumno;
-        $grupo = $alumno->where('grupos', $alumno->id);
-
-        // Obtener las materias de la carrera del alumno
-        $materias = Materia::where('carrera_id', $alumno->carrera_id)->get();
 
         // Obtener grupo actual del alumno
-        $grupoActivo = $alumno->grupos()->first();
+        $grupo = $alumno->grupos->first();
+
+        //Y luego la carrera como referencia auxiliar
+        $carrera = $grupo?->carrera;
+
+        // Obtener las materias de la carrera del alumno
+        $materias = $carrera ? $carrera->materias : collect();
 
         // Obtener el horario filtrado por el grupo del alumno
         $horarios = [];
-        if ($grupoActivo){
+        if ($grupo){
             $horarios = Horario::with('materia')
-                ->where('grupo_id', $grupoActivo->id)
+                ->where('grupo_id', $grupo->id)
                 ->get()
                 ->groupBy('dia');
         }
 
-        return view('dashboard.alumno.alumno', compact('alumno', 'materias', 'horarios', 'grupoActivo'));
+        return view('dashboard.alumno.alumno', compact('alumno', 'grupo', 'carrera', 'materias', 'horarios'));
     }
 
     public function calificaciones()

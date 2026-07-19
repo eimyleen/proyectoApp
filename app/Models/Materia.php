@@ -7,4 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Materia extends Model
 {
     protected $fillable = ['nombre', 'carrera_id', 'docente'];
+
+    public function carrera() {
+        return $this->belongsTo(Carrera::Class);
+    }
 }

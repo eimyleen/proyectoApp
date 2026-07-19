@@ -266,14 +266,8 @@ class UsuariosSeeder extends Seeder
 
         // ---------- Cosas de gabriel ----------
 
-        //$maestro->carreras()->attach([$maestro->id]);
+        $maestro->carreras()->attach([$maestro->id]);
 
-        //$grupo1 = Grupo::create(['nombre' => 'TI-41', 'grado' => '8', 'carrera_id' => $carrera->id]);
-        //$grupo2 = Grupo::create(['nombre' => 'TI-42', 'grado' => '8', 'carrera_id' => $carrera->id]);
-        //$grupo3 = Grupo::create(['nombre' => 'TI-43', 'grado' => '8', 'carrera_id' => $carrera->id]);
-        //$grupo4 = Grupo::create(['nombre' => 'TI-44', 'grado' => '8', 'carrera_id' => $carrera->id]);
-
-        // $grupo1->alumnos()->attach([$alumnoModelo->id]);
-        //$grupo2->alumnos()->attach([$alumnoModelo2->id]);
+        $grupo->alumnos()->attach([$alumnoModelo->id], ['periodo' => 'Noveno']);
     }
 }

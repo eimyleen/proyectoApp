@@ -102,8 +102,8 @@
             --}}
             <div class="materias-titulo">
                 <h3>{{ __('messages.title_my_subjects') }}</h3>
-                @if($grupoActivo)
-                    <span>Grupo: {{ $grupoActivo->nombre }} ({{ $grupoActivo->grado }})</span>
+                @if($grupo)
+                    <span>Grupo: {{ $grupo->nombre }} ({{ $grupo->grado }})</span>
                 @endif
             </div>
             <div class="tabla-materias">
