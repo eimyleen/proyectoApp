@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('alumnos_grupos', function (Blueprint $table) {
+        Schema::create('calificaciones', function (Blueprint $table) {
             $table->id();
             $table->foreignId('alumno_id')->constrained('alumnos')->onDelete('cascade');
-            $table->foreignId('grupo_id')->constrained('grupos')->onDelete('cascade');
+            $table->foreignId('materia_id')->constrained()->onDelete('cascade');
             $table->string('periodo');
+            $table->decimal('calificacion', 4, 2);
             $table->timestamps();
 
-            // El alumno solo puede pertenecer a UN grupo por periodo escolar
-            $table->unique(['alumno_id', 'periodo'], 'alumno_grupo_unico_periodo');
+            // Restricción que evita la combinacion exacta de las 3 cosas
+            $table->unique(['alumno_id', 'materia_id', 'periodo'], 'calificacion_unica_periodo');
         });
     }
 
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('alumnos_grupos');
+        Schema::dropIfExists('calificaciones');
     }
 };

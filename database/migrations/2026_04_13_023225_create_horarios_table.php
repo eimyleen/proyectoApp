@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('horarios', function (Blueprint $table) {
             $table->id();
-            $table->string('grupo');
+            $table->foreignId('grupo_id')->constrained('grupos')->onDelete('cascade');
+            $table->string('maestro_id')->constrained('materias')->onDelete('cascade');
+            $table->foreignId('materia_id')->constrained('materias')->onDelete('cascade');
             $table->string('dia');
             $table->time('hora_inicio');
             $table->time('hora_fin');
-            $table->foreignId('materia_id')->constrained('materias')->onDelete('cascade');
             $table->string('aula');
             $table->timestamps();
         });
