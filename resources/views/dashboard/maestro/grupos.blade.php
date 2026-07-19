@@ -1,6 +1,33 @@
+{{-- 
+    ============================================================
+    MAESTRO - GRUPOS DE UNA CARRERA
+    ============================================================
+    Esta vista muestra los grupos de una carrera específica.
+    Muestra:
+    - Header con el logo y nombre de la carrera
+    - Filtro para seleccionar un grupo
+    - Panel con el tutor del grupo seleccionado
+    - Tabla de alumnos con sus datos y botón para ver expediente
+    
+    RELACIÓN CON OTRAS VISTAS:
+    - Extiende el layout: layouts.dashboard
+    - Usa los estilos de: dashboard_maestro.css
+    - Botón de regreso: visible (back-button)
+    - Se conecta con: maestro.alumno.expediente (ver expediente del alumno)
+    ============================================================ 
+--}}
+
 @extends('layouts.dashboard')
+
+{{-- 
+    TÍTULOS DE LA PÁGINA
+    El primero usa traducción (__()), el segundo es texto fijo.
+    El que prevalece es el último definido.
+    En este caso: "Grupos - Maestro"
+--}}
 @section('title', __('messages.groups_title'))
 @section('subtitle', __('messages.groups_subtitle'))
+
 @section('title', 'Grupos - Maestro')
 @section('user-role', 'Maestro')
 @section('avatar-iniciales', 'CS')
@@ -8,22 +35,46 @@
 @section('welcome-message', '[Nombre de la Carrera]')
 @section('subtitle', 'Selecciona un grupo para ver sus alumnos')
 
+{{-- 
+    BOTÓN DE REGRESO
+    Esta sección hace visible el botón de regreso en el header.
+--}}
 @section('back-button')
     <!-- Activa el botón de regreso -->
 @endsection
 
+{{-- 
+    URL DE REGRESO
+    Define a dónde redirige el botón de regreso.
+    En este caso, al dashboard de maestro.
+--}}
 @section('back-url', '/dashboard/maestro')
 
+{{-- CSS ADICIONAL --}}
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/dashboard_maestro.css') }}">
 @endpush
 
+{{-- CONTENIDO PRINCIPAL --}}
 @section('content')
+    
+    {{-- 
+        CONTENEDOR PRINCIPAL DE GRUPOS
+        Fondo blanco con sombra y bordes redondeados.
+    --}}
     <div class="grupos-container">
-        <!-- Header de la carrera -->
+        
+        {{-- ======================================================
+             HEADER DE LA CARRERA
+             ====================================================== 
+             Muestra el logo, nombre y clave de la carrera.
+             También un mensaje descriptivo sobre la gestión de grupos.
+        --}}
         <div class="carrera-header-grupos">
+            
+            {{-- Logo circular de la carrera --}}
             <div class="carrera-logo-grupos">
-                <div class="logo-circular-grupos" style="width: 120px; height: 120px; overflow: hidden;">
+                <div class="logo-circular-grupos">
                     @if($carrera->logo)
                         <img src="{{ asset($carrera->logo) }}" 
                             alt="{{ $carrera->nombre }}"
@@ -33,34 +84,57 @@
                     @endif
                 </div>
             </div>
+            
+            {{-- Información de la carrera --}}
             <div class="carrera-info-grupos">
                 <h2>{{ $carrera->nombre }}</h2>
                 <p class="carrera-clave">{{ __('messages.groups_id_card') }}: {{ $carrera->clave }}</p>
-               <p>{{ __('messages.groups_management') }}</p>
+                <p>{{ __('messages.groups_management') }}</p>
             </div>
         </div>
 
-        <!-- Filtro de grupos -->
+        {{-- ======================================================
+             FILTRO DE GRUPOS
+             ====================================================== 
+             Select para elegir el grupo a visualizar.
+             Los grupos se cargarán dinámicamente desde el backend.
+        --}}
         <div class="filtro-grupos">
             <select class="grupo-select" id="grupoSelect">
                 <option value="">{{ __('messages.groups_select') }}</option>
-                <!-- Los grupos se cargarán dinámicamente desde el backend -->
+                {{-- Los grupos se cargarán dinámicamente desde el backend --}}
             </select>
         </div>
 
-        <!-- Panel de información del tutor -->
+        {{-- ======================================================
+             PANEL DEL TUTOR
+             ====================================================== 
+             Muestra el tutor del grupo seleccionado.
+             El nombre se actualiza dinámicamente con JavaScript.
+        --}}
         <div class="tutor-info-panel">
             <div class="tutor-info">
                 <span class="tutor-label">{{ __('messages.groups_tutor') }}:</span>
-                <span class="tutor-nombre" id="tutorNombre"></span>
+                <span class="tutor-nombre" id="tutorNombre">{{ __('messages.groups_no_tutor') }}</span>
             </div>
+            {{-- Botón para descargar lista del grupo --}}
             <button class="btn-descargar-grupo" id="btnDescargarGrupo">
                 <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-descarga">
                 {{ __('messages.groups_download_list') }}
             </button>
         </div>
 
-        <!-- Tabla de alumnos -->
+        {{-- ======================================================
+             TABLA DE ALUMNOS
+             ====================================================== 
+             Muestra la lista de alumnos del grupo seleccionado.
+             Columnas:
+             - Número (consecutivo)
+             - Matrícula
+             - Nombre
+             - Apellido
+             - Acciones (botón para ver expediente)
+        --}}
         <div class="tabla-container">
             <table class="tabla-alumnos" id="tablaAlumnos">
                 <thead>
@@ -73,6 +147,11 @@
                     </tr>
                 </thead>
                 <tbody id="alumnosBody">
+                    {{-- 
+                        BUCLE PARA MOSTRAR ALUMNOS
+                        Solo muestra los alumnos que pertenecen a la carrera actual.
+                        El número de fila se genera con $loop->iteration o $i+1.
+                    --}}
                     @foreach($alumnos as $i => $alumno)
                         @if($alumno->carrera_id == $carrera->id)
                             <tr>
@@ -81,6 +160,11 @@
                                 <td class="col-nombre">{{ $alumno->user?->name }}</td>
                                 <td class="col-nombre">{{ $alumno->user?->apellido }}</td>
                                 <td class="col-acciones">
+                                    {{-- 
+                                        BOTÓN VER EXPEDIENTE
+                                        Redirige a la vista del expediente del alumno
+                                        desde la perspectiva del maestro.
+                                    --}}
                                     <a href="{{ route('maestro.alumno.expediente', $alumno->id) }}" style="text-decoration: none;">
                                         <button class="btn-ver-expediente">{{ __('messages.groups_view_record') }}</button>
                                     </a>
@@ -94,10 +178,19 @@
     </div>
 @endsection
 
+{{-- SCRIPTS ADICIONALES --}}
 @push('scripts')
 <script>
+    {{-- 
+        FUNCIONALIDAD JAVASCRIPT:
+        1. Botón de regreso
+        2. Carga de tutor al seleccionar grupo
+        3. Botón descargar lista del grupo
+    --}}
+
     document.addEventListener('DOMContentLoaded', function() {
-        // Flecha de regreso
+        
+        {{-- 1. BOTÓN DE REGRESO --}}
         const backButton = document.getElementById('backButton');
         if (backButton) {
             backButton.addEventListener('click', function() {
@@ -105,13 +198,15 @@
             });
         }
 
-        // Tutor (backend llenará)
+        {{-- 2. CARGA DE TUTOR AL SELECCIONAR GRUPO --}}
         const tutorNombreSpan = document.getElementById('tutorNombre');
         const grupoSelect = document.getElementById('grupoSelect');
 
         function cargarTutor(grupo) {
+            // Esta función se llenará con datos del backend
+            // Por ahora, muestra un mensaje por defecto
             if (tutorNombreSpan) {
-                tutorNombreSpan.textContent = '';
+                tutorNombreSpan.textContent = '{{ __('messages.groups_no_tutor') }}';
             }
         }
 
@@ -121,11 +216,11 @@
             });
         }
 
-        // Botón descargar grupo
+        {{-- 3. BOTÓN DESCARGAR GRUPO --}}
         const btnDescargarGrupo = document.getElementById('btnDescargarGrupo');
         if (btnDescargarGrupo) {
             btnDescargarGrupo.addEventListener('click', function() {
-                alert('Descargar lista del grupo');
+                alert('{{ __('messages.groups_download_alert') }}');
             });
         }
     });

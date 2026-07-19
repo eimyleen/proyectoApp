@@ -5,7 +5,7 @@
     Esta vista muestra el expediente completo del alumno con:
     - Foto de perfil (con opción para subir)
     - Datos personales (Nombre, Apellidos, Carrera, Grupo, etc.)
-    - Sección de documentos (Acta, CURP, Certificado, Constancia)
+    - Sección de documentos (Acta, CURP, Certificado, Constancia/estatico)
     
     RELACIÓN CON OTRAS VISTAS:
     - Extiende el layout: layouts.dashboard
