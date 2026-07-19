@@ -55,11 +55,11 @@
                     </div>
                     <div class="dato-item">
                         <label>Carrera</label>
-                        <span class="dato-valor">{{ $alumno->carrera->nombre ?? 'N/A' }}</span>
+                        <span class="dato-valor">{{ $carrera->nombre ?? 'N/A' }}</span>
                     </div>
                     <div class="dato-item">
                         <label>Grupo</label>
-                        <span class="dato-valor">{{ $alumno->grupo }}</span>
+                        <span class="dato-valor">{{ $grupo->nombre }}</span>
                     </div>
                     <div class="dato-item">
                         <label>CURP</label>
@@ -89,10 +89,10 @@
 
                 <div class="carrera-info-expediente">
                     <div class="logo-circular-carrera" style="width: 120px; height: 120px; overflow: hidden; border-radius: 50%;">
-                        @if($alumno->carrera && $alumno->carrera->logo)
-                            <img src="{{ asset($alumno->carrera->logo) }}" alt="Logo" style="width: 100%; height: 100%; object-fit: contain;">
+                        @if($carrera && $carrera->logo)
+                            <img src="{{ asset($carrera->logo) }}" alt="Logo" style="width: 100%; height: 100%; object-fit: contain;">
                         @else
-                            <img src="{{ asset('img/carreras/default.png') }}" alt="Sin logo">
+                            <img src="{{ asset('img/jaguar.png') }}" alt="Sin logo">
                         @endif
                     </div>
                 </div>

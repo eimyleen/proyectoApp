@@ -120,13 +120,13 @@
             {{-- Carrera --}}
             <div class="dato-item">
                 <label>{{ __('messages.expedient_career') }}</label>
-                <span class="dato-valor">{{ $alumno->carrera->nombre ?? 'N/A' }}</span>
+                <span class="dato-valor">{{ $carrera->nombre ?? 'N/A' }}</span>
             </div>
 
             {{-- Grupo --}}
             <div class="dato-item">
                 <label>{{ __('messages.expedient_group') }}</label>
-                <span class="dato-valor">{{ $alumno->grupo }}</span>
+                <span class="dato-valor">{{ $grupo->nombre }}</span>
             </div>
 
             {{-- CURP --}}

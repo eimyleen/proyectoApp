@@ -43,12 +43,22 @@ class MaestroCarreraController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id, Request $req)
     {
         //
         $carrera = Carrera::findOrFail($id);
         $grupos = Grupo::where('carrera_id', $id)->get();
-        $alumnos = Alumno::with('user:id,name,apellido')->get();
+        $grupoId = $req->grupo_id;
+
+        $alumnos = Alumno::with(['user:id,name,apellido', 'grupos'])
+        ->whereHas('grupos', function ($q) use ($id, $grupoId) {
+            $q->where('carrera_id', $id);
+
+            if ($grupoId) {
+                $q->where('grupos.id', $grupoId);
+            }
+        })
+        ->get();
         $maestros = Maestro::with('user:id,name,apellido,email')->get();
         return view('dashboard.maestro.grupos', compact('carrera', 'alumnos', 'maestros', 'grupos'));
     }
@@ -80,9 +90,11 @@ class MaestroCarreraController extends Controller
     // Funcion para ver el expediente de un alumno desde la perspectiva del maestro
     public function verExpedienteAlumno($id)
     {
-        $alumno = Alumno::with(['user', 'carrera'])->findOrFail($id);
+        $alumno = Alumno::findOrFail($id);
+        $grupo = $alumno->grupos->first();
+        $carrera = $grupo?->carrera;
 
-        return view('dashboard.maestro.expediente_alumno_maestro', compact('alumno'));
+        return view('dashboard.maestro.expediente_alumno_maestro', compact('alumno', 'grupo', 'carrera'));
     }
 
     public function descargarAlumnosPDF()
