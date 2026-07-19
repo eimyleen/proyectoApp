@@ -60,6 +60,14 @@ class UsuariosSeeder extends Seeder
             'role' => 'alumno',
         ]);
 
+        $userAlumno2 = User::create([
+            'name' => 'Pepe',
+            'apellido' => 'Toño',
+            'email' => 'alumnotono@utnay.edu.mx',
+            'password' => Hash::make('password123'),
+            'role' => 'alumno',
+        ]);
+
         // Carrera de prueba
         $carrera = Carrera::create([
             'nombre' => 'Ingeniería en Tecnologías de la Información e Innovación Digital',
@@ -149,12 +157,21 @@ class UsuariosSeeder extends Seeder
         $alumnoModelo = Alumno::create([
             'user_id' => $userAlumno->id,
             'matricula' => 'TIC-310000',
-            'carrera_id' => $carrera->id,
             'curp' => 'GARL000101HNTNNN01',
             'edad' => '21',
             'sexo' => 'Masculino',
             'fecha_nacimiento' => '2005-01-01',
             'telefono' => '3111234567',
+        ]);
+
+        $alumnoModelo2 = Alumno::create([
+            'user_id' => $userAlumno2->id,
+            'matricula' => 'TIC-310054',
+            'curp' => 'FHJDBIVDIJ98380798',
+            'edad' => '22',
+            'sexo' => 'Masculino',
+            'fecha_nacimiento' => '2004-01-01',
+            'telefono' => '3111234527',
         ]);
 
         // Materias de prueba para la carrera ITIID
@@ -242,5 +259,6 @@ class UsuariosSeeder extends Seeder
         $grupo4 = Grupo::create(['nombre' => 'TI-44', 'grado' => '8', 'carrera_id' => $carrera->id]);
 
         $grupo1->alumnos()->attach([$alumnoModelo->id]);
+        $grupo2->alumnos()->attach([$alumnoModelo2->id]);
     }
 }

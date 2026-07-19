@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('matricula')->unique();
-            $table->foreignId('carrera_id')->constrained()->onDelete('cascade');
             $table->string('curp')->unique();
             $table->string('edad');
             $table->string('sexo');
