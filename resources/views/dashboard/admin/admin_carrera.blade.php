@@ -66,10 +66,17 @@
             </div>
 
             <div class="filtro-grupo">
-                <select class="grupo-select" id="filtroGrupo">
-                    <option value="">{{ __('messages.select_group') }}</option>
-                    <!-- Los grupos se cargarán dinámicamente desde el backend -->
-                </select>
+                <form method="GET">
+                    <select name="grupo_id" class="grupo-select" onchange="this.form.submit()">
+                        <option value="">{{ __('messages.select_group') }}</option>
+                        @foreach ($grupos as $grupo)
+                            <option value="{{ $grupo->id }}"
+                                {{ request('grupo_id') == $grupo->id ? 'selected' : '' }}>
+                                {{ $grupo->nombre }}
+                            </option>
+                        @endforeach
+                    </select>
+                </form>
                 <div class="botones-accion">
                     <button class="btn-agregar" id="btnAgregarAlumno">
                         {{ __('messages.btn_add_student') }}
@@ -92,21 +99,19 @@
                     </thead>
                     <tbody id="alumnosBody">
                         @foreach($alumnos as $i => $alumno)
-                            @if($alumno->carrera_id == $carrera->id)
-                                <tr>
-                                    <td class="col-numero">{{ $i+1 }}</td>
-                                    <td class="col-matricula">{{ $alumno->matricula }}</td>
-                                    <td class="col-nombre">{{ $alumno->user?->name }}</td>
-                                    <td class="col-nombre">{{ $alumno->user?->apellido }}</td>
-                                    <td class="col-acciones">
-                                        <a href="{{ route('admin.alumno.expediente', $alumno->id) }}" style="text-decoration: none;">
-                                            <button class="btn-ver-expediente">{{ __('messages.btn_view_record') }}</button>
-                                        </a>
-                                        
-                                        <button class="btn-eliminar">{{ __('messages.btn_delete') }}</button>
-                                    </td>
-                                </tr>
-                            @endif
+                            <tr>
+                                <td class="col-numero">{{ $i+1 }}</td>
+                                <td class="col-matricula">{{ $alumno->matricula }}</td>
+                                <td class="col-nombre">{{ $alumno->user?->name }}</td>
+                                <td class="col-nombre">{{ $alumno->user?->apellido }}</td>
+                                <td class="col-acciones">
+                                    <a href="{{ route('admin.alumno.expediente', $alumno->id) }}" style="text-decoration: none;">
+                                        <button class="btn-ver-expediente">{{ __('messages.btn_view_record') }}</button>
+                                    </a>
+                                    
+                                    <button class="btn-eliminar">{{ __('messages.btn_delete') }}</button>
+                                </td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>

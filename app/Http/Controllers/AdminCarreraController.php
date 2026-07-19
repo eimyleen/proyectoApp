@@ -28,8 +28,18 @@ class AdminCarreraController extends Controller {
     public function show($id, Request $req) {
         $carrera = Carrera::findOrFail($id);
         $grupos = Grupo::where('carrera_id', $id)->get();
+        $grupoId = $req->grupo_id;
         //$alumnos = Alumno::with('user:id,name,apellido')->get();
-        $alumnos = Alumno::where('carrera_id', $id)->get();
+
+        $alumnos = Alumno::with(['user:id,name,apellido', 'grupos'])
+        ->whereHas('grupos', function ($q) use ($id, $grupoId) {
+            $q->where('carrera_id', $id);
+
+            if ($grupoId) {
+                $q->where('grupos.id', $grupoId);
+            }
+        })
+        ->get();
         $maestros = Maestro::with('user:id,name,apellido,email')->get();
         return view('dashboard.admin.admin_carrera', compact('carrera', 'alumnos', 'maestros', 'grupos'));
     }

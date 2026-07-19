@@ -29,7 +29,7 @@ class Alumno extends Model
         return $this->belongsTo(Carrera::class);
     }
 
-    public function grupo() {
-        return $this->belongsTo(Grupo::class, 'alumnos_grupos');
+    public function grupos() {
+        return $this->belongsToMany(Grupo::class, 'alumnos_grupos');
     }
 }
