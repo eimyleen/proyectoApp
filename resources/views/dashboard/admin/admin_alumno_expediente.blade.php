@@ -185,7 +185,7 @@
         </div>
 
         {{-- ======================================================
-             SECCIÓN DE TUTORÍAS (NUEVO)
+             SECCIÓN DE TUTORÍAS
              ====================================================== 
              Muestra la tabla de tutorías del alumno.
              Incluye botón para agregar nuevas tutorías.
@@ -221,7 +221,7 @@
         </div>
 
         {{-- ======================================================
-             MODAL - EDITAR ALUMNO (NUEVO)
+             MODAL - EDITAR ALUMNO
              ====================================================== 
              Modal para editar los datos del alumno.
         --}}
@@ -295,6 +295,41 @@
         </div>
 
         {{-- ======================================================
+             MODAL - AGREGAR/EDITAR TUTORÍA
+             ====================================================== 
+             Modal para agregar o editar una tutoría.
+             - Se abre con el botón "+ Agregar tutoría"
+             - Se abre con el botón "Editar" en cada fila
+             - Los campos son: Fecha, Tema, Notas
+        --}}
+        <div id="modalTutoria" class="modal modal-small">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitulo">Agregar tutoría</h3>
+                    <span class="modal-close" id="closeModal">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" id="fechaTutoria">
+                    </div>
+                    <div class="form-group">
+                        <label>Tema</label>
+                        <input type="text" id="temaTutoria" placeholder="Ej: Revisión de calificaciones">
+                    </div>
+                    <div class="form-group">
+                        <label>Notas</label>
+                        <textarea id="notasTutoria" rows="3" placeholder="Escribe las notas de la tutoría..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-cancelar" id="cancelarModal">Cancelar</button>
+                    <button class="btn-guardar" id="guardarTutoria">Guardar</button>
+                </div>
+            </div>
+        </div>
+
+        {{-- ======================================================
              SECCIÓN DE DOCUMENTOS DEL ALUMNO
              ====================================================== 
              Muestra los documentos del alumno con estado.
@@ -348,13 +383,17 @@
     </div>
 @endsection
 
-{{-- SCRIPTS ADICIONALES --}}
+{{-- ======================================================
+     SCRIPTS ADICIONALES
+     ====================================================== 
+     Funcionalidad JavaScript:
+     1. Botón generar PDF
+     2. Modal de tutorías (agregar/editar)
+     3. Cargar datos al editar una tutoría
+--}}
 @push('scripts')
 <script>
-    {{-- 
-        FUNCIONALIDAD JAVASCRIPT:
-        - Botón generar PDF (alerta de ejemplo)
-    --}}
+    {{-- 1. BOTÓN GENERAR PDF --}}
     document.addEventListener('DOMContentLoaded', function() {
         const btnPdf = document.querySelector('.btn-generar-pdf');
         if (btnPdf) {
@@ -362,6 +401,79 @@
                 alert('Generando PDF del expediente...');
             });
         }
+    });
+
+    {{-- 2. MODAL DE TUTORÍAS --}}
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('modalTutoria');
+        const btnAgregar = document.getElementById('btnAgregarTutoria');
+        const closeModal = document.getElementById('closeModal');
+        const cancelarModal = document.getElementById('cancelarModal');
+        const modalTitulo = document.getElementById('modalTitulo');
+
+        {{-- Abrir modal para agregar --}}
+        if (btnAgregar) {
+            btnAgregar.addEventListener('click', function() {
+                modalTitulo.textContent = 'Agregar tutoría';
+                document.getElementById('fechaTutoria').value = '';
+                document.getElementById('temaTutoria').value = '';
+                document.getElementById('notasTutoria').value = '';
+                modal.style.display = 'flex';
+            });
+        }
+
+        {{-- Cerrar modal --}}
+        function cerrarModal() {
+            modal.style.display = 'none';
+        }
+
+        if (closeModal) closeModal.addEventListener('click', cerrarModal);
+        if (cancelarModal) cancelarModal.addEventListener('click', cerrarModal);
+
+        {{-- Cerrar modal al hacer clic fuera --}}
+        window.addEventListener('click', function(event) {
+            if (event.target == modal) {
+                cerrarModal();
+            }
+        });
+
+        {{-- Guardar tutoría --}}
+        const guardarBtn = document.getElementById('guardarTutoria');
+        if (guardarBtn) {
+            guardarBtn.addEventListener('click', function() {
+                const fecha = document.getElementById('fechaTutoria').value;
+                const tema = document.getElementById('temaTutoria').value;
+                
+                if (fecha && tema) {
+                    alert('Tutoría guardada correctamente');
+                    cerrarModal();
+                } else {
+                    alert('Por favor completa la fecha y el tema');
+                }
+            });
+        }
+
+        {{-- 3. EDITAR TUTORÍA (cargar datos en el modal) --}}
+        document.querySelectorAll('.btn-editar-tutoria').forEach(btn => {
+            btn.addEventListener('click', function() {
+                modalTitulo.textContent = 'Editar tutoría';
+                const row = this.closest('tr');
+                const fecha = row.cells[0].textContent;
+                const tema = row.cells[1].textContent;
+                const notas = row.cells[2].textContent;
+                
+                {{-- Convertir fecha al formato del input date --}}
+                if (fecha && fecha.includes('/')) {
+                    const partes = fecha.split('/');
+                    document.getElementById('fechaTutoria').value = `${partes[2]}-${partes[1]}-${partes[0]}`;
+                } else {
+                    document.getElementById('fechaTutoria').value = '';
+                }
+                document.getElementById('temaTutoria').value = tema;
+                document.getElementById('notasTutoria').value = notas;
+                modal.style.display = 'flex';
+            });
+        });
     });
 </script>
 @endpush
