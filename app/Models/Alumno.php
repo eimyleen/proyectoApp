@@ -10,9 +10,7 @@ class Alumno extends Model
         'user_id',
         'matricula',
         'carrera_id',
-        'grupo',
         'curp',
-        'edad',
         'sexo',
         'fecha_nacimiento',
         'telefono',
@@ -30,6 +28,8 @@ class Alumno extends Model
     }
 
     public function grupos() {
-        return $this->belongsToMany(Grupo::class, 'alumnos_grupos');
+        return $this->belongsToMany(Grupo::class, 'alumnos_grupos')
+                    ->withPivot('periodo') // <- Esto te permite hacer $grupo->pivot->periodo
+                    ->withTimestamps();   // Solo si tu migración pivote tiene timestamps
     }
 }

@@ -139,9 +139,9 @@ Route::middleware(['auth'])->group(function () {
     ])->middleware(['auth', 'role:alumno'])->name('alumno.index');
 
     // --- Ruta del perfil del Alumno ---
-    Route::get('/dashboard/alumno/expediente', function () {
-        return view('dashboard.alumno.alumno_expediente');
-    })->middleware('role:alumno')->name('alumno.expediente');
+    Route::get('/dashboard/alumno/expediente', [
+        AlumnoController::class, 'expediente'
+    ])->middleware('role:alumno')->name('alumno.expediente');
 
     // --- Ruta de las calificaciones del Alumno ---
     Route::get('/dashboard/alumno/calificaciones', [

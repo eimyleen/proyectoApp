@@ -79,9 +79,9 @@
             --}}
             <div class="carrera-logo">
                 <div class="logo-circular">
-                    @if(Auth::user()->alumno->carrera->logo)
-                        <img src="{{ asset(Auth::user()->alumno->carrera->logo) }}" 
-                            alt="Logo {{ Auth::user()->alumno->carrera->nombre }}"
+                    @if($carrera?->logo)
+                        <img src="{{ asset($carrera->logo) }}" 
+                            alt="Logo {{ $carrera->nombre }}"
                             style="width: 100%; height: 100%; object-fit: contain;">
                     @else
                         <img src="{{ asset('img/jaguar.png') }}" alt="UTNay">

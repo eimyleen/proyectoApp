@@ -56,9 +56,9 @@
             {{-- Logo circular de la carrera --}}
             <div class="carrera-logo">
                 <div class="logo-circular">
-                    @if(Auth::user()->alumno->carrera->logo)
-                        <img src="{{ asset(Auth::user()->alumno->carrera->logo) }}" 
-                            alt="Logo {{ Auth::user()->alumno->carrera->nombre }}"
+                    @if($carrera?->logo)
+                        <img src="{{ asset($carrera->logo) }}" 
+                            alt="Logo {{ $carrera->nombre }}"
                             style="width: 100%; height: 100%; object-fit: contain;">
                     @else
                         <img src="{{ asset('img/jaguar.png') }}" alt="UTNay">
@@ -125,43 +125,43 @@
                     {{-- Carrera (relación con modelo Carrera) --}}
                     <div class="dato-item">
                         <label><label>{{ __('messages.label_major') }}</label></label>
-                        <span class="dato-valor">{{ Auth::user()->alumno->carrera->nombre ?? 'No asignada' }}</span>
+                        <span class="dato-valor">{{ $carrera->nombre ?? 'No asignada' }}</span>
                     </div>
                     
                     {{-- Grupo --}}
                     <div class="dato-item">
                         <label>{{ __('messages.label_group') }}</label>
-                        <span class="dato-valor">{{ Auth::user()->alumno->grupo ?? 'N/A' }}</span>
+                        <span class="dato-valor">{{ $grupo->nombre ?? 'N/A' }}</span>
                     </div>
                     
                     {{-- Matrícula --}}
                     <div class="dato-item">
                         <label>{{ __('messages.label_id_number') }}</label>
-                        <span class="dato-valor">{{ Auth::user()->alumno->matricula ?? 'N/A' }}</span>
+                        <span class="dato-valor">{{ $alumno->matricula ?? 'N/A' }}</span>
                     </div>
                     
                     {{-- CURP --}}
                     <div class="dato-item">
                        <label>{{ __('messages.label_curp') }}</label>
-                        <span class="dato-valor">{{ Auth::user()->alumno->curp ?? 'N/A' }}</span>
+                        <span class="dato-valor">{{ $alumno->curp ?? 'N/A' }}</span>
                     </div>
                     
                     {{-- Edad --}}
                     <div class="dato-item">
                         <label>{{ __('messages.label_age') }}</label>
-                        <span class="dato-valor">{{ Auth::user()->alumno->edad ?? 'N/A' }} años</span>
+                        <span class="dato-valor">{{ $alumno->edad ?? 'N/A' }} años</span>
                     </div>
                     
                     {{-- Sexo --}}
                     <div class="dato-item">
                         <label>{{ __('messages.label_gender') }}</label>
-                        <span class="dato-valor">{{ Auth::user()->alumno->sexo ?? 'N/A' }}</span>
+                        <span class="dato-valor">{{ $alumno->sexo ?? 'N/A' }}</span>
                     </div>
                     
                     {{-- Fecha de nacimiento --}}
                     <div class="dato-item">
                         <label>{{ __('messages.label_birthdate') }}</label>
-                        <span class="dato-valor">{{ Auth::user()->alumno->fecha_nacimiento ?? 'N/A' }}</span>
+                        <span class="dato-valor">{{ $alumno->fecha_nacimiento ?? 'N/A' }}</span>
                     </div>
                     
                     {{-- Correo electrónico --}}

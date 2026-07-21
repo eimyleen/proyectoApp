@@ -29,7 +29,6 @@ class AdminCarreraController extends Controller {
         $carrera = Carrera::findOrFail($id);
         $grupos = Grupo::where('carrera_id', $id)->get();
         $grupoId = $req->grupo_id;
-        //$alumnos = Alumno::with('user:id,name,apellido')->get();
 
         $alumnos = Alumno::with(['user:id,name,apellido', 'grupos'])
         ->whereHas('grupos', function ($q) use ($id, $grupoId) {
@@ -119,9 +118,11 @@ class AdminCarreraController extends Controller {
     // Método para mostrar el expediente de un alumno específico desde la perspectiva del Admin
     public function verExpediente($id)
     {
-        $alumno = Alumno::with(['user', 'carrera'])->findOrFail($id);
+        $alumno = Alumno::findOrFail($id);
+        $grupo = $alumno->grupos->first();
+        $carrera = $grupo?->carrera;
 
-        return view('dashboard.admin.admin_alumno_expediente', compact('alumno'));
+        return view('dashboard.admin.admin_alumno_expediente', compact('alumno', 'grupo', 'carrera'));
     }
 
     // Método para mostrar el perfil de un maestro específico desde la perspectiva del Admin

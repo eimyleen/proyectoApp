@@ -102,6 +102,9 @@
             --}}
             <div class="materias-titulo">
                 <h3>{{ __('messages.title_my_subjects') }}</h3>
+                @if($grupo)
+                    <span>Grupo: {{ $grupo->nombre }} ({{ $grupo->grado }})</span>
+                @endif
             </div>
             <div class="tabla-materias">
                 <table>

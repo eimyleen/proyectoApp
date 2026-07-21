@@ -100,10 +100,17 @@
              Los grupos se cargarán dinámicamente desde el backend.
         --}}
         <div class="filtro-grupos">
-            <select class="grupo-select" id="grupoSelect">
-                <option value="">{{ __('messages.groups_select') }}</option>
-                {{-- Los grupos se cargarán dinámicamente desde el backend --}}
-            </select>
+            <form method="GET">
+                <select name="grupo_id" class="grupo-select" onchange="this.form.submit()">
+                    <option value="">{{ __('messages.select_group') }}</option>
+                    @foreach ($grupos as $grupo)
+                        <option value="{{ $grupo->id }}"
+                            {{ request('grupo_id') == $grupo->id ? 'selected' : '' }}>
+                            {{ $grupo->nombre }}
+                        </option>
+                    @endforeach
+                </select>
+            </form>
         </div>
 
         {{-- ======================================================
@@ -153,24 +160,22 @@
                         El número de fila se genera con $loop->iteration o $i+1.
                     --}}
                     @foreach($alumnos as $i => $alumno)
-                        @if($alumno->carrera_id == $carrera->id)
-                            <tr>
-                                <td class="col-numero">{{ $i+1 }}</td>
-                                <td class="col-matricula">{{ $alumno->matricula }}</td>
-                                <td class="col-nombre">{{ $alumno->user?->name }}</td>
-                                <td class="col-nombre">{{ $alumno->user?->apellido }}</td>
-                                <td class="col-acciones">
-                                    {{-- 
-                                        BOTÓN VER EXPEDIENTE
-                                        Redirige a la vista del expediente del alumno
-                                        desde la perspectiva del maestro.
-                                    --}}
-                                    <a href="{{ route('maestro.alumno.expediente', $alumno->id) }}" style="text-decoration: none;">
-                                        <button class="btn-ver-expediente">{{ __('messages.groups_view_record') }}</button>
-                                    </a>
-                                </td>
-                            </tr>
-                        @endif
+                        <tr>
+                            <td class="col-numero">{{ $i+1 }}</td>
+                            <td class="col-matricula">{{ $alumno->matricula }}</td>
+                            <td class="col-nombre">{{ $alumno->user?->name }}</td>
+                            <td class="col-nombre">{{ $alumno->user?->apellido }}</td>
+                            <td class="col-acciones">
+                                {{-- 
+                                    BOTÓN VER EXPEDIENTE
+                                    Redirige a la vista del expediente del alumno
+                                    desde la perspectiva del maestro.
+                                --}}
+                                <a href="{{ route('maestro.alumno.expediente', $alumno->id) }}" style="text-decoration: none;">
+                                    <button class="btn-ver-expediente">{{ __('messages.groups_view_record') }}</button>
+                                </a>
+                            </td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>
