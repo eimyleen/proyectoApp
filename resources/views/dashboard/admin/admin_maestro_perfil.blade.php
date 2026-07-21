@@ -1,37 +1,88 @@
+{{-- 
+    ============================================================
+    ADMIN - PERFIL DEL MAESTRO
+    ============================================================
+    Esta vista muestra el perfil completo de un maestro
+    desde la perspectiva del administrador.
+    Muestra:
+    - Foto de perfil del maestro (con opción para cambiar)
+    - Datos personales (Nombre, Apellidos, Núm. empleado, RFC, etc.)
+    - Carreras que imparte
+    - Grupo tutorado (si es tutor)
+    - Botones para editar y eliminar maestro
+    
+    RELACIÓN CON OTRAS VISTAS:
+    - Extiende el layout: layouts.dashboard
+    - Usa los estilos de: dashboard_admin.css
+    - Botón de regreso: visible (back-button)
+    - Se conecta con: admin.carrera (detalle de carrera)
+    ============================================================ 
+--}}
+
 @extends('layouts.dashboard')
 
+{{-- TÍTULOS DE LA PÁGINA --}}
 @section('title', 'Administrador - Perfil del Maestro')
-
 @section('subtitle', 'Consulta y edita la información del maestro')
 
+{{-- 
+    BOTÓN DE REGRESO
+    Esta sección hace visible el botón de regreso en el header.
+--}}
 @section('back-button')
     <!-- Activa el botón de regreso -->
 @endsection
 
+{{-- 
+    URL DE REGRESO
+    Define a dónde redirige el botón de regreso.
+    En este caso, al detalle de la carrera.
+--}}
 @section('back-url', '/dashboard/admin/carrera')
 
+{{-- CSS ADICIONAL --}}
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/dashboard_admin.css') }}">
 @endpush
 
+{{-- CONTENIDO PRINCIPAL --}}
 @section('content')
+    
+    {{-- 
+        CONTENEDOR PRINCIPAL DEL PERFIL
+        Fondo blanco con sombra y bordes redondeados.
+    --}}
     <div class="perfil-container">
-        <!-- Botones de acción -->
+        
+        {{-- ======================================================
+             BOTONES DE ACCIÓN
+             ====================================================== 
+             - Editar maestro: Abre modal para editar datos
+             - Eliminar maestro: Elimina al maestro (con confirmación)
+        --}}
         <div class="acciones-superiores">
             <button class="btn-editar-perfil" id="btnEditarMaestro">
-                <img src="{{ asset('img/editar.png') }}" alt="Editar" class="btn-icono"> Editar maestro
+                <img src="{{ asset('img/editar.png') }}" alt="Editar" class="btn-icono"> 
+                Editar maestro
             </button>
             <button class="btn-eliminar-perfil" id="btnEliminarMaestro">
                 ✕ Eliminar maestro
             </button>
         </div>
 
-        <!-- Foto de perfil -->
+        {{-- ======================================================
+             FOTO DE PERFIL
+             ====================================================== 
+             - Avatar grande: Muestra la foto del maestro o sus iniciales
+             - Botón "Cambiar foto": Abre el selector de archivos
+        --}}
         <div class="perfil-section">
             <div class="foto-perfil">
                 <div class="avatar-grande">
                     @if($maestro->user->foto)
-                        <img src="{{ asset('storage/' . $maestro->user->foto) }}" alt="Foto" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+                        <img src="{{ asset('storage/' . $maestro->user->foto) }}" 
+                             alt="Foto" 
+                             style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
                     @else
                         <span class="avatar-iniciales-grande">
                             {{ strtoupper(substr($maestro->user->name, 0, 1)) }}{{ strtoupper(substr($maestro->user->apellido, 0, 1)) }}
@@ -42,53 +93,78 @@
             </div>
         </div>
 
-        <!-- Datos personales -->
+        {{-- ======================================================
+             DATOS PERSONALES
+             ====================================================== 
+             Grid de 2 columnas con los datos del maestro.
+        --}}
         <h3 class="perfil-seccion-titulo">Datos personales</h3>
         <div class="datos-grid">
-        <div class="dato-item">
-            <label>Nombre(s)</label>
-            <span class="dato-valor" id="datoNombre">{{ $maestro->user->name }}</span>
+            
+            {{-- Nombre --}}
+            <div class="dato-item">
+                <label>Nombre(s)</label>
+                <span class="dato-valor" id="datoNombre">{{ $maestro->user->name }}</span>
+            </div>
+            
+            {{-- Apellidos --}}
+            <div class="dato-item">
+                <label>Apellidos</label>
+                <span class="dato-valor" id="datoApellidos">{{ $maestro->user->apellido }}</span>
+            </div>
+            
+            {{-- Número de empleado --}}
+            <div class="dato-item">
+                <label>Número de empleado</label>
+                <span class="dato-valor" id="datoEmpleado">{{ $maestro->num_empleado }}</span>
+            </div>
+            
+            {{-- RFC --}}
+            <div class="dato-item">
+                <label>RFC</label>
+                <span class="dato-valor" id="datoRFC">{{ $maestro->rfc }}</span>
+            </div>
+            
+            {{-- Edad --}}
+            <div class="dato-item">
+                <label>Edad</label>
+                <span class="dato-valor" id="datoEdad">{{ $maestro->edad }} años</span>
+            </div>
+            
+            {{-- Sexo --}}
+            <div class="dato-item">
+                <label>Sexo</label>
+                <span class="dato-valor" id="datoSexo">{{ $maestro->sexo }}</span>
+            </div>
+            
+            {{-- Fecha de nacimiento --}}
+            <div class="dato-item">
+                <label>Fecha de nacimiento</label>
+                <span class="dato-valor" id="datoFechaNac">
+                    {{ \Carbon\Carbon::parse($maestro->fecha_nacimiento)->format('d/m/Y') }}
+                </span>
+            </div>
+            
+            {{-- Correo electrónico --}}
+            <div class="dato-item">
+                <label>Correo electrónico</label>
+                <span class="dato-valor" id="datoCorreo">{{ $maestro->user->email }}</span>
+            </div>
+            
+            {{-- Teléfono --}}
+            <div class="dato-item">
+                <label>Teléfono</label>
+                <span class="dato-valor" id="datoTelefono">{{ $maestro->telefono }}</span>
+            </div>
         </div>
-        <div class="dato-item">
-            <label>Apellidos</label>
-            <span class="dato-valor" id="datoApellidos">{{ $maestro->user->apellido }}</span>
-        </div>
-        <div class="dato-item">
-            <label>Número de empleado</label>
-            <span class="dato-valor" id="datoEmpleado">{{ $maestro->num_empleado }}</span>
-        </div>
-        <div class="dato-item">
-            <label>RFC</label>
-            <span class="dato-valor" id="datoRFC">{{ $maestro->rfc }}</span>
-        </div>
-        <div class="dato-item">
-            <label>Edad</label>
-            <span class="dato-valor" id="datoEdad">{{ $maestro->edad }} años</span>
-        </div>
-        <div class="dato-item">
-            <label>Sexo</label>
-            <span class="dato-valor" id="datoSexo">{{ $maestro->sexo }}</span>
-        </div>
-        <div class="dato-item">
-            <label>Fecha de nacimiento</label>
-            <span class="dato-valor" id="datoFechaNac">
-                {{ \Carbon\Carbon::parse($maestro->fecha_nacimiento)->format('d/m/Y') }}
-            </span>
-        </div>
-        <div class="dato-item">
-            <label>Correo electrónico</label>
-            <span class="dato-valor" id="datoCorreo">{{ $maestro->user->email }}</span>
-        </div>
-        <div class="dato-item">
-            <label>Teléfono</label>
-            <span class="dato-valor" id="datoTelefono">{{ $maestro->telefono }}</span>
-        </div>
-    </div>
 
-        <!-- Carreras que imparte -->
+        {{-- ======================================================
+             CARRERAS QUE IMPARTE
+             ====================================================== 
+             Muestra la lista de carreras que el maestro imparte.
+        --}}
         <h3 class="seccion-titulo">Carreras que imparte</h3>
         <div class="carreras-grid-perfil" id="carrerasContainer">
-            <!-- Las carreras se cargarán dinámicamente -->
             <ul>
                 @foreach ($maestro->carreras as $carrera)
                     <li>{{ $carrera->nombre }}</li>
@@ -96,14 +172,24 @@
             </ul>
         </div>
 
-        <!-- Grupo tutorado -->
+        {{-- ======================================================
+             GRUPO TUTORADO
+             ====================================================== 
+             Muestra el grupo que el maestro tiene asignado como tutor.
+        --}}
         <h3 class="seccion-titulo">Grupo tutorado</h3>
         <div class="grupo-tutorado-info">
             <span class="grupo-nombre-perfil" id="grupoTutorado"></span>
         </div>
     </div>
 
-    <!-- Modal para editar maestro (con un solo scroll) -->
+    {{-- ======================================================
+         MODAL - EDITAR MAESTRO
+         ====================================================== 
+         Formulario para editar los datos del maestro.
+         Campos: Nombre, Apellidos, Núm. empleado, RFC, Edad, Sexo,
+         Fecha nacimiento, Correo, Teléfono, ¿Es tutor?, Grupo tutorado, Foto.
+    --}}
     <div id="modalEditarMaestro" class="modal-small">
         <div class="modal-content">
             <div class="modal-header">
@@ -178,10 +264,20 @@
     </div>
 @endsection
 
+{{-- ======================================================
+     SCRIPTS ADICIONALES
+     ====================================================== 
+     Funcionalidad JavaScript:
+     1. Botón de regreso
+     2. Modal Editar Maestro (abrir/cerrar/guardar)
+     3. Eliminar maestro (confirmación)
+     4. Cambiar foto de perfil (previsualización)
+--}}
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Flecha de regreso
+        
+        {{-- 1. BOTÓN DE REGRESO --}}
         const backButton = document.getElementById('backButton');
         if (backButton) {
             backButton.addEventListener('click', function() {
@@ -189,18 +285,20 @@
             });
         }
 
-        // Modal Editar Maestro
+        {{-- 2. MODAL EDITAR MAESTRO --}}
         const modalEditar = document.getElementById('modalEditarMaestro');
         const btnEditar = document.getElementById('btnEditarMaestro');
         const closeModal = document.getElementById('closeModalEditar');
         const cancelar = document.getElementById('cancelarEditar');
 
+        {{-- Abrir modal --}}
         if (btnEditar) {
             btnEditar.onclick = function() {
                 modalEditar.style.display = 'flex';
             };
         }
 
+        {{-- Cerrar modal --}}
         function cerrarModal() {
             modalEditar.style.display = 'none';
         }
@@ -208,11 +306,12 @@
         if (closeModal) closeModal.onclick = cerrarModal;
         if (cancelar) cancelar.onclick = cerrarModal;
 
+        {{-- Cerrar al hacer clic fuera --}}
         window.onclick = function(e) {
             if (e.target === modalEditar) cerrarModal();
         };
 
-        // Guardar cambios (actualiza la vista con los nuevos valores)
+        {{-- Guardar cambios (actualiza la vista con los nuevos valores) --}}
         const guardar = document.getElementById('guardarEditar');
         if (guardar) {
             guardar.onclick = function() {
@@ -234,12 +333,6 @@
                 document.getElementById('datoTelefono').textContent = document.getElementById('editTelefono').value;
                 document.getElementById('grupoTutorado').textContent = document.getElementById('editGrupoTutorado').value;
                 
-                const esTutor = document.getElementById('editEsTutor').value === '1';
-                const tutorBadge = document.getElementById('tutorBadge');
-                if (tutorBadge) {
-                    tutorBadge.style.display = esTutor ? 'inline-block' : 'none';
-                }
-                
                 const nombre = document.getElementById('editNombre').value;
                 const apellidos = document.getElementById('editApellidos').value;
                 const iniciales = (nombre ? nombre.charAt(0) : '') + (apellidos ? apellidos.charAt(0) : '');
@@ -250,7 +343,7 @@
             };
         }
 
-        // Eliminar maestro
+        {{-- 3. ELIMINAR MAESTRO --}}
         const btnEliminar = document.getElementById('btnEliminarMaestro');
         if (btnEliminar) {
             btnEliminar.onclick = function() {
@@ -260,7 +353,7 @@
             };
         }
 
-        // Cambiar foto
+        {{-- 4. CAMBIAR FOTO (previsualización) --}}
         const btnCambiarFoto = document.getElementById('btnCambiarFoto');
         if (btnCambiarFoto) {
             btnCambiarFoto.onclick = function() {
@@ -273,7 +366,7 @@
                 const reader = new FileReader();
                 reader.onload = function(event) {
                     const avatar = document.querySelector('.avatar-grande');
-                    avatar.innerHTML = `<img src="${event.target.result}" style="width:100%; height:100%; object-fit:cover;">`;
+                    avatar.innerHTML = `<img src="${event.target.result}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
                 };
                 reader.readAsDataURL(e.target.files[0]);
             }

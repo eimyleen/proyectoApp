@@ -1,25 +1,77 @@
+{{-- 
+    ============================================================
+    ADMIN - DETALLE DE CARRERA
+    ============================================================
+    Esta vista muestra el detalle de una carrera específica.
+    Muestra:
+    - Header con logo, nombre, clave y acciones (editar/eliminar)
+    - Pestañas para cambiar entre Grupos y Maestros
+    - Tabla de alumnos con filtro por grupo
+    - Tabla de maestros
+    - Modales para agregar alumno, agregar maestro y editar carrera
+    
+    RELACIÓN CON OTRAS VISTAS:
+    - Extiende el layout: layouts.dashboard
+    - Usa los estilos de: dashboard_admin.css
+    - Botón de regreso: visible (back-button)
+    - Se conecta con: admin.index (dashboard de admin)
+    ============================================================ 
+--}}
+
 @extends('layouts.dashboard')
 
+{{-- 
+    TÍTULOS DE LA PÁGINA
+    El primero usa traducción (__()), el segundo es texto fijo.
+    El que prevalece es el último definido.
+--}}
 @section('title', __('messages.career_detail_title'))
 @section('subtitle', __('messages.career_detail_subtitle'))
-@section('title', 'Administrador - Detalle de Carrera')
 
+@section('title', 'Administrador - Detalle de Carrera')
 @section('subtitle', 'Gestiona los grupos y maestros de esta carrera')
 
+{{-- 
+    BOTÓN DE REGRESO
+    Esta sección hace visible el botón de regreso en el header.
+--}}
 @section('back-button')
     <!-- Activa el botón de regreso -->
 @endsection
 
+{{-- 
+    URL DE REGRESO
+    Define a dónde redirige el botón de regreso.
+    En este caso, al dashboard de administrador.
+--}}
 @section('back-url', '/dashboard/admin')
 
+{{-- CSS ADICIONAL --}}
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/dashboard_admin.css') }}">
 @endpush
 
+{{-- CONTENIDO PRINCIPAL --}}
 @section('content')
+    
+    {{-- 
+        CONTENEDOR PRINCIPAL
+        Fondo blanco con sombra y bordes redondeados.
+    --}}
     <div class="carrera-container">
-        <!-- Header de la carrera -->
+        
+        {{-- ======================================================
+             HEADER DE LA CARRERA
+             ====================================================== 
+             Muestra:
+             - Logo circular de la carrera (o logo por defecto)
+             - Nombre de la carrera
+             - Clave de la carrera
+             - Botones: Editar carrera y Eliminar carrera
+        --}}
         <div class="carrera-header">
+            
+            {{-- Logo de la carrera --}}
             <div class="carrera-logo">
                 <div class="logo-circular" style="width: 120px; height: 120px; overflow: hidden;">
                     @if($carrera->logo)
@@ -31,17 +83,26 @@
                     @endif
                 </div>
             </div>
+            
+            {{-- Información de la carrera --}}
             <div class="carrera-info">
                 <h2>{{ $carrera->nombre }}</h2>
                 <p class="carrera-clave">Clave: {{ $carrera->clave }}</p>
                 <p>{{ __('messages.career_management') }}</p>
             </div>
+            
+            {{-- Acciones de la carrera --}}
             <div class="carrera-acciones">
+                {{-- Botón Editar (abre modal) --}}
                 <button class="btn-editar" id="btnEditarCarrera">
-                    <img src="{{ asset('img/editar.png') }}" alt="Editar" class="btn-icono"> {{ __('messages.btn_edit_career') }}
+                    <img src="{{ asset('img/editar.png') }}" alt="Editar" class="btn-icono"> 
+                    {{ __('messages.btn_edit_career') }}
                 </button>
-                <form action="{{ route("admin.delete", $carrera) }}" method="POST">
-                    @csrf @method('DELETE')
+                
+                {{-- Formulario para eliminar carrera --}}
+                <form action="{{ route('admin.delete', $carrera) }}" method="POST">
+                    @csrf 
+                    @method('DELETE')
                     <button type="submit" class="btn-eliminar-carrera" id="btnEliminarCarrera">
                         ✕ {{ __('messages.btn_delete_career') }}
                     </button>
@@ -49,15 +110,29 @@
             </div>
         </div>
 
-        <!-- Pestañas -->
+        {{-- ======================================================
+             PESTAÑAS
+             ====================================================== 
+             Permite cambiar entre la vista de Grupos y Maestros.
+             La pestaña activa tiene un borde inferior azul oscuro.
+        --}}
         <div class="tabs">
             <button class="tab-btn active" data-tab="grupos">{{ __('messages.tab_groups') }}</button>
             <button class="tab-btn" data-tab="maestros">{{ __('messages.tab_teachers') }}</button>
         </div>
 
-        <!-- Contenido Grupos -->
+        {{-- ======================================================
+             CONTENIDO - GRUPOS
+             ====================================================== 
+             Muestra:
+             - Panel del tutor (información del tutor del grupo)
+             - Filtro para seleccionar un grupo específico
+             - Botones: Agregar alumno y Descargar lista
+             - Tabla con los alumnos del grupo seleccionado
+        --}}
         <div class="tab-content active" id="tab-grupos">
-            <!-- Panel de información del tutor -->
+            
+            {{-- Panel de información del tutor --}}
             <div class="tutor-info-panel">
                 <div class="tutor-info">
                     <span class="tutor-label">{{ __('messages.tutor_label') }}</span>
@@ -65,7 +140,9 @@
                 </div>
             </div>
 
+            {{-- Filtro y acciones --}}
             <div class="filtro-grupo">
+                {{-- Select de grupos (recarga la página al cambiar) --}}
                 <form method="GET">
                     <select name="grupo_id" class="grupo-select" onchange="this.form.submit()">
                         <option value="">{{ __('messages.select_group') }}</option>
@@ -77,15 +154,20 @@
                         @endforeach
                     </select>
                 </form>
+                
+                {{-- Botones de acción --}}
                 <div class="botones-accion">
                     <button class="btn-agregar" id="btnAgregarAlumno">
                         {{ __('messages.btn_add_student') }}
                     </button>
                     <button class="btn-descargar-lista" id="btnDescargarGrupos">
-                        <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-descarga"> {{ __('messages.btn_download_groups') }}
+                        <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-descarga"> 
+                        {{ __('messages.btn_download_groups') }}
                     </button>
                 </div>
             </div>
+            
+            {{-- Tabla de alumnos --}}
             <div class="tabla-container">
                 <table class="tabla-alumnos">
                     <thead>
@@ -105,10 +187,12 @@
                                 <td class="col-nombre">{{ $alumno->user?->name }}</td>
                                 <td class="col-nombre">{{ $alumno->user?->apellido }}</td>
                                 <td class="col-acciones">
+                                    {{-- Botón Ver Expediente --}}
                                     <a href="{{ route('admin.alumno.expediente', $alumno->id) }}" style="text-decoration: none;">
                                         <button class="btn-ver-expediente">{{ __('messages.btn_view_record') }}</button>
                                     </a>
                                     
+                                    {{-- Botón Eliminar (rojo) --}}
                                     <button class="btn-eliminar">{{ __('messages.btn_delete') }}</button>
                                 </td>
                             </tr>
@@ -118,18 +202,29 @@
             </div>
         </div>
 
-        <!-- Contenido Maestros -->
+        {{-- ======================================================
+             CONTENIDO - MAESTROS
+             ====================================================== 
+             Muestra:
+             - Botones: Agregar maestro y Descargar lista
+             - Tabla con los maestros que imparten la carrera
+        --}}
         <div class="tab-content" id="tab-maestros">
+            
+            {{-- Acciones --}}
             <div class="filtro-grupo" style="justify-content: flex-end;">
                 <div class="botones-accion">
                     <button class="btn-agregar" id="btnAgregarMaestro">
                         {{ __('messages.btn_add_teacher') }}
                     </button>
                     <button class="btn-descargar-lista" id="btnDescargarMaestros">
-                        <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-descarga"> {{ __('messages.btn_download_teachers') }}
+                        <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-descarga"> 
+                        {{ __('messages.btn_download_teachers') }}
                     </button>
                 </div>
             </div>
+            
+            {{-- Tabla de maestros --}}
             <div class="tabla-container">
                 <table class="tabla-maestros">
                     <thead>
@@ -142,6 +237,7 @@
                         </tr>
                     </thead>
                     <tbody id="maestrosBody">
+                        {{-- Solo mostrar maestros que están asignados a esta carrera --}}
                         @foreach($maestros as $i => $maestro)
                             @if ($maestro->carreras->contains('id', $carrera->id))
                                 <tr>
@@ -150,9 +246,12 @@
                                     <td class="col-nombre">{{ $maestro->user?->apellido }}</td>
                                     <td class="col-correo">{{ $maestro->user?->email }}</td>
                                     <td class="col-acciones">
+                                        {{-- Botón Ver Perfil --}}
                                         <a href="{{ route('admin.maestro.perfil', $maestro->id) }}" style="text-decoration: none;">
                                             <button class="btn-ver-perfil">{{ __('messages.btn_view_profile') }}</button>
                                         </a>
+                                        
+                                        {{-- Botón Eliminar (rojo) --}}
                                         <button class="btn-eliminar">{{ __('messages.btn_delete') }}</button>
                                     </td>
                                 </tr>
@@ -164,14 +263,20 @@
         </div>
     </div>
 
-    <!-- Modal para agregar alumno -->
+    {{-- ======================================================
+         MODAL - AGREGAR ALUMNO
+         ====================================================== 
+         Formulario para agregar un nuevo alumno a la carrera.
+         Campos: Nombre, Apellidos, Grupo, Matrícula, Correo, CURP,
+         Fecha Nacimiento, Edad, Sexo, Teléfono.
+    --}}
     <div id="modalAgregarAlumno" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>{{ __('messages.modal_add_student') }}</h3>
                 <span class="modal-close" id="closeModalAlumno">&times;</span>
             </div>
-            <form action="{{ route("admin.carrera.storeAlumno", $carrera) }}" method="POST">
+            <form action="{{ route('admin.carrera.storeAlumno', $carrera) }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
@@ -230,13 +335,18 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn-guardar" id="">Guardar alumno</button>
+                    <button type="submit" class="btn-guardar">Guardar alumno</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Modal para agregar maestro -->
+    {{-- ======================================================
+         MODAL - AGREGAR MAESTRO
+         ====================================================== 
+         Formulario para agregar un nuevo maestro a la carrera.
+         Campos: Número de empleado, Nombre, Apellidos, Correo, Teléfono.
+    --}}
     <div id="modalAgregarMaestro" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -271,8 +381,13 @@
         </div>
     </div>
 
-    <!-- Modal para editar carrera -->
-    <form action="{{ route("admin.update", $carrera) }}" method="POST">
+    {{-- ======================================================
+         MODAL - EDITAR CARRERA
+         ====================================================== 
+         Formulario para editar los datos de la carrera.
+         Campos: Nombre, Clave, Logo.
+    --}}
+    <form action="{{ route('admin.update', $carrera) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PATCH')
         <div id="modalCarrera" class="modal">
@@ -292,7 +407,7 @@
                     </div>
                     <div class="form-group">
                         <label>{{ __('messages.field_career_logo') }}</label>
-                        <input name="inLogo" type="file" id="logoCarrera" accept="image/*" value="{{ $carrera->logo }}">
+                        <input name="inLogo" type="file" id="logoCarrera" accept="image/*">
                         <small class="form-text">{{ __('messages.helper_logo') }}</small>
                     </div>
                 </div>
@@ -304,10 +419,23 @@
     </form>
 @endsection
 
+{{-- ======================================================
+     SCRIPTS ADICIONALES
+     ====================================================== 
+     Funcionalidad JavaScript:
+     1. Botón de regreso
+     2. Cambio de pestañas (Grupos / Maestros)
+     3. Modales (Agregar Alumno, Agregar Maestro, Editar Carrera)
+     4. Guardar datos de modales
+     5. Eliminar carrera (confirmación)
+     6. Botones de descarga (alertas)
+     7. Botones de eliminar en tablas
+--}}
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Flecha de regreso
+        
+        {{-- 1. BOTÓN DE REGRESO --}}
         const backButton = document.getElementById('backButton');
         if (backButton) {
             backButton.addEventListener('click', function() {
@@ -315,7 +443,7 @@
             });
         }
 
-        // Cambio de pestañas
+        {{-- 2. CAMBIO DE PESTAÑAS --}}
         const tabBtns = document.querySelectorAll('.tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
 
@@ -329,7 +457,7 @@
             });
         });
 
-        // Tutor (ejemplo, backend llenará)
+        {{-- 3. TUTOR (ejemplo, backend llenará) --}}
         const tutorNombreSpan = document.getElementById('tutorNombre');
         const filtroGrupo = document.getElementById('filtroGrupo');
 
@@ -345,11 +473,10 @@
             });
         }
 
-        // Modal Agregar Alumno
+        {{-- 4. MODAL AGREGAR ALUMNO --}}
         const modalAlumno = document.getElementById('modalAgregarAlumno');
         const btnAgregarAlumno = document.getElementById('btnAgregarAlumno');
         const closeModalAlumno = document.getElementById('closeModalAlumno');
-        const cancelarAlumno = document.getElementById('cancelarAlumno');
 
         if (btnAgregarAlumno) {
             btnAgregarAlumno.onclick = function() {
@@ -374,13 +501,11 @@
         }
 
         if (closeModalAlumno) closeModalAlumno.onclick = cerrarModalAlumno;
-        if (cancelarAlumno) cancelarAlumno.onclick = cerrarModalAlumno;
 
-        // Modal Agregar Maestro
+        {{-- 5. MODAL AGREGAR MAESTRO --}}
         const modalMaestro = document.getElementById('modalAgregarMaestro');
         const btnAgregarMaestro = document.getElementById('btnAgregarMaestro');
         const closeModalMaestro = document.getElementById('closeModalMaestro');
-        const cancelarMaestro = document.getElementById('cancelarMaestro');
 
         if (btnAgregarMaestro) {
             btnAgregarMaestro.onclick = function() {
@@ -398,13 +523,11 @@
         }
 
         if (closeModalMaestro) closeModalMaestro.onclick = cerrarModalMaestro;
-        if (cancelarMaestro) cancelarMaestro.onclick = cerrarModalMaestro;
 
-        // Modal Editar Carrera
+        {{-- 6. MODAL EDITAR CARRERA --}}
         const modalCarrera = document.getElementById('modalCarrera');
         const btnEditarCarrera = document.getElementById('btnEditarCarrera');
         const closeModalCarrera = document.getElementById('closeModalCarrera');
-        const cancelarCarrera = document.getElementById('cancelarCarrera');
 
         if (btnEditarCarrera) {
             btnEditarCarrera.onclick = function() {
@@ -417,16 +540,15 @@
         }
 
         if (closeModalCarrera) closeModalCarrera.onclick = cerrarModalCarrera;
-        if (cancelarCarrera) cancelarCarrera.onclick = cerrarModalCarrera;
 
-        // Cerrar modales al hacer clic fuera
+        {{-- 7. CERRAR MODALES AL HACER CLIC FUERA --}}
         window.onclick = function(e) {
             if (e.target === modalAlumno) cerrarModalAlumno();
             if (e.target === modalMaestro) cerrarModalMaestro();
             if (e.target === modalCarrera) cerrarModalCarrera();
         };
 
-        // Guardar alumno
+        {{-- 8. GUARDAR ALUMNO (validación) --}}
         const guardarAlumno = document.getElementById('guardarAlumno');
         if (guardarAlumno) {
             guardarAlumno.onclick = function() {
@@ -441,7 +563,7 @@
             };
         }
 
-        // Guardar maestro
+        {{-- 9. GUARDAR MAESTRO (validación) --}}
         const guardarMaestro = document.getElementById('guardarMaestro');
         if (guardarMaestro) {
             guardarMaestro.onclick = function() {
@@ -456,7 +578,7 @@
             };
         }
 
-        // Guardar carrera
+        {{-- 10. GUARDAR CARRERA (validación y actualización visual) --}}
         const guardarCarrera = document.getElementById('guardarCarrera');
         if (guardarCarrera) {
             guardarCarrera.onclick = function() {
@@ -472,7 +594,7 @@
             };
         }
 
-        // Eliminar carrera
+        {{-- 11. ELIMINAR CARRERA (confirmación) --}}
         const btnEliminarCarrera = document.getElementById('btnEliminarCarrera');
         if (btnEliminarCarrera) {
             btnEliminarCarrera.onclick = function() {
@@ -482,7 +604,7 @@
             };
         }
 
-        // Botones de descarga
+        {{-- 12. BOTONES DE DESCARGA (alertas) --}}
         const btnDescargarGrupos = document.getElementById('btnDescargarGrupos');
         if (btnDescargarGrupos) {
             btnDescargarGrupos.onclick = function() {
@@ -497,7 +619,7 @@
             };
         }
 
-        // Botones de acciones
+        {{-- 13. BOTONES ELIMINAR EN TABLAS --}}
         document.addEventListener('click', function(e) {
             if (e.target.classList.contains('btn-eliminar')) {
                 if (confirm('¿Estás seguro de eliminar este elemento?')) {

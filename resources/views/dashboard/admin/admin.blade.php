@@ -1,36 +1,87 @@
-<!-- Dashboard Admin - Módulo de gestión de carreras y usuarios -->
+{{-- 
+    ============================================================
+    ADMIN - DASHBOARD PRINCIPAL
+    ============================================================
+    Esta es la vista principal del módulo de administrador.
+    Muestra:
+    - Botones superiores (Logs, Respaldos, Lista Global, +Agregar Carrera)
+    - Grid de carreras con logos circulares
+    - Modal para agregar una nueva carrera
+    - Modal para lista global de alumnos con filtro y descarga
+    - Modal para gestión de respaldos (generar y configurar)
+    
+    RELACIÓN CON OTRAS VISTAS:
+    - Extiende el layout: layouts.dashboard
+    - Usa los estilos de: dashboard_admin.css
+    - Se conecta con: admin.show (detalle de carrera), admin.logs, etc.
+    ============================================================ 
+--}}
+
 @extends('layouts.dashboard')
 
+{{-- 
+    TÍTULOS DE LA PÁGINA
+    El primero usa traducción (__()), el segundo es texto fijo.
+    El que prevalece es el último definido.
+--}}
 @section('title', __('messages.admin_title'))
 @section('subtitle', __('messages.admin_subtitle'))
-@section('title', 'Administrador - Carreras')
 
+@section('title', 'Administrador - Carreras')
 @section('subtitle', 'Gestiona las carreras de la universidad')
 
+{{-- CSS ADICIONAL --}}
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/dashboard_admin.css') }}">
 @endpush
 
+{{-- CONTENIDO PRINCIPAL --}}
 @section('content')
     <div class="admin-dashboard-container">
-        <!-- Botones superiores -->
+        
+        {{-- ======================================================
+             BOTONES SUPERIORES
+             ====================================================== 
+             Acciones principales del administrador:
+             - Logs: Ver el historial de acciones
+             - Respaldos: Gestionar respaldos de la base de datos
+             - Lista Global: Ver todos los alumnos en un modal
+             - +Agregar Carrera: Abre modal para crear una nueva carrera
+        --}}
         <div class="admin-buttons">
+            {{-- Botón Logs (redirige a una página) --}}
             <a href="{{ route('admin.logs') }}" style="text-decoration: none;">
                 <button class="btn-lista-global" id="btnLogs">
                     {{ __('messages.admin_btn_logs') }}
                 </button>
             </a>
+            
+            {{-- Botón Respaldos (abre modal) --}}
             <button class="btn-lista-global" id="btnRespaldos">
                 {{ __('messages.admin_btn_backups') }}
             </button>
+            
+            {{-- Botón Lista Global (abre modal) --}}
             <button class="btn-lista-global" id="btnListaGlobal">
                 {{ __('messages.admin_btn_global_list') }}
             </button>
+            
+            {{-- Botón Agregar Carrera (abre modal) --}}
             <button class="btn-agregar-carrera" id="btnAgregarCarrera">
                 {{ __('messages.admin_btn_add_career') }}
             </button>
         </div>
-        <form action="{{ route("admin.store") }}" method="POST" >
+
+        {{-- ======================================================
+             MODAL - AGREGAR CARRERA
+             ====================================================== 
+             Formulario para crear una nueva carrera.
+             Los campos son:
+             - Nombre (texto)
+             - Clave (texto)
+             - Logo (archivo de imagen)
+        --}}
+        <form action="{{ route('admin.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div id="modalAgregarCarrera" class="modal">
                 <div class="modal-content">
@@ -59,18 +110,21 @@
                 </div>
             </div>
         </form>
-        <!-- Grid de carreras -->
+
+        {{-- ======================================================
+             GRID DE CARRERAS
+             ====================================================== 
+             Muestra todas las carreras en un grid de círculos.
+             Cada carrera tiene su logo y al hacer clic redirige
+             a la vista de detalle (admin.show)
+        --}}
         <div class="carreras-grid">
             @foreach ($carreras as $carrera)
                 <div class="carrera-card" data-carrera="{{ $carrera->nombre }}">
                     <div class="carrera-img">
                         <a href="{{ route('admin.show', $carrera) }}">
-                            @if($carrera->logo)
-                                @if(file_exists($carrera->logo))
-                                    <img src="{{ asset($carrera->logo) }}" alt="{{ $carrera->nombre }}">
-                                @else
-                                    <img src="{{ asset('img/jaguar.png') }}" alt="Sin logo">
-                                @endif
+                            @if($carrera->logo && file_exists($carrera->logo))
+                                <img src="{{ asset($carrera->logo) }}" alt="{{ $carrera->nombre }}">
                             @else
                                 <img src="{{ asset('img/jaguar.png') }}" alt="{{ __('messages.admin_no_logo') }}">
                             @endif
@@ -81,7 +135,13 @@
         </div>
     </div>
 
-    <!-- Modal para lista global de alumnos - CORREGIDO -->
+    {{-- ======================================================
+         MODAL - LISTA GLOBAL DE ALUMNOS
+         ====================================================== 
+         Muestra todos los alumnos en una tabla con:
+         - Filtro de búsqueda por texto
+         - Botón para descargar lista en PDF
+    --}}
     <div id="modalListaGlobal" class="modal-lista-global">
         <div class="modal-content">
             <div class="modal-header">
@@ -92,7 +152,7 @@
                 <div class="modal-actions">
                     <div class="modal-filtro">
                         <img src="{{ asset('img/lupa.png') }}" alt="Buscar" class="lupa-icon-modal">
-                        <input type="text" id="busquedaModal" placeholder= "{{ __('messages.modal_search_placeholder') }}" class="input-busqueda-modal">
+                        <input type="text" id="busquedaModal" placeholder="{{ __('messages.modal_search_placeholder') }}" class="input-busqueda-modal">
                     </div>
                     <a href="{{ route('admin.alumnos.pdf') }}" style="text-decoration: none;">
                         <button class="btn-lista-global">
@@ -128,14 +188,20 @@
             </div>
         </div>
     </div>
+
+    {{-- ======================================================
+         MODAL - RESPALDOS (Principal)
+         ====================================================== 
+         Muestra opciones para gestionar respaldos:
+         - Generar un respaldo ahora
+         - Configurar respaldos automatizados (abre otro modal)
+    --}}
     <div id="modalRespaldos" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>{{ __('messages.modal_backups_title') }}</h3>
                 <span class="modal-close" id="closeModalRespaldos">&times;</span>
             </div>
-            
-            
             <div class="modal-body">
                 <form action="/respaldo" method="POST">
                     @csrf
@@ -143,10 +209,17 @@
                 </form>
                 <button style="margin: 4px 4px;" class="btn-guardar" id="btnRespaldosAuto">Configurar Respaldos Automatizados</button>
             </div>
-
         </div>
     </div>
 
+    {{-- ======================================================
+         MODAL - CONFIGURAR RESPALDOS AUTOMATIZADOS
+         ====================================================== 
+         Permite programar respaldos automáticos con:
+         - Fecha de inicio
+         - Intervalo de tiempo (segundos, minutos, horas, días)
+         - Botones para guardar, reiniciar o regresar
+    --}}
     <div id="modalRespaldosAuto" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -155,35 +228,81 @@
             </div>
             <div class="modal-body">
                 <h2>Datos de los Respaldos</h2>
-                <p>Estado del Respaldo Automatico: {{ 'Inexistente' }}</p>
-                <p>Fecha de Inicio de Respaldo: {{ 'Ninguno - Sin Programar' }}</p>
-                <p>Ultimo Respaldo Realizado: {{ 'Ninguno' }}</p>
-                <p>Fecha para el próximo Respaldo: {{ 'Ninguno' }}</p>
+                
+                <div class="info-text">
+                    <strong>Estado del Respaldo Automatico:</strong>
+                    <span class="valor">Inexistente</span>
+                </div>
+                <div class="info-text">
+                    <strong>Fecha de Inicio de Respaldo:</strong>
+                    <span class="valor">Ninguno - Sin Programar</span>
+                </div>
+                <div class="info-text">
+                    <strong>Ultimo Respaldo Realizado:</strong>
+                    <span class="valor">Ninguno</span>
+                </div>
+                <div class="info-text">
+                    <strong>Fecha para el próximo Respaldo:</strong>
+                    <span class="valor">Ninguno</span>
+                </div>
+
                 <br>
                 <h2>Configurar Horario de Respaldos</h2>
-                <label for="">Fecha de Inicio: </label><input type="date" id="fechaIniciarRespaldos" required min="{{ date("Y-m-d") }}"><br>
-                <p>Horario para los Próximos Respaldos:</p>
-                <label>Segundos: </label><input type="number" min="0" max="59" value="0" id="tiempoSegundosSigRespaldo" required>
-                <label>Minutos: </label><input type="number" min="0" max="59" value="0" id="tiempoMinutosSigRespaldo" required>
-                <label>Horas: </label><input type="number" min="0" max="23" value="0" id="tiempoHorasSigRespaldo" required>
-                <label>Días: </label><input type="number" min="0" max="31" value="1" id="tiempoDiasSigRespaldo" required>
-            </div>
+                
+                <div class="config-grid">
+                    <div class="campo-fecha">
+                        <label>Fecha de Inicio:</label>
+                        <input type="date" id="fechaIniciarRespaldos" required min="{{ date('Y-m-d') }}">
+                    </div>
 
+                    <div class="subtitle">Horario para los Próximos Respaldos:</div>
+
+                    <div class="campo">
+                        <label>Segundos:</label>
+                        <input type="number" min="0" max="59" value="0" id="tiempoSegundosSigRespaldo" required>
+                    </div>
+                    <div class="campo">
+                        <label>Minutos:</label>
+                        <input type="number" min="0" max="59" value="0" id="tiempoMinutosSigRespaldo" required>
+                    </div>
+                    <div class="campo">
+                        <label>Horas:</label>
+                        <input type="number" min="0" max="23" value="0" id="tiempoHorasSigRespaldo" required>
+                    </div>
+                    <div class="campo">
+                        <label>Días:</label>
+                        <input type="number" min="0" max="31" value="1" id="tiempoDiasSigRespaldo" required>
+                    </div>
+                </div>
+            </div>
             <div class="modal-footer">
                 <button class="btn-eliminar" id="btnRespaldosBorrarAutoDum">Reiniciar Horario de los Respaldos</button>
                 <button class="btn-guardar" id="btnRespaldosGuardarIniAuto">Guardar y Iniciar Respaldo</button>
-                <button class="btn-guardar" id="btnRespaldosMainRegreso">Regresar</button>
+                <button class="btn-guardar" id="btnRespaldosMainRegreso">
+                    <img src="{{ asset('img/flecha.png') }}" alt="Regresar" class="btn-icono" style="width: 16px; height: 16px; filter: brightness(0) invert(1);">
+                    Regresar
+                </button>
             </div>
-
         </div>
     </div>
 @endsection
 
+{{-- SCRIPTS ADICIONALES --}}
 @push('scripts')
 <script>
-    //sección donde se maneja cosas de frontend del HTML y CSS (Modales)
+    {{-- 
+        FUNCIONALIDAD JAVASCRIPT:
+        1. Modal Agregar Carrera (abrir/cerrar)
+        2. Modal Respaldos (abrir/cerrar)
+        3. Modal Respaldos Automatizados (abrir/cerrar)
+        4. Modal Lista Global de Alumnos (abrir/cerrar)
+        5. Filtro de búsqueda en la tabla de alumnos
+        6. Cerrar modales al hacer clic fuera
+    --}}
+
     document.addEventListener('DOMContentLoaded', function() {
-        // Modal Agregar Carrera
+        
+        {{-- 1. MODAL AGREGAR CARRERA --}}
         const modalCarrera = document.getElementById('modalAgregarCarrera');
         const btnAgregar = document.getElementById('btnAgregarCarrera');
         const closeModalCarrera = document.getElementById('closeModalCarrera');
@@ -203,14 +322,12 @@
 
         if (closeModalCarrera) closeModalCarrera.onclick = cerrarModalCarrera;
 
-        //modal respaldos base
+        {{-- 2. MODAL RESPALDOS --}}
         const btnRespaldos = document.getElementById('btnRespaldos');
         const btnRespaldosAuto = document.getElementById('btnRespaldosAuto');
-        const btonCerrarRespaldos= document.getElementById('closeModalRespaldos');
+        const btonCerrarRespaldos = document.getElementById('closeModalRespaldos');
         const modalRespaldos = document.getElementById('modalRespaldos');
-
         const modalRespaldosAuto = document.getElementById('modalRespaldosAuto');
-
 
         if (btnRespaldos) {
             btnRespaldos.onclick = function() {
@@ -228,10 +345,9 @@
         }
 
         if (btonCerrarRespaldos) btonCerrarRespaldos.onclick = cerrarModalRespaldos;
-        
-        if(btnRespaldosAuto) btnRespaldosAuto.onclick = abrirModalRespaldosAuto
+        if (btnRespaldosAuto) btnRespaldosAuto.onclick = abrirModalRespaldosAuto;
 
-        //modal respaldos automatizados
+        {{-- 3. MODAL RESPALDOS AUTOMATIZADOS --}}
         const closeModalRespaldosAuto = document.getElementById('closeModalRespaldosAuto');
         const btnRespaldosMainRegreso = document.getElementById('btnRespaldosMainRegreso');
 
@@ -247,7 +363,7 @@
         if (closeModalRespaldosAuto) closeModalRespaldosAuto.onclick = cerrarModalRespaldosAuto;
         if (btnRespaldosMainRegreso) btnRespaldosMainRegreso.onclick = regresarModalRespaldos;
 
-        // Modal Lista Global de Alumnos 
+        {{-- 4. MODAL LISTA GLOBAL DE ALUMNOS --}}
         const modalListaGlobal = document.getElementById('modalListaGlobal');
         const btnListaGlobal = document.getElementById('btnListaGlobal');
         const closeModalListaGlobal = document.getElementById('closeModalListaGlobal');
@@ -264,7 +380,7 @@
 
         if (closeModalListaGlobal) closeModalListaGlobal.onclick = cerrarModalListaGlobal;
 
-        // Cerrar modales al hacer clic fuera
+        {{-- 6. CERRAR MODALES AL HACER CLIC FUERA --}}
         window.onclick = function(e) {
             if (e.target === modalCarrera) cerrarModalCarrera();
             if (e.target === modalListaGlobal) cerrarModalListaGlobal();
@@ -272,7 +388,7 @@
             if (e.target === modalRespaldosAuto) cerrarModalRespaldosAuto();
         };
 
-        // Filtro dentro del modal de lista global
+        {{-- 5. FILTRO DE BÚSQUEDA EN TABLA --}}
         const inputBusquedaModal = document.getElementById('busquedaModal');
         if (inputBusquedaModal) {
             inputBusquedaModal.addEventListener('input', function() {
