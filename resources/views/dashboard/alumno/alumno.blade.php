@@ -87,105 +87,61 @@
              ====================================================== --}}
         <div class="tablas-contenedor">
             
-            {{-- ==================================================
-                 TABLA DE MATERIAS
-                 ================================================== 
-                 Muestra las materias que el alumno está cursando
-                 y el docente que las imparte.
-                 
-                 ESTRUCTURA DE LA TABLA:
-                 - Header (azul oscuro): "Materia" y "Docente"
-                 - Cuerpo: Filas con los datos (actualmente vacías)
-                 
-                 NOTA: Los datos se llenarán dinámicamente desde
-                 el controlador con un @foreach
-            --}}
-            <div class="materias-titulo">
-                <h3>{{ __('messages.title_my_subjects') }}</h3>
+            @php
+                $diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+            @endphp
+
+            <div>
+                <h2>Horario de Clases</h2>
+
+                {{-- Información general del alumno --}}
                 @if($grupo)
-                    <span>Grupo: {{ $grupo->nombre }} ({{ $grupo->grado }})</span>
+                    <p><strong>Grupo:</strong> {{ $grupo->nombre }}</p>
                 @endif
-            </div>
-            <div class="tabla-materias">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>{{ __('messages.th_subject') }}</th>
-                            <th>{{ __('messages.th_teacher') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($materias as $materia)
-                            <tr>
-                                <td>{{ $materia->nombre }}</td>
-                                <td>{{ $materia->docente }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="2">No tienes materias asignadas.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
 
-            {{-- ==================================================
-                 TABLA DE HORARIO
-                 ================================================== 
-                 Muestra los días de la semana con el horario de clases.
-                 
-                 ESTRUCTURA DE LA TABLA:
-                 - Header: "Día" y "Horario"
-                 - Cuerpo: Lunes a Domingo
-                 - Sábado y Domingo: Tienen clase "dia-bloqueado" 
-                 
-                 NOTA: Los horarios reales se llenarán desde el controlador.
-            --}}
-            <div class="horario-titulo">
-                <h3>{{ __('messages.title_my_schedule') }}</h3>
-            </div>
-            <div class="tabla-horario">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>{{ __('messages.th_day') }}</th>
-                            <th>{{ __('messages.th_schedule') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @php
-                            $diasSemana = [
-                                'Lunes' => __('messages.day_monday'),
-                                'Martes' => __('messages.day_tuesday'),
-                                'Miércoles' => __('messages.day_wednesday'),
-                                'Jueves' => __('messages.day_thursday'),
-                                'Viernes' => __('messages.day_friday')
-                            ];
-                        @endphp
+                {{-- @if($carrera)
+                    <p><strong>Carrera:</strong> {{ $carrera->nombre }}</p>
+                @endif  no sé si mostrarlo o no--}}
 
-                        @foreach($diasSemana as $diaNombre => $diaTraduccion)
-                            <tr>
-                                <td>{{ $diaTraduccion }}</td>
-                                <td>
-                                    @if(isset($horarios[$diaNombre]))
-                                        @foreach($horarios[$diaNombre] as $clase)
-                                            <div class="clase-item">
-                                                <strong>{{ $clase->materia->nombre }}</strong><br>
-                                                <small>{{ \Carbon\Carbon::parse($clase->hora_inicio)->format('H:i') }} - {{ \Carbon\Carbon::parse($clase->hora_fin)->format('H:i') }} | {{ $clase->aula }}</small>
-                                            </div>
-                                        @endforeach
-                                    @else
-                                        <span class="sin-clase">Sin clases</span>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
-                        
-                        {{-- Fines de semana bloqueados como ya los tenías --}}
-                        <tr><td>{{ __('messages.day_saturday') }}</td><td class="dia-bloqueado">{{ __('messages.no_classes') }}</td></tr>
-                        <tr><td>{{ __('messages.day_sunday') }}</td><td class="dia-bloqueado">{{ __('messages.no_classes') }}</td></tr>
-                    </tbody>
-                </table>
+                <hr>
+
+                {{-- Tablas de horarios por día --}}
+                @foreach($diasSemana as $dia)
+                    <section>
+                        <h3>{{ $dia }}</h3>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Hora</th>
+                                    <th>Materia</th>
+                                    <th>Docente</th>
+                                    <th>Aula</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($horarios->get($dia, []) as $clase)
+                                    <tr>
+                                        <td>
+                                            {{ \Carbon\Carbon::parse($clase->hora_inicio)->format('H:i') }} - 
+                                            {{ \Carbon\Carbon::parse($clase->hora_fin)->format('H:i') }}
+                                        </td>
+                                        <td>{{ $clase->materia->nombre }}</td>
+                                        <td>
+                                            {{ $clase->maestro->user->name }} {{ $clase->maestro->user->apellido }}
+                                        </td>
+                                        <td>{{ $clase->aula }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4">Sin clases programadas</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </section>
+                    <br>
+                @endforeach
             </div>
         </div>
     </div>

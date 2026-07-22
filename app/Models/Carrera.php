@@ -14,7 +14,7 @@ class Carrera extends Model
     
     protected $fillable = ['nombre', 'clave', 'logo'];
     
-    public function alumnos(): HasOne
+    public function alumno(): HasOne
     {
         return $this->hasOne(Alumno::class);
     }

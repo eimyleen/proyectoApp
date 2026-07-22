@@ -279,7 +279,11 @@
         Las vistas hijas pueden agregar JavaScript extra con:
         @push('scripts') ... @endpush
     --}}
-    @vite(['resources/js/app.js'])
+    {{-- @vite(['resources/js/app.js']) 
+
+    Me da error esa linea por no tener node y npm instalado, lo cual no haré ni deberian por las vulnerabilidades que hay, por lo tanto, de momento es mejor trabajar de la manera tradicional, con las etiquetas script.
+
+     --}}
     @stack('scripts')
 </body>
 </html>
