@@ -5,21 +5,27 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Alumno;
 use App\Models\Materia;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Carrera extends Model
 {
-    protected $fillable = ['nombre', 'clave', 'logo'];
     protected  $table = 'carreras';
     
-    public function alumnos() {
+    protected $fillable = ['nombre', 'clave', 'logo'];
+    
+    public function alumnos(): HasOne
+    {
         return $this->hasOne(Alumno::class);
     }
 
-    public function materias() {
+    public function materias(): HasMany
+    {
         return $this->hasMany(Materia::class);
     }
 
-    public function grupos() {
+    public function grupos(): HasMany
+    {
         return $this->hasMany(Grupo::class);
     }
 }
