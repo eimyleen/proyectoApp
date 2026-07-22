@@ -11,12 +11,15 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Maestro;
 use App\Models\Alumno;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+    
+    protected $table = 'users';
 
     protected $fillable = [
         'name',
@@ -27,13 +30,13 @@ class User extends Authenticatable
         'foto',
     ];
 
-    public function maestro()
+    public function maestro(): HasOne
     {
         // Un usuario tiene un registro de maestro
         return $this->hasOne(Maestro::class);
     }
 
-    public function alumno()
+    public function alumno(): HasOne
     {
         return $this->hasOne(Alumno::class);
     }
