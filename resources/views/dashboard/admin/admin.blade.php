@@ -179,7 +179,7 @@
                                     <td>{{ $alumno->user?->name }}</td>
                                     <td>{{ $alumno->user?->apellido }}</td>
                                     <td>{{ $alumno->carrera?->nombre }}</td>
-                                    <td>{{ $alumno->grupo }}</td>
+                                    <td>{{ $alumno->grupos->first()?->nombre ?? 'No Asignado' }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
