@@ -16,6 +16,9 @@ return new class extends Migration
             $table->string('nombre');
             $table->foreignId('carrera_id')->constrained('carreras')->onDelete('cascade');
             $table->timestamps();
+
+            // Restriccion que evita duplicidad de materias
+            $table->unique(['nombre', 'carrera_id'], 'materia_carrera_unica');
         });
     }
 
