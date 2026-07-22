@@ -2,7 +2,7 @@
    DASHBOARD ALUMNO - ESTILOS PRINCIPALES
    ============================================================
 
-   ============================================================
+   /* ============================================================
    ÍNDICE DE SECCIONES
    ============================================================
 
@@ -17,6 +17,7 @@
    9.   EXPEDIENTE - DOCUMENTOS
    10.  BOTONES CON ICONO
    11.  RESPONSIVE
+   12.  INFORMACIÓN DEL GRUPO               
 
    ============================================================ */
 
@@ -738,4 +739,41 @@
         width: 0.875rem;
         height: 0.875rem;
     }
+}
+
+/* ============================================================
+   12. INFORMACIÓN DEL GRUPO
+   ============================================================ */
+
+/* Contenedor del grupo */
+.grupo-info {
+    background: #f8fafc;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    margin-bottom: 1.5rem;  /* ← Aumentamos el margen inferior para separar */
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    border-left: 0.25rem solid #1e293b;
+    box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.06);
+}
+
+/* Etiqueta "Grupo:" */
+.grupo-etiqueta {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Valor del grupo (ej: "TI-92") */
+.grupo-valor {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1e293b;
+    background: #ffffff;
+    padding: 0.2rem 0.75rem;
+    border-radius: 0.25rem;
+    border: 1px solid #e2e8f0;
 }

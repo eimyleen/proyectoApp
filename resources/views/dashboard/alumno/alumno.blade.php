@@ -38,6 +38,7 @@
      - Botones laterales
      - Tablas (materias y horario)
      - Diseño responsive
+     - Información del grupo
 --}}
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/dashboard_alumno.css') }}">
@@ -92,53 +93,79 @@
             @endphp
 
             <div>
-                <h2>Horario de Clases</h2>
+                {{-- Título principal con margen inferior para separar del grupo --}}
+                <h2 style="margin-bottom: 1.5rem;">Horario de Clases</h2>
 
-                {{-- Información general del alumno --}}
+                {{-- 
+                    INFORMACIÓN DEL GRUPO
+                    ====================================================== 
+                    Muestra el grupo del alumno en un contenedor estilizado
+                    con las clases 'grupo-info', 'grupo-etiqueta' y 'grupo-valor'
+                    definidas en dashboard_alumno.css
+                --}}
                 @if($grupo)
-                    <p><strong>Grupo:</strong> {{ $grupo->nombre }}</p>
+                    <div class="grupo-info">
+                        <span class="grupo-etiqueta">Grupo:</span>
+                        <span class="grupo-valor">{{ $grupo->nombre }}</span>
+                    </div>
                 @endif
 
                 {{-- @if($carrera)
                     <p><strong>Carrera:</strong> {{ $carrera->nombre }}</p>
                 @endif  no sé si mostrarlo o no--}}
 
-                <hr>
+                {{-- Eliminamos el <hr> que estaba aquí --}}
 
-                {{-- Tablas de horarios por día --}}
+                {{-- 
+                    TABLAS DE HORARIOS POR DÍA
+                    ====================================================== 
+                    Cada día de la semana tiene su propia tabla envuelta
+                    en un contenedor con la clase 'tabla-horario' para
+                    aplicar los estilos definidos en dashboard_alumno.css.
+                    Esta clase proporciona:
+                    - Fondo blanco
+                    - Bordes redondeados
+                    - Sombra suave
+                    - Estilos de encabezado (fondo oscuro, texto blanco)
+                    - Estilos de celdas (padding, bordes, hover)
+                --}}
                 @foreach($diasSemana as $dia)
                     <section>
                         <h3>{{ $dia }}</h3>
 
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Hora</th>
-                                    <th>Materia</th>
-                                    <th>Docente</th>
-                                    <th>Aula</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($horarios->get($dia, []) as $clase)
+                        {{-- Contenedor con la clase 'tabla-horario' para aplicar los estilos CSS --}}
+                        <div class="tabla-horario">
+                            <table>
+                                <thead>
                                     <tr>
-                                        <td>
-                                            {{ \Carbon\Carbon::parse($clase->hora_inicio)->format('H:i') }} - 
-                                            {{ \Carbon\Carbon::parse($clase->hora_fin)->format('H:i') }}
-                                        </td>
-                                        <td>{{ $clase->materia->nombre }}</td>
-                                        <td>
-                                            {{ $clase->maestro->user->name }} {{ $clase->maestro->user->apellido }}
-                                        </td>
-                                        <td>{{ $clase->aula }}</td>
+                                        <th>Hora</th>
+                                        <th>Materia</th>
+                                        <th>Docente</th>
+                                        <th>Aula</th>
                                     </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="4">Sin clases programadas</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @forelse($horarios->get($dia, []) as $clase)
+                                        <tr>
+                                            <td>
+                                                {{ \Carbon\Carbon::parse($clase->hora_inicio)->format('H:i') }} - 
+                                                {{ \Carbon\Carbon::parse($clase->hora_fin)->format('H:i') }}
+                                            </td>
+                                            <td>{{ $clase->materia->nombre }}</td>
+                                            <td>
+                                                {{ $clase->maestro->user->name }} {{ $clase->maestro->user->apellido }}
+                                            </td>
+                                            <td>{{ $clase->aula }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="4">Sin clases programadas</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                        {{-- Fin del contenedor tabla-horario --}}
                     </section>
                     <br>
                 @endforeach
