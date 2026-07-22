@@ -49,15 +49,6 @@ class BackupRun extends Command
                 $ejecutar = now()->diffInSeconds($config->ultimo_backup, true) >= $intervalo;
             }
 
-            \Log::info([
-                'intervalo' => $intervalo,
-                'ultimo_backup' => $config->ultimo_backup,
-                'diff' => $config->ultimo_backup
-                    ? now()->diffInSeconds($config->ultimo_backup)
-                    : null,
-                'ejecutar' => $ejecutar
-            ]);
-
             if (!$ejecutar) {
                 $this->info('Aún no toca ejecutar backup');
                 \Log::info('Aún no toca ejecutar backup');
