@@ -155,26 +155,32 @@
             </div>
             <div class="modal-body">
                 <h2>Datos de los Respaldos</h2>
-                <p>Estado del Respaldo Automatico: {{ 'Inexistente' }}</p>
+                <p>Estado del Respaldo Automatico: {{ $configBackAuto?->activo ? 'Activo' : 'Inactivo' }}</p>
                 <p>Fecha de Inicio de Respaldo: {{ 'Ninguno - Sin Programar' }}</p>
-                <p>Ultimo Respaldo Realizado: {{ 'Ninguno' }}</p>
+                <p>Ultimo Respaldo Realizado: {{ $configBackAuto?->ultimo_backup ?? 'Ninguno' }}</p>
                 <p>Fecha para el próximo Respaldo: {{ 'Ninguno' }}</p>
                 <br>
                 <h2>Configurar Horario de Respaldos</h2>
-                <label for="">Fecha de Inicio: </label><input type="date" id="fechaIniciarRespaldos" required min="{{ date("Y-m-d") }}"><br>
-                <p>Horario para los Próximos Respaldos:</p>
-                <label>Segundos: </label><input type="number" min="0" max="59" value="0" id="tiempoSegundosSigRespaldo" required>
-                <label>Minutos: </label><input type="number" min="0" max="59" value="0" id="tiempoMinutosSigRespaldo" required>
-                <label>Horas: </label><input type="number" min="0" max="23" value="0" id="tiempoHorasSigRespaldo" required>
-                <label>Días: </label><input type="number" min="0" max="31" value="1" id="tiempoDiasSigRespaldo" required>
+                <form action="/respaldoAuto" method="post">
+                    @csrf
+                    <label for="fechaIniciarRespaldos">Fecha de Inicio: </label><input type="date" id="fechaIniciarRespaldos" name="fecha_inicio" required min="{{ date("Y-m-d") }}"><br>
+                    <p>Horario para los Próximos Respaldos:</p>
+                    <label for="permitirTiemposCheck">Permitir tiempo exacto: </label><input type="checkbox" id="permitirTiemposCheck">
+                    <br>
+                    <label for="tiempoMinutosSigRespaldo" id="tiempoMinutosSigRespaldoLab">Minutos: <input type="number" min="1" max="59" value="0" id="tiempoMinutosSigRespaldo" name="minutos" required></label>
+                    <label for="tiempoHorasSigRespaldo" id="tiempoHorasSigRespaldoLab">Horas: <input type="number" min="0" max="23" value="0" id="tiempoHorasSigRespaldo" name="horas" required></label>
+                    <label for="tiempoDiasSigRespaldo" id="tiempoDiasSigRespaldoLab">Días: <input type="number" min="1" max="31" value="1" id="tiempoDiasSigRespaldo" name="dias" required></label>
+                    <br><br>
+                    <button type="submit" class="btn-guardar" id="btnRespaldosGuardarIniAuto">Guardar y Iniciar Respaldo</button>
+                </form>
             </div>
-
             <div class="modal-footer">
-                <button class="btn-eliminar" id="btnRespaldosBorrarAutoDum">Reiniciar Horario de los Respaldos</button>
-                <button class="btn-guardar" id="btnRespaldosGuardarIniAuto">Guardar y Iniciar Respaldo</button>
+                <form action="/quitarRespaldoAuto" method="post">
+                    @csrf
+                    <button type="submit" class="btn-eliminar" id="btnRespaldosBorrarAutoDum">Reiniciar Horario de los Respaldos</button>
+                </form>
                 <button class="btn-guardar" id="btnRespaldosMainRegreso">Regresar</button>
             </div>
-
         </div>
     </div>
 @endsection
@@ -246,6 +252,51 @@
 
         if (closeModalRespaldosAuto) closeModalRespaldosAuto.onclick = cerrarModalRespaldosAuto;
         if (btnRespaldosMainRegreso) btnRespaldosMainRegreso.onclick = regresarModalRespaldos;
+
+        //manejar cosas del modal anterior
+        const permitirTiemposCheck = document.getElementById('permitirTiemposCheck');
+
+        const tiempoMinutosSigRespaldoLab = document.getElementById('tiempoMinutosSigRespaldoLab');
+        const tiempoMinutosSigRespaldo = document.getElementById('tiempoMinutosSigRespaldo');
+        const tiempoHorasSigRespaldoLab = document.getElementById('tiempoHorasSigRespaldoLab');
+        const tiempoHorasSigRespaldo = document.getElementById('tiempoHorasSigRespaldo');
+        const tiempoDiasSigRespaldoLab = document.getElementById('tiempoDiasSigRespaldoLab');
+        const tiempoDiasSigRespaldo = document.getElementById('tiempoDiasSigRespaldo');
+
+        permitirTiemposCheck.onclick = function(e) {
+            if(e.srcElement.checked) {
+                tiempoMinutosSigRespaldoLab.style.display = 'inline';
+                tiempoHorasSigRespaldoLab.style.display = 'inline';
+
+                tiempoMinutosSigRespaldo.min = 1;
+                tiempoMinutosSigRespaldo.value = 1;
+                tiempoDiasSigRespaldo.min = 0;
+                tiempoDiasSigRespaldo.value = 0;
+            } else {
+                tiempoMinutosSigRespaldoLab.style.display = 'none';
+                tiempoHorasSigRespaldoLab.style.display = 'none';
+
+                tiempoMinutosSigRespaldo.min = 0;
+                tiempoMinutosSigRespaldo.value = 0;
+                tiempoHorasSigRespaldo.value = 0;
+
+                if(tiempoDiasSigRespaldo.value == 0) {
+                    tiempoDiasSigRespaldo.value = 1;
+                }
+
+                tiempoDiasSigRespaldo.min = 1;
+            }
+        };
+
+        if(permitirTiemposCheck.checked) {
+            tiempoMinutosSigRespaldoLab.style.display = 'inline';
+            tiempoHorasSigRespaldoLab.style.display = 'inline';
+        } else {
+            tiempoMinutosSigRespaldoLab.style.display = 'none';
+            tiempoHorasSigRespaldoLab.style.display = 'none';
+        }
+
+        
 
         // Modal Lista Global de Alumnos 
         const modalListaGlobal = document.getElementById('modalListaGlobal');

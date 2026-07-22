@@ -78,7 +78,17 @@ Route::middleware(['auth'])->group(function () {
         AdminCarreraController::class, 'descargarAlumnosPDF'
     ])->middleware(['auth', 'role:admin'])->name('admin.alumnos.pdf');
 
-    Route::post('/respaldo', [AdminCarreraController::class, 'handleBackup'])->middleware(['auth', 'role:admin']);
+    Route::post('/respaldo', [
+        AdminCarreraController::class, 'manejarBackupManual'
+    ])->middleware(['auth', 'role:admin']);
+
+    Route::post('/respaldoAuto', [
+        AdminCarreraController::class, 'guardarConfiguracionBackupAuto'
+    ])->middleware(['auth', 'role:admin']);
+
+    Route::post('/quitarRespaldoAuto', [
+        AdminCarreraController::class, 'quitarConfiguracionBackupAuto'
+    ])->middleware(['auth', 'role:admin']);
 
     // ----- Rutas referentes a la gestión de usuarios -----
 
