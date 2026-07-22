@@ -148,7 +148,7 @@ class UsuariosSeeder extends Seeder
 
         $grupo = Grupo::create([
             'nombre' => 'TI-92',
-            'grado' => 'Noveno',
+            'grado' => '9',
             'carrera_id' => $carrera->id,
         ]);
 

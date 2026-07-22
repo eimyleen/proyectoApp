@@ -16,6 +16,9 @@ return new class extends Migration
             $table->foreignId('maestro_id')->constrained('maestros')->onDelete('cascade'); 
             $table->foreignId('carrera_id')->constrained('carreras')->onDelete('cascade');
             $table->timestamps();
+
+            // Restriccion que evita duplicidad de registro
+            $table->unique(['maestro_id', 'carrera_id'], 'maestro_carrera_unico');
         });
     }
 

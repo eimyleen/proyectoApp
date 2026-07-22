@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('carreras', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->string('clave');
+            $table->string('clave', 10);
             $table->string('logo')->nullable();
             $table->timestamps();
         });
