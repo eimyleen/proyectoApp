@@ -279,6 +279,7 @@
         Las vistas hijas pueden agregar JavaScript extra con:
         @push('scripts') ... @endpush
     --}}
+    @vite(['resources/js/app.js'])
     @stack('scripts')
 </body>
 </html>
