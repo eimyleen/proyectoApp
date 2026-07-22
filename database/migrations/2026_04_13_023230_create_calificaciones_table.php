@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('calificaciones', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('alumno_id')->constrained('alumnos')->onDelete('cascade');
-            $table->foreignId('materia_id')->constrained()->onDelete('cascade');
             $table->string('periodo');
             $table->decimal('calificacion', 4, 2);
+            $table->foreignId('alumno_id')->constrained('alumnos')->onDelete('cascade');
+            $table->foreignId('materia_id')->constrained()->onDelete('cascade');
             $table->timestamps();
 
             // Restricción que evita la combinacion exacta de las 3 cosas

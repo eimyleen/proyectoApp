@@ -7,17 +7,36 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Horario extends Model
 {
+    protected $table = 'horarios';
+
     protected $fillable = [
-        'grupo', 
         'dia', 
         'hora_inicio', 
         'hora_fin', 
-        'materia_id', 
-        'aula'
+        'aula',
+        'grupo_id',
+        'maestro_id',
+        'materia_id'
     ];
 
     /**
-     * Relación con la materia a la que pertenece este horario.
+     * Relación con el grupo a la que pertenece el horario.
+     */
+    public function grupo(): BelongsTo
+    {
+        return $this->belongsTo(Grupo::class);
+    }
+
+    /**
+     * Relación con la materia a la que pertenece el horario.
+     */
+    public function maestro(): BelongsTo
+    {
+        return $this->belongsTo(Maestro::class);
+    }
+
+    /**
+     * Relación con la materia a la que pertenece el horario.
      */
     public function materia(): BelongsTo
     {

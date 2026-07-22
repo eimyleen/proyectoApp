@@ -4,16 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Jobs\ProcessDBBackup;
 use App\Jobs\RunBackupJob;
+use App\Models\ConfiguracionBackupAuto;
 use App\Models\Log;
 use App\Models\Maestro;
 use App\Models\Grupo;
 use App\Models\User;
-use Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use App\Models\Carrera;
 use App\Models\Alumno;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class AdminCarreraController extends Controller {
@@ -22,7 +22,8 @@ class AdminCarreraController extends Controller {
         $carreras = Carrera::all();
         // Y Alumnos con el nombre de su carrera y nombre de usuario*
         $alumnos = Alumno::with(['carrera:id,nombre','user:id,name'])->get();
-        return view('dashboard.admin.admin', compact('carreras', 'alumnos'));
+        $configBackAuto = ConfiguracionBackupAuto::first();
+        return view('dashboard.admin.admin', compact('carreras', 'alumnos', 'configBackAuto'));
     }
     
     public function show($id, Request $req) {
@@ -133,11 +134,80 @@ class AdminCarreraController extends Controller {
         return view('dashboard.admin.admin_maestro_perfil', compact('maestro'));
     }
 
-    public function handleBackup() {
-        $user_id = Auth::id();
-        Log::registrar('Respaldo de BD', 'El administrador genero un respaldo manual.');
-        ProcessDbBackup::dispatch($user_id);
-        return redirect()->route("admin.index");
+     public function manejarBackupManual()
+    {
+        DB::beginTransaction();
+        try {
+            Log::registrar('Respaldo de BD', 'El administrador genero un respaldo manual.');
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+
+        $db = config('database.connections.mysql.database');
+        $user = config('database.connections.mysql.username');
+        $pass = config('database.connections.mysql.password');
+        $host = config('database.connections.mysql.host');
+
+        $fileName = 'backup_manual_' . now()->format('Y-m-d_H-i-s') . '.sql';
+        $path = storage_path('app/backups/' . $fileName);
+
+        // Crear carpeta si no existe
+        if (!file_exists(storage_path('app/backups'))) {
+            mkdir(storage_path('app/backups'), 0755, true);
+        }
+
+        // Comando mysqldump
+        $command = sprintf(
+            'mysqldump --skip-ssl --user=%s --password=%s --host=%s %s > %s 2>&1',
+            escapeshellarg($user),
+            escapeshellarg($pass),
+            escapeshellarg($host),
+            escapeshellarg($db),
+            escapeshellarg($path)
+        );
+
+        exec($command, $output, $result);
+
+        if ($result !== 0) {
+            return back()->with('error', 'Error al generar backup');
+        }
+
+        return back()->with('success', 'Backup generado correctamente');
+    }
+
+    public function guardarConfiguracionBackupAuto()
+    {
+        $data = request()->validate([
+            'fecha_inicio' => 'required|date',
+            'minutos'      => 'required|integer|min:0|max:59',
+            'horas'        => 'required|integer|min:0|max:23',
+            'dias'         => 'required|integer|min:0|max:31',
+        ]);
+
+        ConfiguracionBackupAuto::updateOrCreate(['id' => 1], [
+            'activo' => true,
+            'fecha_inicio' => $data['fecha_inicio'],
+            'intervalo_minutos' => $data['minutos'],
+            'intervalo_horas' => $data['horas'],
+            'intervalo_dias' => $data['dias']
+        ]);
+
+        return back();
+    }
+
+    public function quitarConfiguracionBackupAuto() 
+    {
+        $back = ConfiguracionBackupAuto::first();
+
+        if($back !== null) {
+            $back::updateOrCreate(
+                ['id' => 1],
+                ['activo' => false, 'ultimo_backup' => null]
+            );
+        }
+        return back();
     }
 
     public function descargarAlumnosPDF()

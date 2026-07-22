@@ -179,7 +179,7 @@
                                     <td>{{ $alumno->user?->name }}</td>
                                     <td>{{ $alumno->user?->apellido }}</td>
                                     <td>{{ $alumno->carrera?->nombre }}</td>
-                                    <td>{{ $alumno->grupo }}</td>
+                                    <td>{{ $alumno->grupos->first()?->nombre ?? 'No Asignado' }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -217,7 +217,7 @@
          ====================================================== 
          Permite programar respaldos automáticos con:
          - Fecha de inicio
-         - Intervalo de tiempo (segundos, minutos, horas, días)
+         - Intervalo de tiempo (minutos, horas, días)
          - Botones para guardar, reiniciar o regresar
     --}}
     <div id="modalRespaldosAuto" class="modal">
@@ -231,15 +231,15 @@
                 
                 <div class="info-text">
                     <strong>Estado del Respaldo Automatico:</strong>
-                    <span class="valor">Inexistente</span>
+                    <span class="valor">{{ $configBackAuto?->activo ? 'Activo' : 'Inactivo' }}</span>
                 </div>
                 <div class="info-text">
                     <strong>Fecha de Inicio de Respaldo:</strong>
-                    <span class="valor">Ninguno - Sin Programar</span>
+                    <span class="valor">{{ $configBackAuto->fecha_inicio ?? 'Ninguno - Sin Programar' }}</span>
                 </div>
                 <div class="info-text">
                     <strong>Ultimo Respaldo Realizado:</strong>
-                    <span class="valor">Ninguno</span>
+                    <span class="valor">{{ $configBackAuto->ultimo_backup ?? 'Ninguno' }}</span>
                 </div>
                 <div class="info-text">
                     <strong>Fecha para el próximo Respaldo:</strong>
@@ -247,37 +247,37 @@
                 </div>
 
                 <br>
+
                 <h2>Configurar Horario de Respaldos</h2>
-                
+
                 <div class="config-grid">
-                    <div class="campo-fecha">
-                        <label>Fecha de Inicio:</label>
-                        <input type="date" id="fechaIniciarRespaldos" required min="{{ date('Y-m-d') }}">
-                    </div>
+                    <form action="/respaldoAuto" method="post">
+                        @csrf
+                        <div class="campo-fecha">
+                            <label for="fechaIniciarRespaldos">Fecha de Inicio: </label><input type="date" id="fechaIniciarRespaldos" name="fecha_inicio" required min="{{ date("Y-m-d") }}"><br>
+                        </div>
 
-                    <div class="subtitle">Horario para los Próximos Respaldos:</div>
+                        <div class="subtitle">Horario para los Próximos Respaldos:</div>
 
-                    <div class="campo">
-                        <label>Segundos:</label>
-                        <input type="number" min="0" max="59" value="0" id="tiempoSegundosSigRespaldo" required>
-                    </div>
-                    <div class="campo">
-                        <label>Minutos:</label>
-                        <input type="number" min="0" max="59" value="0" id="tiempoMinutosSigRespaldo" required>
-                    </div>
-                    <div class="campo">
-                        <label>Horas:</label>
-                        <input type="number" min="0" max="23" value="0" id="tiempoHorasSigRespaldo" required>
-                    </div>
-                    <div class="campo">
-                        <label>Días:</label>
-                        <input type="number" min="0" max="31" value="1" id="tiempoDiasSigRespaldo" required>
-                    </div>
+                        <div class="campo">
+                            <label for="permitirTiemposCheck">Permitir tiempo exacto: </label><input type="checkbox" id="permitirTiemposCheck">
+                        </div>
+                        <br>
+                        <div class="campo">
+                            <label for="tiempoMinutosSigRespaldo" id="tiempoMinutosSigRespaldoLab">Minutos: <input type="number" min="1" max="59" value="0" id="tiempoMinutosSigRespaldo" name="minutos" required></label>
+                            <label for="tiempoHorasSigRespaldo" id="tiempoHorasSigRespaldoLab">Horas: <input type="number" min="0" max="23" value="0" id="tiempoHorasSigRespaldo" name="horas" required></label>
+                            <label for="tiempoDiasSigRespaldo" id="tiempoDiasSigRespaldoLab">Días: <input type="number" min="1" max="31" value="1" id="tiempoDiasSigRespaldo" name="dias" required></label>
+                        </div>
+                        <br>
+                        <button type="submit" class="btn-guardar" id="btnRespaldosGuardarIniAuto">Guardar y Iniciar Respaldo</button>
+                    </form>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn-eliminar" id="btnRespaldosBorrarAutoDum">Reiniciar Horario de los Respaldos</button>
-                <button class="btn-guardar" id="btnRespaldosGuardarIniAuto">Guardar y Iniciar Respaldo</button>
+                <form action="/quitarRespaldoAuto" method="post">
+                    @csrf
+                    <button type="submit" class="btn-eliminar" id="btnRespaldosBorrarAutoDum">Reiniciar Horario de los Respaldos</button>
+                </form>
                 <button class="btn-guardar" id="btnRespaldosMainRegreso">
                     <img src="{{ asset('img/flecha.png') }}" alt="Regresar" class="btn-icono" style="width: 16px; height: 16px; filter: brightness(0) invert(1);">
                     Regresar
@@ -363,7 +363,52 @@
         if (closeModalRespaldosAuto) closeModalRespaldosAuto.onclick = cerrarModalRespaldosAuto;
         if (btnRespaldosMainRegreso) btnRespaldosMainRegreso.onclick = regresarModalRespaldos;
 
-        {{-- 4. MODAL LISTA GLOBAL DE ALUMNOS --}}
+        //manejar cosas del modal anterior
+        const permitirTiemposCheck = document.getElementById('permitirTiemposCheck');
+
+        const tiempoMinutosSigRespaldoLab = document.getElementById('tiempoMinutosSigRespaldoLab');
+        const tiempoMinutosSigRespaldo = document.getElementById('tiempoMinutosSigRespaldo');
+        const tiempoHorasSigRespaldoLab = document.getElementById('tiempoHorasSigRespaldoLab');
+        const tiempoHorasSigRespaldo = document.getElementById('tiempoHorasSigRespaldo');
+        const tiempoDiasSigRespaldoLab = document.getElementById('tiempoDiasSigRespaldoLab');
+        const tiempoDiasSigRespaldo = document.getElementById('tiempoDiasSigRespaldo');
+
+        permitirTiemposCheck.onclick = function(e) {
+            if(e.srcElement.checked) {
+                tiempoMinutosSigRespaldoLab.style.display = 'inline';
+                tiempoHorasSigRespaldoLab.style.display = 'inline';
+
+                tiempoMinutosSigRespaldo.min = 1;
+                tiempoMinutosSigRespaldo.value = 1;
+                tiempoDiasSigRespaldo.min = 0;
+                tiempoDiasSigRespaldo.value = 0;
+            } else {
+                tiempoMinutosSigRespaldoLab.style.display = 'none';
+                tiempoHorasSigRespaldoLab.style.display = 'none';
+
+                tiempoMinutosSigRespaldo.min = 0;
+                tiempoMinutosSigRespaldo.value = 0;
+                tiempoHorasSigRespaldo.value = 0;
+
+                if(tiempoDiasSigRespaldo.value == 0) {
+                    tiempoDiasSigRespaldo.value = 1;
+                }
+
+                tiempoDiasSigRespaldo.min = 1;
+            }
+        };
+
+        if(permitirTiemposCheck.checked) {
+            tiempoMinutosSigRespaldoLab.style.display = 'inline';
+            tiempoHorasSigRespaldoLab.style.display = 'inline';
+        } else {
+            tiempoMinutosSigRespaldoLab.style.display = 'none';
+            tiempoHorasSigRespaldoLab.style.display = 'none';
+        }
+
+        
+
+        // Modal Lista Global de Alumnos 
         const modalListaGlobal = document.getElementById('modalListaGlobal');
         const btnListaGlobal = document.getElementById('btnListaGlobal');
         const closeModalListaGlobal = document.getElementById('closeModalListaGlobal');

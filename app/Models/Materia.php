@@ -3,12 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Materia extends Model
 {
-    protected $fillable = ['nombre', 'carrera_id', 'docente'];
+    protected $table = 'materias';
 
-    public function carrera() {
-        return $this->belongsTo(Carrera::Class);
+    protected $fillable = ['nombre', 'carrera_id'];
+
+    /**
+    * Relación con la carrera a la que pertenece la materia.
+    */
+    public function carrera(): BelongsTo
+    {
+        return $this->belongsTo(Carrera::class);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AdminCarreraController;
+use App\Models\ConfiguracionBackupAuto;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 
@@ -7,4 +9,4 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::command("app:data-base-backup-command")->everyFifteenMinutes();
+Schedule::command('app:backup-run')->everyMinute();

@@ -173,6 +173,7 @@ class UsuariosSeeder extends Seeder
             'sexo' => 'M',
             'fecha_nacimiento' => '2005-01-01',
             'telefono' => '3111234567',
+            'carrera_id' => $carrera->id,
         ]);
 
         $alumnoModelo2 = Alumno::create([
@@ -182,6 +183,7 @@ class UsuariosSeeder extends Seeder
             'sexo' => 'M',
             'fecha_nacimiento' => '2004-01-01',
             'telefono' => '3111234527',
+            'carrera_id' => $carrera->id,
         ]);
 
         // ---------- Materias de prueba para la carrera ITIID ----------

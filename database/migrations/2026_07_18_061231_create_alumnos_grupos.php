@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('alumnos_grupos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('alumno_id')->constrained('alumnos')->onDelete('cascade');
-            $table->foreignId('grupo_id')->constrained('grupos')->onDelete('cascade');
             $table->string('periodo');
+            $table->foreignId('grupo_id')->constrained('grupos')->onDelete('cascade');
+            $table->foreignId('alumno_id')->constrained('alumnos')->onDelete('cascade');
             $table->timestamps();
 
             // El alumno solo puede pertenecer a UN grupo por periodo escolar
