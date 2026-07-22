@@ -227,6 +227,7 @@
                 <span class="modal-close" id="closeModalRespaldosAuto">&times;</span>
             </div>
             <div class="modal-body">
+                <h2>Datos de los Respaldos</h2>
                 
                 <div class="info-text">
                     <strong>Estado del Respaldo Automatico:</strong>
@@ -246,35 +247,31 @@
                 </div>
 
                 <br>
+
                 <h2>Configurar Horario de Respaldos</h2>
 
-                <form action="/respaldoAuto" method="post">
-                    @csrf
-                    <div class="config-grid">
+                <div class="config-grid">
+                    <form action="/respaldoAuto" method="post">
+                        @csrf
                         <div class="campo-fecha">
                             <label for="fechaIniciarRespaldos">Fecha de Inicio: </label><input type="date" id="fechaIniciarRespaldos" name="fecha_inicio" required min="{{ date("Y-m-d") }}"><br>
                         </div>
 
                         <div class="subtitle">Horario para los Próximos Respaldos:</div>
 
-                        <label for="permitirTiemposCheck">Permitir tiempo exacto: </label><input type="checkbox" id="permitirTiemposCheck">
-                        
+                        <div class="campo">
+                            <label for="permitirTiemposCheck">Permitir tiempo exacto: </label><input type="checkbox" id="permitirTiemposCheck">
+                        </div>
                         <br>
                         <div class="campo">
                             <label for="tiempoMinutosSigRespaldo" id="tiempoMinutosSigRespaldoLab">Minutos: <input type="number" min="1" max="59" value="0" id="tiempoMinutosSigRespaldo" name="minutos" required></label>
-                        </div>
-
-                        <div class="campo">
                             <label for="tiempoHorasSigRespaldo" id="tiempoHorasSigRespaldoLab">Horas: <input type="number" min="0" max="23" value="0" id="tiempoHorasSigRespaldo" name="horas" required></label>
-                        </div>
-
-                        <div class="campo">
                             <label for="tiempoDiasSigRespaldo" id="tiempoDiasSigRespaldoLab">Días: <input type="number" min="1" max="31" value="1" id="tiempoDiasSigRespaldo" name="dias" required></label>
                         </div>
-                        <br><br>
+                        <br>
                         <button type="submit" class="btn-guardar" id="btnRespaldosGuardarIniAuto">Guardar y Iniciar Respaldo</button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
             <div class="modal-footer">
                 <form action="/quitarRespaldoAuto" method="post">
