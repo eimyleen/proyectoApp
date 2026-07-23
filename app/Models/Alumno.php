@@ -22,6 +22,20 @@ class Alumno extends Model
     ];
 
     /**
+     *  Accesor para completar el sexo 
+     */
+    public function getSexoTextoAttribute()
+    {
+        $sexos = [
+            'M' => 'Masculino',
+            'F' => 'Femenino',
+            'Otro' => 'Otro',
+        ];
+
+        return $sexos[$this->sexo] ?? $this->sexo;
+    }
+
+    /**
      *  Accesor para calcular y obtener la edad del alumno.
      */
     public function getEdadAttribute()

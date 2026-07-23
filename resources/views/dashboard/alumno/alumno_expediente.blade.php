@@ -155,7 +155,7 @@
                     {{-- Sexo --}}
                     <div class="dato-item">
                         <label>{{ __('messages.label_gender') }}</label>
-                        <span class="dato-valor">{{ $alumno->sexo ?? 'N/A' }}</span>
+                        <span class="dato-valor">{{ $alumno->sexo_texto ?? 'N/A' }}</span>
                     </div>
                     
                     {{-- Fecha de nacimiento --}}
