@@ -23,6 +23,9 @@
     {{-- CSRF TOKEN: Necesario para enviar formularios con seguridad --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
+    {{-- SweetAlert: Estilos personalizados de las alertas --}}
+    <link rel="stylesheet" href="{{ asset('css/sweetalert.css') }}">
+
     {{-- FAVICON: Icono que aparece en la pestaña del navegador --}}
     <link rel="shortcut icon" href="{{ asset("img/IconUTNAY.png") }}" type="image/x-icon">
     
@@ -273,17 +276,48 @@
             }
         });
     </script>
-    
+        {{-- 
+        SWEETALERT2
+        Librería externa encargada de crear las ventanas emergentes
+        personalizadas. Se carga primero porque contiene la variable global
+        "Swal", que es utilizada por el archivo sweetalerts.js.
+    --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+    {{-- 
+        SISTEMA DE ALERTAS REUTILIZABLE
+        Archivo propio del proyecto que contiene las funciones de SweetAlert
+        ya configuradas con el diseño y comportamiento definido.
+
+        Aquí se encuentran funciones como:
+        - alertaExito()
+        - alertaInfo()
+        - alertaError()
+        - confirmarEliminacion()
+        - confirmarAccion()
+
+        Se carga después de SweetAlert2 porque necesita utilizar la variable
+        global "Swal" creada por la librería.
+    --}}
+    <script src="{{ asset('js/sweetalerts.js') }}"></script>
+
+
     {{-- 
         SCRIPTS ADICIONALES (STACK)
-        Las vistas hijas pueden agregar JavaScript extra con:
-        @push('scripts') ... @endpush
+        Permite que cada vista hija agregue sus propios scripts sin modificar
+        este layout principal.
+
+        Ejemplo:
+        @push('scripts')
+            <script>
+                alertaExito('Guardado', 'Información actualizada');
+            </script>
+        @endpush
+
+        Laravel colocará esos scripts en este punto después de cargar
+        SweetAlert2 y sweetalerts.js.
     --}}
-    {{-- @vite(['resources/js/app.js']) 
-
-    Me da error esa linea por no tener node y npm instalado, lo cual no haré ni deberian por las vulnerabilidades que hay, por lo tanto, de momento es mejor trabajar de la manera tradicional, con las etiquetas script.
-
-     --}}
     @stack('scripts')
 </body>
 </html>

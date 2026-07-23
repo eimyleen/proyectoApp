@@ -1,0 +1,219 @@
+/* ============================================================
+   SWEETALERT - ESTILOS COMPLETOS
+   ============================================================
+   Colores institucionales:
+   - Verde principal: #00843D
+   - Verde hover: #006B31
+   
+   Estructura del archivo:
+   1. Popup - Base
+   2. Popup - Variantes por tipo (con !important)
+   3. Título
+   4. Texto
+   5. Botones
+   6. Iconos (SweetAlert2 maneja sus propios estilos)
+   7. Actions (Contenedor de botones)
+   8. Responsive
+   ============================================================ */
+
+/* ============================================================
+   1. POPUP - BASE
+   ============================================================ */
+.swal-popup {
+    background: #ffffff;
+    border-radius: 0.75rem;
+    padding: 2rem 1.5rem 1.5rem;
+    box-shadow: 0 1.25rem 3.75rem rgba(0, 0, 0, 0.15);
+    border: none;
+    border-top: 0.25rem solid transparent;
+    width: 28rem;
+    max-width: 90vw;
+    position: relative;
+}
+
+/* ============================================================
+   2. POPUP - VARIANTES POR TIPO (CON !important)
+   ============================================================ */
+.swal-success {
+    border-top-color: #00843D !important;  /* Verde institucional */
+}
+
+.swal-error {
+    border-top-color: #dc3545 !important;  /* Rojo */
+}
+
+.swal-info {
+    border-top-color: #0d6efd !important;  /* Azul */
+}
+
+.swal-warning {
+    border-top-color: #ffc107 !important;  /* Amarillo/Naranja */
+}
+
+/* ============================================================
+   3. TÍTULO
+   ============================================================ */
+.swal-title {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding: 0;
+    letter-spacing: -0.01em;
+}
+
+/* ============================================================
+   4. TEXTO
+   ============================================================ */
+.swal-text {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #475569;
+    line-height: 1.6;
+    text-align: center;
+    padding: 0 0.5rem;
+    margin-top: 0.25rem;
+}
+
+/* ============================================================
+   5. BOTONES
+   ============================================================ */
+.swal-btn-confirm,
+.swal-btn-cancel {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.625rem 1.75rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    min-width: 6.25rem;
+}
+
+/* --- Botón Confirmar (Verde institucional) --- */
+.swal-btn-confirm {
+    background: #00843D;
+    color: #ffffff;
+    box-shadow: 0 0.125rem 0.5rem rgba(0, 132, 61, 0.25);
+}
+
+.swal-btn-confirm:hover {
+    background: #006B31;
+    transform: translateY(-0.125rem);
+    box-shadow: 0 0.5rem 1.25rem rgba(0, 132, 61, 0.35);
+}
+
+.swal-btn-confirm:active {
+    transform: translateY(0);
+    box-shadow: 0 0.125rem 0.5rem rgba(0, 132, 61, 0.25);
+}
+
+/* --- Botón Confirmar en alerta de eliminación (Rojo) --- */
+.swal-warning .swal-btn-confirm {
+    background: #dc3545;
+    box-shadow: 0 0.125rem 0.5rem rgba(220, 53, 69, 0.25);
+}
+
+.swal-warning .swal-btn-confirm:hover {
+    background: #b02a37;
+    box-shadow: 0 0.5rem 1.25rem rgba(220, 53, 69, 0.35);
+}
+
+/* --- Botón Cancelar (Gris) --- */
+.swal-btn-cancel {
+    background: #f1f5f9;
+    color: #475569;
+    box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05);
+}
+
+.swal-btn-cancel:hover {
+    background: #e2e8f0;
+    transform: translateY(-0.125rem);
+    box-shadow: 0 0.375rem 1.25rem rgba(0, 0, 0, 0.1);
+}
+
+.swal-btn-cancel:active {
+    transform: translateY(0);
+    box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05);
+}
+
+/* ============================================================
+   6. ICONOS - SweetAlert2 maneja sus propios estilos
+   ============================================================
+   Nota: SweetAlert2 ya maneja los colores de los iconos internamente.
+   Si necesitas personalizarlos, usa las clases .swal2-icon-* 
+   ============================================================ */
+
+/* ============================================================
+   7. ACTIONS (Contenedor de botones) - SweetAlert2
+   ============================================================ */
+.swal2-actions {
+    padding-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+/* ============================================================
+   8. RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+    .swal-popup {
+        width: 85vw;
+        padding: 1.5rem 1rem 1.25rem;
+    }
+    .swal-title {
+        font-size: 1.25rem;
+    }
+    .swal-text {
+        font-size: 0.9rem;
+    }
+    .swal-btn-confirm,
+    .swal-btn-cancel {
+        font-size: 0.8rem;
+        padding: 0.5rem 1.25rem;
+        min-width: 5rem;
+    }
+    .swal2-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .swal-btn-confirm,
+    .swal-btn-cancel {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .swal-popup {
+        width: 92vw;
+        padding: 1.25rem 0.75rem 1rem;
+        border-radius: 0.5rem;
+        border-top-width: 0.1875rem;
+    }
+    .swal-title {
+        font-size: 1.1rem;
+        margin-top: 0.25rem;
+    }
+    .swal-text {
+        font-size: 0.85rem;
+        padding: 0 0.25rem;
+        line-height: 1.5;
+    }
+    .swal-btn-confirm,
+    .swal-btn-cancel {
+        font-size: 0.75rem;
+        padding: 0.5rem 1rem;
+        min-width: 4.5rem;
+    }
+    .swal2-actions {
+        padding-top: 1rem;
+        gap: 0.4rem;
+    }
+}
