@@ -1,0 +1,59 @@
+/* Logs del sistema - Estilos específicos */
+.logs-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.page-header {
+    margin-bottom: 24px;
+}
+
+.page-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.tabla-logs {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    width: 100%;
+}
+
+.tabla-logs table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-logs th {
+    text-align: left;
+    padding: 16px 20px;
+    background: #0e7c7c;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.tabla-logs td {
+    padding: 14px 20px;
+    color: #4b5563;
+    font-size: 0.9rem;
+}
+
+.tabla-logs tr:hover td {
+    background: #f1f5f9;
+}
+
+@media (max-width: 768px) {
+    .logs-container {
+        padding: 0 16px;
+    }
+    
+    .tabla-logs th,
+    .tabla-logs td {
+        padding: 10px 12px;
+        font-size: 0.8rem;
+    }
+}

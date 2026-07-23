@@ -1,14 +1,15 @@
 @extends('layouts.dashboard')
 
+@section('title', __('messages.profile_teacher_title'))
+@section('welcome-message', __('messages.profile_welcome'))
+@section('subtitle', __('messages.profile_subtitle'))
+
 @section('title', 'Mi Perfil - Maestro')
-@section('user-role', 'Maestro')
-@section('avatar-iniciales', 'CS')
-@section('nombre-completo', 'Carlos Sánchez')
 @section('welcome-message', 'Mi Perfil')
 @section('subtitle', 'Aquí puedes consultar y editar tu información personal')
 
 @section('back-button')
-    <!-- Activa el botón de regreso -->
+    <!-- Botón de regresar -->
 @endsection
 
 @section('back-url', '/dashboard/maestro')
@@ -25,62 +26,71 @@
                 <div class="avatar-grande">
                     <span class="avatar-iniciales-grande"></span>
                 </div>
-                <button class="btn-subir-foto">Subir foto</button>
+                <button class="btn-subir-foto">{{ __('messages.profile_upload_photo') }}</button>
+                            @if(Auth::user()->foto)
+                                <img src="{{ asset('storage/' . Auth::user()->foto) }}" alt="Foto" class="foto-perfil-img">
+                            @else
+                                <span class="avatar-iniciales-grande">
+                                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}{{ strtoupper(substr(Auth::user()->apellido, 0, 1)) }}
+                                </span>
+                            @endif
+                        </div>
+
+                        <form action="{{ route('perfil.foto.update') }}" method="POST" enctype="multipart/form-data" id="fotoForm">
+                            @csrf
+                            @method('PUT')
+                            <input type="file" name="foto" id="inputFoto" style="display: none;" accept="image/*" onchange="document.getElementById('fotoForm').submit();">
+                            <button type="button" class="btn-subir-foto" onclick="document.getElementById('inputFoto').click();">
+                                {{ __('messages.profile_upload_photo') }}
+                            </button>
+                        </form>
             </div>
         </div>
 
         <!-- Datos personales -->
         <h3 class="perfil-titulo">
-            Datos personales
+            {{ __('messages.profile_personal_data') }}
             <span class="tutor-badge"></span>
         </h3>
         <div class="datos-grid">
             <div class="dato-item">
-                <label>Nombre</label>
-                <span class="dato-valor"></span>
+                <label>{{ __('messages.profile_names') }}</label>
+                <span class="dato-valor">{{ Auth::user()->name }}</span>
             </div>
             <div class="dato-item">
-                <label>Apellidos</label>
-                <span class="dato-valor"></span>
+                <label>{{ __('messages.profile_last_names') }}</label>
+                <span class="dato-valor">{{ Auth::user()->apellido }}</span>
             </div>
             <div class="dato-item">
-                <label>Número de empleado</label>
-                <span class="dato-valor"></span>
+                <label>{{ __('messages.profile_employee_num') }}</label>
+                <span class="dato-valor">{{ Auth::user()->maestro->num_empleado ?? 'N/A' }}</span>
             </div>
             <div class="dato-item">
-                <label>RFC</label>
-                <span class="dato-valor"></span>
+                <label>{{ __('messages.profile_rfc') }}</label>
+                <span class="dato-valor">{{ Auth::user()->maestro->rfc ?? 'N/A' }}</span>
             </div>
             <div class="dato-item">
-                <label>Edad</label>
-                <span class="dato-valor"></span>
+                <label>{{ __('messages.profile_age') }}</label>
+                <span class="dato-valor">{{ Auth::user()->maestro->edad ?? 'N/A' }} {{ __('messages.profile_years') }}</span>
             </div>
             <div class="dato-item">
-                <label>Sexo</label>
-                <span class="dato-valor"></span>
+                <label><label>{{ __('messages.profile_phone') }}</label></label>
+                <span class="dato-valor">{{ Auth::user()->maestro->telefono ??  __('messages.profile_no_phone') }}</span>
             </div>
             <div class="dato-item">
-                <label>Fecha de nacimiento</label>
-                <span class="dato-valor"></span>
-            </div>
-            <div class="dato-item">
-                <label>Correo electrónico</label>
-                <span class="dato-valor"></span>
-            </div>
-            <div class="dato-item">
-                <label>Teléfono</label>
-                <span class="dato-valor"></span>
+                <label>{{ __('messages.profile_email') }}</label>
+                <span class="dato-valor">{{ Auth::user()->email }}</span>
             </div>
         </div>
 
         <!-- Carreras que imparte -->
-        <h3 class="seccion-titulo">Carreras que imparte</h3>
+        <h3 class="seccion-titulo">{{ __('messages.profile_teaching_careers') }}</h3>
         <div class="carreras-grid">
             <!-- Las carreras se cargarán dinámicamente desde el backend -->
         </div>
 
         <!-- Grupo(s) tutorado -->
-        <h3 class="seccion-titulo">Grupo(s) tutorado</h3>
+        <h3 class="seccion-titulo">{{ __('messages.profile_tutored_groups') }}</h3>
         <div class="grupos-grid">
             <!-- Los grupos se cargarán dinámicamente desde el backend -->
         </div>

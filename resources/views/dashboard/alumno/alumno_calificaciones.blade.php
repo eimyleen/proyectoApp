@@ -17,26 +17,12 @@
 
 @extends('layouts.dashboard')
 
-{{-- ======================================================
-     SECCIONES QUE LLENAN EL LAYOUT
-     ====================================================== --}}
+@section('title', __('messages.title_my_grades'))
 
-{{-- Título de la página (aparece en la pestaña del navegador) --}}
+@section('subtitle', __('messages.subtitle_grades'))
+
 @section('title', 'Mis Calificaciones - Alumno')
 
-{{-- Rol del usuario que se muestra en el badge del header --}}
-@section('user-role', 'Alumno')
-
-{{-- Iniciales del avatar (CM = Carlos Martínez) --}}
-@section('avatar-iniciales', 'CM')
-
-{{-- Nombre completo del usuario --}}
-@section('nombre-completo', 'Carlos Martínez')
-
-{{-- Mensaje de bienvenida en el header --}}
-@section('welcome-message', 'Mis Calificaciones')
-
-{{-- Subtítulo descriptivo --}}
 @section('subtitle', 'Aquí puedes consultar tus calificaciones por período')
 
 {{-- 
@@ -74,12 +60,16 @@
              - "Logo de carrera" muestra el logo circular de la carrera del alumno
         --}}
         <div class="botones-laterales">
-            
-            {{-- Botón EXPEDIENTE (inactivo) --}}
-            <button class="btn-expediente">Expediente</button>
-            
-            {{-- Botón CALIFICACIONES (activo) --}}
-            <button class="btn-calificaciones active">Calificaciones</button>
+            <a href="{{ route('alumno.expediente') }}" style="text-decoration: none;">
+                <button class="btn-expediente {{ Request::routeIs('alumno.expediente') ? 'active' : '' }}">
+                    {{ __('messages.btn_record') }}
+                </button>
+            </a>
+            <a href="{{ route('alumno.calificaciones') }}" style="text-decoration: none;">
+                <button class="btn-calificaciones {{ Request::routeIs('alumno.calificaciones') ? 'active' : '' }}">
+                    {{ __('messages.btn_grades') }}
+                </button>
+            </a>
             
             {{-- ==================================================
                  LOGO CIRCULAR DE LA CARRERA
@@ -89,13 +79,15 @@
             --}}
             <div class="carrera-logo">
                 <div class="logo-circular">
-                    @if(isset($carrera->logo))
-                        <img src="{{ asset('storage/' . $carrera->logo) }}" alt="{{ $carrera->nombre }}">
+                    @if(Auth::user()->alumno->carrera->logo)
+                        <img src="{{ asset(Auth::user()->alumno->carrera->logo) }}" 
+                            alt="Logo {{ Auth::user()->alumno->carrera->nombre }}"
+                            style="width: 100%; height: 100%; object-fit: contain;">
                     @else
-                        {{-- Espacio vacío si no hay logo --}}
+                        <img src="{{ asset('img/jaguar.png') }}" alt="UTNay">
                     @endif
                 </div>
-                <span class="logo-texto">Logo de la carrera</span>
+                
             </div>
         </div>
 
@@ -119,17 +111,12 @@
             --}}
             <div class="filtro-periodo">
                 <div class="periodo-select">
-                    <label for="periodo">Período:</label>
-                    <select id="periodo" name="periodo">
-                        {{-- 
-                            Opción por defecto (seleccionar período)
-                            Las opciones dinámicas se agregarían con @foreach
-                            Ejemplo:
-                            @foreach($periodos as $periodo)
-                                <option value="{{ $periodo->id }}">{{ $periodo->nombre }}</option>
-                            @endforeach
-                        --}}
-                        <option value="">Seleccionar período</option>
+                    <label>{{ __('messages.label_period') }}</label>
+                    <select name="periodo" id="periodoSelect">
+                        <option value="">{{ __('messages.select_period') }}</option>
+                        @foreach($periodos as $periodo)
+                            <option value="{{ $periodo }}">{{ $periodo }}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
@@ -154,49 +141,23 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Materia</th>
-                            <th>Calificación</th>
+                           <th>{{ __('messages.th_subject') }}</th>
+                            <th>{{ __('messages.th_grade') }}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- 
-                            ESTAS FILAS SON DE EJEMPLO
-                            Se reemplazarán con datos reales del controlador:
-                            @foreach($calificaciones as $calificacion)
-                                <tr>
-                                    <td>{{ $calificacion->materia->nombre }}</td>
-                                    <td class="calificacion">{{ $calificacion->nota }}</td>
-                                </tr>
-                            @endforeach
-                        --}}
-                        <tr>
-                            <td></td>
-                            <td class="calificacion"></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td class="calificacion"></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td class="calificacion"></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td class="calificacion"></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td class="calificacion"></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td class="calificacion"></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td class="calificacion"></td>
-                        </tr>
+                        @forelse($calificaciones as $cal)
+                            <tr>
+                                <td>{{ $cal->materia->nombre }}</td>
+                                <td class="calificacion {{ $cal->calificacion >= 8 ? 'aprobado' : 'reprobado' }}">
+                                    {{ number_format($cal->calificacion, 1) }}
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="2" style="text-align: center;">No hay calificaciones registradas aún.</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

@@ -1,11 +1,10 @@
 <!-- Dashboard Admin - Módulo de gestión de carreras y usuarios -->
 @extends('layouts.dashboard')
 
+@section('title', __('messages.admin_title'))
+@section('subtitle', __('messages.admin_subtitle'))
 @section('title', 'Administrador - Carreras')
-@section('user-role', 'Administrador')
-@section('avatar-iniciales', 'AD')
-@section('nombre-completo', 'Admin User')
-@section('welcome-message', '¡Bienvenido, Administrador!')
+
 @section('subtitle', 'Gestiona las carreras de la universidad')
 
 @push('styles')
@@ -16,52 +15,69 @@
     <div class="admin-dashboard-container">
         <!-- Botones superiores -->
         <div class="admin-buttons">
+            <a href="{{ route('admin.logs') }}" style="text-decoration: none;">
+                <button class="btn-lista-global" id="btnLogs">
+                    {{ __('messages.admin_btn_logs') }}
+                </button>
+            </a>
+            <button class="btn-lista-global" id="btnRespaldos">
+                {{ __('messages.admin_btn_backups') }}
+            </button>
             <button class="btn-lista-global" id="btnListaGlobal">
-                Ver lista de alumnos global
+                {{ __('messages.admin_btn_global_list') }}
             </button>
             <button class="btn-agregar-carrera" id="btnAgregarCarrera">
-                + Agregar carrera
+                {{ __('messages.admin_btn_add_career') }}
             </button>
         </div>
-
+        <form action="{{ route("admin.store") }}" method="POST" >
+            @csrf
+            <div id="modalAgregarCarrera" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>{{ __('messages.modal_add_career_title') }}</h3>
+                        <span class="modal-close" id="closeModalCarrera">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>{{ __('messages.modal_career_name') }}</label>
+                            <input name="nombre" type="text" id="nombreCarrera" placeholder="{{ __('messages.modal_career_name_placeholder') }}">
+                        </div>
+                        <div class="form-group">
+                            <label>{{ __('messages.modal_career_key') }}</label>
+                            <input name="clave" type="text" id="claveCarrera" placeholder="{{ __('messages.modal_career_key_placeholder') }}">
+                        </div>
+                        <div class="form-group">
+                            <label>{{ __('messages.modal_career_logo') }}</label>
+                            <input name="logo" type="file" id="logoCarrera" accept="image/*">
+                            <small class="form-text">{{ __('messages.modal_career_logo_helper') }}</small>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn-guardar" id="guardarCarrera">{{ __('messages.modal_save_career') }}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
         <!-- Grid de carreras -->
         <div class="carreras-grid">
-            @foreach($carreras as $carrera)
-                <div class="carrera-card" data-carrera="{{ $carrera['alt'] }}">
+            @foreach ($carreras as $carrera)
+                <div class="carrera-card" data-carrera="{{ $carrera->nombre }}">
                     <div class="carrera-img">
-                        <img src="{{ asset('img/carreras/' . $carrera['img']) }}" alt="{{ $carrera['alt'] }}">
+                        <a href="{{ route('admin.show', $carrera) }}">
+                            @if($carrera->logo)
+                                @if(file_exists($carrera->logo))
+                                    <img src="{{ asset($carrera->logo) }}" alt="{{ $carrera->nombre }}">
+                                @else
+                                    <img src="{{ asset('img/jaguar.png') }}" alt="Sin logo">
+                                @endif
+                            @else
+                                <img src="{{ asset('img/jaguar.png') }}" alt="{{ __('messages.admin_no_logo') }}">
+                            @endif
+                        </a>
                     </div>
                 </div>
             @endforeach
-        </div>
-    </div>
-
-    <!-- Modal para agregar carrera -->
-    <div id="modalAgregarCarrera" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Agregar carrera</h3>
-                <span class="modal-close" id="closeModalCarrera">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label>Nombre de la carrera</label>
-                    <input type="text" id="nombreCarrera" placeholder="Ej: Ingeniería en Sistemas">
-                </div>
-                <div class="form-group">
-                    <label>Clave de la carrera</label>
-                    <input type="text" id="claveCarrera" placeholder="Ej: ISC">
-                </div>
-                <div class="form-group">
-                    <label>Logo de la carrera</label>
-                    <input type="file" id="logoCarrera" accept="image/*">
-                    <small class="form-text">Selecciona una imagen para el logo</small>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-cancelar" id="cancelarCarrera">Cancelar</button>
-                <button class="btn-guardar" id="guardarCarrera">Guardar carrera</button>
-            </div>
         </div>
     </div>
 
@@ -69,55 +85,108 @@
     <div id="modalListaGlobal" class="modal-lista-global">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Lista de alumnos global</h3>
+                <h3>{{ __('messages.modal_global_list_title') }}</h3>
                 <span class="modal-close" id="closeModalListaGlobal">&times;</span>
             </div>
             <div class="modal-body">
                 <div class="modal-actions">
                     <div class="modal-filtro">
                         <img src="{{ asset('img/lupa.png') }}" alt="Buscar" class="lupa-icon-modal">
-                        <input type="text" id="busquedaModal" placeholder="Buscar por nombre o matrícula..." class="input-busqueda-modal">
+                        <input type="text" id="busquedaModal" placeholder= "{{ __('messages.modal_search_placeholder') }}" class="input-busqueda-modal">
                     </div>
-                    <button class="btn-descargar-modal">
-                        <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-modal">
-                        Descargar lista
-                    </button>
+                    <a href="{{ route('admin.alumnos.pdf') }}" style="text-decoration: none;">
+                        <button class="btn-lista-global">
+                            <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icono">
+                            {{ __('messages.modal_btn_download_list') }}
+                        </button>
+                    </a>
                 </div>
                 <div class="tabla-container">
                     <table class="tabla-alumnos-global" id="tablaAlumnosModal">
                         <thead>
                             <tr>
-                                <th>Matrícula</th>
-                                <th>Nombre</th>
-                                <th>Carrera</th>
-                                <th>Grupo</th>
+                                <th>{{ __('messages.expedient_id') }}</th>
+                                <th>{{ __('messages.expedient_name') }}</th>
+                                <th>{{ __('messages.expedient_last_names') }}</th>
+                                <th>{{ __('messages.expedient_career') }}</th>
+                                <th>{{ __('messages.expedient_group') }}</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @for($i = 0; $i < 5; $i++)
+                            @foreach($alumnos as $alumno)
                                 <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>{{ $alumno->matricula }}</td>
+                                    <td>{{ $alumno->user?->name }}</td>
+                                    <td>{{ $alumno->user?->apellido }}</td>
+                                    <td>{{ $alumno->carrera?->nombre }}</td>
+                                    <td>{{ $alumno->grupo }}</td>
                                 </tr>
-                            @endfor
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
+    <div id="modalRespaldos" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>{{ __('messages.modal_backups_title') }}</h3>
+                <span class="modal-close" id="closeModalRespaldos">&times;</span>
+            </div>
+            
+            
+            <div class="modal-body">
+                <form action="/respaldo" method="POST">
+                    @csrf
+                    <button type="submit" style="margin: 4px 4px;" class="btn-guardar" id="btnRespaldosExec">Generar un Respaldo Ahora</button>
+                </form>
+                <button style="margin: 4px 4px;" class="btn-guardar" id="btnRespaldosAuto">Configurar Respaldos Automatizados</button>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="modalRespaldosAuto" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Respaldos Automatizados</h3>
+                <span class="modal-close" id="closeModalRespaldosAuto">&times;</span>
+            </div>
+            <div class="modal-body">
+                <h2>Datos de los Respaldos</h2>
+                <p>Estado del Respaldo Automatico: {{ 'Inexistente' }}</p>
+                <p>Fecha de Inicio de Respaldo: {{ 'Ninguno - Sin Programar' }}</p>
+                <p>Ultimo Respaldo Realizado: {{ 'Ninguno' }}</p>
+                <p>Fecha para el próximo Respaldo: {{ 'Ninguno' }}</p>
+                <br>
+                <h2>Configurar Horario de Respaldos</h2>
+                <label for="">Fecha de Inicio: </label><input type="date" id="fechaIniciarRespaldos" required min="{{ date("Y-m-d") }}"><br>
+                <p>Horario para los Próximos Respaldos:</p>
+                <label>Segundos: </label><input type="number" min="0" max="59" value="0" id="tiempoSegundosSigRespaldo" required>
+                <label>Minutos: </label><input type="number" min="0" max="59" value="0" id="tiempoMinutosSigRespaldo" required>
+                <label>Horas: </label><input type="number" min="0" max="23" value="0" id="tiempoHorasSigRespaldo" required>
+                <label>Días: </label><input type="number" min="0" max="31" value="1" id="tiempoDiasSigRespaldo" required>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-eliminar" id="btnRespaldosBorrarAutoDum">Reiniciar Horario de los Respaldos</button>
+                <button class="btn-guardar" id="btnRespaldosGuardarIniAuto">Guardar y Iniciar Respaldo</button>
+                <button class="btn-guardar" id="btnRespaldosMainRegreso">Regresar</button>
+            </div>
+
+        </div>
+    </div>
 @endsection
 
 @push('scripts')
 <script>
+    //sección donde se maneja cosas de frontend del HTML y CSS (Modales)
     document.addEventListener('DOMContentLoaded', function() {
         // Modal Agregar Carrera
         const modalCarrera = document.getElementById('modalAgregarCarrera');
         const btnAgregar = document.getElementById('btnAgregarCarrera');
         const closeModalCarrera = document.getElementById('closeModalCarrera');
-        const cancelarCarrera = document.getElementById('cancelarCarrera');
 
         if (btnAgregar) {
             btnAgregar.onclick = function() {
@@ -133,22 +202,65 @@
         }
 
         if (closeModalCarrera) closeModalCarrera.onclick = cerrarModalCarrera;
-        if (cancelarCarrera) cancelarCarrera.onclick = cerrarModalCarrera;
 
-        // Guardar carrera
-        const guardarCarrera = document.getElementById('guardarCarrera');
-        if (guardarCarrera) {
-            guardarCarrera.onclick = function() {
-                const nombre = document.getElementById('nombreCarrera').value;
-                const clave = document.getElementById('claveCarrera').value;
-                if (nombre && clave) {
-                    alert('Carrera agregada: ' + nombre + ' (' + clave + ')');
-                    cerrarModalCarrera();
-                } else {
-                    alert('Por favor complete el nombre y la clave de la carrera');
-                }
+        //modal respaldos base
+        const btnRespaldos = document.getElementById('btnRespaldos');
+        const btnRespaldosAuto = document.getElementById('btnRespaldosAuto');
+        const btonCerrarRespaldos= document.getElementById('closeModalRespaldos');
+        const modalRespaldos = document.getElementById('modalRespaldos');
+
+        const modalRespaldosAuto = document.getElementById('modalRespaldosAuto');
+
+
+        if (btnRespaldos) {
+            btnRespaldos.onclick = function() {
+                modalRespaldos.style.display = 'flex';
             };
         }
+
+        function cerrarModalRespaldos() {
+            modalRespaldos.style.display = 'none';
+        }
+
+        function abrirModalRespaldosAuto() {
+            modalRespaldos.style.display = 'none';
+            modalRespaldosAuto.style.display = 'flex';
+        }
+
+        if (btonCerrarRespaldos) btonCerrarRespaldos.onclick = cerrarModalRespaldos;
+        
+        if(btnRespaldosAuto) btnRespaldosAuto.onclick = abrirModalRespaldosAuto
+
+        //modal respaldos automatizados
+        const closeModalRespaldosAuto = document.getElementById('closeModalRespaldosAuto');
+        const btnRespaldosMainRegreso = document.getElementById('btnRespaldosMainRegreso');
+
+        //Datos
+        const fechaIniciarRespaldos = document.getElementById('fechaIniciarRespaldos');
+
+        const tiempoSegundosSigRespaldo = document.getElementById('tiempoSegundosSigRespaldo');
+        const tiempoMinutosSigRespaldo = document.getElementById('tiempoMinutosSigRespaldo');
+        const tiempoHorasSigRespaldo = document.getElementById('tiempoHorasSigRespaldo');
+        const tiempoDiasSigRespaldo = document.getElementById('tiempoDiasSigRespaldo');
+
+        function cerrarModalRespaldosAuto() {
+            fechaIniciarRespaldos.value = "";
+
+            tiempoSegundosSigRespaldo.value = "0";
+            tiempoMinutosSigRespaldo.value = "0";
+            tiempoHorasSigRespaldo.value = "0";
+            tiempoDiasSigRespaldo.value = "1";
+
+            modalRespaldosAuto.style.display = 'none';
+        }
+
+        function regresarModalRespaldos() {
+            modalRespaldos.style.display = 'flex';
+            modalRespaldosAuto.style.display = 'none';
+        }
+
+        if (closeModalRespaldosAuto) closeModalRespaldosAuto.onclick = cerrarModalRespaldosAuto;
+        if (btnRespaldosMainRegreso) btnRespaldosMainRegreso.onclick = regresarModalRespaldos;
 
         // Modal Lista Global de Alumnos 
         const modalListaGlobal = document.getElementById('modalListaGlobal');
@@ -171,6 +283,8 @@
         window.onclick = function(e) {
             if (e.target === modalCarrera) cerrarModalCarrera();
             if (e.target === modalListaGlobal) cerrarModalListaGlobal();
+            if (e.target === modalRespaldos) cerrarModalRespaldos();
+            if (e.target === modalRespaldosAuto) cerrarModalRespaldosAuto();
         };
 
         // Filtro dentro del modal de lista global
@@ -189,15 +303,6 @@
                 });
             });
         }
-
-        // Click en carrera para ir al detalle
-        document.querySelectorAll('.carrera-card').forEach(card => {
-            card.addEventListener('click', function() {
-                const nombre = this.getAttribute('data-carrera');
-                alert('Navegar a detalle de: ' + nombre);
-                // window.location.href = '/dashboard/admin/carrera';
-            });
-        });
     });
 </script>
 @endpush

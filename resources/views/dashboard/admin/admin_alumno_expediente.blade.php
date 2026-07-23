@@ -1,10 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('title', 'Administrador - Perfil del Alumno')
-@section('user-role', 'Administrador')
-@section('avatar-iniciales', 'RR')
-@section('nombre-completo', 'Raúl Ramírez')
-@section('welcome-message', 'Perfil del Alumno')
+
 @section('subtitle', 'Consulta y edita la información del alumno')
 
 @section('back-button')
@@ -19,7 +16,6 @@
 
 @section('content')
     <div class="perfil-container">
-        <!-- Botones de acción -->
         <div class="acciones-superiores">
             <button class="btn-editar-perfil" id="btnEditarAlumno">
                 <img src="{{ asset('img/editar.png') }}" alt="Editar" class="btn-icono"> Editar alumno
@@ -32,73 +28,74 @@
             </button>
         </div>
 
-        <!-- Foto de perfil -->
         <div class="perfil-section">
             <div class="foto-perfil">
                 <div class="avatar-grande">
-                    <span class="avatar-iniciales-grande"></span>
+                    @if($alumno->user->foto)
+                        <img src="{{ asset('storage/' . $alumno->user->foto) }}" style="width:100%; height:100%; object-fit:cover;">
+                    @else
+                        <span class="avatar-iniciales-grande">
+                            {{ strtoupper(substr($alumno->user->name, 0, 1)) }}{{ strtoupper(substr($alumno->user->apellido, 0, 1)) }}
+                        </span>
+                    @endif
                 </div>
-                <button class="btn-subir-foto" id="btnCambiarFoto">Cambiar foto</button>
-            </div>
-        </div>
 
-        <!-- Datos personales -->
-        <h3 class="perfil-titulo">Datos personales</h3>
-        <div class="datos-grid">
-            <div class="dato-item">
-                <label>Nombre(s)</label>
-                <span class="dato-valor" id="datoNombre"></span>
-            </div>
-            <div class="dato-item">
-                <label>Apellidos</label>
-                <span class="dato-valor" id="datoApellidos"></span>
-            </div>
-            <div class="dato-item">
-                <label>Matrícula</label>
-                <span class="dato-valor" id="datoMatricula"></span>
-            </div>
-            <div class="dato-item">
-                <label>Carrera</label>
-                <span class="dato-valor" id="datoCarrera"></span>
-            </div>
-            <div class="dato-item">
-                <label>Grupo</label>
-                <span class="dato-valor" id="datoGrupo"></span>
-            </div>
-            <div class="dato-item">
-                <label>CURP</label>
-                <span class="dato-valor" id="datoCURP"></span>
-            </div>
-            <div class="dato-item">
-                <label>Edad</label>
-                <span class="dato-valor" id="datoEdad"></span>
-            </div>
-            <div class="dato-item">
-                <label>Sexo</label>
-                <span class="dato-valor" id="datoSexo"></span>
-            </div>
-            <div class="dato-item">
-                <label>Fecha de nacimiento</label>
-                <span class="dato-valor" id="datoFechaNac"></span>
-            </div>
-            <div class="dato-item">
-                <label>Correo electrónico</label>
-                <span class="dato-valor" id="datoCorreo"></span>
-            </div>
-            <div class="dato-item">
-                <label>Teléfono</label>
-                <span class="dato-valor" id="datoTelefono"></span>
-            </div>
-        </div>
+                <div class="datos-grid">
+                    <div class="dato-item">
+                        <label>Nombre(s)</label>
+                        <span class="dato-valor">{{ $alumno->user->name }}</span>
+                    </div>
+                    <div class="dato-item">
+                        <label>Apellidos</label>
+                        <span class="dato-valor">{{ $alumno->user->apellido }}</span>
+                    </div>
+                    <div class="dato-item">
+                        <label>Matrícula</label>
+                        <span class="dato-valor">{{ $alumno->matricula }}</span>
+                    </div>
+                    <div class="dato-item">
+                        <label>Carrera</label>
+                        <span class="dato-valor">{{ $alumno->carrera->nombre ?? 'N/A' }}</span>
+                    </div>
+                    <div class="dato-item">
+                        <label>Grupo</label>
+                        <span class="dato-valor">{{ $alumno->grupo }}</span>
+                    </div>
+                    <div class="dato-item">
+                        <label>CURP</label>
+                        <span class="dato-valor">{{ $alumno->curp }}</span>
+                    </div>
+                    <div class="dato-item">
+                        <label>Edad</label>
+                        <span class="dato-valor">{{ $alumno->edad }} años</span>
+                    </div>
+                    <div class="dato-item">
+                        <label>Sexo</label>
+                        <span class="dato-valor">{{ $alumno->sexo }}</span>
+                    </div>
+                    <div class="dato-item">
+                        <label>Fecha de nacimiento</label>
+                        <span class="dato-valor">{{ $alumno->fecha_nacimiento }}</span>
+                    </div>
+                    <div class="dato-item">
+                        <label>Correo electrónico</label>
+                        <span class="dato-valor">{{ $alumno->user->email }}</span>
+                    </div>
+                    <div class="dato-item">
+                        <label>Teléfono</label>
+                        <span class="dato-valor">{{ $alumno->telefono }}</span>
+                    </div>
+                </div>
 
-        <!-- Logo de la carrera -->
-        <h3 class="seccion-titulo">Carrera</h3>
-        <div class="carrera-info-expediente">
-            <div class="logo-circular-carrera">
-                <img src="{{ asset('img/carreras/ing_alimentos.png') }}" alt="Logo de la carrera">
-            </div>
-            <span class="logo-texto-carrera">Logo de la carrera</span>
-        </div>
+                <div class="carrera-info-expediente">
+                    <div class="logo-circular-carrera" style="width: 120px; height: 120px; overflow: hidden; border-radius: 50%;">
+                        @if($alumno->carrera && $alumno->carrera->logo)
+                            <img src="{{ asset($alumno->carrera->logo) }}" alt="Logo" style="width: 100%; height: 100%; object-fit: contain;">
+                        @else
+                            <img src="{{ asset('img/carreras/default.png') }}" alt="Sin logo">
+                        @endif
+                    </div>
+                </div>
 
         <!-- Sección de tutorías -->
         <h3 class="seccion-titulo">Tutorías</h3>

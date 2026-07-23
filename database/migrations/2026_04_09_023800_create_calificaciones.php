@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('calificaciones', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('expediente_id')->constrained('expedientes')->onDelete('cascade');
             $table->foreignId('materia_id')->constrained('materias');
             $table->decimal('parcial_1', 4, 2)->nullable();
             $table->decimal('parcial_2', 4, 2)->nullable();

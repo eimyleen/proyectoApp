@@ -22,26 +22,12 @@
 --}}
 @extends('layouts.dashboard')
 
-{{-- ======================================================
-     SECCIONES QUE LLENAN EL LAYOUT
-     ====================================================== --}}
+@section('title', __('messages.student_panel'))
 
-{{-- Título de la página (aparece en la pestaña del navegador) --}}
+@section('subtitle', __('messages.student_subtitle'))
+
 @section('title', 'Mi Panel - Alumno')
 
-{{-- Rol del usuario que se muestra en el badge del header --}}
-@section('user-role', 'Alumno')
-
-{{-- Iniciales del avatar (CM = Carlos Martínez) --}}
-@section('avatar-iniciales', 'CM')
-
-{{-- Nombre completo del usuario --}}
-@section('nombre-completo', 'Carlos Martínez')
-
-{{-- Mensaje de bienvenida que aparece en el header --}}
-@section('welcome-message', '¡Bienvenido, Carlos!')
-
-{{-- Subtítulo descriptivo debajo del mensaje de bienvenida --}}
 @section('subtitle', 'Aquí puedes consultar tu información académica')
 
 {{-- ======================================================
@@ -84,18 +70,16 @@
              estamos en la vista principal del alumno.
         --}}
         <div class="botones-laterales">
-            {{-- 
-                Botón EXPEDIENTE (activo)
-                'active' indica que estamos en esta sección.
-                Al hacer clic, redirige al expediente del alumno.
-            --}}
-            <button class="btn-expediente">Expediente</button>
-            
-            {{-- 
-                Botón CALIFICACIONES (inactivo)
-                Al hacer clic, redirige a la vista de calificaciones.
-            --}}
-            <button class="btn-calificaciones">Calificaciones</button>
+            <a href="{{ route('alumno.expediente') }}" style="text-decoration: none;">
+                <button class="btn-expediente {{ Request::routeIs('alumno.expediente') ? 'active' : '' }}">
+                    {{ __('messages.btn_record') }}
+                </button>
+            </a>
+            <a href="{{ route('alumno.calificaciones') }}" style="text-decoration: none;">
+                <button class="btn-calificaciones {{ Request::routeIs('alumno.calificaciones') ? 'active' : '' }}">
+                    {{ __('messages.btn_grades') }}
+                </button>
+            </a>
         </div>
 
         {{-- ======================================================
@@ -117,32 +101,27 @@
                  el controlador con un @foreach
             --}}
             <div class="materias-titulo">
-                <h3>Mis materias</h3>
+                <h3>{{ __('messages.title_my_subjects') }}</h3>
             </div>
             <div class="tabla-materias">
                 <table>
                     <thead>
                         <tr>
-                            <th>Materia</th>
-                            <th>Docente</th>
+                            <th>{{ __('messages.th_subject') }}</th>
+                            <th>{{ __('messages.th_teacher') }}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- 
-                            ESTAS FILAS SON DE EJEMPLO
-                            Se reemplazarán con datos reales del controlador:
-                            @foreach($materias as $materia)
-                                <tr>
-                                    <td>{{ $materia->nombre }}</td>
-                                    <td>{{ $materia->docente->nombre }}</td>
-                                </tr>
-                            @endforeach
-                        --}}
-                        <tr><td></td><td></td></tr>
-                        <tr><td></td><td></td></tr>
-                        <tr><td></td><td></td></tr>
-                        <tr><td></td><td></td></tr>
-                        <tr><td></td><td></td></tr>
+                        @forelse($materias as $materia)
+                            <tr>
+                                <td>{{ $materia->nombre }}</td>
+                                <td>{{ $materia->docente }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="2">No tienes materias asignadas.</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -160,29 +139,48 @@
                  NOTA: Los horarios reales se llenarán desde el controlador.
             --}}
             <div class="horario-titulo">
-                <h3>Mi horario</h3>
+                <h3>{{ __('messages.title_my_schedule') }}</h3>
             </div>
             <div class="tabla-horario">
                 <table>
                     <thead>
                         <tr>
-                            <th>Día</th>
-                            <th>Horario</th>
+                            <th>{{ __('messages.th_day') }}</th>
+                            <th>{{ __('messages.th_schedule') }}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- 
-                            Días de la semana con horario.
-                            Sábado y Domingo tienen la clase 'dia-bloqueado'
-                            que los estiliza en gris e itálico.
-                        --}}
-                        <tr><td>Lunes</td><td></td></tr>
-                        <tr><td>Martes</td><td></td></tr>
-                        <tr><td>Miércoles</td><td></td></tr>
-                        <tr><td>Jueves</td><td></td></tr>
-                        <tr><td>Viernes</td><td></td></tr>
-                        <tr><td>Sábado</td><td class="dia-bloqueado">Sin clases</td></tr>
-                        <tr><td>Domingo</td><td class="dia-bloqueado">Sin clases</td></tr>
+                        @php
+                            $diasSemana = [
+                                'Lunes' => __('messages.day_monday'),
+                                'Martes' => __('messages.day_tuesday'),
+                                'Miércoles' => __('messages.day_wednesday'),
+                                'Jueves' => __('messages.day_thursday'),
+                                'Viernes' => __('messages.day_friday')
+                            ];
+                        @endphp
+
+                        @foreach($diasSemana as $diaNombre => $diaTraduccion)
+                            <tr>
+                                <td>{{ $diaTraduccion }}</td>
+                                <td>
+                                    @if(isset($horarios[$diaNombre]))
+                                        @foreach($horarios[$diaNombre] as $clase)
+                                            <div class="clase-item">
+                                                <strong>{{ $clase->materia->nombre }}</strong><br>
+                                                <small>{{ \Carbon\Carbon::parse($clase->hora_inicio)->format('H:i') }} - {{ \Carbon\Carbon::parse($clase->hora_fin)->format('H:i') }} | {{ $clase->aula }}</small>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <span class="sin-clase">Sin clases</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                        
+                        {{-- Fines de semana bloqueados como ya los tenías --}}
+                        <tr><td>{{ __('messages.day_saturday') }}</td><td class="dia-bloqueado">{{ __('messages.no_classes') }}</td></tr>
+                        <tr><td>{{ __('messages.day_sunday') }}</td><td class="dia-bloqueado">{{ __('messages.no_classes') }}</td></tr>
                     </tbody>
                 </table>
             </div>

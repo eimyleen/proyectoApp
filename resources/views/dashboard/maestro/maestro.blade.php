@@ -1,11 +1,12 @@
 <!-- Dashboard Maestro - Módulo de carreras que imparte -->
 @extends('layouts.dashboard')
 
+@section('title', __('messages.teacher_panel_title'))
+
+@section('subtitle', __('messages.teacher_panel_subtitle'))
+
 @section('title', 'Panel Maestro')
-@section('user-role', 'Maestro')
-@section('avatar-iniciales', 'CS')
-@section('nombre-completo', 'Carlos Sánchez')
-@section('welcome-message', '¡Bienvenido, Carlos!')
+
 @section('subtitle', 'Selecciona una carrera para gestionar sus grupos')
 
 @push('styles')
@@ -15,35 +16,24 @@
 @section('content')
     <!-- Botones superiores -->
     <div class="maestro-buttons">
-        <button class="btn-lista-global" id="btnListaGlobal">Ver lista de alumnos global</button>
+        <button class="btn-lista-global" id="btnListaGlobal">{{ __('messages.btn_global_list') }}</button>
     </div>
 
     <!-- Carreras -->
     <div class="carreras-container">
         <div class="carreras-grid">
-            @php
-                $carreras = [
-                    ['img' => 'ing_alimentos.png', 'alt' => 'Ingeniería en Alimentos'],
-                    ['img' => 'ing_civil.png', 'alt' => 'Ingeniería Civil'],
-                    ['img' => 'ing_inte_artificial.png', 'alt' => 'Ingeniería Artificial'],
-                    ['img' => 'ing_logistica.png', 'alt' => 'Ingeniería Logística'],
-                    ['img' => 'ing_mant_industrial.png', 'alt' => 'Ingeniería Mantenimiento Industrial'],
-                    ['img' => 'ing_mecatronica.png', 'alt' => 'Ingeniería Mecatrónica'],
-                    ['img' => 'ing_micro_semic.png', 'alt' => 'Ingeniería Micro Semiconductores'],
-                    ['img' => 'ing_tec_info.png', 'alt' => 'Ingeniería Tecnologías Información'],
-                    ['img' => 'lic_admin.png', 'alt' => 'Licenciatura Administración'],
-                    ['img' => 'lic_gastro.png', 'alt' => 'Gastronomía'],
-                    ['img' => 'lic_merca.png', 'alt' => 'Licenciatura Mercadotecnia'],
-                    ['img' => 'lic_psicologia.png', 'alt' => 'Psicología'],
-                    ['img' => 'lic_seg_publ.png', 'alt' => 'Seguridad Pública'],
-                    ['img' => 'lic_turismo.png', 'alt' => 'Licenciatura Turismo'],
-                ];
-            @endphp
-
-            @foreach($carreras as $carrera)
-                <div class="carrera-card" data-carrera="{{ $carrera['alt'] }}">
+            @foreach ($carreras as $carrera)
+                <div class="carrera-card" data-carrera="{{ $carrera->nombre }}">
                     <div class="carrera-img">
-                        <img src="{{ asset('img/carreras/' . $carrera['img']) }}" alt="{{ $carrera['alt'] }}">
+                        <a href="{{ route("maestro.show", $carrera) }}">
+                            @if($carrera->logo)
+                                <img src="{{ asset($carrera->logo) }}" 
+                                    alt="{{ $carrera->nombre }}"
+                                    style="width: 100%; height: 100%; object-fit: contain;">
+                            @else
+                                <img src="{{ asset('img/jaguar.png') }}" alt="{{ __('messages.no_logo') }}">
+                            @endif
+                        </a>
                     </div>
                 </div>
             @endforeach
@@ -54,39 +44,41 @@
     <div id="modalListaGlobal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Lista de alumnos global</h3>
+                <h3>{{ __('messages.modal_global_title') }}</h3>
                 <span class="modal-close" id="closeModal">&times;</span>
             </div>
             <div class="modal-body">
                 <div class="modal-actions">
                     <div class="modal-filtro">
                         <img src="{{ asset('img/lupa.png') }}" alt="Buscar" class="lupa-icon-modal">
-                        <input type="text" id="busquedaModal" placeholder="Buscar por nombre o matrícula..." class="input-busqueda-modal">
+                        <input type="text" id="busquedaModal" placeholder="{{ __('messages.placeholder_search_modal') }}" class="input-busqueda-modal">
                     </div>
-                    <button class="btn-descargar-modal">
-                        <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-modal">
-                        Descargar lista
-                    </button>
+                    <a href="{{ route('maestro.alumnos.pdf') }}" style="text-decoration: none;">
+                        <button class="btn-descargar-modal">
+                            <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-modal">
+                            {{ __('messages.btn_download_list') }}
+                        </button>
+                    </a>
                 </div>
                 <div class="tabla-container">
                     <table class="tabla-alumnos-global" id="tablaAlumnosModal">
                         <thead>
                             <tr>
-                                <th>Matrícula</th>
-                                <th>Nombre</th>
-                                <th>Carrera</th>
-                                <th>Grupo</th>
+                                <th>{{ __('messages.label_id_number') }}</th>
+                                <th>{{ __('messages.th_nombre') }}</th>
+                                <th>{{ __('messages.label_major') }}</th>
+                                <th>{{ __('messages.label_group') }}</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @for($i = 0; $i < 5; $i++)
+                            @foreach($alumnos as $alumno)
                                 <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                   <td>{{ $alumno->matricula }}</td>
+                                    <td>{{ $alumno->user?->name }}</td>
+                                    <td>{{ $alumno->carrera?->nombre }}</td>
+                                    <td>{{ $alumno->grupo }}</td>
                                 </tr>
-                            @endfor
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -136,15 +128,6 @@
                 });
             });
         }
-
-        // Click en carrera
-        document.querySelectorAll('.carrera-card').forEach(card => {
-            card.addEventListener('click', function() {
-                const carrera = this.getAttribute('data-carrera');
-                alert('Navegar a grupos de: ' + carrera);
-                // window.location.href = '/dashboard/maestro/grupos';
-            });
-        });
     });
 </script>
 @endpush
