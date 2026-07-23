@@ -153,6 +153,11 @@ Route::middleware(['auth'])->group(function () {
         AlumnoController::class, 'expediente'
     ])->middleware('role:alumno')->name('alumno.expediente');
 
+    // --- Ruta para subir documentos ---
+    Route::post('/dashboard/alumno/expediente', [
+        AlumnoController::class, 'subirDocumentos'
+    ])->middleware('role:alumno')->name('alumno.subirDocumentos');
+
     // --- Ruta de las calificaciones del Alumno ---
     Route::get('/dashboard/alumno/calificaciones', [
         AlumnoController::class, 'calificaciones'

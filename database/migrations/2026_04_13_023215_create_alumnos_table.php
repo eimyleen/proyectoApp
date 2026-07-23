@@ -18,6 +18,10 @@ return new class extends Migration
             $table->enum('sexo', ['M', 'F', 'Otro']);
             $table->date('fecha_nacimiento');
             $table->string('telefono', 20);
+            $table->string('doc_acta_nacimiento')->nullable();
+            $table->string('doc_curp')->nullable();
+            $table->string('doc_certificado_bachillerato')->nullable();
+            $table->string('doc_constancia_estudios')->nullable();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('carrera_id')->constrained('carreras')->onDelete('cascade');
             $table->timestamps();

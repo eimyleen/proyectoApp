@@ -195,63 +195,90 @@
                 {{-- Título de la sección --}}
                 <h3 class="documentos-titulo">Documentos</h3>
                 
-                {{-- ==============================================
-                     DOCUMENTO 1: Acta de nacimiento
-                     ============================================== --}}
-                <div class="documento-item">
-                    <div class="documento-info">
-                        <span class="documento-nombre">Acta de nacimiento</span>
-                        {{-- Estado: "no-cargado" lo muestra en gris --}}
-                        <span class="documento-estado no-cargado">Aún no has cargado este documento.</span>
+                {{-- Formulario para enviar los archivos al controlador --}}
+                <form action="{{ route('alumno.subirDocumentos') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    {{-- ==============================================
+                         DOCUMENTO 1: Acta de nacimiento
+                         ============================================== --}}
+                    <div class="documento-item">
+                        <div class="documento-info">
+                            <span class="documento-nombre">Acta de nacimiento</span>
+                            @if($alumno->doc_acta_nacimiento)
+                                <span class="documento-estado">
+                                    <a href="{{ asset('storage/' . $alumno->doc_acta_nacimiento) }}" target="_blank">Ver documento</a>
+                                </span>
+                            @else
+                                <span class="documento-estado no-cargado">Aún no has cargado este documento.</span>
+                            @endif
+                        </div>
+                        <label class="btn-cargar-documento">
+                            <img src="{{ asset('img/subir.png') }}" alt="Subir" class="btn-icon">
+                            {{ $alumno->doc_acta_nacimiento ? 'Reemplazar archivo' : 'Cargar archivo' }}
+                            <input type="file" name="doc_acta_nacimiento" accept=".pdf,.png,.jpg,.jpeg" onchange="this.form.submit()" style="display: none;">
+                        </label>
                     </div>
-                    {{-- Botón con icono para cargar el documento --}}
-                    <button class="btn-cargar-documento">
-                        <img src="{{ asset('img/subir.png') }}" alt="Subir" class="btn-icon">
-                        Cargar archivo
-                    </button>
-                </div>
-
-                {{-- ==============================================
-                     DOCUMENTO 2: CURP
-                     ============================================== --}}
-                <div class="documento-item">
-                    <div class="documento-info">
-                        <span class="documento-nombre">CURP</span>
-                        <span class="documento-estado no-cargado">Aún no has cargado este documento.</span>
+                    {{-- ==============================================
+                         DOCUMENTO 2: CURP
+                         ============================================== --}}
+                    <div class="documento-item">
+                        <div class="documento-info">
+                            <span class="documento-nombre">CURP</span>
+                            @if($alumno->doc_curp)
+                                <span class="documento-estado">
+                                    <a href="{{ asset('storage/' . $alumno->doc_curp) }}" target="_blank">Ver documento</a>
+                                </span>
+                            @else
+                                <span class="documento-estado no-cargado">Aún no has cargado este documento.</span>
+                            @endif
+                        </div>
+                        <label class="btn-cargar-documento">
+                            <img src="{{ asset('img/subir.png') }}" alt="Subir" class="btn-icon">
+                            {{ $alumno->doc_curp ? 'Reemplazar archivo' : 'Cargar archivo' }}
+                            <input type="file" name="doc_curp" accept=".pdf,.png,.jpg,.jpeg" onchange="this.form.submit()" style="display: none;">
+                        </label>
                     </div>
-                    <button class="btn-cargar-documento">
-                        <img src="{{ asset('img/subir.png') }}" alt="Subir" class="btn-icon">
-                        Cargar archivo
-                    </button>
-                </div>
-
-                {{-- ==============================================
-                     DOCUMENTO 3: Certificado de bachillerato
-                     ============================================== --}}
-                <div class="documento-item">
-                    <div class="documento-info">
-                        <span class="documento-nombre">Certificado de bachillerato</span>
-                        <span class="documento-estado no-cargado">Aún no has cargado este documento.</span>
+                    {{-- ==============================================
+                         DOCUMENTO 3: Certificado de bachillerato
+                         ============================================== --}}
+                    <div class="documento-item">
+                        <div class="documento-info">
+                            <span class="documento-nombre">Certificado de bachillerato</span>
+                            @if($alumno->doc_certificado_bachillerato)
+                                <span class="documento-estado">
+                                    <a href="{{ asset('storage/' . $alumno->doc_certificado_bachillerato) }}" target="_blank">Ver documento</a>
+                                </span>
+                            @else
+                                <span class="documento-estado no-cargado">Aún no has cargado este documento.</span>
+                            @endif
+                        </div>
+                        <label class="btn-cargar-documento">
+                            <img src="{{ asset('img/subir.png') }}" alt="Subir" class="btn-icon">
+                            {{ $alumno->doc_certificado_bachillerato ? 'Reemplazar archivo' : 'Cargar archivo' }}
+                            <input type="file" name="doc_certificado_bachillerato" accept=".pdf,.png,.jpg,.jpeg" onchange="this.form.submit()" style="display: none;">
+                        </label>
                     </div>
-                    <button class="btn-cargar-documento">
-                        <img src="{{ asset('img/subir.png') }}" alt="Subir" class="btn-icon">
-                        Cargar archivo
-                    </button>
-                </div>
-
-                {{-- ==============================================
-                     DOCUMENTO 4: Constancia de estudios
-                     ============================================== --}}
-                <div class="documento-item">
-                    <div class="documento-info">
-                        <span class="documento-nombre">Constancia de estudios</span>
-                        <span class="documento-estado no-cargado">Aún no has cargado este documento.</span>
+                    {{-- ==============================================
+                         DOCUMENTO 4: Constancia de estudios
+                         ============================================== --}}
+                    <div class="documento-item">
+                        <div class="documento-info">
+                            <span class="documento-nombre">Constancia de estudios</span>
+                            @if($alumno->doc_constancia_estudios)
+                                <span class="documento-estado">
+                                    <a href="{{ asset('storage/' . $alumno->doc_constancia_estudios) }}" target="_blank">Ver documento</a>
+                                </span>
+                            @else
+                                <span class="documento-estado no-cargado">Aún no has cargado este documento.</span>
+                            @endif
+                        </div>
+                        <label class="btn-cargar-documento">
+                            <img src="{{ asset('img/subir.png') }}" alt="Subir" class="btn-icon">
+                            {{ $alumno->doc_constancia_estudios ? 'Reemplazar archivo' : 'Cargar archivo' }}
+                            <input type="file" name="doc_constancia_estudios" accept=".pdf,.png,.jpg,.jpeg" onchange="this.form.submit()" style="display: none;">
+                        </label>
                     </div>
-                    <button class="btn-cargar-documento">
-                        <img src="{{ asset('img/subir.png') }}" alt="Subir" class="btn-icon">
-                        Cargar archivo
-                    </button>
-                </div>
+                </form>
             </div>
         </div>
     </div>

@@ -17,6 +17,10 @@ class Alumno extends Model
         'sexo',
         'fecha_nacimiento',
         'telefono',
+        'doc_acta_nacimiento',
+        'doc_curp',
+        'doc_certificado_bachillerato',
+        'doc_constancia_estudios',
         'user_id',
         'carrera_id',
     ];
