@@ -193,6 +193,7 @@ class UsuariosSeeder extends Seeder
         $m3 = Materia::create(['nombre' => 'Aplicaciones Móviles Multiplataforma', 'carrera_id' => $carrera->id]);
         $m4 = Materia::create(['nombre' => 'Seguridad Informática', 'carrera_id' => $carrera->id]);
         $m5 = Materia::create(['nombre' => 'Inglés IX', 'carrera_id' => $carrera->id]);
+        $m6 = Materia::create(['nombre' => 'Desarrollo Web Integral', 'carrera_id' => $carrera->id]);
 
         // ---------- Horarios para el grupo TI-41 ----------
 
@@ -260,6 +261,12 @@ class UsuariosSeeder extends Seeder
                 'periodo' => 'Enero - Abril 2026',
                 'calificacion' => 9.7,
             ],
+            [
+                'alumno_id' => $alumnoModelo->id,
+                'materia_id' => $m6->id,
+                'periodo' => 'Mayo - Agosto 2026',
+                'calificacion' => 9.2,
+            ]
         ];
 
         foreach ($calificaciones as $c) {

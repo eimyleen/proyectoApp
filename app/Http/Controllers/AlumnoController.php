@@ -35,22 +35,28 @@ class AlumnoController extends Controller
         return view('dashboard.alumno.alumno', compact('alumno', 'grupo', 'carrera', 'horarios'));
     }
 
-    public function calificaciones()
+    public function calificaciones(Request $request)
     {
         $user = Auth::user();
         $alumno = $user->alumno;
         $grupo = $alumno->grupos->first();
         $carrera = $grupo?->carrera;
 
-        $calificaciones = \App\Models\Calificacion::with('materia')
-            ->where('alumno_id', $alumno->id) 
-            ->get();
+        $periodoSeleccionado = $request->query('periodo');
 
         $periodos = \App\Models\Calificacion::where('alumno_id', $alumno->id)
-            ->distinct()
-            ->pluck('periodo');
+        ->distinct()
+        ->pluck('periodo');
 
-        return view('dashboard.alumno.alumno_calificaciones', compact('calificaciones', 'periodos', 'grupo', 'carrera'));
+        // Solo se traen las calificaciones si el usuario eligió un período
+        $calificaciones = $periodoSeleccionado 
+            ? \App\Models\Calificacion::with('materia')
+                ->where('alumno_id', $alumno->id)
+                ->where('periodo', $periodoSeleccionado)
+                ->get()
+            : collect();
+
+        return view('dashboard.alumno.alumno_calificaciones', compact('calificaciones', 'periodos', 'grupo', 'carrera', 'periodoSeleccionado'));
     }
 
     public function expediente() {

@@ -109,17 +109,25 @@
                  NOTA: Las opciones del select se llenarán desde
                  el controlador con los períodos disponibles.
             --}}
-            <div class="filtro-periodo">
-                <div class="periodo-select">
-                    <label>{{ __('messages.label_period') }}</label>
-                    <select name="periodo" id="periodoSelect">
-                        <option value="">{{ __('messages.select_period') }}</option>
-                        @foreach($periodos as $periodo)
-                            <option value="{{ $periodo }}">{{ $periodo }}</option>
-                        @endforeach
-                    </select>
+            <form method="GET" action="{{ route('alumno.calificaciones') }}">
+                <div class="filtro-periodo">
+                    <div class="periodo-select">
+                        <label for="periodoSelect">{{ __('messages.label_period') }}</label>
+                        <select name="periodo" id="periodoSelect">
+                            <option value="" {{ empty($periodoSeleccionado) ? 'selected' : '' }}>
+                                {{ __('messages.select_period') }}
+                            </option>
+                            @foreach($periodos as $periodo)
+                                <option value="{{ $periodo }}" {{ $periodoSeleccionado == $periodo ? 'selected' : '' }}>
+                                    {{ $periodo }}
+                                </option>
+                            @endforeach
+                        </select>
+                        {{-- Este boton necesita css--}}
+                        <button type="submit">Buscar</button>
+                    </div>
                 </div>
-            </div>
+            </form>
 
             {{-- ==================================================
                  TABLA DE CALIFICACIONES
@@ -137,30 +145,33 @@
                  - Cada calificación puede tener colores según su valor
                    (ej: verde para aprobado, rojo para reprobado)
             --}}
-            <div class="tabla-calificaciones">
-                <table>
-                    <thead>
-                        <tr>
-                           <th>{{ __('messages.th_subject') }}</th>
-                            <th>{{ __('messages.th_grade') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($calificaciones as $cal)
+            {{-- La tabla solo se renderiza si el usuario seleccionó un período --}}
+            @if($periodoSeleccionado)
+                <div class="tabla-calificaciones">
+                    <table>
+                        <thead>
                             <tr>
-                                <td>{{ $cal->materia->nombre }}</td>
-                                <td class="calificacion {{ $cal->calificacion >= 8 ? 'aprobado' : 'reprobado' }}">
-                                    {{ number_format($cal->calificacion, 1) }}
-                                </td>
+                                <th>{{ __('messages.th_subject') }}</th>
+                                <th>{{ __('messages.th_grade') }}</th>
                             </tr>
-                        @empty
-                            <tr>
-                                <td colspan="2" style="text-align: center;">No hay calificaciones registradas aún.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            @forelse($calificaciones as $cal)
+                                <tr>
+                                    <td>{{ $cal->materia->nombre ?? 'N/A' }}</td>
+                                    <td class="calificacion {{ $cal->calificacion >= 8 ? 'aprobado' : 'reprobado' }}">
+                                        {{ number_format($cal->calificacion, 1) }}
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="2" style="text-align: center;">No hay calificaciones registradas en este período.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            @endif
         </div>
     </div>
 @endsection
