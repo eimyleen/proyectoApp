@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use Illuminate\Http\Request;
 use App\Models\Carrera;
 use App\Models\Grupo;
@@ -88,13 +89,33 @@ class MaestroCarreraController extends Controller
     }
 
     // Funcion para ver el expediente de un alumno desde la perspectiva del maestro
-    public function verExpedienteAlumno($id)
+    public function verExpedienteAlumno($id, Request $request)
     {
         $alumno = Alumno::findOrFail($id);
         $grupo = $alumno->grupos->first();
         $carrera = $grupo?->carrera;
 
-        return view('dashboard.maestro.expediente_alumno_maestro', compact('alumno', 'grupo', 'carrera'));
+        $periodoSeleccionado = $request->query('periodo');
+
+        $periodos = \App\Models\Calificacion::where('alumno_id', $alumno->id)
+        ->distinct()
+        ->pluck('periodo');
+        
+        $calificaciones = $periodoSeleccionado 
+            ? \App\Models\Calificacion::with('materia')
+                ->where('alumno_id', $alumno->id)
+                ->where('periodo', $periodoSeleccionado)
+                ->get()
+            : collect();
+
+        return view('dashboard.maestro.expediente_alumno_maestro', compact('alumno', 'grupo', 'carrera', 'periodoSeleccionado', 'periodos', 'calificaciones'));
+    }
+
+    public function maestroPerfil() {
+        $user = Auth::user();
+        $maestro = $user->maestro;
+        $carreras = $maestro->carreras;
+        return view('dashboard.maestro.perfil_maestro', compact('user', 'maestro', 'carreras'));
     }
 
     public function descargarAlumnosPDF()

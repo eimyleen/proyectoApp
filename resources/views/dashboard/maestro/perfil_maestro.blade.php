@@ -121,43 +121,43 @@
             {{-- Nombre --}}
             <div class="dato-item">
                 <label>{{ __('messages.profile_names') }}</label>
-                <span class="dato-valor">{{ Auth::user()->name }}</span>
+                <span class="dato-valor">{{ $user->name }}</span>
             </div>
             
             {{-- Apellidos --}}
             <div class="dato-item">
                 <label>{{ __('messages.profile_last_names') }}</label>
-                <span class="dato-valor">{{ Auth::user()->apellido }}</span>
+                <span class="dato-valor">{{ $user->apellido }}</span>
             </div>
             
             {{-- Número de empleado --}}
             <div class="dato-item">
                 <label>{{ __('messages.profile_employee_num') }}</label>
-                <span class="dato-valor">{{ Auth::user()->maestro->num_empleado ?? 'N/A' }}</span>
+                <span class="dato-valor">{{ $maestro->num_empleado ?? 'N/A' }}</span>
             </div>
             
             {{-- RFC --}}
             <div class="dato-item">
                 <label>{{ __('messages.profile_rfc') }}</label>
-                <span class="dato-valor">{{ Auth::user()->maestro->rfc ?? 'N/A' }}</span>
+                <span class="dato-valor">{{ $maestro->rfc ?? 'N/A' }}</span>
             </div>
             
             {{-- Edad --}}
             <div class="dato-item">
                 <label>{{ __('messages.profile_age') }}</label>
-                <span class="dato-valor">{{ Auth::user()->maestro->edad ?? 'N/A' }} {{ __('messages.profile_years') }}</span>
+                <span class="dato-valor">{{ $maestro->edad ?? 'N/A' }} {{ __('messages.profile_years') }}</span>
             </div>
             
             {{-- Teléfono --}}
             <div class="dato-item">
                 <label>{{ __('messages.profile_phone') }}</label>
-                <span class="dato-valor">{{ Auth::user()->maestro->telefono ?? __('messages.profile_no_phone') }}</span>
+                <span class="dato-valor">{{ $maestro->telefono ?? __('messages.profile_no_phone') }}</span>
             </div>
             
             {{-- Correo electrónico --}}
             <div class="dato-item">
                 <label>{{ __('messages.profile_email') }}</label>
-                <span class="dato-valor">{{ Auth::user()->email }}</span>
+                <span class="dato-valor">{{ $user->email }}</span>
             </div>
         </div>
 
@@ -168,8 +168,24 @@
              Los datos se cargarán dinámicamente desde el backend.
         --}}
         <h3 class="seccion-titulo">{{ __('messages.profile_teaching_careers') }}</h3>
-        <div class="carreras-grid">
+        <div class="carreras-grid tabla-calificaciones">
             {{-- Las carreras se cargarán dinámicamente desde el backend --}}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Es Tutor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($carreras as $carrera)
+                        <tr>
+                            <td>{{ $carrera->nombre ?? 'Sin Nombre' }}</td>
+                            <td>No Es Tutor</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
 
         {{-- ======================================================

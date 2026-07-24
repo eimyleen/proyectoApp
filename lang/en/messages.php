@@ -77,6 +77,7 @@ return [
     'not_assigned' => 'Not assigned',
     'not_available' => 'N/A',
     'subtitle_record' => 'Here you can consult your personal and academic information',
+    'expedient_documents' => 'Expedient Documents',
 
     // --- Teacher Module ---
     'teacher_panel' => 'Teacher Dashboard',
@@ -198,6 +199,7 @@ return [
     'btn_view_profile' => 'View profile',
     'btn_add_teacher' => '+ Add teacher',
     'btn_download_teachers' => 'Download teachers list',
+    'groups_no_tutor' => 'This Group Doesn\'t have an Tutor',
 
     // --- TABLES ---
     'column_number' => 'No.',
