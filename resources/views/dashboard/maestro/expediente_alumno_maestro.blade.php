@@ -62,13 +62,19 @@
     --}}
     <div class="expediente-container">
         
-        {{-- ======================================================
-             BOTÓN GENERAR PDF
-             ====================================================== 
-             Permite descargar el expediente en formato PDF.
+        {{-- 
+            ======================================================
+            NOTA: CAMBIO REALIZADO - GENERACIÓN DE PDF
+            ======================================================
+            Se agregó ID "btnGenerarPDF" al botón y una alerta de
+            confirmación con SweetAlert.
+            
+            Originalmente solo redirigía a '#'.
+            Ahora pregunta antes de mostrar el mensaje informativo.
+            ======================================================
         --}}
         <div class="pdf-button-container">
-            <button class="btn-generar-pdf">
+            <button class="btn-generar-pdf" id="btnGenerarPDF">
                 <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-pdf">
                 {{ __('messages.expedient_generate_pdf') }}
             </button>
@@ -327,7 +333,16 @@
     </div>
 @endsection
 
-{{-- SCRIPTS ADICIONALES --}}
+{{-- 
+    ======================================================
+    SCRIPTS ADICIONALES
+    ======================================================
+    NOTA: FUNCIONALIDADES AGREGADAS
+    ======================================================
+    1. Confirmación antes de generar PDF del expediente
+    2. Confirmación antes de guardar tutoría
+    ======================================================
+--}}
 @push('scripts')
 <script>
     {{-- 
@@ -335,11 +350,16 @@
         1. Filtro de período para calificaciones
         2. Modal para agregar/editar tutorías
         3. Botones de edición en filas de tutorías
+        4. Confirmación antes de generar PDF del expediente (NUEVO)
+        5. Confirmación antes de guardar tutoría (NUEVO)
+        6. Validación de campos vacíos en modal (NUEVO)
     --}}
 
     document.addEventListener('DOMContentLoaded', function() {
         
-        {{-- 1. FILTRO DE PERÍODO PARA CALIFICACIONES --}}
+        // ==============================================
+        // 1. FILTRO DE PERÍODO PARA CALIFICACIONES
+        // ==============================================
         const periodoSelect = document.getElementById('periodoSelect');
         const calificacionesBody = document.getElementById('calificacionesBody');
         
@@ -347,7 +367,7 @@
             periodoSelect.addEventListener('change', function() {
                 const periodo = this.value;
                 if (periodo) {
-                    {{-- Aquí el backend cargará las calificaciones del período seleccionado --}}
+                    // Aquí el backend cargará las calificaciones del período seleccionado
                     calificacionesBody.innerHTML = '';
                     for (let i = 0; i < 5; i++) {
                         const row = document.createElement('tr');
@@ -355,7 +375,7 @@
                         calificacionesBody.appendChild(row);
                     }
                 } else {
-                    {{-- Mostrar 5 filas vacías --}}
+                    // Mostrar 5 filas vacías
                     calificacionesBody.innerHTML = '';
                     for (let i = 0; i < 5; i++) {
                         const row = document.createElement('tr');
@@ -366,14 +386,16 @@
             });
         }
 
-        {{-- 2. MODAL DE TUTORÍAS --}}
+        // ==============================================
+        // 2. MODAL DE TUTORÍAS
+        // ==============================================
         const modal = document.getElementById('modalTutoria');
         const btnAgregar = document.getElementById('btnAgregarTutoria');
         const closeModal = document.getElementById('closeModal');
         const cancelarModal = document.getElementById('cancelarModal');
         const modalTitulo = document.getElementById('modalTitulo');
 
-        {{-- Abrir modal para agregar --}}
+        // Abrir modal para agregar
         if (btnAgregar) {
             btnAgregar.addEventListener('click', function() {
                 modalTitulo.textContent = '{{ __('messages.modal_add_tutoria') }}';
@@ -384,7 +406,7 @@
             });
         }
 
-        {{-- Cerrar modal --}}
+        // Cerrar modal
         function cerrarModal() {
             modal.style.display = 'none';
         }
@@ -392,30 +414,16 @@
         if (closeModal) closeModal.addEventListener('click', cerrarModal);
         if (cancelarModal) cancelarModal.addEventListener('click', cerrarModal);
 
-        {{-- Cerrar modal al hacer clic fuera --}}
+        // Cerrar modal al hacer clic fuera
         window.addEventListener('click', function(event) {
             if (event.target == modal) {
                 cerrarModal();
             }
         });
 
-        {{-- Guardar tutoría --}}
-        const guardarBtn = document.getElementById('guardarTutoria');
-        if (guardarBtn) {
-            guardarBtn.addEventListener('click', function() {
-                const fecha = document.getElementById('fechaTutoria').value;
-                const tema = document.getElementById('temaTutoria').value;
-                
-                if (fecha && tema) {
-                    alert('{{ __('messages.modal_success') }}');
-                    cerrarModal();
-                } else {
-                    alert('{{ __('messages.modal_error_empty') }}');
-                }
-            });
-        }
-
-        {{-- 3. BOTONES DE EDICIÓN EN FILAS DE TUTORÍAS --}}
+        // ==============================================
+        // 3. BOTONES DE EDICIÓN EN FILAS DE TUTORÍAS
+        // ==============================================
         document.querySelectorAll('.btn-editar-tutoria').forEach(btn => {
             btn.addEventListener('click', function() {
                 modalTitulo.textContent = '{{ __('messages.modal_edit_tutoria') }}';
@@ -424,7 +432,7 @@
                 const tema = row.cells[1].textContent;
                 const notas = row.cells[2].textContent;
                 
-                {{-- Convertir fecha al formato del input date --}}
+                // Convertir fecha al formato del input date
                 if (fecha && fecha.includes('/')) {
                     const partes = fecha.split('/');
                     document.getElementById('fechaTutoria').value = `${partes[2]}-${partes[1]}-${partes[0]}`;
@@ -436,6 +444,70 @@
                 modal.style.display = 'flex';
             });
         });
+
+        // ==============================================
+        // 4. CONFIRMAR GENERACIÓN DE PDF DEL EXPEDIENTE
+        // ==============================================
+        // Originalmente redirigía a '#' sin confirmación.
+        // Ahora muestra una alerta de confirmación antes de mostrar el mensaje.
+        const btnGenerarPDF = document.getElementById('btnGenerarPDF');
+        if (btnGenerarPDF) {
+            btnGenerarPDF.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                confirmarAccion(
+                    'Generar PDF del expediente',
+                    'Se generará un archivo PDF con el expediente completo del alumno. ¿Deseas continuar?',
+                    'Generar PDF',
+                    'Cancelar'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        // NOTA: La descarga real se integrará cuando la ruta esté definida
+                        alertaInfo(
+                            'Descarga de PDF',
+                            'La funcionalidad de descarga del expediente se integrará próximamente.'
+                        );
+                    }
+                });
+            });
+        }
+
+        // ==============================================
+        // 5. CONFIRMAR GUARDAR TUTORÍA
+        // ==============================================
+        // Originalmente usaba alert() para éxito y error.
+        // Ahora usa SweetAlert para confirmar el guardado.
+        const guardarBtn = document.getElementById('guardarTutoria');
+        if (guardarBtn) {
+            guardarBtn.addEventListener('click', function() {
+                const fecha = document.getElementById('fechaTutoria').value;
+                const tema = document.getElementById('temaTutoria').value;
+                const notas = document.getElementById('notasTutoria').value;
+                
+                if (fecha && tema) {
+                    confirmarAccion(
+                        'Guardar tutoría',
+                        '¿Estás seguro de que quieres guardar esta tutoría?',
+                        'Guardar',
+                        'Cancelar'
+                    ).then((result) => {
+                        if (result.isConfirmed) {
+                            // Aquí iría la lógica de guardado real
+                            alertaExito(
+                                'Tutoría guardada',
+                                'La tutoría se ha registrado correctamente.'
+                            );
+                            cerrarModal();
+                        }
+                    });
+                } else {
+                    alertaInfo(
+                        'Campos incompletos',
+                        'Debes completar la fecha y el tema de la tutoría.'
+                    );
+                }
+            });
+        }
     });
 </script>
 @endpush

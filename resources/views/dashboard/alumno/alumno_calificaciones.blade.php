@@ -75,7 +75,7 @@
                  LOGO CIRCULAR DE LA CARRERA
                  ================================================== 
                  Muestra el logo de la carrera del alumno.
-                 Si no hay logo, muestra un espacio vacío.
+                 Si no hay logo, muestra el logo de UTNay por defecto.
             --}}
             <div class="carrera-logo">
                 <div class="logo-circular">
@@ -105,9 +105,10 @@
                  ESTRUCTURA:
                  - Label: "Período:"
                  - Select: Desplegable con opciones de períodos
+                 - Botón: "Buscar" con ícono de lupa
                  
-                 NOTA: Las opciones del select se llenarán desde
-                 el controlador con los períodos disponibles.
+                 NOTA: Las opciones del select se llenan desde
+                 el controlador con la variable $periodos.
             --}}
             <form method="GET" action="{{ route('alumno.calificaciones') }}">
                 <div class="filtro-periodo">
@@ -123,8 +124,13 @@
                                 </option>
                             @endforeach
                         </select>
-                        {{-- Este boton necesita css--}}
-                        <button type="submit">Buscar</button>
+                        <button type="submit" class="btn-buscar">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"/>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                            </svg>
+                            Buscar
+                        </button>
                     </div>
                 </div>
             </form>
@@ -135,17 +141,18 @@
                  Muestra las calificaciones del alumno por materia.
                  
                  ESTRUCTURA DE LA TABLA:
-                 - Header (azul oscuro): "Materia" y "Calificación"
+                 - Header: "Materia" y "Calificación"
                  - Cuerpo: Filas con materia y calificación
                  - Columna "Calificación": Tiene la clase 'calificacion'
                    que la centra y le da un ancho fijo (120px)
                  
                  NOTA: 
-                 - Los datos se llenarán dinámicamente desde el controlador
-                 - Cada calificación puede tener colores según su valor
-                   (ej: verde para aprobado, rojo para reprobado)
+                 - Los datos se llenan dinámicamente desde el controlador con $calificaciones
+                 - Cada calificación tiene colores según su valor:
+                   - >= 8: 'aprobado' (verde)
+                   - < 8: 'reprobado' (rojo)
+                 - La tabla solo se muestra si el usuario seleccionó un período
             --}}
-            {{-- La tabla solo se renderiza si el usuario seleccionó un período --}}
             @if($periodoSeleccionado)
                 <div class="tabla-calificaciones">
                     <table>

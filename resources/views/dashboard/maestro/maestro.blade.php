@@ -108,7 +108,22 @@
                                placeholder="{{ __('messages.placeholder_search_modal') }}" 
                                class="input-busqueda-modal">
                     </div>
-                    <a href="{{ route('maestro.alumnos.pdf') }}" style="text-decoration: none;">
+                    {{-- 
+                        ======================================================
+                        NOTA: CAMBIO REALIZADO - DESCARGA DE PDF - ALERTA SWEETALERT
+                        ======================================================
+                        Se agregó ID "btnDescargarPDF" al enlace para manejarlo
+                        con JavaScript desde el script de abajo.
+                        
+                        El cambio consiste en agregar una alerta de confirmación
+                        (SweetAlert) antes de redirigir a la ruta que ya existía.
+                        
+                        La ruta 'maestro.alumnos.pdf'
+                        sigue siendo la misma y funciona igual que antes.
+                        Solo se agregó un paso de confirmación visual.
+                        ======================================================
+                    --}}
+                    <a href="#" id="btnDescargarPDF" style="text-decoration: none;">
                         <button class="btn-descargar-modal">
                             <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-modal">
                             {{ __('messages.btn_download_list') }}
@@ -145,34 +160,53 @@
 
 @endsection
 
-{{-- SCRIPTS ADICIONALES --}}
+{{-- 
+    ======================================================
+    SCRIPTS ADICIONALES
+    ======================================================
+    NOTA: FUNCIONALIDAD AGREGADA - CONFIRMACIÓN DE DESCARGA
+    ======================================================
+    Se agregó el código JavaScript que intercepta el clic en el botón
+    de descarga de PDF y muestra una alerta de confirmación usando
+    confirmarAccion() de sweetalerts.js.
+    
+    El flujo es:
+    1. Usuario hace clic en "Descargar PDF"
+    2. Aparece alerta de confirmación (frontend)
+    3. Si confirma → redirige a la ruta existente (backend)
+    4. Si cancela → no pasa nada
+    ======================================================
+--}}
 @push('scripts')
 <script>
     {{-- 
         FUNCIONALIDAD JAVASCRIPT:
         1. Modal de lista global (abrir/cerrar)
         2. Filtro de búsqueda en tabla (por cualquier columna)
+        3. Confirmación antes de descargar PDF (NUEVO)
     --}}
 
     document.addEventListener('DOMContentLoaded', function() {
         
-        {{-- 1. MODAL LISTA GLOBAL --}}
+        // ==============================================
+        // 1. MODAL LISTA GLOBAL
+        // ==============================================
         const modal = document.getElementById('modalListaGlobal');
         const btn = document.getElementById('btnListaGlobal');
         const closeBtn = document.getElementById('closeModal');
 
         if (btn && modal && closeBtn) {
-            {{-- Abrir modal --}}
+            // Abrir modal
             btn.addEventListener('click', function() {
                 modal.style.display = 'flex';
             });
 
-            {{-- Cerrar modal con la X --}}
+            // Cerrar modal con la X
             closeBtn.addEventListener('click', function() {
                 modal.style.display = 'none';
             });
 
-            {{-- Cerrar modal al hacer clic fuera --}}
+            // Cerrar modal al hacer clic fuera
             window.addEventListener('click', function(event) {
                 if (event.target == modal) {
                     modal.style.display = 'none';
@@ -180,7 +214,9 @@
             });
         }
 
-        {{-- 2. FILTRO DE BÚSQUEDA EN LA TABLA --}}
+        // ==============================================
+        // 2. FILTRO DE BÚSQUEDA EN LA TABLA
+        // ==============================================
         const inputBusquedaModal = document.getElementById('busquedaModal');
         if (inputBusquedaModal) {
             inputBusquedaModal.addEventListener('input', function() {
@@ -194,6 +230,31 @@
                     } else {
                         fila.style.display = 'none';
                     }
+                });
+            });
+        }
+
+        // ==============================================
+        // 3. CONFIRMAR DESCARGA DE PDF
+        // ==============================================
+        const btnDescargarPDF = document.getElementById('btnDescargarPDF');
+        if (btnDescargarPDF) {
+            btnDescargarPDF.addEventListener('click', function(e) {
+                // Prevenir la redirección inmediata
+                e.preventDefault();
+                
+                // Mostrar alerta de confirmación
+                confirmarAccion(
+                    'Descargar lista de alumnos',
+                    'Se generará un archivo PDF con la lista completa de alumnos. ¿Deseas continuar?',
+                    'Descargar',
+                    'Cancelar'
+                ).then((result) => {
+                    // Si el usuario confirma, redirigir a la ruta original
+                    if (result.isConfirmed) {
+                        window.location.href = '{{ route("maestro.alumnos.pdf") }}';
+                    }
+                    // Si cancela, no pasa nada
                 });
             });
         }

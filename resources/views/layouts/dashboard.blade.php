@@ -153,6 +153,11 @@
                              - Inicio (redirige al dashboard según el rol)
                              - Mi Perfil (redirige al perfil según el rol)
                              - Cerrar Sesión (cierra la sesión con formulario POST)
+                             
+                             CAMBIO REALIZADO:
+                             El enlace de "Cerrar Sesión" ahora tiene un ID
+                             (btnCerrarSesion) para ser manejado por JavaScript
+                             y mostrar una alerta de confirmación antes de cerrar.
                         --}}
                         <div class="dropdown-container">
                             <div class="action-icon" id="btnMenu">
@@ -178,10 +183,15 @@
                                     FORMULARIO PARA CERRAR SESIÓN
                                     Laravel requiere que el logout se haga con método POST
                                     para proteger contra ataques CSRF.
+                                    
+                                    CAMBIO REALIZADO:
+                                    El enlace ahora tiene ID "btnCerrarSesion" para que
+                                    JavaScript pueda interceptar el clic y mostrar
+                                    una alerta de confirmación antes de enviar el formulario.
                                 --}}
                                 <form action="{{ route('logout') }}" method="POST" id="logout-form">
                                     @csrf
-                                    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <a href="#" id="btnCerrarSesion">
                                         <img src="{{ asset('img/flecha.png') }}" alt="Cerrar" class="dropdown-icon"> Cerrar Sesión
                                     </a>
                                 </form>
@@ -241,6 +251,8 @@
             - Menú desplegable de navegación (puntitos)
             - Dropdown de idioma
             - Cerrar dropdowns al hacer clic fuera
+            - Confirmación antes de cerrar sesión
+            - Mensaje de bienvenida (solo una vez)
             - Toma el rol directamente de Laravel
         --}}
 
@@ -248,7 +260,9 @@
             // Pasamos el rol directamente de Laravel a JS sin redeclarar variables conflictivas
             const userRole = "{{ Auth::user()->role }}";
 
-            // Lógica del menú desplegable (puntitos)
+            // ==============================================
+            // MENU DESPLEGABLE (puntitos)
+            // ==============================================
             const btnMenu = document.getElementById('btnMenu');
             const dropdownMenu = document.getElementById('dropdownMenu');
             
@@ -264,7 +278,9 @@
                 if (dropdownMenu) dropdownMenu.classList.remove('show');
             });
 
-            // Dropdown de idioma (tuerca)
+            // ==============================================
+            // DROPDOWN DE IDIOMA (tuerca)
+            // ==============================================
             const btnIdioma = document.getElementById('btnIdioma');
             const dropdownIdioma = document.getElementById('dropdownIdioma');
             
@@ -274,16 +290,53 @@
                     dropdownIdioma.classList.toggle('show');
                 });
             }
+
+            // ==============================================
+            // CONFIRMAR ANTES DE CERRAR SESION
+            // ==============================================
+            const btnCerrarSesion = document.getElementById('btnCerrarSesion');
+            if (btnCerrarSesion) {
+                btnCerrarSesion.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    confirmarAccion(
+                        'Cerrar sesión',
+                        '¿Estás seguro de que quieres cerrar sesión?',
+                        'Cerrar sesión',
+                        'Cancelar'
+                    ).then((result) => {
+                        if (result.isConfirmed) {
+                            document.getElementById('logout-form').submit();
+                        }
+                    });
+                });
+            }
+
+            // ==============================================
+            // MENSAJE DE BIENVENIDA (SOLO UNA VEZ)
+            // ==============================================
+            // Muestra un mensaje de bienvenida al cargar la página.
+            // Usa sessionStorage para recordar que ya se mostró
+            // y no volver a mostrarlo en la misma sesión de navegador.
+            const yaMostrado = sessionStorage.getItem('bienvenida_mostrada');
+            if (!yaMostrado) {
+                setTimeout(function() {
+                    alertaInfo(
+                        'Bienvenido {{ Auth::user()->name }}',
+                        'Has iniciado sesión correctamente en el Portal de Expedientes.'
+                    );
+                    sessionStorage.setItem('bienvenida_mostrada', 'true');
+                }, 500);
+            }
         });
     </script>
-        {{-- 
+
+    {{-- 
         SWEETALERT2
         Librería externa encargada de crear las ventanas emergentes
         personalizadas. Se carga primero porque contiene la variable global
         "Swal", que es utilizada por el archivo sweetalerts.js.
     --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 
     {{-- 
         SISTEMA DE ALERTAS REUTILIZABLE
@@ -301,7 +354,6 @@
         global "Swal" creada por la librería.
     --}}
     <script src="{{ asset('js/sweetalerts.js') }}"></script>
-
 
     {{-- 
         SCRIPTS ADICIONALES (STACK)

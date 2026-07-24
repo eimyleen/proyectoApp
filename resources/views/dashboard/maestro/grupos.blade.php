@@ -124,7 +124,16 @@
                 <span class="tutor-label">{{ __('messages.groups_tutor') }}:</span>
                 <span class="tutor-nombre" id="tutorNombre">{{ __('messages.groups_no_tutor') }}</span>
             </div>
-            {{-- Botón para descargar lista del grupo --}}
+            {{-- 
+                ======================================================
+                NOTA: CAMBIO REALIZADO - DESCARGA DE LISTA DEL GRUPO
+                ======================================================
+                Se reemplazó el alert() original por una alerta de
+                confirmación con SweetAlert.
+                
+                Originalmente solo mostraba un mensaje con alert().
+                ======================================================
+            --}}
             <button class="btn-descargar-grupo" id="btnDescargarGrupo">
                 <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-descarga">
                 {{ __('messages.groups_download_list') }}
@@ -183,19 +192,36 @@
     </div>
 @endsection
 
-{{-- SCRIPTS ADICIONALES --}}
+{{-- 
+    ======================================================
+    SCRIPTS ADICIONALES
+    ======================================================
+    NOTA: FUNCIONALIDAD AGREGADA - CONFIRMACIÓN DE DESCARGA
+    ======================================================
+    Se reemplazó el alert() original por una alerta de
+    confirmación con SweetAlert.
+    
+    El flujo es:
+    1. Usuario hace clic en "Descargar lista"
+    2. Aparece alerta de confirmación
+    3. Si confirma → muestra mensaje informativo
+    4. Si cancela → no pasa nada
+    ======================================================
+--}}
 @push('scripts')
 <script>
     {{-- 
         FUNCIONALIDAD JAVASCRIPT:
         1. Botón de regreso
         2. Carga de tutor al seleccionar grupo
-        3. Botón descargar lista del grupo
+        3. Confirmación antes de descargar lista del grupo (NUEVO)
     --}}
 
     document.addEventListener('DOMContentLoaded', function() {
         
-        {{-- 1. BOTÓN DE REGRESO --}}
+        // ==============================================
+        // 1. BOTÓN DE REGRESO
+        // ==============================================
         const backButton = document.getElementById('backButton');
         if (backButton) {
             backButton.addEventListener('click', function() {
@@ -203,7 +229,9 @@
             });
         }
 
-        {{-- 2. CARGA DE TUTOR AL SELECCIONAR GRUPO --}}
+        // ==============================================
+        // 2. CARGA DE TUTOR AL SELECCIONAR GRUPO
+        // ==============================================
         const tutorNombreSpan = document.getElementById('tutorNombre');
         const grupoSelect = document.getElementById('grupoSelect');
 
@@ -221,11 +249,35 @@
             });
         }
 
-        {{-- 3. BOTÓN DESCARGAR GRUPO --}}
+        // ==============================================
+        // 3. CONFIRMAR DESCARGA DE LISTA DEL GRUPO
+        // ==============================================
+        // Originalmente: alert('{{ __('messages.groups_download_alert') }}');
         const btnDescargarGrupo = document.getElementById('btnDescargarGrupo');
         if (btnDescargarGrupo) {
-            btnDescargarGrupo.addEventListener('click', function() {
-                alert('{{ __('messages.groups_download_alert') }}');
+            btnDescargarGrupo.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Obtener el nombre del grupo seleccionado
+                const select = document.querySelector('.grupo-select');
+                const optionSelected = select ? select.options[select.selectedIndex] : null;
+                const nombreGrupo = optionSelected ? optionSelected.textContent : 'seleccionado';
+                
+                // Mostrar alerta de confirmación
+                confirmarAccion(
+                    'Descargar lista del grupo',
+                    `Se generará un archivo PDF con la lista de alumnos del grupo "${nombreGrupo}". ¿Deseas continuar?`,
+                    'Descargar',
+                    'Cancelar'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        // NOTA: La descarga real se integrará cuando la ruta esté definida
+                        alertaInfo(
+                            'Descarga de lista',
+                            'La funcionalidad de descarga se integrará próximamente.'
+                        );
+                    }
+                });
             });
         }
     });
