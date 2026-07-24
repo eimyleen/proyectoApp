@@ -174,42 +174,80 @@
             <div class="documento-item">
                 <div class="documento-info">
                     <span class="documento-nombre">Acta de nacimiento</span>
-                    <span class="documento-estado subido">Documento subido</span>
+                    @if($alumno->doc_acta_nacimiento)
+                        <span class="documento-estado subido">Documento subido</span>
+                    @else
+                        <span class="documento-estado no-subido">No subido</span>
+                    @endif
                 </div>
-                <button class="btn-ver-documento" onclick="window.location.href='#'">
-                    <img src="{{ asset('img/ojo.png') }}" alt="Ver" class="btn-icon">
-                    Ver documento
-                </button>
+                @if($alumno->doc_acta_nacimiento)
+                    <button class="btn-ver-documento" onclick="window.location.href='{{ asset('storage/' . $alumno->doc_acta_nacimiento) }}'">
+                        <img src="{{ asset('img/ojo.png') }}" alt="Ver" class="btn-icon">
+                        Ver documento
+                    </button>
+                @else
+                    <span class="estado-sin-boton">—</span>
+                @endif
             </div>
 
             {{-- Documento 2: CURP (no subido) --}}
             <div class="documento-item">
                 <div class="documento-info">
                     <span class="documento-nombre">CURP</span>
-                    <span class="documento-estado no-subido">No subido</span>
+                    @if($alumno->doc_curp)
+                        <span class="documento-estado subido">Documento subido</span>
+                    @else
+                        <span class="documento-estado no-subido">No subido</span>
+                    @endif
                 </div>
-                <span class="estado-sin-boton">—</span>
+                @if($alumno->doc_curp)
+                    <button class="btn-ver-documento" onclick="window.location.href='{{ asset('storage/' . $alumno->doc_curp) }}'">
+                        <img src="{{ asset('img/ojo.png') }}" alt="Ver" class="btn-icon">
+                        Ver documento
+                    </button>
+                @else
+                    <span class="estado-sin-boton">—</span>
+                @endif
             </div>
 
             {{-- Documento 3: Certificado de bachillerato (no subido) --}}
             <div class="documento-item">
                 <div class="documento-info">
                     <span class="documento-nombre">Certificado de bachillerato</span>
-                    <span class="documento-estado no-subido">No subido</span>
+                    @if($alumno->doc_certificado_bachillerato)
+                        <span class="documento-estado subido">Documento subido</span>
+                    @else
+                        <span class="documento-estado no-subido">No subido</span>
+                    @endif
                 </div>
-                <span class="estado-sin-boton">—</span>
+                @if($alumno->doc_certificado_bachillerato)
+                    <button class="btn-ver-documento" onclick="window.location.href='{{ asset('storage/' . $alumno->doc_certificado_bachillerato) }}'">
+                        <img src="{{ asset('img/ojo.png') }}" alt="Ver" class="btn-icon">
+                        Ver documento
+                    </button>
+                @else
+                    <span class="estado-sin-boton">—</span>
+                @endif
             </div>
 
             {{-- Documento 4: Constancia de estudios (subido) --}}
             <div class="documento-item">
                 <div class="documento-info">
                     <span class="documento-nombre">Constancia de estudios</span>
-                    <span class="documento-estado subido">Documento subido</span>
+                    @if($alumno->doc_constancia_estudios)
+                        <span class="documento-estado subido">Documento subido</span>
+                    @else
+                        <span class="documento-estado no-subido">No subido</span>
+                    @endif
                 </div>
-                <button class="btn-ver-documento" onclick="window.location.href='#'">
-                    <img src="{{ asset('img/ojo.png') }}" alt="Ver" class="btn-icon">
-                    Ver documento
-                </button>
+                @if($alumno->doc_constancia_estudios)
+                    <button class="btn-ver-documento" onclick="window.location.href='{{ asset('storage/' . $alumno->doc_constancia_estudios) }}'">
+                        <img src="{{ asset('img/ojo.png') }}" alt="Ver" class="btn-icon">
+                        Ver documento
+                    </button>
+                @else
+                    <span class="estado-sin-boton">—</span>
+                @endif
             </div>
         </div>
 
@@ -261,37 +299,6 @@
              Solo visible para maestros que son TUTOR.
              El backend debe mostrar esta sección solo si $esTutor = true
         --}}
-        <div class="tutorias-header">
-            <h3 class="seccion-titulo tutorias-titulo">{{ __('messages.expedient_tutorias') }}</h3>
-            <button class="btn-agregar-tutoria" id="btnAgregarTutoria">
-                {{ __('messages.expedient_add_tutoria') }}
-            </button>
-        </div>
-        
-        <div class="tabla-container">
-            <table class="tabla-tutorias">
-                <thead>
-                    <tr>
-                        <th>{{ __('messages.expedient_date') }}</th>
-                        <th>{{ __('messages.expedient_topic') }}</th>
-                        <th>{{ __('messages.expedient_notes') }}</th>
-                        <th>{{ __('messages.expedient_actions') }}</th>
-                    </tr>
-                </thead>
-                <tbody id="tutoriasBody">
-                    @for($i = 0; $i < 2; $i++)
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <button class="btn-editar-tutoria">{{ __('messages.expedient_edit') }}</button>
-                            </td>
-                        </tr>
-                    @endfor
-                </tbody>
-            </table>
-        </div>
         {{-- FIN SECCIÓN TUTORÍAS --}}
 
     </div>
