@@ -262,11 +262,20 @@
         {{-- Filtro de período --}}
         <div class="filtro-periodo-expediente">
             <div class="periodo-select-expediente">
-                <label>{{ __('messages.expedient_period') }}:</label>
-                <select id="periodoSelect">
-                    <option value="">{{ __('messages.expedient_select_period') }}</option>
-                    {{-- Los períodos se cargarán dinámicamente desde el backend --}}
-                </select>
+                <form action="{{ route('maestro.alumno.expediente', $alumno->id) }}" method="get">
+                    <label for="periodoSelect">{{ __('messages.expedient_period') }}:</label>
+                    <select name="periodo" id="periodoSelect">
+                        <option value="">{{ __('messages.expedient_select_period') }}</option>
+                        @foreach($periodos as $periodo)
+                            <option value="{{ $periodo }}" {{ $periodoSeleccionado == $periodo ? 'selected' : '' }}>
+                                {{ $periodo }}
+                            </option>
+                        @endforeach
+                    </select>
+                    {{-- Este boton necesita css--}}
+                    <button type="submit">Buscar</button>
+                </form>
+                
             </div>
         </div>
 
@@ -280,12 +289,24 @@
                     </tr>
                 </thead>
                 <tbody id="calificacionesBody">
-                    @for($i = 0; $i < 5; $i++)
-                        <tr>
-                            <td></td>
-                            <td class="calificacion"></td>
-                        </tr>
-                    @endfor
+                    @if ($periodoSeleccionado)
+                        @foreach($calificaciones as $cal)
+                            <tr>
+                                <td>{{ $cal->materia->nombre ?? 'N/A' }}</td>
+                                <td class="calificacion" {{ $cal->calificacion >= 8 ? 'aprobado' : 'reprobado' }}>
+                                    {{ number_format($cal->calificacion, 1) }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
+                        @for($i = 0; $i < 5; $i++)
+                            <tr>
+                                <td></td>
+                                <td class="calificacion"></td>
+                            </tr>
+                        @endfor
+                    @endif
+                    
                 </tbody>
             </table>
         </div>
