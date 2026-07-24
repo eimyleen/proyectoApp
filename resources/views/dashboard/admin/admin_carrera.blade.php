@@ -135,7 +135,7 @@
             {{-- Panel de información del tutor --}}
             <div class="tutor-info-panel">
                 <div class="tutor-info">
-                    <span class="tutor-label">{{ __('messages.tutor_label') }}</span>
+                    <span class="tutor-label">{{ __('messages.tutor_label') . ': ' . __('messages.groups_no_tutor') }}</span>
                     <span class="tutor-nombre" id="tutorNombre"></span>
                 </div>
             </div>

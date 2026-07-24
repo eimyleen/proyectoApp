@@ -126,9 +126,9 @@ Route::middleware(['auth'])->group(function () {
     ])->middleware('role:maestro')->name('maestro.show');
 
     // --- Ruta del perfil del Maestro ---
-    Route::get('/dashboard/maestro/perfil', function () {
-        return view('dashboard.maestro.perfil_maestro');
-    })->middleware('role:maestro')->name('maestro.perfil');
+    Route::get('/dashboard/maestro/perfil', [
+        MaestroCarreraController::class, 'maestroPerfil'
+    ])->middleware('role:maestro')->name('maestro.perfil');
 
     // --- Ruta de los grupos del Maestro ---
     Route::get('/dashboard/maestro/grupos', function () {

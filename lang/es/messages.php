@@ -77,6 +77,7 @@ return [
     'not_assigned' => 'No asignada',
     'not_available' => 'N/A',
     'subtitle_record' => 'Aquí puedes consultar tu información personal y académica',
+    'expedient_documents' => 'Documentos de Expediente',
 
     // --- Módulo Maestro ---
     'teacher_panel' => 'Panel del Maestro',
@@ -199,6 +200,7 @@ return [
     'btn_view_profile' => 'Ver perfil',
     'btn_add_teacher' => '+ Agregar maestro',
     'btn_download_teachers' => 'Descargar lista de maestros',
+    'groups_no_tutor' => 'Este Grupo no tiene Tutor',
 
     // --- TABLAS ---
     'column_number' => 'No.',

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use Illuminate\Http\Request;
 use App\Models\Carrera;
 use App\Models\Grupo;
@@ -108,6 +109,13 @@ class MaestroCarreraController extends Controller
             : collect();
 
         return view('dashboard.maestro.expediente_alumno_maestro', compact('alumno', 'grupo', 'carrera', 'periodoSeleccionado', 'periodos', 'calificaciones'));
+    }
+
+    public function maestroPerfil() {
+        $user = Auth::user();
+        $maestro = $user->maestro;
+        $carreras = $maestro->carreras;
+        return view('dashboard.maestro.perfil_maestro', compact('user', 'maestro', 'carreras'));
     }
 
     public function descargarAlumnosPDF()
