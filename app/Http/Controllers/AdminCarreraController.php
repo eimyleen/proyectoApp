@@ -28,7 +28,7 @@ class AdminCarreraController extends Controller {
     
     public function show($id, Request $req) {
         $carrera = Carrera::findOrFail($id);
-        $grupos = Grupo::where('carrera_id', $id)->get();
+        $grupos = Grupo::with('maestro.user')->where('carrera_id', $id)->get();
         $grupoId = $req->grupo_id;
 
         $alumnos = Alumno::with(['user:id,name,apellido', 'grupos.carrera'])
@@ -39,7 +39,7 @@ class AdminCarreraController extends Controller {
                 $q->where('grupos.id', $grupoId);
             }
         })->get();
-        
+
         $maestros = Maestro::with('user:id,name,apellido,email')->whereHas('carreras', function($d) use ($id) {
             $d->where('carrera_id', $id);
         })->get();
@@ -249,6 +249,89 @@ class AdminCarreraController extends Controller {
         $pdf = Pdf::loadView('pdf.lista_alumnos_maestro', compact('alumnos'));
 
         return $pdf->download('reporte_global_alumnos_' . now()->format('d-m-Y') . '.pdf');
+    }
+
+    public function updateAlumno(Request $request, $carreraId, $alumnoId)
+    {
+        $data = $request->validate([
+            'name'             => 'required|string|max:255',
+            'apellido'         => 'required|string|max:255',
+            'email'            => 'required|email|max:255',
+            'matricula'        => 'required|string|max:12',
+            'curp'             => 'required|string|max:18',
+            'sexo'             => 'required|in:M,F,Otro',
+            'fecha_nacimiento' => 'required|date',
+            'telefono'         => 'nullable|string|max:20',
+            'grupo'            => 'required|exists:grupos,id',
+        ]);
+
+        $alumno = Alumno::findOrFail($alumnoId);
+        $alumno->user->update([
+            'name'     => $data['name'],
+            'apellido' => $data['apellido'],
+            'email'    => $data['email'],
+        ]);
+
+        $alumno->update([
+            'matricula'        => $data['matricula'],
+            'curp'             => $data['curp'],
+            'sexo'             => $data['sexo'],
+            'fecha_nacimiento' => $data['fecha_nacimiento'],
+            'telefono'         => $data['telefono'],
+        ]);
+
+        $alumno->grupos()->sync([$data['grupo'] => ['periodo' => 'Primero']]);
+
+        return redirect()->route('admin.show', $carreraId)->with('success', 'Alumno actualizado correctamente');
+    }
+
+    public function updateMaestro(Request $request, $carreraId, $maestroId)
+    {
+        $data = $request->validate([
+            'name'             => 'required|string|max:255',
+            'apellido'         => 'required|string|max:255',
+            'email'            => 'required|email|max:255',
+            'num_empleado'     => 'required|string|max:20',
+            'rfc'              => 'required|string|max:13',
+            'sexo'             => 'required|in:M,F,Otro',
+            'fecha_nacimiento' => 'required|date',
+            'telefono'         => 'nullable|string|max:20',
+        ]);
+
+        $maestro = Maestro::findOrFail($maestroId);
+        $maestro->user->update([
+            'name'     => $data['name'],
+            'apellido' => $data['apellido'],
+            'email'    => $data['email'],
+        ]);
+
+        $maestro->update([
+            'num_empleado'     => $data['num_empleado'],
+            'rfc'              => $data['rfc'],
+            'sexo'             => $data['sexo'],
+            'fecha_nacimiento' => $data['fecha_nacimiento'],
+            'telefono'         => $data['telefono'],
+        ]);
+
+        return redirect()->route('admin.show', $carreraId)->with('success', 'Maestro actualizado correctamente');
+    }
+
+    public function updateGrupo(Request $request, $carreraId, $grupoId)
+    {
+        $data = $request->validate([
+            'nombre'    => 'required|string|max:10',
+            'grado'     => 'required|in:1,2,3,4,5,6,7,8,9,10,11',
+            'maestro_id' => 'nullable|exists:maestros,id',
+        ]);
+
+        $grupo = Grupo::findOrFail($grupoId);
+        $grupo->update([
+            'nombre'     => $data['nombre'],
+            'grado'      => $data['grado'],
+            'maestro_id' => $data['maestro_id'] ?: null,
+        ]);
+
+        return redirect()->route('admin.show', $carreraId)->with('success', 'Grupo actualizado correctamente');
     }
 
     public function storeGrupo(Request $request, $carreraId)

@@ -77,6 +77,18 @@ Route::middleware(['auth'])->group(function () {
         AdminCarreraController::class, 'storeGrupo'
     ])->middleware('role:admin')->name('admin.carrera.storeGrupo');
 
+    Route::patch('/admin/carrera/{carreraId}/alumno/{alumnoId}', [
+        AdminCarreraController::class, 'updateAlumno'
+    ])->middleware('role:admin')->name('admin.carrera.updateAlumno');
+
+    Route::patch('/admin/carrera/{carreraId}/maestro/{maestroId}', [
+        AdminCarreraController::class, 'updateMaestro'
+    ])->middleware('role:admin')->name('admin.carrera.updateMaestro');
+
+    Route::patch('/admin/carrera/{carreraId}/grupo/{grupoId}', [
+        AdminCarreraController::class, 'updateGrupo'
+    ])->middleware('role:admin')->name('admin.carrera.updateGrupo');
+
     Route::post('/respaldo', [
         AdminCarreraController::class, 'manejarBackupManual'
     ])->middleware(['auth', 'role:admin']);

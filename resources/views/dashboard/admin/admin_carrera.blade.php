@@ -145,8 +145,14 @@
             {{-- Panel de información del tutor --}}
             <div class="tutor-info-panel">
                 <div class="tutor-info">
-                    <span class="tutor-label">{{ __('messages.tutor_label') . ': ' . __('messages.groups_no_tutor') }}</span>
-                    <span class="tutor-nombre" id="tutorNombre"></span>
+                    <span class="tutor-label">{{ __('messages.tutor_label') }}:</span>
+                    <span class="tutor-nombre" id="tutorNombre">
+                        @if($grupoSeleccionado && $grupoSeleccionado->maestro)
+                            {{ $grupoSeleccionado->maestro->user?->name }} {{ $grupoSeleccionado->maestro->user?->apellido }}
+                        @else
+                            {{ __('messages.groups_no_tutor') }}
+                        @endif
+                    </span>
                 </div>
             </div>
 
@@ -177,6 +183,9 @@
                 <div class="botones-accion">
                     <button class="btn-agregar" id="btnAgregarGrupo">
                         + Agregar Grupo
+                    </button>
+                    <button class="btn-agregar" id="btnEditarGrupo" style="background: #ffffff; color: #1e293b; border: 1px solid #e2e8f0;">
+                        <img src="{{ asset('img/editar.png') }}" alt="Editar" style="width: 1rem; height: 1rem;"> Editar Grupo
                     </button>
                     <button class="btn-agregar" id="btnAgregarAlumno">
                         {{ __('messages.btn_add_student') }}
@@ -218,26 +227,30 @@
                                 <td class="col-nombre">{{ $alumno->user?->apellido }}</td>
                                 <td class="col-grupo">{{ $alumno->grupos->first()?->nombre ?? '—' }}</td>
                                 <td class="col-acciones">
-                                    {{-- Botón Ver Expediente --}}
                                     <a href="{{ route('admin.alumno.expediente', $alumno->id) }}" style="text-decoration: none;">
-                                        <button class="btn-ver-expediente">{{ __('messages.btn_view_record') }}</button>
+                                        <button class="btn-icono-tabla" title="Ver expediente">
+                                            <img src="{{ asset('img/expediente.svg') }}" alt="Expediente">
+                                        </button>
                                     </a>
-                                    
-                                    {{-- 
-                                        ======================================================
-                                        NOTA: CAMBIO REALIZADO - CONFIRMACIÓN DE ELIMINAR ALUMNO
-                                        ======================================================
-                                        Se agregó data attributes para manejar la alerta
-                                        de confirmación con SweetAlert antes de ejecutar
-                                        la acción de eliminación.
-                                        
-                                        La eliminación real permanece a cargo del backend.
-                                        ======================================================
-                                    --}}
-                                    <button class="btn-eliminar btn-eliminar-alumno" 
-                                            data-id="{{ $alumno->id }}" 
-                                            data-nombre="{{ $alumno->user?->name }} {{ $alumno->user?->apellido }}">
-                                        {{ __('messages.btn_delete') }}
+                                    <button class="btn-icono-tabla btn-editar-alumno"
+                                            data-id="{{ $alumno->id }}"
+                                            data-nombre="{{ $alumno->user?->name }}"
+                                            data-apellido="{{ $alumno->user?->apellido }}"
+                                            data-email="{{ $alumno->user?->email }}"
+                                            data-matricula="{{ $alumno->matricula }}"
+                                            data-curp="{{ $alumno->curp }}"
+                                            data-sexo="{{ $alumno->sexo }}"
+                                            data-fecha="{{ $alumno->fecha_nacimiento }}"
+                                            data-telefono="{{ $alumno->telefono }}"
+                                            data-grupo="{{ $alumno->grupos->first()?->id }}"
+                                            title="Editar alumno">
+                                        <img src="{{ asset('img/editar.png') }}" alt="Editar">
+                                    </button>
+                                    <button class="btn-icono-tabla btn-eliminar btn-eliminar-alumno"
+                                            data-id="{{ $alumno->id }}"
+                                            data-nombre="{{ $alumno->user?->name }} {{ $alumno->user?->apellido }}"
+                                            title="Eliminar alumno">
+                                        <img src="{{ asset('img/borrar.svg') }}" alt="Eliminar">
                                     </button>
                                 </td>
                             </tr>
@@ -302,26 +315,29 @@
                                 <td class="col-nombre">{{ $maestro->user?->apellido }}</td>
                                 <td class="col-correo">{{ $maestro->user?->email }}</td>
                                 <td class="col-acciones">
-                                    {{-- Botón Ver Perfil --}}
                                     <a href="{{ route('admin.maestro.perfil', $maestro->id) }}" style="text-decoration: none;">
-                                        <button class="btn-ver-perfil">{{ __('messages.btn_view_profile') }}</button>
+                                        <button class="btn-icono-tabla" title="Ver perfil">
+                                            <img src="{{ asset('img/expediente.svg') }}" alt="Perfil">
+                                        </button>
                                     </a>
-                                    
-                                    {{-- 
-                                        ======================================================
-                                        NOTA: CAMBIO REALIZADO - CONFIRMACIÓN DE ELIMINAR MAESTRO
-                                        ======================================================
-                                        Se agregó data attributes para manejar la alerta
-                                        de confirmación con SweetAlert antes de ejecutar
-                                        la acción de eliminación.
-                                        
-                                        La eliminación real permanece a cargo del backend.
-                                        ======================================================
-                                    --}}
-                                    <button class="btn-eliminar btn-eliminar-maestro" 
-                                            data-id="{{ $maestro->id }}" 
-                                            data-nombre="{{ $maestro->user?->name }} {{ $maestro->user?->apellido }}">
-                                        {{ __('messages.btn_delete') }}
+                                    <button class="btn-icono-tabla btn-editar-maestro"
+                                            data-id="{{ $maestro->id }}"
+                                            data-nombre="{{ $maestro->user?->name }}"
+                                            data-apellido="{{ $maestro->user?->apellido }}"
+                                            data-email="{{ $maestro->user?->email }}"
+                                            data-num-empleado="{{ $maestro->num_empleado }}"
+                                            data-rfc="{{ $maestro->rfc }}"
+                                            data-sexo="{{ $maestro->sexo }}"
+                                            data-fecha="{{ $maestro->fecha_nacimiento }}"
+                                            data-telefono="{{ $maestro->telefono }}"
+                                            title="Editar maestro">
+                                        <img src="{{ asset('img/editar.png') }}" alt="Editar">
+                                    </button>
+                                    <button class="btn-icono-tabla btn-eliminar btn-eliminar-maestro"
+                                            data-id="{{ $maestro->id }}"
+                                            data-nombre="{{ $maestro->user?->name }} {{ $maestro->user?->apellido }}"
+                                            title="Eliminar maestro">
+                                        <img src="{{ asset('img/borrar.svg') }}" alt="Eliminar">
                                     </button>
                                 </td>
                             </tr>
@@ -560,6 +576,194 @@
             </form>
         </div>
     </div>
+
+    {{-- MODAL EDITAR ALUMNO --}}
+    <div id="modalEditarAlumno" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Editar Alumno</h3>
+                <span class="modal-close" id="closeModalEditarAlumno">&times;</span>
+            </div>
+            <form method="POST" id="formEditarAlumno">
+                @csrf
+                @method('PATCH')
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nombre(s)</label>
+                        <input name="name" type="text" id="editAlumnoNombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Apellidos</label>
+                        <input name="apellido" type="text" id="editAlumnoApellido" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Correo electrónico</label>
+                        <input name="email" type="email" id="editAlumnoEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Matrícula</label>
+                        <input name="matricula" type="text" id="editAlumnoMatricula" required>
+                    </div>
+                    <div class="form-group">
+                        <label>CURP</label>
+                        <input name="curp" type="text" id="editAlumnoCurp" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Grupo</label>
+                        <select name="grupo" id="editAlumnoGrupo" required>
+                            <option value="">Selecciona un Grupo</option>
+                            @foreach ($grupos as $grup)
+                                <option value="{{ $grup->id }}">{{ $grup->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Nacimiento</label>
+                        <input name="fecha_nacimiento" type="date" id="editAlumnoFecha" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Sexo</label>
+                        <table>
+                            <tr style="text-align: center">
+                                <td><label>Masculino</label></td>
+                                <td><label>Femenino</label></td>
+                                <td><label>Otro</label></td>
+                            </tr>
+                            <tr>
+                                <td><input name="sexo" type="radio" value="M" id="editAlumnoSexoM" required></td>
+                                <td><input name="sexo" type="radio" value="F" id="editAlumnoSexoF"></td>
+                                <td><input name="sexo" type="radio" value="Otro" id="editAlumnoSexoO"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="form-group">
+                        <label>Teléfono</label>
+                        <input name="telefono" type="text" id="editAlumnoTelefono">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn-guardar">Guardar cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {{-- MODAL EDITAR MAESTRO --}}
+    <div id="modalEditarMaestro" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Editar Maestro</h3>
+                <span class="modal-close" id="closeModalEditarMaestro">&times;</span>
+            </div>
+            <form method="POST" id="formEditarMaestro">
+                @csrf
+                @method('PATCH')
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nombre(s)</label>
+                        <input name="name" type="text" id="editMaestroNombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Apellidos</label>
+                        <input name="apellido" type="text" id="editMaestroApellido" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Correo electrónico</label>
+                        <input name="email" type="email" id="editMaestroEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label>No. Empleado</label>
+                        <input name="num_empleado" type="text" id="editMaestroNumEmpleado" required>
+                    </div>
+                    <div class="form-group">
+                        <label>RFC</label>
+                        <input name="rfc" type="text" id="editMaestroRfc" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Nacimiento</label>
+                        <input name="fecha_nacimiento" type="date" id="editMaestroFecha" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Sexo</label>
+                        <table>
+                            <tr style="text-align: center">
+                                <td><label>Masculino</label></td>
+                                <td><label>Femenino</label></td>
+                                <td><label>Otro</label></td>
+                            </tr>
+                            <tr>
+                                <td><input name="sexo" type="radio" value="M" id="editMaestroSexoM" required></td>
+                                <td><input name="sexo" type="radio" value="F" id="editMaestroSexoF"></td>
+                                <td><input name="sexo" type="radio" value="Otro" id="editMaestroSexoO"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="form-group">
+                        <label>Teléfono</label>
+                        <input name="telefono" type="text" id="editMaestroTelefono">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn-guardar">Guardar cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {{-- MODAL EDITAR GRUPO --}}
+    <div id="modalEditarGrupo" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Editar Grupo</h3>
+                <span class="modal-close" id="closeModalEditarGrupo">&times;</span>
+            </div>
+            <form method="POST" id="formEditarGrupo">
+                @csrf
+                @method('PATCH')
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Selecciona el grupo a editar</label>
+                        <select id="selectGrupoEditar" class="grupo-select" required>
+                            <option value="">Selecciona un grupo</option>
+                            @foreach ($grupos as $grup)
+                                <option value="{{ $grup->id }}"
+                                    data-nombre="{{ $grup->nombre }}"
+                                    data-grado="{{ $grup->grado }}"
+                                    data-maestro="{{ $grup->maestro_id ?? '' }}">
+                                    {{ $grup->nombre }} - Grado {{ $grup->grado }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre del grupo</label>
+                        <input name="nombre" type="text" id="editGrupoNombre" maxlength="10" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Grado</label>
+                        <select name="grado" id="editGrupoGrado" required>
+                            <option value="">Selecciona un grado</option>
+                            @for($g = 1; $g <= 11; $g++)
+                                <option value="{{ $g }}">{{ $g }}</option>
+                            @endfor
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tutor / Maestro asignado</label>
+                        <select name="maestro_id" id="editGrupoMaestro">
+                            <option value="">Sin tutor asignado</option>
+                            @foreach ($maestros as $m)
+                                <option value="{{ $m->id }}">{{ $m->user?->name }} {{ $m->user?->apellido }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn-guardar">Guardar cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
 @endsection
 
 {{-- 
@@ -582,23 +786,8 @@
 --}}
 @push('scripts')
 <script>
-    {{-- 
-        FUNCIONALIDAD JAVASCRIPT:
-        1. Cambio de pestañas (Grupos / Maestros)
-        2. Modales (Agregar Alumno, Agregar Maestro, Editar Carrera)
-        3. Cerrar modales al hacer clic fuera
-        4. Confirmación antes de eliminar carrera
-        5. Confirmación antes de descargar lista de grupos
-        6. Confirmación antes de descargar lista de maestros
-        7. Confirmación antes de eliminar alumno
-        8. Confirmación antes de eliminar maestro
-        9. Confirmación antes de guardar alumno + validación
-        10. Confirmación antes de guardar maestro + validación
-        11. Confirmación antes de guardar carrera + validación
-    --}}
-
     document.addEventListener('DOMContentLoaded', function() {
-        
+
         // ==============================================
         // 1. CAMBIO DE PESTAÑAS
         // ==============================================
@@ -616,356 +805,342 @@
         });
 
         // ==============================================
-        // 2. TUTOR (placeholder mientras se integra la funcionalidad)
-        // ==============================================
-        const tutorNombreSpan = document.getElementById('tutorNombre');
-        const filtroGrupo = document.getElementById('filtroGrupo');
-
-        function cargarTutor(grupo) {
-            if (tutorNombreSpan) {
-                tutorNombreSpan.textContent = '';
-            }
-        }
-
-        if (filtroGrupo) {
-            filtroGrupo.addEventListener('change', function() {
-                cargarTutor(this.value);
-            });
-        }
-
-        // ==============================================
-        // 3. MODAL AGREGAR ALUMNO
+        // 2. MODAL AGREGAR ALUMNO
         // ==============================================
         const modalAlumno = document.getElementById('modalAgregarAlumno');
         const btnAgregarAlumno = document.getElementById('btnAgregarAlumno');
-        const closeModalAlumno = document.getElementById('closeModalAlumno');
 
         if (btnAgregarAlumno) {
-            btnAgregarAlumno.onclick = function() {
-                modalAlumno.style.display = 'flex';
-            };
+            btnAgregarAlumno.onclick = function() { modalAlumno.style.display = 'flex'; };
         }
 
         function cerrarModalAlumno() {
             modalAlumno.style.display = 'none';
-            document.getElementById('nombreAlumno').value = '';
-            document.getElementById('apellidosAlumno').value = '';
-            document.getElementById('grupoAlumno').value = '';
-            document.getElementById('matriculaAlumno').value = '';
-            document.getElementById('correoAlumno').value = '';
-            document.getElementById('curpAlumno').value = '';
-            document.getElementById('fechaNacAlumno').value = '';
-            document.getElementById('edadAlumno').value = '';
-            document.getElementById('sexoAlumnoMas').checked = false;
-            document.getElementById('sexoAlumnoFem').checked = false;
-            document.getElementById('sexoAlumnoOt').checked = false;
-            document.getElementById('telefonoAlumno').value = '';
+            document.getElementById('formAgregarAlumno').reset();
         }
 
-        if (closeModalAlumno) closeModalAlumno.onclick = cerrarModalAlumno;
+        document.getElementById('closeModalAlumno').onclick = cerrarModalAlumno;
 
         // ==============================================
-        // 4. MODAL AGREGAR MAESTRO
+        // 3. MODAL AGREGAR MAESTRO
         // ==============================================
         const modalMaestro = document.getElementById('modalAgregarMaestro');
         const btnAgregarMaestro = document.getElementById('btnAgregarMaestro');
-        const closeModalMaestro = document.getElementById('closeModalMaestro');
 
         if (btnAgregarMaestro) {
-            btnAgregarMaestro.onclick = function() {
-                modalMaestro.style.display = 'flex';
-            };
+            btnAgregarMaestro.onclick = function() { modalMaestro.style.display = 'flex'; };
         }
 
         function cerrarModalMaestro() {
             modalMaestro.style.display = 'none';
-            document.getElementById('numEmpleado').value = '';
-            document.getElementById('nombreMaestro').value = '';
-            document.getElementById('apellidosMaestro').value = '';
-            document.getElementById('correoMaestro').value = '';
-            document.getElementById('telefonoMaestro').value = '';
+            document.getElementById('formAgregarMaestro').reset();
         }
 
-        if (closeModalMaestro) closeModalMaestro.onclick = cerrarModalMaestro;
+        document.getElementById('closeModalMaestro').onclick = cerrarModalMaestro;
 
         // ==============================================
-        // 5. MODAL EDITAR CARRERA
+        // 4. MODAL EDITAR CARRERA
         // ==============================================
         const modalCarrera = document.getElementById('modalCarrera');
         const btnEditarCarrera = document.getElementById('btnEditarCarrera');
-        const closeModalCarrera = document.getElementById('closeModalCarrera');
 
         if (btnEditarCarrera) {
-            btnEditarCarrera.onclick = function() {
-                modalCarrera.style.display = 'flex';
-            };
+            btnEditarCarrera.onclick = function() { modalCarrera.style.display = 'flex'; };
         }
 
-        function cerrarModalCarrera() {
-            modalCarrera.style.display = 'none';
-        }
+        function cerrarModalCarrera() { modalCarrera.style.display = 'none'; }
 
-        if (closeModalCarrera) closeModalCarrera.onclick = cerrarModalCarrera;
+        document.getElementById('closeModalCarrera').onclick = cerrarModalCarrera;
 
         // ==============================================
-        // 5b. MODAL AGREGAR GRUPO
+        // 5. MODAL AGREGAR GRUPO
         // ==============================================
         const modalGrupo = document.getElementById('modalAgregarGrupo');
         const btnAgregarGrupo = document.getElementById('btnAgregarGrupo');
-        const closeModalGrupo = document.getElementById('closeModalGrupo');
 
         if (btnAgregarGrupo) {
-            btnAgregarGrupo.onclick = function() {
-                modalGrupo.style.display = 'flex';
-            };
+            btnAgregarGrupo.onclick = function() { modalGrupo.style.display = 'flex'; };
         }
 
         function cerrarModalGrupo() {
             modalGrupo.style.display = 'none';
-            document.getElementById('nombreGrupo').value = '';
-            document.getElementById('gradoGrupo').value = '';
+            document.getElementById('formAgregarGrupo').reset();
         }
 
-        if (closeModalGrupo) closeModalGrupo.onclick = cerrarModalGrupo;
-
-        // Confirmación antes de guardar grupo
-        const formAgregarGrupo = document.getElementById('formAgregarGrupo');
-        if (formAgregarGrupo) {
-            formAgregarGrupo.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const nombre = document.getElementById('nombreGrupo').value.trim();
-                const grado = document.getElementById('gradoGrupo').value;
-
-                if (!nombre || !grado) {
-                    alertaInfo(
-                        'Campos incompletos',
-                        'Debes completar todos los campos obligatorios del formulario.'
-                    );
-                    return;
-                }
-
-                confirmarAccion(
-                    'Guardar grupo',
-                    '¿Estás seguro de que quieres crear este grupo?',
-                    'Guardar',
-                    'Cancelar'
-                ).then((result) => {
-                    if (result.isConfirmed) {
-                        formAgregarGrupo.submit();
-                    }
-                });
-            });
-        }
+        document.getElementById('closeModalGrupo').onclick = cerrarModalGrupo;
 
         // ==============================================
-        // 6. CERRAR MODALES AL HACER CLIC FUERA
+        // 6. MODAL EDITAR ALUMNO
+        // ==============================================
+        const modalEditarAlumno = document.getElementById('modalEditarAlumno');
+        const closeModalEditarAlumno = document.getElementById('closeModalEditarAlumno');
+
+        document.querySelectorAll('.btn-editar-alumno').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const id = this.dataset.id;
+                document.getElementById('formEditarAlumno').action = '{{ route("admin.carrera.updateAlumno", [$carrera, "__ID__"]) }}'.replace('__ID__', id);
+                document.getElementById('editAlumnoNombre').value = this.dataset.nombre || '';
+                document.getElementById('editAlumnoApellido').value = this.dataset.apellido || '';
+                document.getElementById('editAlumnoEmail').value = this.dataset.email || '';
+                document.getElementById('editAlumnoMatricula').value = this.dataset.matricula || '';
+                document.getElementById('editAlumnoCurp').value = this.dataset.curp || '';
+                document.getElementById('editAlumnoFecha').value = this.dataset.fecha || '';
+                document.getElementById('editAlumnoTelefono').value = this.dataset.telefono || '';
+                document.getElementById('editAlumnoGrupo').value = this.dataset.grupo || '';
+
+                const sexo = this.dataset.sexo;
+                document.getElementById('editAlumnoSexoM').checked = (sexo === 'M');
+                document.getElementById('editAlumnoSexoF').checked = (sexo === 'F');
+                document.getElementById('editAlumnoSexoO').checked = (sexo === 'Otro');
+
+                modalEditarAlumno.style.display = 'flex';
+            });
+        });
+
+        function cerrarModalEditarAlumno() {
+            modalEditarAlumno.style.display = 'none';
+        }
+
+        if (closeModalEditarAlumno) closeModalEditarAlumno.onclick = cerrarModalEditarAlumno;
+
+        // ==============================================
+        // 7. MODAL EDITAR MAESTRO
+        // ==============================================
+        const modalEditarMaestro = document.getElementById('modalEditarMaestro');
+        const closeModalEditarMaestro = document.getElementById('closeModalEditarMaestro');
+
+        document.querySelectorAll('.btn-editar-maestro').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const id = this.dataset.id;
+                document.getElementById('formEditarMaestro').action = '{{ route("admin.carrera.updateMaestro", [$carrera, "__ID__"]) }}'.replace('__ID__', id);
+                document.getElementById('editMaestroNombre').value = this.dataset.nombre || '';
+                document.getElementById('editMaestroApellido').value = this.dataset.apellido || '';
+                document.getElementById('editMaestroEmail').value = this.dataset.email || '';
+                document.getElementById('editMaestroNumEmpleado').value = this.dataset.numEmpleado || '';
+                document.getElementById('editMaestroRfc').value = this.dataset.rfc || '';
+                document.getElementById('editMaestroFecha').value = this.dataset.fecha || '';
+                document.getElementById('editMaestroTelefono').value = this.dataset.telefono || '';
+
+                const sexo = this.dataset.sexo;
+                document.getElementById('editMaestroSexoM').checked = (sexo === 'M');
+                document.getElementById('editMaestroSexoF').checked = (sexo === 'F');
+                document.getElementById('editMaestroSexoO').checked = (sexo === 'Otro');
+
+                modalEditarMaestro.style.display = 'flex';
+            });
+        });
+
+        function cerrarModalEditarMaestro() {
+            modalEditarMaestro.style.display = 'none';
+        }
+
+        if (closeModalEditarMaestro) closeModalEditarMaestro.onclick = cerrarModalEditarMaestro;
+
+        // ==============================================
+        // 8. MODAL EDITAR GRUPO
+        // ==============================================
+        const modalEditarGrupo = document.getElementById('modalEditarGrupo');
+        const closeModalEditarGrupo = document.getElementById('closeModalEditarGrupo');
+        const selectGrupoEditar = document.getElementById('selectGrupoEditar');
+        const btnEditarGrupo = document.getElementById('btnEditarGrupo');
+
+        if (btnEditarGrupo) {
+            btnEditarGrupo.onclick = function() { modalEditarGrupo.style.display = 'flex'; };
+        }
+
+        selectGrupoEditar.addEventListener('change', function() {
+            const selected = this.options[this.selectedIndex];
+            if (selected.value) {
+                document.getElementById('editGrupoNombre').value = selected.dataset.nombre || '';
+                document.getElementById('editGrupoGrado').value = selected.dataset.grado || '';
+                document.getElementById('editGrupoMaestro').value = selected.dataset.maestro || '';
+                document.getElementById('formEditarGrupo').action = '{{ route("admin.carrera.updateGrupo", [$carrera, "__ID__"]) }}'.replace('__ID__', selected.value);
+            }
+        });
+
+        function cerrarModalEditarGrupo() {
+            modalEditarGrupo.style.display = 'none';
+            selectGrupoEditar.value = '';
+            document.getElementById('formEditarGrupo').reset();
+        }
+
+        if (closeModalEditarGrupo) closeModalEditarGrupo.onclick = cerrarModalEditarGrupo;
+
+        // ==============================================
+        // 9. CERRAR MODALES AL HACER CLIC FUERA
         // ==============================================
         window.onclick = function(e) {
             if (e.target === modalAlumno) cerrarModalAlumno();
             if (e.target === modalMaestro) cerrarModalMaestro();
             if (e.target === modalCarrera) cerrarModalCarrera();
             if (e.target === modalGrupo) cerrarModalGrupo();
+            if (e.target === modalEditarAlumno) cerrarModalEditarAlumno();
+            if (e.target === modalEditarMaestro) cerrarModalEditarMaestro();
+            if (e.target === modalEditarGrupo) cerrarModalEditarGrupo();
         };
 
         // ==============================================
-        // 7. CONFIRMACIÓN DE ELIMINAR CARRERA
+        // 10. CONFIRMACIONES DE FORMULARIOS
         // ==============================================
+
+        // Eliminar carrera
         const formEliminarCarrera = document.getElementById('formEliminarCarrera');
         if (formEliminarCarrera) {
             formEliminarCarrera.addEventListener('submit', function(e) {
                 e.preventDefault();
-                confirmarAccion(
-                    'Confirmar eliminación',
-                    '¿Deseas continuar con esta acción?'
-                ).then((result) => {
-                    if (result.isConfirmed) {
-                        formEliminarCarrera.submit();
-                    }
+                confirmarAccion('Confirmar eliminación', '¿Deseas continuar con esta acción?').then(r => {
+                    if (r.isConfirmed) formEliminarCarrera.submit();
                 });
             });
         }
 
-        // ==============================================
-        // 8. CONFIRMACIÓN DE DESCARGAR LISTA DE GRUPOS
-        // ==============================================
-        const btnDescargarGrupos = document.getElementById('btnDescargarGrupos');
-        if (btnDescargarGrupos) {
-            btnDescargarGrupos.addEventListener('click', function(e) {
-                e.preventDefault();
-                confirmarAccion(
-                    'Descargar lista de grupos',
-                    '¿Deseas continuar con esta acción?'
-                ).then((result) => {
-                    if (result.isConfirmed) {
-                        alertaInfo(
-                            'Descarga de lista',
-                            'La funcionalidad de descarga se integrará próximamente.'
-                        );
-                    }
-                });
-            });
-        }
-
-        // ==============================================
-        // 9. CONFIRMACIÓN DE DESCARGAR LISTA DE MAESTROS
-        // ==============================================
-        const btnDescargarMaestros = document.getElementById('btnDescargarMaestros');
-        if (btnDescargarMaestros) {
-            btnDescargarMaestros.addEventListener('click', function(e) {
-                e.preventDefault();
-                confirmarAccion(
-                    'Descargar lista de maestros',
-                    '¿Deseas continuar con esta acción?'
-                ).then((result) => {
-                    if (result.isConfirmed) {
-                        alertaInfo(
-                            'Descarga de lista',
-                            'La funcionalidad de descarga se integrará próximamente.'
-                        );
-                    }
-                });
-            });
-        }
-
-        // ==============================================
-        // 10. CONFIRMACIÓN DE GUARDAR ALUMNO
-        // ==============================================
+        // Guardar alumno (nuevo)
         const formAgregarAlumno = document.getElementById('formAgregarAlumno');
         if (formAgregarAlumno) {
             formAgregarAlumno.addEventListener('submit', function(e) {
                 e.preventDefault();
-                const matricula = document.getElementById('matriculaAlumno').value.trim();
-                const nombre = document.getElementById('nombreAlumno').value.trim();
-                const apellidos = document.getElementById('apellidosAlumno').value.trim();
-                const email = document.getElementById('correoAlumno').value.trim();
-                
-                if (!matricula || !nombre || !apellidos || !email) {
-                    alertaInfo(
-                        'Campos incompletos',
-                        'Debes completar todos los campos obligatorios del formulario.'
-                    );
+                const f = this;
+                const nombre = f.querySelector('[name="name"]').value.trim();
+                const apellido = f.querySelector('[name="apellido"]').value.trim();
+                if (!nombre || !apellido) {
+                    alertaInfo('Campos incompletos', 'Debes completar todos los campos obligatorios.');
                     return;
                 }
-                
-                confirmarAccion(
-                    'Guardar alumno',
-                    '¿Estás seguro de que quieres guardar este alumno?',
-                    'Guardar',
-                    'Cancelar'
-                ).then((result) => {
-                    if (result.isConfirmed) {
-                        formAgregarAlumno.submit();
-                    }
+                confirmarAccion('Guardar alumno', '¿Estás seguro de que quieres guardar este alumno?', 'Guardar', 'Cancelar').then(r => {
+                    if (r.isConfirmed) f.submit();
                 });
             });
         }
 
-        // ==============================================
-        // 11. CONFIRMACIÓN DE GUARDAR MAESTRO
-        // ==============================================
+        // Editar alumno
+        const formEditarAlumno = document.getElementById('formEditarAlumno');
+        if (formEditarAlumno) {
+            formEditarAlumno.addEventListener('submit', function(e) {
+                e.preventDefault();
+                confirmarAccion('Actualizar alumno', '¿Estás seguro de que quieres guardar los cambios?', 'Guardar', 'Cancelar').then(r => {
+                    if (r.isConfirmed) formEditarAlumno.submit();
+                });
+            });
+        }
+
+        // Guardar maestro (nuevo)
         const formAgregarMaestro = document.getElementById('formAgregarMaestro');
         if (formAgregarMaestro) {
             formAgregarMaestro.addEventListener('submit', function(e) {
                 e.preventDefault();
-                const nombre = document.getElementById('nombreMaestro').value.trim();
-                const apellidos = document.getElementById('apellidosMaestro').value.trim();
-                const correo = document.getElementById('correoMaestro').value.trim();
-                
-                if (!nombre || !apellidos || !correo) {
-                    alertaInfo(
-                        'Campos incompletos',
-                        'Debes completar todos los campos obligatorios del formulario.'
-                    );
+                const f = this;
+                const nombre = f.querySelector('[name="name"]').value.trim();
+                const apellido = f.querySelector('[name="apellido"]').value.trim();
+                if (!nombre || !apellido) {
+                    alertaInfo('Campos incompletos', 'Debes completar todos los campos obligatorios.');
                     return;
                 }
-                
-                confirmarAccion(
-                    'Guardar maestro',
-                    '¿Estás seguro de que quieres guardar este maestro?',
-                    'Guardar',
-                    'Cancelar'
-                ).then((result) => {
-                    if (result.isConfirmed) {
-                        alertaInfo(
-                            'Funcionalidad pendiente',
-                            'El registro de maestros se implementará posteriormente.'
-                        );
-                    }
+                confirmarAccion('Guardar maestro', '¿Estás seguro de que quieres guardar este maestro?', 'Guardar', 'Cancelar').then(r => {
+                    if (r.isConfirmed) f.submit();
                 });
             });
         }
 
-        // ==============================================
-        // 12. CONFIRMACIÓN DE GUARDAR CARRERA
-        // ==============================================
+        // Editar maestro
+        const formEditarMaestro = document.getElementById('formEditarMaestro');
+        if (formEditarMaestro) {
+            formEditarMaestro.addEventListener('submit', function(e) {
+                e.preventDefault();
+                confirmarAccion('Actualizar maestro', '¿Estás seguro de que quieres guardar los cambios?', 'Guardar', 'Cancelar').then(r => {
+                    if (r.isConfirmed) formEditarMaestro.submit();
+                });
+            });
+        }
+
+        // Editar grupo
+        const formEditarGrupo = document.getElementById('formEditarGrupo');
+        if (formEditarGrupo) {
+            formEditarGrupo.addEventListener('submit', function(e) {
+                e.preventDefault();
+                if (!selectGrupoEditar.value) {
+                    alertaInfo('Sin selección', 'Selecciona un grupo para editar.');
+                    return;
+                }
+                confirmarAccion('Actualizar grupo', '¿Estás seguro de que quieres guardar los cambios?', 'Guardar', 'Cancelar').then(r => {
+                    if (r.isConfirmed) formEditarGrupo.submit();
+                });
+            });
+        }
+
+        // Guardar grupo (nuevo)
+        const formAgregarGrupo = document.getElementById('formAgregarGrupo');
+        if (formAgregarGrupo) {
+            formAgregarGrupo.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const nombre = document.getElementById('nombreGrupo').value.trim();
+                const grado = document.getElementById('gradoGrupo').value;
+                if (!nombre || !grado) {
+                    alertaInfo('Campos incompletos', 'Debes completar todos los campos obligatorios.');
+                    return;
+                }
+                confirmarAccion('Guardar grupo', '¿Estás seguro de que quieres crear este grupo?', 'Guardar', 'Cancelar').then(r => {
+                    if (r.isConfirmed) formAgregarGrupo.submit();
+                });
+            });
+        }
+
+        // Editar carrera
         const formEditarCarrera = document.getElementById('formEditarCarrera');
         if (formEditarCarrera) {
             formEditarCarrera.addEventListener('submit', function(e) {
                 e.preventDefault();
                 const nombre = document.getElementById('nombreCarrera').value.trim();
                 const clave = document.getElementById('claveCarrera').value.trim();
-                
                 if (!nombre || !clave) {
-                    alertaInfo(
-                        'Campos incompletos',
-                        'Debes completar todos los campos obligatorios del formulario.'
-                    );
+                    alertaInfo('Campos incompletos', 'Debes completar todos los campos obligatorios.');
                     return;
                 }
-                
-                confirmarAccion(
-                    'Guardar cambios',
-                    '¿Estás seguro de que quieres guardar los cambios?',
-                    'Guardar',
-                    'Cancelar'
-                ).then((result) => {
-                    if (result.isConfirmed) {
-                        formEditarCarrera.submit();
-                    }
+                confirmarAccion('Guardar cambios', '¿Estás seguro de que quieres guardar los cambios?', 'Guardar', 'Cancelar').then(r => {
+                    if (r.isConfirmed) formEditarCarrera.submit();
                 });
             });
         }
 
-        // ==============================================
-        // 13. CONFIRMACIÓN DE ELIMINAR ALUMNO
-        // ==============================================
+        // Descargar lista de grupos
+        const btnDescargarGrupos = document.getElementById('btnDescargarGrupos');
+        if (btnDescargarGrupos) {
+            btnDescargarGrupos.addEventListener('click', function(e) {
+                e.preventDefault();
+                confirmarAccion('Descargar lista de grupos', '¿Deseas continuar con esta acción?').then(r => {
+                    if (r.isConfirmed) alertaInfo('Descarga de lista', 'La funcionalidad de descarga se integrará próximamente.');
+                });
+            });
+        }
+
+        // Descargar lista de maestros
+        const btnDescargarMaestros = document.getElementById('btnDescargarMaestros');
+        if (btnDescargarMaestros) {
+            btnDescargarMaestros.addEventListener('click', function(e) {
+                e.preventDefault();
+                confirmarAccion('Descargar lista de maestros', '¿Deseas continuar con esta acción?').then(r => {
+                    if (r.isConfirmed) alertaInfo('Descarga de lista', 'La funcionalidad de descarga se integrará próximamente.');
+                });
+            });
+        }
+
+        // Eliminar alumno
         document.querySelectorAll('.btn-eliminar-alumno').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.stopPropagation();
-                const nombre = this.getAttribute('data-nombre') || 'este alumno';
-                
-                confirmarAccion(
-                    'Confirmar eliminación',
-                    `¿Estás seguro de que deseas eliminar al alumno "${nombre}"?`
-                ).then((result) => {
-                    if (result.isConfirmed) {
-                        alertaInfo(
-                            'Funcionalidad pendiente',
-                            'La eliminación de alumnos se implementará posteriormente.'
-                        );
-                    }
+                const nombre = this.dataset.nombre || 'este alumno';
+                confirmarAccion('Confirmar eliminación', `¿Estás seguro de que deseas eliminar al alumno "${nombre}"?`).then(r => {
+                    if (r.isConfirmed) alertaInfo('Funcionalidad pendiente', 'La eliminación de alumnos se implementará posteriormente.');
                 });
             });
         });
 
-        // ==============================================
-        // 14. CONFIRMACIÓN DE ELIMINAR MAESTRO
-        // ==============================================
+        // Eliminar maestro
         document.querySelectorAll('.btn-eliminar-maestro').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.stopPropagation();
-                const nombre = this.getAttribute('data-nombre') || 'este maestro';
-                
-                confirmarAccion(
-                    'Confirmar eliminación',
-                    `¿Estás seguro de que deseas eliminar al maestro "${nombre}"?`
-                ).then((result) => {
-                    if (result.isConfirmed) {
-                        alertaInfo(
-                            'Funcionalidad pendiente',
-                            'La eliminación de maestros se implementará posteriormente.'
-                        );
-                    }
+                const nombre = this.dataset.nombre || 'este maestro';
+                confirmarAccion('Confirmar eliminación', `¿Estás seguro de que deseas eliminar al maestro "${nombre}"?`).then(r => {
+                    if (r.isConfirmed) alertaInfo('Funcionalidad pendiente', 'La eliminación de maestros se implementará posteriormente.');
                 });
             });
         });

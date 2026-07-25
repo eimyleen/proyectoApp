@@ -13,15 +13,18 @@ class Grupo extends Model
     protected $fillable = [
         'nombre',
         'grado',
-        'carrera_id'
+        'carrera_id',
+        'maestro_id',
     ];
 
-    /**
-     * Relación con la carrera a la que pertenece el grupo.
-     */
     public function carrera(): BelongsTo
     {
         return $this->belongsTo(Carrera::class);
+    }
+
+    public function maestro(): BelongsTo
+    {
+        return $this->belongsTo(Maestro::class);
     }
 
     public function alumnos()
