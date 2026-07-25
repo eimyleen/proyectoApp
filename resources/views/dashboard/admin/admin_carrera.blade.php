@@ -99,8 +99,18 @@
                     {{ __('messages.btn_edit_career') }}
                 </button>
                 
-                {{-- Formulario para eliminar carrera --}}
-                <form action="{{ route('admin.delete', $carrera) }}" method="POST">
+                {{-- 
+                    ======================================================
+                    NOTA: CAMBIO REALIZADO - CONFIRMACIÓN DE ELIMINAR CARRERA
+                    ======================================================
+                    Se agregó ID "formEliminarCarrera" al formulario y una
+                    alerta de confirmación con SweetAlert antes de ejecutar
+                    la acción.
+                    
+                    La ruta y el método de eliminación se mantienen igual.
+                    ======================================================
+                --}}
+                <form action="{{ route('admin.delete', $carrera) }}" method="POST" id="formEliminarCarrera">
                     @csrf 
                     @method('DELETE')
                     <button type="submit" class="btn-eliminar-carrera" id="btnEliminarCarrera">
@@ -160,6 +170,14 @@
                     <button class="btn-agregar" id="btnAgregarAlumno">
                         {{ __('messages.btn_add_student') }}
                     </button>
+                    {{-- 
+                        ======================================================
+                        NOTA: CAMBIO REALIZADO - CONFIRMACIÓN DE DESCARGA
+                        ======================================================
+                        Se agregó ID "btnDescargarGrupos" y una alerta de
+                        confirmación con SweetAlert antes de ejecutar la acción.
+                        ======================================================
+                    --}}
                     <button class="btn-descargar-lista" id="btnDescargarGrupos">
                         <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-descarga"> 
                         {{ __('messages.btn_download_groups') }}
@@ -192,8 +210,22 @@
                                         <button class="btn-ver-expediente">{{ __('messages.btn_view_record') }}</button>
                                     </a>
                                     
-                                    {{-- Botón Eliminar (rojo) --}}
-                                    <button class="btn-eliminar">{{ __('messages.btn_delete') }}</button>
+                                    {{-- 
+                                        ======================================================
+                                        NOTA: CAMBIO REALIZADO - CONFIRMACIÓN DE ELIMINAR ALUMNO
+                                        ======================================================
+                                        Se agregó data attributes para manejar la alerta
+                                        de confirmación con SweetAlert antes de ejecutar
+                                        la acción de eliminación.
+                                        
+                                        La eliminación real permanece a cargo del backend.
+                                        ======================================================
+                                    --}}
+                                    <button class="btn-eliminar btn-eliminar-alumno" 
+                                            data-id="{{ $alumno->id }}" 
+                                            data-nombre="{{ $alumno->user?->name }} {{ $alumno->user?->apellido }}">
+                                        {{ __('messages.btn_delete') }}
+                                    </button>
                                 </td>
                             </tr>
                         @endforeach
@@ -217,6 +249,14 @@
                     <button class="btn-agregar" id="btnAgregarMaestro">
                         {{ __('messages.btn_add_teacher') }}
                     </button>
+                    {{-- 
+                        ======================================================
+                        NOTA: CAMBIO REALIZADO - CONFIRMACIÓN DE DESCARGA
+                        ======================================================
+                        Se agregó ID "btnDescargarMaestros" y una alerta de
+                        confirmación con SweetAlert antes de ejecutar la acción.
+                        ======================================================
+                    --}}
                     <button class="btn-descargar-lista" id="btnDescargarMaestros">
                         <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-descarga"> 
                         {{ __('messages.btn_download_teachers') }}
@@ -251,8 +291,22 @@
                                             <button class="btn-ver-perfil">{{ __('messages.btn_view_profile') }}</button>
                                         </a>
                                         
-                                        {{-- Botón Eliminar (rojo) --}}
-                                        <button class="btn-eliminar">{{ __('messages.btn_delete') }}</button>
+                                        {{-- 
+                                            ======================================================
+                                            NOTA: CAMBIO REALIZADO - CONFIRMACIÓN DE ELIMINAR MAESTRO
+                                            ======================================================
+                                            Se agregó data attributes para manejar la alerta
+                                            de confirmación con SweetAlert antes de ejecutar
+                                            la acción de eliminación.
+                                            
+                                            La eliminación real permanece a cargo del backend.
+                                            ======================================================
+                                        --}}
+                                        <button class="btn-eliminar btn-eliminar-maestro" 
+                                                data-id="{{ $maestro->id }}" 
+                                                data-nombre="{{ $maestro->user?->name }} {{ $maestro->user?->apellido }}">
+                                            {{ __('messages.btn_delete') }}
+                                        </button>
                                     </td>
                                 </tr>
                             @endif
@@ -263,12 +317,16 @@
         </div>
     </div>
 
-    {{-- ======================================================
-         MODAL - AGREGAR ALUMNO
-         ====================================================== 
-         Formulario para agregar un nuevo alumno a la carrera.
-         Campos: Nombre, Apellidos, Grupo, Matrícula, Correo, CURP,
-         Fecha Nacimiento, Edad, Sexo, Teléfono.
+    {{-- 
+        ======================================================
+        NOTA: CAMBIO REALIZADO - CONFIRMACIÓN DE GUARDAR ALUMNO
+        ======================================================
+        Se agregó ID "formAgregarAlumno" al formulario y una
+        alerta de confirmación con SweetAlert antes de ejecutar
+        la acción de guardado.
+        
+        También se agregó validación de campos obligatorios.
+        ======================================================
     --}}
     <div id="modalAgregarAlumno" class="modal">
         <div class="modal-content">
@@ -276,7 +334,7 @@
                 <h3>{{ __('messages.modal_add_student') }}</h3>
                 <span class="modal-close" id="closeModalAlumno">&times;</span>
             </div>
-            <form action="{{ route('admin.carrera.storeAlumno', $carrera) }}" method="POST">
+            <form action="{{ route('admin.carrera.storeAlumno', $carrera) }}" method="POST" id="formAgregarAlumno">
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
@@ -333,17 +391,23 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn-guardar">Guardar alumno</button>
+                    <button type="submit" class="btn-guardar" id="guardarAlumno">Guardar alumno</button>
                 </div>
             </form>
         </div>
     </div>
 
-    {{-- ======================================================
-         MODAL - AGREGAR MAESTRO
-         ====================================================== 
-         Formulario para agregar un nuevo maestro a la carrera.
-         Campos: Número de empleado, Nombre, Apellidos, Correo, Teléfono.
+    {{-- 
+        ======================================================
+        NOTA: CAMBIO REALIZADO - CONFIRMACIÓN DE GUARDAR MAESTRO
+        ======================================================
+        Se agregó ID "formAgregarMaestro" al formulario y una
+        alerta de confirmación con SweetAlert antes de ejecutar
+        la acción de guardado.
+        
+        El formulario no tiene action ni method porque la
+        funcionalidad de backend se implementará posteriormente.
+        ======================================================
     --}}
     <div id="modalAgregarMaestro" class="modal">
         <div class="modal-content">
@@ -405,13 +469,18 @@
         </div>
     </div>
 
-    {{-- ======================================================
-         MODAL - EDITAR CARRERA
-         ====================================================== 
-         Formulario para editar los datos de la carrera.
-         Campos: Nombre, Clave, Logo.
+    {{-- 
+        ======================================================
+        NOTA: CAMBIO REALIZADO - CONFIRMACIÓN DE GUARDAR CARRERA
+        ======================================================
+        Se agregó ID "formEditarCarrera" al formulario y una
+        alerta de confirmación con SweetAlert antes de ejecutar
+        la acción de guardado.
+        
+        También se agregó validación de campos obligatorios.
+        ======================================================
     --}}
-    <form action="{{ route('admin.update', $carrera) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.update', $carrera) }}" method="POST" enctype="multipart/form-data" id="formEditarCarrera">
         @csrf
         @method('PATCH')
         <div id="modalCarrera" class="modal">
@@ -436,38 +505,53 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn-guardar">{{ __('messages.btn_save_changes') }}</button>
+                    <button type="submit" class="btn-guardar" id="guardarCarrera">{{ __('messages.btn_save_changes') }}</button>
                 </div>
             </div>
         </div>
     </form>
 @endsection
 
-{{-- ======================================================
-     SCRIPTS ADICIONALES
-     ====================================================== 
-     Funcionalidad JavaScript:
-     1. Botón de regreso
-     2. Cambio de pestañas (Grupos / Maestros)
-     3. Modales (Agregar Alumno, Agregar Maestro, Editar Carrera)
-     4. Guardar datos de modales
-     5. Eliminar carrera (confirmación)
-     6. Botones de descarga (alertas)
-     7. Botones de eliminar en tablas
+{{-- 
+    ======================================================
+    SCRIPTS ADICIONALES
+    ======================================================
+    NOTA: FUNCIONALIDADES AGREGADAS
+    ======================================================
+    1. Confirmación antes de eliminar carrera.
+    2. Confirmación antes de descargar lista de grupos.
+    3. Confirmación antes de descargar lista de maestros.
+    4. Confirmación antes de eliminar alumno.
+    5. Confirmación antes de eliminar maestro.
+    6. Confirmación antes de guardar alumno + validación de campos.
+    7. Confirmación antes de guardar maestro + validación de campos.
+    8. Confirmación antes de guardar carrera + validación de campos.
+    
+    La eliminación y guardado real permanecen a cargo del backend.
+    ======================================================
 --}}
 @push('scripts')
 <script>
+    {{-- 
+        FUNCIONALIDAD JAVASCRIPT:
+        1. Cambio de pestañas (Grupos / Maestros)
+        2. Modales (Agregar Alumno, Agregar Maestro, Editar Carrera)
+        3. Cerrar modales al hacer clic fuera
+        4. Confirmación antes de eliminar carrera
+        5. Confirmación antes de descargar lista de grupos
+        6. Confirmación antes de descargar lista de maestros
+        7. Confirmación antes de eliminar alumno
+        8. Confirmación antes de eliminar maestro
+        9. Confirmación antes de guardar alumno + validación
+        10. Confirmación antes de guardar maestro + validación
+        11. Confirmación antes de guardar carrera + validación
+    --}}
+
     document.addEventListener('DOMContentLoaded', function() {
         
-        {{-- 1. BOTÓN DE REGRESO --}}
-        const backButton = document.getElementById('backButton');
-        if (backButton) {
-            backButton.addEventListener('click', function() {
-                window.location.href = '/dashboard/admin';
-            });
-        }
-
-        {{-- 2. CAMBIO DE PESTAÑAS --}}
+        // ==============================================
+        // 1. CAMBIO DE PESTAÑAS
+        // ==============================================
         const tabBtns = document.querySelectorAll('.tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
 
@@ -481,7 +565,9 @@
             });
         });
 
-        {{-- 3. TUTOR (ejemplo, backend llenará) --}}
+        // ==============================================
+        // 2. TUTOR (placeholder mientras se integra la funcionalidad)
+        // ==============================================
         const tutorNombreSpan = document.getElementById('tutorNombre');
         const filtroGrupo = document.getElementById('filtroGrupo');
 
@@ -497,7 +583,9 @@
             });
         }
 
-        {{-- 4. MODAL AGREGAR ALUMNO --}}
+        // ==============================================
+        // 3. MODAL AGREGAR ALUMNO
+        // ==============================================
         const modalAlumno = document.getElementById('modalAgregarAlumno');
         const btnAgregarAlumno = document.getElementById('btnAgregarAlumno');
         const closeModalAlumno = document.getElementById('closeModalAlumno');
@@ -526,7 +614,9 @@
 
         if (closeModalAlumno) closeModalAlumno.onclick = cerrarModalAlumno;
 
-        {{-- 5. MODAL AGREGAR MAESTRO --}}
+        // ==============================================
+        // 4. MODAL AGREGAR MAESTRO
+        // ==============================================
         const modalMaestro = document.getElementById('modalAgregarMaestro');
         const btnAgregarMaestro = document.getElementById('btnAgregarMaestro');
         const closeModalMaestro = document.getElementById('closeModalMaestro');
@@ -548,7 +638,9 @@
 
         if (closeModalMaestro) closeModalMaestro.onclick = cerrarModalMaestro;
 
-        {{-- 6. MODAL EDITAR CARRERA --}}
+        // ==============================================
+        // 5. MODAL EDITAR CARRERA
+        // ==============================================
         const modalCarrera = document.getElementById('modalCarrera');
         const btnEditarCarrera = document.getElementById('btnEditarCarrera');
         const closeModalCarrera = document.getElementById('closeModalCarrera');
@@ -565,92 +657,216 @@
 
         if (closeModalCarrera) closeModalCarrera.onclick = cerrarModalCarrera;
 
-        {{-- 7. CERRAR MODALES AL HACER CLIC FUERA --}}
+        // ==============================================
+        // 6. CERRAR MODALES AL HACER CLIC FUERA
+        // ==============================================
         window.onclick = function(e) {
             if (e.target === modalAlumno) cerrarModalAlumno();
             if (e.target === modalMaestro) cerrarModalMaestro();
             if (e.target === modalCarrera) cerrarModalCarrera();
         };
 
-        {{-- 8. GUARDAR ALUMNO (validación) --}}
-        const guardarAlumno = document.getElementById('guardarAlumno');
-        if (guardarAlumno) {
-            guardarAlumno.onclick = function() {
-                const matricula = document.getElementById('matriculaAlumno').value;
-                const nombre = document.getElementById('nombreAlumno').value;
-                const apellidos = document.getElementById('apellidosAlumno').value;
-                if (matricula && nombre && apellidos) {
-                    cerrarModalAlumno();
-                } else {
-                    alert('Por favor complete Matrícula, Nombre y Apellidos');
-                }
-            };
+        // ==============================================
+        // 7. CONFIRMACIÓN DE ELIMINAR CARRERA
+        // ==============================================
+        const formEliminarCarrera = document.getElementById('formEliminarCarrera');
+        if (formEliminarCarrera) {
+            formEliminarCarrera.addEventListener('submit', function(e) {
+                e.preventDefault();
+                confirmarAccion(
+                    'Confirmar eliminación',
+                    '¿Deseas continuar con esta acción?'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        formEliminarCarrera.submit();
+                    }
+                });
+            });
         }
 
-        {{-- 9. GUARDAR MAESTRO (validación) --}}
-        const guardarMaestro = document.getElementById('guardarMaestro');
-        if (guardarMaestro) {
-            guardarMaestro.onclick = function() {
-                const nombre = document.getElementById('nombreMaestro').value;
-                const apellidos = document.getElementById('apellidosMaestro').value;
-                const correo = document.getElementById('correoMaestro').value;
-                if (nombre && apellidos && correo) {
-                    cerrarModalMaestro();
-                } else {
-                    alert('Por favor complete Nombre, Apellidos y Correo');
-                }
-            };
-        }
-
-        {{-- 10. GUARDAR CARRERA (validación y actualización visual) --}}
-        const guardarCarrera = document.getElementById('guardarCarrera');
-        if (guardarCarrera) {
-            guardarCarrera.onclick = function() {
-                const nombre = document.getElementById('nombreCarrera').value;
-                const clave = document.getElementById('claveCarrera').value;
-                if (nombre && clave) {
-                    cerrarModalCarrera();
-                    document.querySelector('.carrera-info h2').textContent = nombre;
-                    document.querySelector('.carrera-clave').textContent = 'Clave: ' + clave;
-                } else {
-                    alert('Por favor ingrese el nombre y la clave de la carrera');
-                }
-            };
-        }
-
-        {{-- 11. ELIMINAR CARRERA (confirmación) --}}
-        const btnEliminarCarrera = document.getElementById('btnEliminarCarrera');
-        if (btnEliminarCarrera) {
-            btnEliminarCarrera.onclick = function() {
-                if (confirm('¿Estás seguro de eliminar esta carrera?')) {
-                    alert('Carrera eliminada');
-                }
-            };
-        }
-
-        {{-- 12. BOTONES DE DESCARGA (alertas) --}}
+        // ==============================================
+        // 8. CONFIRMACIÓN DE DESCARGAR LISTA DE GRUPOS
+        // ==============================================
         const btnDescargarGrupos = document.getElementById('btnDescargarGrupos');
         if (btnDescargarGrupos) {
-            btnDescargarGrupos.onclick = function() {
-                alert('Descargar lista de grupos');
-            };
+            btnDescargarGrupos.addEventListener('click', function(e) {
+                e.preventDefault();
+                confirmarAccion(
+                    'Descargar lista de grupos',
+                    '¿Deseas continuar con esta acción?'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        alertaInfo(
+                            'Descarga de lista',
+                            'La funcionalidad de descarga se integrará próximamente.'
+                        );
+                    }
+                });
+            });
         }
 
+        // ==============================================
+        // 9. CONFIRMACIÓN DE DESCARGAR LISTA DE MAESTROS
+        // ==============================================
         const btnDescargarMaestros = document.getElementById('btnDescargarMaestros');
         if (btnDescargarMaestros) {
-            btnDescargarMaestros.onclick = function() {
-                alert('Descargar lista de maestros');
-            };
+            btnDescargarMaestros.addEventListener('click', function(e) {
+                e.preventDefault();
+                confirmarAccion(
+                    'Descargar lista de maestros',
+                    '¿Deseas continuar con esta acción?'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        alertaInfo(
+                            'Descarga de lista',
+                            'La funcionalidad de descarga se integrará próximamente.'
+                        );
+                    }
+                });
+            });
         }
 
-        {{-- 13. BOTONES ELIMINAR EN TABLAS --}}
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('btn-eliminar')) {
-                if (confirm('¿Estás seguro de eliminar este elemento?')) {
-                    const row = e.target.closest('tr');
-                    if (row) row.remove();
+        // ==============================================
+        // 10. CONFIRMACIÓN DE GUARDAR ALUMNO
+        // ==============================================
+        const formAgregarAlumno = document.getElementById('formAgregarAlumno');
+        if (formAgregarAlumno) {
+            formAgregarAlumno.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const matricula = document.getElementById('matriculaAlumno').value.trim();
+                const nombre = document.getElementById('nombreAlumno').value.trim();
+                const apellidos = document.getElementById('apellidosAlumno').value.trim();
+                const email = document.getElementById('correoAlumno').value.trim();
+                
+                if (!matricula || !nombre || !apellidos || !email) {
+                    alertaInfo(
+                        'Campos incompletos',
+                        'Debes completar todos los campos obligatorios del formulario.'
+                    );
+                    return;
                 }
-            }
+                
+                confirmarAccion(
+                    'Guardar alumno',
+                    '¿Estás seguro de que quieres guardar este alumno?',
+                    'Guardar',
+                    'Cancelar'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        formAgregarAlumno.submit();
+                    }
+                });
+            });
+        }
+
+        // ==============================================
+        // 11. CONFIRMACIÓN DE GUARDAR MAESTRO
+        // ==============================================
+        const formAgregarMaestro = document.getElementById('formAgregarMaestro');
+        if (formAgregarMaestro) {
+            formAgregarMaestro.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const nombre = document.getElementById('nombreMaestro').value.trim();
+                const apellidos = document.getElementById('apellidosMaestro').value.trim();
+                const correo = document.getElementById('correoMaestro').value.trim();
+                
+                if (!nombre || !apellidos || !correo) {
+                    alertaInfo(
+                        'Campos incompletos',
+                        'Debes completar todos los campos obligatorios del formulario.'
+                    );
+                    return;
+                }
+                
+                confirmarAccion(
+                    'Guardar maestro',
+                    '¿Estás seguro de que quieres guardar este maestro?',
+                    'Guardar',
+                    'Cancelar'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        alertaInfo(
+                            'Funcionalidad pendiente',
+                            'El registro de maestros se implementará posteriormente.'
+                        );
+                    }
+                });
+            });
+        }
+
+        // ==============================================
+        // 12. CONFIRMACIÓN DE GUARDAR CARRERA
+        // ==============================================
+        const formEditarCarrera = document.getElementById('formEditarCarrera');
+        if (formEditarCarrera) {
+            formEditarCarrera.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const nombre = document.getElementById('nombreCarrera').value.trim();
+                const clave = document.getElementById('claveCarrera').value.trim();
+                
+                if (!nombre || !clave) {
+                    alertaInfo(
+                        'Campos incompletos',
+                        'Debes completar todos los campos obligatorios del formulario.'
+                    );
+                    return;
+                }
+                
+                confirmarAccion(
+                    'Guardar cambios',
+                    '¿Estás seguro de que quieres guardar los cambios?',
+                    'Guardar',
+                    'Cancelar'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        formEditarCarrera.submit();
+                    }
+                });
+            });
+        }
+
+        // ==============================================
+        // 13. CONFIRMACIÓN DE ELIMINAR ALUMNO
+        // ==============================================
+        document.querySelectorAll('.btn-eliminar-alumno').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const nombre = this.getAttribute('data-nombre') || 'este alumno';
+                
+                confirmarAccion(
+                    'Confirmar eliminación',
+                    `¿Estás seguro de que deseas eliminar al alumno "${nombre}"?`
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        alertaInfo(
+                            'Funcionalidad pendiente',
+                            'La eliminación de alumnos se implementará posteriormente.'
+                        );
+                    }
+                });
+            });
+        });
+
+        // ==============================================
+        // 14. CONFIRMACIÓN DE ELIMINAR MAESTRO
+        // ==============================================
+        document.querySelectorAll('.btn-eliminar-maestro').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const nombre = this.getAttribute('data-nombre') || 'este maestro';
+                
+                confirmarAccion(
+                    'Confirmar eliminación',
+                    `¿Estás seguro de que deseas eliminar al maestro "${nombre}"?`
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        alertaInfo(
+                            'Funcionalidad pendiente',
+                            'La eliminación de maestros se implementará posteriormente.'
+                        );
+                    }
+                });
+            });
         });
     });
 </script>

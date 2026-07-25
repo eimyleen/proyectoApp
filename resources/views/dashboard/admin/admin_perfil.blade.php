@@ -127,40 +127,46 @@
             {{-- Nombre --}}
             <div class="dato-item">
                 <label>{{ __('messages.field_firstname') }}</label>
-                <span class="dato-valor" id="datoNombre">{{ Auth::user()->name }}</span>
+                <span class="dato-valor">{{ Auth::user()->name }}</span>
             </div>
             
             {{-- Apellidos --}}
             <div class="dato-item">
                 <label>{{ __('messages.field_lastname') }}</label>
-                <span class="dato-valor" id="datoApellidos">{{ Auth::user()->apellido }}</span>
+                <span class="dato-valor">{{ Auth::user()->apellido }}</span>
             </div>
             
             {{-- Correo electrónico --}}
             <div class="dato-item">
                 <label>{{ __('messages.field_email') }}</label>
-                <span class="dato-valor" id="datoCorreo">{{ Auth::user()->email }}</span>
+                <span class="dato-valor">{{ Auth::user()->email }}</span>
             </div>
             
             {{-- Rol --}}
             <div class="dato-item">
                 <label>{{ __('messages.field_role') }}</label>
-                <span class="dato-valor" id="datoRol">{{ ucfirst(Auth::user()->role) }}</span>
+                <span class="dato-valor">{{ ucfirst(Auth::user()->role) }}</span>
             </div>
             
             {{-- Fecha de registro --}}
             <div class="dato-item">
                 <label>{{ __('messages.field_member_since') }}</label>
-                <span class="dato-valor" id="datoFechaRegistro">{{ Auth::user()->created_at->format('d/m/Y') }}</span>
+                <span class="dato-valor">{{ Auth::user()->created_at->format('d/m/Y') }}</span>
             </div>
         </div>
     </div>
 
-    {{-- ======================================================
-         MODAL - EDITAR PERFIL
-         ====================================================== 
-         Formulario para editar los datos personales del administrador.
-         Campos: Nombre, Apellidos, Email.
+    {{-- 
+        ======================================================
+        NOTA: CAMBIO REALIZADO - CONFIRMACIÓN DE GUARDAR PERFIL
+        ======================================================
+        Se agregó ID "formEditarPerfil" al formulario y una
+        alerta de confirmación antes de ejecutar la acción.
+        
+        También se agregó validación de campos obligatorios.
+        
+        El formulario mantiene el action="#" original.
+        ======================================================
     --}}
     <div id="modalEditarPerfil" class="modal">
         <div class="modal-content">
@@ -173,31 +179,36 @@
                     @csrf
                     <div class="form-group">
                         <label>{{ __('messages.field_firstname') }}</label>
-                        <input type="text" name="name" value="{{ Auth::user()->name }}">
+                        <input type="text" name="name" id="editNombre" value="{{ Auth::user()->name }}">
                     </div>
                     <div class="form-group">
                         <label>{{ __('messages.field_lastname') }}</label>
-                        <input type="text" name="apellido" value="{{ Auth::user()->apellido }}">
+                        <input type="text" name="apellido" id="editApellidos" value="{{ Auth::user()->apellido }}">
                     </div>
                     <div class="form-group">
                         <label>{{ __('messages.field_email') }}</label>
-                        <input type="email" name="email" value="{{ Auth::user()->email }}">
+                        <input type="email" name="email" id="editCorreo" value="{{ Auth::user()->email }}">
                     </div>
                     <input type="file" id="editFoto" name="foto" style="display:none;" accept="image/*">
                 </form>
             </div>
             <div class="modal-footer">
                 <button class="btn-cancelar" id="cancelarEditar">{{ __('messages.btn_cancel') }}</button>
-                <button class="btn-guardar" type="submit" form="formEditarPerfil">{{ __('messages.btn_save_changes') }}</button>
+                <button class="btn-guardar" type="button" id="guardarEditar">{{ __('messages.btn_save_changes') }}</button>
             </div>
         </div>
     </div>
 
-    {{-- ======================================================
-         MODAL - CAMBIAR CONTRASEÑA
-         ====================================================== 
-         Formulario para cambiar la contraseña del administrador.
-         Campos: Contraseña actual, Nueva contraseña, Confirmar contraseña.
+    {{-- 
+        ======================================================
+        NOTA: CAMBIO REALIZADO - CONFIRMACIÓN DE CAMBIAR CONTRASEÑA
+        ======================================================
+        Se agregó IDs a los campos y una alerta de confirmación
+        antes de ejecutar la acción.
+        
+        También se agregó validación de campos obligatorios
+        y confirmación de contraseñas.
+        ======================================================
     --}}
     <div id="modalCambiarContrasena" class="modal">
         <div class="modal-content">
@@ -227,33 +238,48 @@
     </div>
 @endsection
 
-{{-- ======================================================
-     SCRIPTS ADICIONALES
-     ====================================================== 
-     Funcionalidad JavaScript:
-     1. Modal Editar Perfil (abrir/cerrar/guardar)
-     2. Modal Cambiar Contraseña (abrir/cerrar/guardar)
-     3. Cambiar foto de perfil (previsualización)
-     4. Cerrar modales al hacer clic fuera
+{{-- 
+    ======================================================
+    SCRIPTS ADICIONALES
+    ======================================================
+    NOTA: FUNCIONALIDADES AGREGADAS
+    ======================================================
+    1. Confirmación antes de guardar cambios de perfil.
+    2. Confirmación antes de cambiar contraseña.
+    3. Validación de campos obligatorios en perfil.
+    4. Validación de campos obligatorios y coincidencia en contraseña.
+    ======================================================
 --}}
 @push('scripts')
 <script>
+    {{-- 
+        FUNCIONALIDAD JAVASCRIPT:
+        1. Modal Editar Perfil (abrir/cerrar/guardar)
+        2. Modal Cambiar Contraseña (abrir/cerrar/guardar)
+        3. Cerrar modales al hacer clic fuera
+        4. Confirmación antes de guardar perfil (NUEVO)
+        5. Confirmación antes de cambiar contraseña (NUEVO)
+        6. Validación de campos obligatorios (NUEVO)
+    --}}
+
     document.addEventListener('DOMContentLoaded', function() {
         
-        {{-- 1. MODAL EDITAR PERFIL --}}
+        // ==============================================
+        // 1. MODAL EDITAR PERFIL
+        // ==============================================
         const modalEditar = document.getElementById('modalEditarPerfil');
         const btnEditar = document.getElementById('btnEditarPerfil');
         const closeModalEditar = document.getElementById('closeModalEditar');
         const cancelarEditar = document.getElementById('cancelarEditar');
 
-        {{-- Abrir modal --}}
+        // Abrir modal
         if (btnEditar) {
             btnEditar.onclick = function() {
                 modalEditar.style.display = 'flex';
             };
         }
 
-        {{-- Cerrar modal --}}
+        // Cerrar modal
         function cerrarModalEditar() {
             modalEditar.style.display = 'none';
         }
@@ -261,39 +287,22 @@
         if (closeModalEditar) closeModalEditar.onclick = cerrarModalEditar;
         if (cancelarEditar) cancelarEditar.onclick = cerrarModalEditar;
 
-        {{-- Guardar cambios perfil --}}
-        const guardarEditar = document.getElementById('guardarEditar');
-        if (guardarEditar) {
-            guardarEditar.onclick = function() {
-                document.getElementById('datoNombre').textContent = document.getElementById('editNombre').value;
-                document.getElementById('datoApellidos').textContent = document.getElementById('editApellidos').value;
-                document.getElementById('datoCorreo').textContent = document.getElementById('editCorreo').value;
-                document.getElementById('datoTelefono').textContent = document.getElementById('editTelefono').value;
-                
-                const nombre = document.getElementById('editNombre').value;
-                const apellidos = document.getElementById('editApellidos').value;
-                const iniciales = (nombre ? nombre.charAt(0) : '') + (apellidos ? apellidos.charAt(0) : '');
-                document.querySelector('.avatar-iniciales-grande').textContent = iniciales.toUpperCase();
-                
-                alert('Perfil actualizado correctamente');
-                cerrarModalEditar();
-            };
-        }
-
-        {{-- 2. MODAL CAMBIAR CONTRASEÑA --}}
+        // ==============================================
+        // 2. MODAL CAMBIAR CONTRASEÑA
+        // ==============================================
         const modalContrasena = document.getElementById('modalCambiarContrasena');
         const btnContrasena = document.getElementById('btnCambiarContrasena');
         const closeModalContrasena = document.getElementById('closeModalContrasena');
         const cancelarContrasena = document.getElementById('cancelarContrasena');
 
-        {{-- Abrir modal --}}
+        // Abrir modal
         if (btnContrasena) {
             btnContrasena.onclick = function() {
                 modalContrasena.style.display = 'flex';
             };
         }
 
-        {{-- Cerrar modal --}}
+        // Cerrar modal
         function cerrarModalContrasena() {
             modalContrasena.style.display = 'none';
             document.getElementById('contrasenaActual').value = '';
@@ -304,45 +313,99 @@
         if (closeModalContrasena) closeModalContrasena.onclick = cerrarModalContrasena;
         if (cancelarContrasena) cancelarContrasena.onclick = cerrarModalContrasena;
 
-        {{-- Guardar contraseña (validación) --}}
-        const guardarContrasena = document.getElementById('guardarContrasena');
-        if (guardarContrasena) {
-            guardarContrasena.onclick = function() {
-                const nueva = document.getElementById('nuevaContrasena').value;
-                const confirmar = document.getElementById('confirmarContrasena').value;
-                if (nueva && nueva === confirmar) {
-                    alert('Contraseña actualizada correctamente');
-                    cerrarModalContrasena();
-                } else {
-                    alert('Las contraseñas no coinciden');
-                }
-            };
-        }
-
-        {{-- 3. CAMBIAR FOTO (previsualización) --}}
-        const btnCambiarFoto = document.getElementById('btnCambiarFoto');
-        if (btnCambiarFoto) {
-            btnCambiarFoto.onclick = function() {
-                document.getElementById('editFoto').click();
-            };
-        }
-
-        document.getElementById('editFoto')?.addEventListener('change', function(e) {
-            if (e.target.files && e.target.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    const avatar = document.querySelector('.avatar-grande');
-                    avatar.innerHTML = `<img src="${event.target.result}" style="width:100%; height:100%; object-fit:cover;">`;
-                };
-                reader.readAsDataURL(e.target.files[0]);
-            }
-        });
-
-        {{-- 4. CERRAR MODALES AL HACER CLIC FUERA --}}
+        // ==============================================
+        // 3. CERRAR MODALES AL HACER CLIC FUERA
+        // ==============================================
         window.onclick = function(e) {
             if (e.target === modalEditar) cerrarModalEditar();
             if (e.target === modalContrasena) cerrarModalContrasena();
         };
+
+        // ==============================================
+        // 4. CONFIRMACIÓN DE GUARDAR PERFIL (NUEVO)
+        // ==============================================
+        const guardarEditar = document.getElementById('guardarEditar');
+        if (guardarEditar) {
+            guardarEditar.addEventListener('click', function() {
+                const nombre = document.getElementById('editNombre').value.trim();
+                const apellidos = document.getElementById('editApellidos').value.trim();
+                const correo = document.getElementById('editCorreo').value.trim();
+                
+                if (!nombre || !apellidos || !correo) {
+                    alertaInfo(
+                        'Campos incompletos',
+                        'Debes completar todos los campos obligatorios del formulario.'
+                    );
+                    return;
+                }
+                
+                confirmarAccion(
+                    'Guardar cambios',
+                    '¿Estás seguro de que quieres guardar los cambios en tu perfil?',
+                    'Guardar',
+                    'Cancelar'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        alertaInfo(
+                            'Funcionalidad pendiente',
+                            'La edición del perfil se implementará posteriormente.'
+                        );
+                        cerrarModalEditar();
+                    }
+                });
+            });
+        }
+
+        // ==============================================
+        // 5. CONFIRMACIÓN DE CAMBIAR CONTRASEÑA (NUEVO)
+        // ==============================================
+        const guardarContrasena = document.getElementById('guardarContrasena');
+        if (guardarContrasena) {
+            guardarContrasena.addEventListener('click', function() {
+                const actual = document.getElementById('contrasenaActual').value.trim();
+                const nueva = document.getElementById('nuevaContrasena').value.trim();
+                const confirmar = document.getElementById('confirmarContrasena').value.trim();
+                
+                if (!actual || !nueva || !confirmar) {
+                    alertaInfo(
+                        'Campos incompletos',
+                        'Debes completar todos los campos del formulario.'
+                    );
+                    return;
+                }
+                
+                if (nueva !== confirmar) {
+                    alertaInfo(
+                        'Contraseñas no coinciden',
+                        'La nueva contraseña y la confirmación no coinciden.'
+                    );
+                    return;
+                }
+                
+                if (nueva.length < 8) {
+                    alertaInfo(
+                        'Contraseña muy corta',
+                        'La contraseña debe tener al menos 8 caracteres.'
+                    );
+                    return;
+                }
+                
+                confirmarAccion(
+                    'Cambiar contraseña',
+                    '¿Estás seguro de que quieres cambiar tu contraseña?',
+                    'Cambiar',
+                    'Cancelar'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        alertaInfo(
+                            'Funcionalidad pendiente',
+                            'El cambio de contraseña se implementará posteriormente.'
+                        );
+                        cerrarModalContrasena();
+                    }
+                });
+            });
+        }
     });
 </script>
 @endpush

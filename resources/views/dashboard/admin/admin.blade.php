@@ -72,16 +72,17 @@
             </button>
         </div>
 
-        {{-- ======================================================
-             MODAL - AGREGAR CARRERA
-             ====================================================== 
-             Formulario para crear una nueva carrera.
-             Los campos son:
-             - Nombre (texto)
-             - Clave (texto)
-             - Logo (archivo de imagen)
+        {{-- 
+            ======================================================
+            NOTA: CAMBIO REALIZADO - MODAL AGREGAR CARRERA
+            ======================================================
+            Se agregó ID "formAgregarCarrera" al formulario y una
+            alerta de confirmación antes de enviar.
+            
+            También se agregó validación de campos vacíos.
+            ======================================================
         --}}
-        <form action="{{ route('admin.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.store') }}" method="POST" enctype="multipart/form-data" id="formAgregarCarrera">
             @csrf
             <div id="modalAgregarCarrera" class="modal">
                 <div class="modal-content">
@@ -135,12 +136,15 @@
         </div>
     </div>
 
-    {{-- ======================================================
-         MODAL - LISTA GLOBAL DE ALUMNOS
-         ====================================================== 
-         Muestra todos los alumnos en una tabla con:
-         - Filtro de búsqueda por texto
-         - Botón para descargar lista en PDF
+    {{-- 
+        ======================================================
+        NOTA: CAMBIO REALIZADO - MODAL LISTA GLOBAL
+        ======================================================
+        Se agregó ID "btnDescargarPDFGlobal" al enlace de descarga
+        y una alerta de confirmación antes de redirigir.
+        
+        La ruta 'admin.alumnos.pdf' se mantiene igual.
+        ======================================================
     --}}
     <div id="modalListaGlobal" class="modal-lista-global">
         <div class="modal-content">
@@ -154,7 +158,7 @@
                         <img src="{{ asset('img/lupa.png') }}" alt="Buscar" class="lupa-icon-modal">
                         <input type="text" id="busquedaModal" placeholder="{{ __('messages.modal_search_placeholder') }}" class="input-busqueda-modal">
                     </div>
-                    <a href="{{ route('admin.alumnos.pdf') }}" style="text-decoration: none;">
+                    <a href="#" id="btnDescargarPDFGlobal" style="text-decoration: none;">
                         <button class="btn-lista-global">
                             <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icono">
                             {{ __('messages.modal_btn_download_list') }}
@@ -189,12 +193,21 @@
         </div>
     </div>
 
-    {{-- ======================================================
-         MODAL - RESPALDOS (Principal)
-         ====================================================== 
-         Muestra opciones para gestionar respaldos:
-         - Generar un respaldo ahora
-         - Configurar respaldos automatizados (abre otro modal)
+    {{-- 
+        ======================================================
+        MODAL - RESPALDOS (CORREGIDO)
+        ======================================================
+        NOTA: CAMBIO REALIZADO - ESTRUCTURA DEL MODAL DE RESPALDOS
+        ======================================================
+        Se sacó el botón "Generar un Respaldo Ahora" del formulario
+        para que quede al mismo nivel que el botón "Configurar
+        Respaldos Automatizados".
+        
+        El formulario ahora está oculto (display: none) y se envía
+        desde JavaScript después de la confirmación.
+        
+        Esto permite que ambos botones se vean iguales y alineados.
+        ======================================================
     --}}
     <div id="modalRespaldos" class="modal">
         <div class="modal-content">
@@ -203,22 +216,25 @@
                 <span class="modal-close" id="closeModalRespaldos">&times;</span>
             </div>
             <div class="modal-body">
-                <form action="/respaldo" method="POST">
-                    @csrf
-                    <button type="submit" style="margin: 4px 4px;" class="btn-guardar" id="btnRespaldosExec">Generar un Respaldo Ahora</button>
-                </form>
-                <button style="margin: 4px 4px;" class="btn-guardar" id="btnRespaldosAuto">Configurar Respaldos Automatizados</button>
+                <button class="btn-guardar" id="btnGenerarRespaldo">Generar un Respaldo Ahora</button>
+                <button class="btn-guardar" id="btnRespaldosAuto">Configurar Respaldos Automatizados</button>
             </div>
+            <form action="/respaldo" method="POST" id="formGenerarRespaldo" style="display: none;">
+                @csrf
+            </form>
         </div>
     </div>
 
-    {{-- ======================================================
-         MODAL - CONFIGURAR RESPALDOS AUTOMATIZADOS
-         ====================================================== 
-         Permite programar respaldos automáticos con:
-         - Fecha de inicio
-         - Intervalo de tiempo (minutos, horas, días)
-         - Botones para guardar, reiniciar o regresar
+    {{-- 
+        ======================================================
+        NOTA: CAMBIO REALIZADO - MODAL RESPALDOS AUTOMATIZADOS
+        ======================================================
+        Se agregaron IDs a los formularios y alertas de
+        confirmación antes de guardar configuración o reiniciar.
+        
+        Los botones del footer se centran desde el CSS sin
+        modificar la estructura del Blade.
+        ======================================================
     --}}
     <div id="modalRespaldosAuto" class="modal">
         <div class="modal-content">
@@ -251,32 +267,31 @@
                 <h2>Configurar Horario de Respaldos</h2>
 
                 <div class="config-grid">
-                    <form action="/respaldoAuto" method="post">
-                        @csrf
-                        <div class="campo-fecha">
-                            <label for="fechaIniciarRespaldos">Fecha de Inicio: </label><input type="date" id="fechaIniciarRespaldos" name="fecha_inicio" required min="{{ date("Y-m-d") }}"><br>
-                        </div>
+                    <div class="campo-fecha">
+                        <label for="fechaIniciarRespaldos">Fecha de Inicio: </label><input type="date" id="fechaIniciarRespaldos" name="fecha_inicio" required min="{{ date("Y-m-d") }}">
+                    </div>
 
-                        <div class="subtitle">Horario para los Próximos Respaldos:</div>
+                    <div class="subtitle">Horario para los Próximos Respaldos:</div>
 
-                        <div class="campo">
-                            <label for="permitirTiemposCheck">Permitir tiempo exacto: </label><input type="checkbox" id="permitirTiemposCheck">
-                        </div>
-                        <br>
-                        <div class="campo">
-                            <label for="tiempoMinutosSigRespaldo" id="tiempoMinutosSigRespaldoLab">Minutos: <input type="number" min="1" max="59" value="0" id="tiempoMinutosSigRespaldo" name="minutos" required></label>
-                            <label for="tiempoHorasSigRespaldo" id="tiempoHorasSigRespaldoLab">Horas: <input type="number" min="0" max="23" value="0" id="tiempoHorasSigRespaldo" name="horas" required></label>
-                            <label for="tiempoDiasSigRespaldo" id="tiempoDiasSigRespaldoLab">Días: <input type="number" min="1" max="31" value="1" id="tiempoDiasSigRespaldo" name="dias" required></label>
-                        </div>
-                        <br>
-                        <button type="submit" class="btn-guardar" id="btnRespaldosGuardarIniAuto">Guardar y Iniciar Respaldo</button>
-                    </form>
+                    <div class="campo">
+                        <label for="permitirTiemposCheck">Permitir tiempo exacto: </label><input type="checkbox" id="permitirTiemposCheck">
+                    </div>
+                    <br>
+                    <div class="campo">
+                        <label for="tiempoMinutosSigRespaldo" id="tiempoMinutosSigRespaldoLab">Minutos: <input type="number" min="1" max="59" value="0" id="tiempoMinutosSigRespaldo" name="minutos" required></label>
+                        <label for="tiempoHorasSigRespaldo" id="tiempoHorasSigRespaldoLab">Horas: <input type="number" min="0" max="23" value="0" id="tiempoHorasSigRespaldo" name="horas" required></label>
+                        <label for="tiempoDiasSigRespaldo" id="tiempoDiasSigRespaldoLab">Días: <input type="number" min="1" max="31" value="1" id="tiempoDiasSigRespaldo" name="dias" required></label>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <form action="/quitarRespaldoAuto" method="post">
+                <form action="/respaldoAuto" method="post" id="formConfigRespaldo">
                     @csrf
-                    <button type="submit" class="btn-eliminar" id="btnRespaldosBorrarAutoDum">Reiniciar Horario de los Respaldos</button>
+                    <button type="submit" class="btn-guardar" id="btnRespaldosGuardarIniAuto">Guardar y Iniciar Respaldo</button>
+                </form>
+                <form action="/quitarRespaldoAuto" method="post" id="formReiniciarRespaldo">
+                    @csrf
+                    <button type="submit" class="btn-eliminar" id="btnRespaldosReiniciar">Reiniciar Horario de los Respaldos</button>
                 </form>
                 <button class="btn-guardar" id="btnRespaldosMainRegreso">
                     <img src="{{ asset('img/flecha.png') }}" alt="Regresar" class="btn-icono" style="width: 16px; height: 16px; filter: brightness(0) invert(1);">
@@ -287,7 +302,22 @@
     </div>
 @endsection
 
-{{-- SCRIPTS ADICIONALES --}}
+{{-- 
+    ======================================================
+    SCRIPTS ADICIONALES
+    ======================================================
+    NOTA: FUNCIONALIDADES AGREGADAS
+    ======================================================
+    1. Confirmación antes de guardar carrera
+    2. Validación de campos vacíos en carrera
+    3. Confirmación antes de descargar PDF global
+    4. Confirmación antes de generar respaldo
+    5. Confirmación antes de configurar respaldos
+    6. Confirmación antes de reiniciar horario de respaldos
+    
+    Las rutas y datos del backend se mantienen igual.
+    ======================================================
+--}}
 @push('scripts')
 <script>
     {{-- 
@@ -298,11 +328,19 @@
         4. Modal Lista Global de Alumnos (abrir/cerrar)
         5. Filtro de búsqueda en la tabla de alumnos
         6. Cerrar modales al hacer clic fuera
+        7. Confirmación antes de guardar carrera (NUEVO)
+        8. Confirmación antes de descargar PDF global (NUEVO)
+        9. Confirmación antes de generar respaldo (NUEVO)
+        10. Confirmación antes de configurar respaldos (NUEVO)
+        11. Confirmación antes de reiniciar horario (NUEVO)
+        12. Validación de campos vacíos en carrera (NUEVO)
     --}}
 
     document.addEventListener('DOMContentLoaded', function() {
         
-        {{-- 1. MODAL AGREGAR CARRERA --}}
+        // ==============================================
+        // 1. MODAL AGREGAR CARRERA
+        // ==============================================
         const modalCarrera = document.getElementById('modalAgregarCarrera');
         const btnAgregar = document.getElementById('btnAgregarCarrera');
         const closeModalCarrera = document.getElementById('closeModalCarrera');
@@ -322,7 +360,9 @@
 
         if (closeModalCarrera) closeModalCarrera.onclick = cerrarModalCarrera;
 
-        {{-- 2. MODAL RESPALDOS --}}
+        // ==============================================
+        // 2. MODAL RESPALDOS
+        // ==============================================
         const btnRespaldos = document.getElementById('btnRespaldos');
         const btnRespaldosAuto = document.getElementById('btnRespaldosAuto');
         const btonCerrarRespaldos = document.getElementById('closeModalRespaldos');
@@ -347,7 +387,9 @@
         if (btonCerrarRespaldos) btonCerrarRespaldos.onclick = cerrarModalRespaldos;
         if (btnRespaldosAuto) btnRespaldosAuto.onclick = abrirModalRespaldosAuto;
 
-        {{-- 3. MODAL RESPALDOS AUTOMATIZADOS --}}
+        // ==============================================
+        // 3. MODAL RESPALDOS AUTOMATIZADOS
+        // ==============================================
         const closeModalRespaldosAuto = document.getElementById('closeModalRespaldosAuto');
         const btnRespaldosMainRegreso = document.getElementById('btnRespaldosMainRegreso');
 
@@ -363,7 +405,7 @@
         if (closeModalRespaldosAuto) closeModalRespaldosAuto.onclick = cerrarModalRespaldosAuto;
         if (btnRespaldosMainRegreso) btnRespaldosMainRegreso.onclick = regresarModalRespaldos;
 
-        //manejar cosas del modal anterior
+        // Manejar cosas del modal anterior
         const permitirTiemposCheck = document.getElementById('permitirTiemposCheck');
 
         const tiempoMinutosSigRespaldoLab = document.getElementById('tiempoMinutosSigRespaldoLab');
@@ -406,9 +448,9 @@
             tiempoHorasSigRespaldoLab.style.display = 'none';
         }
 
-        
-
-        // Modal Lista Global de Alumnos 
+        // ==============================================
+        // 4. MODAL LISTA GLOBAL DE ALUMNOS
+        // ==============================================
         const modalListaGlobal = document.getElementById('modalListaGlobal');
         const btnListaGlobal = document.getElementById('btnListaGlobal');
         const closeModalListaGlobal = document.getElementById('closeModalListaGlobal');
@@ -425,7 +467,9 @@
 
         if (closeModalListaGlobal) closeModalListaGlobal.onclick = cerrarModalListaGlobal;
 
-        {{-- 6. CERRAR MODALES AL HACER CLIC FUERA --}}
+        // ==============================================
+        // 5. CERRAR MODALES AL HACER CLIC FUERA
+        // ==============================================
         window.onclick = function(e) {
             if (e.target === modalCarrera) cerrarModalCarrera();
             if (e.target === modalListaGlobal) cerrarModalListaGlobal();
@@ -433,7 +477,9 @@
             if (e.target === modalRespaldosAuto) cerrarModalRespaldosAuto();
         };
 
-        {{-- 5. FILTRO DE BÚSQUEDA EN TABLA --}}
+        // ==============================================
+        // 6. FILTRO DE BÚSQUEDA EN TABLA
+        // ==============================================
         const inputBusquedaModal = document.getElementById('busquedaModal');
         if (inputBusquedaModal) {
             inputBusquedaModal.addEventListener('input', function() {
@@ -445,6 +491,126 @@
                         fila.style.display = '';
                     } else {
                         fila.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // ==============================================
+        // 7. CONFIRMAR GUARDAR CARRERA (NUEVO)
+        // ==============================================
+        const formAgregarCarrera = document.getElementById('formAgregarCarrera');
+        if (formAgregarCarrera) {
+            formAgregarCarrera.addEventListener('submit', function(e) {
+                const nombre = document.getElementById('nombreCarrera').value.trim();
+                const clave = document.getElementById('claveCarrera').value.trim();
+                
+                if (!nombre || !clave) {
+                    e.preventDefault();
+                    alertaInfo(
+                        'Campos incompletos',
+                        'Debes completar todos los campos obligatorios del formulario.'
+                    );
+                    return;
+                }
+                
+                e.preventDefault();
+                confirmarAccion(
+                    'Guardar carrera',
+                    '¿Estás seguro de que quieres guardar esta carrera?',
+                    'Guardar',
+                    'Cancelar'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        formAgregarCarrera.submit();
+                    }
+                });
+            });
+        }
+
+        // ==============================================
+        // 8. CONFIRMAR DESCARGA DE PDF GLOBAL (NUEVO)
+        // ==============================================
+        const btnDescargarPDFGlobal = document.getElementById('btnDescargarPDFGlobal');
+        if (btnDescargarPDFGlobal) {
+            btnDescargarPDFGlobal.addEventListener('click', function(e) {
+                e.preventDefault();
+                confirmarAccion(
+                    'Descargar lista de alumnos',
+                    'Se generará un archivo PDF con la lista completa de alumnos. ¿Deseas continuar?',
+                    'Descargar',
+                    'Cancelar'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '{{ route("admin.alumnos.pdf") }}';
+                    }
+                });
+            });
+        }
+
+        // ==============================================
+        // 9. CONFIRMAR GENERAR RESPALDO (NUEVO)
+        // ==============================================
+        const btnGenerarRespaldo = document.getElementById('btnGenerarRespaldo');
+        if (btnGenerarRespaldo) {
+            btnGenerarRespaldo.addEventListener('click', function(e) {
+                e.preventDefault();
+                confirmarAccion(
+                    'Generar respaldo',
+                    'Se generará un respaldo de la base de datos. ¿Deseas continuar?',
+                    'Generar',
+                    'Cancelar'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('formGenerarRespaldo').submit();
+                    }
+                });
+            });
+        }
+
+        // ==============================================
+        // 10. CONFIRMAR CONFIGURAR RESPALDOS (NUEVO)
+        // ==============================================
+        const formConfigRespaldo = document.getElementById('formConfigRespaldo');
+        if (formConfigRespaldo) {
+            formConfigRespaldo.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const fecha = document.getElementById('fechaIniciarRespaldos').value;
+                
+                if (!fecha) {
+                    alertaInfo(
+                        'Campos incompletos',
+                        'Debes completar todos los campos obligatorios del formulario.'
+                    );
+                    return;
+                }
+                
+                confirmarAccion(
+                    'Configurar respaldos',
+                    'Se configurarán los respaldos automatizados. ¿Deseas continuar?',
+                    'Configurar',
+                    'Cancelar'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        formConfigRespaldo.submit();
+                    }
+                });
+            });
+        }
+
+        // ==============================================
+        // 11. CONFIRMAR REINICIAR HORARIO (NUEVO)
+        // ==============================================
+        const formReiniciarRespaldo = document.getElementById('formReiniciarRespaldo');
+        if (formReiniciarRespaldo) {
+            formReiniciarRespaldo.addEventListener('submit', function(e) {
+                e.preventDefault();
+                confirmarEliminacion(
+                    '¿Reiniciar horario de respaldos?',
+                    'Esta acción eliminará la configuración actual de respaldos automatizados. ¿Estás seguro?'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        formReiniciarRespaldo.submit();
                     }
                 });
             });
