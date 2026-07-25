@@ -212,6 +212,7 @@ return [
     'groups_no_tutor' => 'Este Grupo no tiene Tutor',
     'btn_edit_group' => 'Editar Grupo',
     'btn_add_group' => 'Añadir Grupo',
+    'btn_delete_group' => 'Borrar Grupo',
     
     //expediente alumno en admin
     'student_record_admin_detail_title' => 'Administrador - Expediente del Alumno',

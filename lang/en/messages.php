@@ -211,6 +211,7 @@ return [
     'groups_no_tutor' => 'This Group Doesn\'t have an Tutor',
     'btn_edit_group' => 'Edit Group',
     'btn_add_group' => 'Add Group',
+    'btn_delete_group' => 'Delete Group',
 
     //expediente alumno en admin
     'student_record_admin_detail_title' => 'Administrator - Student Record',

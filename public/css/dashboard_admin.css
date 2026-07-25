@@ -1718,6 +1718,12 @@
     align-items: center;
 }
 
+.form-eliminar-inline {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
 .contador-alumnos {
     font-size: 0.85rem;
     font-weight: 600;
