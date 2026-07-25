@@ -38,19 +38,17 @@ class AdminCarreraController extends Controller {
             if ($grupoId) {
                 $q->where('grupos.id', $grupoId);
             }
-        })
-        ->get();
+        })->get();
+        
         $maestros = Maestro::with('user:id,name,apellido,email')->whereHas('carreras', function($d) use ($id) {
             $d->where('carrera_id', $id);
         })->get();
-        return view('dashboard.admin.admin_carrera', compact('carrera', 'alumnos', 'maestros', 'grupos'));
 
         $totalAlumnosGrupo = $grupoId
             ? $alumnos->count()
             : Alumno::whereHas('grupos', fn($q) => $q->where('carrera_id', $id))->count();
 
         $grupoSeleccionado = $grupoId ? $grupos->firstWhere('id', $grupoId) : null;
-        $maestros = Maestro::with('user:id,name,apellido,email')->get();
 
         return view('dashboard.admin.admin_carrera', compact('carrera', 'alumnos', 'maestros', 'grupos', 'grupoSeleccionado', 'totalAlumnosGrupo', 'grupoId'));
     }
