@@ -31,7 +31,7 @@ class AdminCarreraController extends Controller {
         $grupos = Grupo::where('carrera_id', $id)->get();
         $grupoId = $req->grupo_id;
 
-        $alumnos = Alumno::with(['user:id,name,apellido', 'grupos'])
+        $alumnos = Alumno::with(['user:id,name,apellido', 'grupos.carrera'])
         ->whereHas('grupos', function ($q) use ($id, $grupoId) {
             $q->where('carrera_id', $id);
 
@@ -44,6 +44,15 @@ class AdminCarreraController extends Controller {
             $d->where('carrera_id', $id);
         })->get();
         return view('dashboard.admin.admin_carrera', compact('carrera', 'alumnos', 'maestros', 'grupos'));
+
+        $totalAlumnosGrupo = $grupoId
+            ? $alumnos->count()
+            : Alumno::whereHas('grupos', fn($q) => $q->where('carrera_id', $id))->count();
+
+        $grupoSeleccionado = $grupoId ? $grupos->firstWhere('id', $grupoId) : null;
+        $maestros = Maestro::with('user:id,name,apellido,email')->get();
+
+        return view('dashboard.admin.admin_carrera', compact('carrera', 'alumnos', 'maestros', 'grupos', 'grupoSeleccionado', 'totalAlumnosGrupo', 'grupoId'));
     }
 
     public function storeAlumno($carreraId, CreateAlumnoRequest $req) {
@@ -237,10 +246,26 @@ class AdminCarreraController extends Controller {
         $alumnos = Alumno::with('user', 'carrera')->get();
 
         Log::registrar('Descarga PDF', 'El administrador descargó la lista global de alumnos');
-        
+
         // Reutilizamos la vista de PDF que ya creamos
         $pdf = Pdf::loadView('pdf.lista_alumnos_maestro', compact('alumnos'));
 
         return $pdf->download('reporte_global_alumnos_' . now()->format('d-m-Y') . '.pdf');
+    }
+
+    public function storeGrupo(Request $request, $carreraId)
+    {
+        $request->validate([
+            'nombre' => 'required|string|max:10',
+            'grado'  => 'required|in:1,2,3,4,5,6,7,8,9,10,11',
+        ]);
+
+        Grupo::create([
+            'nombre'     => $request->nombre,
+            'grado'      => $request->grado,
+            'carrera_id' => $carreraId,
+        ]);
+
+        return redirect()->route('admin.show', $carreraId)->with('success', 'Grupo creado correctamente');
     }
 }
