@@ -54,11 +54,13 @@
     --}}
     <div class="perfil-container">
         
-        {{-- ======================================================
-             BOTONES DE ACCIÓN
-             ====================================================== 
-             - Editar maestro: Abre modal para editar datos
-             - Eliminar maestro: Elimina al maestro (con confirmación)
+        {{-- 
+            ======================================================
+            NOTA: CAMBIO REALIZADO - CONFIRMACIÓN DE ELIMINAR MAESTRO
+            ======================================================
+            Se reemplazó confirm() + alert() por confirmarEliminacion()
+            + alertaInfo() de SweetAlert.
+            ======================================================
         --}}
         <div class="acciones-superiores">
             <button class="btn-editar-perfil" id="btnEditarMaestro">
@@ -189,6 +191,7 @@
          Formulario para editar los datos del maestro.
          Campos: Nombre, Apellidos, Núm. empleado, RFC, Edad, Sexo,
          Fecha nacimiento, Correo, Teléfono, ¿Es tutor?, Grupo tutorado, Foto.
+         ======================================================
     --}}
     <div id="modalEditarMaestro" class="modal-small">
         <div class="modal-content">
@@ -199,44 +202,44 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Nombre(s)</label>
-                    <input type="text" id="editNombre">
+                    <input type="text" id="editNombre" value="{{ $maestro->user->name }}">
                 </div>
                 <div class="form-group">
                     <label>Apellidos</label>
-                    <input type="text" id="editApellidos">
+                    <input type="text" id="editApellidos" value="{{ $maestro->user->apellido }}">
                 </div>
                 <div class="form-group">
                     <label>Número de empleado</label>
-                    <input type="text" id="editEmpleado">
+                    <input type="text" id="editEmpleado" value="{{ $maestro->num_empleado }}">
                 </div>
                 <div class="form-group">
                     <label>RFC</label>
-                    <input type="text" id="editRFC">
+                    <input type="text" id="editRFC" value="{{ $maestro->rfc }}">
                 </div>
                 <div class="form-group">
                     <label>Edad</label>
-                    <input type="text" id="editEdad">
+                    <input type="text" id="editEdad" value="{{ $maestro->edad }}">
                 </div>
                 <div class="form-group">
                     <label>Sexo</label>
                     <select id="editSexo">
                         <option value="">Seleccionar</option>
-                        <option value="Masculino">Masculino</option>
-                        <option value="Femenino">Femenino</option>
-                        <option value="Otro">Otro</option>
+                        <option value="Masculino" {{ $maestro->sexo == 'Masculino' ? 'selected' : '' }}>Masculino</option>
+                        <option value="Femenino" {{ $maestro->sexo == 'Femenino' ? 'selected' : '' }}>Femenino</option>
+                        <option value="Otro" {{ $maestro->sexo == 'Otro' ? 'selected' : '' }}>Otro</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>Fecha de nacimiento</label>
-                    <input type="date" id="editFechaNac">
+                    <input type="date" id="editFechaNac" value="{{ $maestro->fecha_nacimiento }}">
                 </div>
                 <div class="form-group">
                     <label>Correo electrónico</label>
-                    <input type="email" id="editCorreo">
+                    <input type="email" id="editCorreo" value="{{ $maestro->user->email }}">
                 </div>
                 <div class="form-group">
                     <label>Teléfono</label>
-                    <input type="text" id="editTelefono">
+                    <input type="text" id="editTelefono" value="{{ $maestro->telefono }}">
                 </div>
                 <div class="form-group">
                     <label>¿Es tutor?</label>
@@ -264,20 +267,36 @@
     </div>
 @endsection
 
-{{-- ======================================================
-     SCRIPTS ADICIONALES
-     ====================================================== 
-     Funcionalidad JavaScript:
-     1. Botón de regreso
-     2. Modal Editar Maestro (abrir/cerrar/guardar)
-     3. Eliminar maestro (confirmación)
-     4. Cambiar foto de perfil (previsualización)
+{{-- 
+    ======================================================
+    SCRIPTS ADICIONALES
+    ======================================================
+    NOTA: FUNCIONALIDADES AGREGADAS
+    ======================================================
+    1. Confirmación antes de guardar cambios del maestro.
+    2. Confirmación antes de eliminar maestro.
+    
+    Se conserva la simulación de guardado (actualización del DOM)
+    que ya existía originalmente, pero ahora envuelta en SweetAlert.
+    ======================================================
 --}}
 @push('scripts')
 <script>
+    {{-- 
+        FUNCIONALIDAD JAVASCRIPT:
+        1. Botón de regreso
+        2. Modal Editar Maestro (abrir/cerrar/guardar)
+        3. Eliminar maestro (confirmación)
+        4. Cambiar foto de perfil (previsualización)
+        5. Confirmación antes de guardar maestro (NUEVO)
+        6. Confirmación antes de eliminar maestro (NUEVO)
+    --}}
+
     document.addEventListener('DOMContentLoaded', function() {
         
-        {{-- 1. BOTÓN DE REGRESO --}}
+        // ==============================================
+        // 1. BOTÓN DE REGRESO
+        // ==============================================
         const backButton = document.getElementById('backButton');
         if (backButton) {
             backButton.addEventListener('click', function() {
@@ -285,20 +304,22 @@
             });
         }
 
-        {{-- 2. MODAL EDITAR MAESTRO --}}
+        // ==============================================
+        // 2. MODAL EDITAR MAESTRO
+        // ==============================================
         const modalEditar = document.getElementById('modalEditarMaestro');
         const btnEditar = document.getElementById('btnEditarMaestro');
         const closeModal = document.getElementById('closeModalEditar');
         const cancelar = document.getElementById('cancelarEditar');
 
-        {{-- Abrir modal --}}
+        // Abrir modal
         if (btnEditar) {
             btnEditar.onclick = function() {
                 modalEditar.style.display = 'flex';
             };
         }
 
-        {{-- Cerrar modal --}}
+        // Cerrar modal
         function cerrarModal() {
             modalEditar.style.display = 'none';
         }
@@ -306,54 +327,14 @@
         if (closeModal) closeModal.onclick = cerrarModal;
         if (cancelar) cancelar.onclick = cerrarModal;
 
-        {{-- Cerrar al hacer clic fuera --}}
+        // Cerrar al hacer clic fuera
         window.onclick = function(e) {
             if (e.target === modalEditar) cerrarModal();
         };
 
-        {{-- Guardar cambios (actualiza la vista con los nuevos valores) --}}
-        const guardar = document.getElementById('guardarEditar');
-        if (guardar) {
-            guardar.onclick = function() {
-                document.getElementById('datoNombre').textContent = document.getElementById('editNombre').value;
-                document.getElementById('datoApellidos').textContent = document.getElementById('editApellidos').value;
-                document.getElementById('datoEmpleado').textContent = document.getElementById('editEmpleado').value;
-                document.getElementById('datoRFC').textContent = document.getElementById('editRFC').value;
-                document.getElementById('datoEdad').textContent = document.getElementById('editEdad').value ? document.getElementById('editEdad').value + ' años' : '';
-                document.getElementById('datoSexo').textContent = document.getElementById('editSexo').value;
-                
-                const fecha = document.getElementById('editFechaNac').value;
-                if (fecha) {
-                    const partes = fecha.split('-');
-                    const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-                    document.getElementById('datoFechaNac').textContent = partes[2] + ' de ' + meses[parseInt(partes[1]) - 1] + ' de ' + partes[0];
-                }
-                
-                document.getElementById('datoCorreo').textContent = document.getElementById('editCorreo').value;
-                document.getElementById('datoTelefono').textContent = document.getElementById('editTelefono').value;
-                document.getElementById('grupoTutorado').textContent = document.getElementById('editGrupoTutorado').value;
-                
-                const nombre = document.getElementById('editNombre').value;
-                const apellidos = document.getElementById('editApellidos').value;
-                const iniciales = (nombre ? nombre.charAt(0) : '') + (apellidos ? apellidos.charAt(0) : '');
-                document.querySelector('.avatar-iniciales-grande').textContent = iniciales.toUpperCase();
-                
-                alert('Maestro actualizado correctamente');
-                cerrarModal();
-            };
-        }
-
-        {{-- 3. ELIMINAR MAESTRO --}}
-        const btnEliminar = document.getElementById('btnEliminarMaestro');
-        if (btnEliminar) {
-            btnEliminar.onclick = function() {
-                if (confirm('¿Estás seguro de eliminar este maestro?')) {
-                    alert('Maestro eliminado');
-                }
-            };
-        }
-
-        {{-- 4. CAMBIAR FOTO (previsualización) --}}
+        // ==============================================
+        // 3. CAMBIAR FOTO (previsualización)
+        // ==============================================
         const btnCambiarFoto = document.getElementById('btnCambiarFoto');
         if (btnCambiarFoto) {
             btnCambiarFoto.onclick = function() {
@@ -371,6 +352,99 @@
                 reader.readAsDataURL(e.target.files[0]);
             }
         });
+
+        // ==============================================
+        // 4. CONFIRMACIÓN DE GUARDAR MAESTRO (NUEVO)
+        // ==============================================
+        // Se conserva la lógica original de simulación de guardado
+        // pero ahora envuelta en SweetAlert.
+        const guardarEditar = document.getElementById('guardarEditar');
+        if (guardarEditar) {
+            guardarEditar.addEventListener('click', function() {
+                const nombre = document.getElementById('editNombre').value.trim();
+                const apellidos = document.getElementById('editApellidos').value.trim();
+                const correo = document.getElementById('editCorreo').value.trim();
+                const empleado = document.getElementById('editEmpleado').value.trim();
+                
+                if (!nombre || !apellidos || !correo || !empleado) {
+                    alertaInfo(
+                        'Campos incompletos',
+                        'Debes completar todos los campos obligatorios del formulario.'
+                    );
+                    return;
+                }
+                
+                confirmarAccion(
+                    'Guardar cambios',
+                    '¿Estás seguro de que quieres guardar los cambios en el perfil del maestro?',
+                    'Guardar',
+                    'Cancelar'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        // ==========================================
+                        // CÓDIGO ORIGINAL DE SIMULACIÓN DE GUARDADO
+                        // ==========================================
+                        // Se mantiene exactamente igual que antes,
+                        // solo se reemplazó alert() por SweetAlert.
+                        document.getElementById('datoNombre').textContent = nombre;
+                        document.getElementById('datoApellidos').textContent = apellidos;
+                        document.getElementById('datoEmpleado').textContent = empleado;
+                        document.getElementById('datoRFC').textContent = document.getElementById('editRFC').value;
+                        document.getElementById('datoEdad').textContent = document.getElementById('editEdad').value ? document.getElementById('editEdad').value + ' años' : '';
+                        document.getElementById('datoSexo').textContent = document.getElementById('editSexo').value;
+                        
+                        const fecha = document.getElementById('editFechaNac').value;
+                        if (fecha) {
+                            const partes = fecha.split('-');
+                            const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+                            document.getElementById('datoFechaNac').textContent = partes[2] + ' de ' + meses[parseInt(partes[1]) - 1] + ' de ' + partes[0];
+                        }
+                        
+                        document.getElementById('datoCorreo').textContent = correo;
+                        document.getElementById('datoTelefono').textContent = document.getElementById('editTelefono').value;
+                        document.getElementById('grupoTutorado').textContent = document.getElementById('editGrupoTutorado').value;
+                        
+                        const iniciales = (nombre ? nombre.charAt(0) : '') + (apellidos ? apellidos.charAt(0) : '');
+                        document.querySelector('.avatar-iniciales-grande').textContent = iniciales.toUpperCase();
+                        
+                        // ==========================================
+                        // FIN DEL CÓDIGO ORIGINAL
+                        // ==========================================
+                        
+                        alertaExito(
+                            'Maestro actualizado',
+                            'Los cambios se aplicaron correctamente.'
+                        );
+                        cerrarModal();
+                    }
+                });
+            });
+        }
+
+        // ==============================================
+        // 5. CONFIRMACIÓN DE ELIMINAR MAESTRO (NUEVO)
+        // ==============================================
+        // Originalmente: confirm() + alert()
+        // Ahora: confirmarEliminacion() + alertaInfo()
+        const btnEliminar = document.getElementById('btnEliminarMaestro');
+        if (btnEliminar) {
+            btnEliminar.addEventListener('click', function() {
+                const nombre = document.getElementById('datoNombre').textContent;
+                const apellidos = document.getElementById('datoApellidos').textContent;
+                
+                confirmarEliminacion(
+                    '¿Eliminar maestro?',
+                    `El maestro "${nombre} ${apellidos}" se eliminará permanentemente.`
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        alertaInfo(
+                            'Funcionalidad pendiente',
+                            'La eliminación de maestros se implementará posteriormente.'
+                        );
+                    }
+                });
+            });
+        }
     });
 </script>
 @endpush

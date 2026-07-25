@@ -265,10 +265,20 @@
         --}}
         <h3 class="seccion-titulo">{{ __('messages.expedient_grades') }}</h3>
         
-        {{-- Filtro de período --}}
+        {{-- 
+            Filtro de período
+            ======================================================
+            NOTA: CAMBIO REALIZADO - ESTRUCTURA DEL FILTRO
+            ======================================================
+            Se movió el <form> para que envuelva el div en lugar de
+            estar dentro, igual que en la vista de calificaciones
+            del alumno. Esto corrige el desalineamiento de los
+            elementos (label, select, botón).
+            ======================================================
+        --}}
         <div class="filtro-periodo-expediente">
-            <div class="periodo-select-expediente">
-                <form action="{{ route('maestro.alumno.expediente', $alumno->id) }}" method="get">
+            <form action="{{ route('maestro.alumno.expediente', $alumno->id) }}" method="get">
+                <div class="periodo-select-expediente">
                     <label for="periodoSelect">{{ __('messages.expedient_period') }}:</label>
                     <select name="periodo" id="periodoSelect">
                         <option value="">{{ __('messages.expedient_select_period') }}</option>
@@ -278,11 +288,15 @@
                             </option>
                         @endforeach
                     </select>
-                    {{-- Este boton necesita css--}}
-                    <button type="submit">Buscar</button>
-                </form>
-                
-            </div>
+                    <button type="submit" class="btn-buscar">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        Buscar
+                    </button>
+                </div>
+            </form>
         </div>
 
         {{-- Tabla de calificaciones --}}

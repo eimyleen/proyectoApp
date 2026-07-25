@@ -62,13 +62,16 @@
     --}}
     <div class="expediente-container admin-expediente">
         
-        {{-- ======================================================
-             BOTÓN GENERAR PDF
-             ====================================================== 
-             Permite descargar el expediente en formato PDF.
+        {{-- 
+            ======================================================
+            NOTA: CAMBIO REALIZADO - GENERAR PDF
+            ======================================================
+            Se agregó ID "btnGenerarPDF" y una alerta de
+            confirmación con SweetAlert antes de ejecutar la acción.
+            ======================================================
         --}}
         <div class="pdf-button-container">
-            <button class="btn-generar-pdf" onclick="alert('Generando PDF del expediente...')">
+            <button class="btn-generar-pdf" id="btnGenerarPDF">
                 <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-pdf">
                 {{ __('messages.expedient_generate_pdf') }}
             </button>
@@ -161,7 +164,7 @@
                     <span class="dato-valor">{{ $alumno->user->email }}</span>
                 </div>
 
-                {{-- Teléfono (NUEVO) --}}
+                {{-- Teléfono --}}
                 <div class="dato-item">
                     <label>{{ __('messages.expedient_phone') }}</label>
                     <span class="dato-valor">{{ $alumno->telefono ?? 'N/A' }}</span>
@@ -184,11 +187,17 @@
             </div>
         </div>
 
-        {{-- ======================================================
-             SECCIÓN DE TUTORÍAS
-             ====================================================== 
-             Muestra la tabla de tutorías del alumno.
-             Incluye botón para agregar nuevas tutorías.
+        {{-- 
+            ======================================================
+            NOTA: CAMBIO REALIZADO - TUTORÍAS Y DOCUMENTOS
+            ======================================================
+            Se agregaron IDs a los botones necesarios para manejar
+            las acciones desde JavaScript.
+            
+            También se agregaron alertas de confirmación con
+            SweetAlert para guardar y eliminar tutorías, además
+            de validación de campos obligatorios.
+            ======================================================
         --}}
         <h3 class="seccion-titulo">Tutorías</h3>
         <div class="tutorias-header">
@@ -211,8 +220,8 @@
                             <td></td>
                             <td></td>
                             <td>
-                                <button class="btn-editar-tutoria">Editar</button> 
-                                <button class="btn-eliminar-tutoria">Eliminar</button>
+                                <button class="btn-editar-tutoria" data-fila="{{ $i }}">Editar</button> 
+                                <button class="btn-eliminar-tutoria" data-fila="{{ $i }}">Eliminar</button>
                             </td>
                         </tr>
                     @endfor
@@ -224,6 +233,9 @@
              MODAL - EDITAR ALUMNO
              ====================================================== 
              Modal para editar los datos del alumno.
+             
+             NOTA: Se mantiene la estructura original.
+             ======================================================
         --}}
         <div id="modalEditarAlumno" class="modal">
             <div class="modal-content">
@@ -301,6 +313,9 @@
              - Se abre con el botón "+ Agregar tutoría"
              - Se abre con el botón "Editar" en cada fila
              - Los campos son: Fecha, Tema, Notas
+             
+             NOTA: Se mantiene la estructura original sin <form>.
+             ======================================================
         --}}
         <div id="modalTutoria" class="modal modal-small">
             <div class="modal-content">
@@ -333,6 +348,9 @@
              SECCIÓN DE DOCUMENTOS DEL ALUMNO
              ====================================================== 
              Muestra los documentos del alumno con estado.
+             
+             NOTA: Se mantiene la estructura original.
+             ======================================================
         --}}
         <div class="documentos-container">
             <h3 class="seccion-titulo documentos-titulo">{{ __('messages.expedient_documents') }}</h3>
@@ -343,7 +361,7 @@
                     <span class="documento-nombre">Acta de nacimiento</span>
                     <span class="documento-estado subido">{{ __('messages.document_uploaded') }}</span>
                 </div>
-                <button class="btn-ver-documento" onclick="alert('Ver documento: Acta de nacimiento')">
+                <button class="btn-ver-documento" id="btnVerActa">
                     <img src="{{ asset('img/ojo.png') }}" alt="Ver" class="btn-icon">
                     {{ __('messages.document_view') }}
                 </button>
@@ -373,7 +391,7 @@
                     <span class="documento-nombre">Constancia de estudios</span>
                     <span class="documento-estado subido">{{ __('messages.document_uploaded') }}</span>
                 </div>
-                <button class="btn-ver-documento" onclick="alert('Ver documento: Constancia de estudios')">
+                <button class="btn-ver-documento" id="btnVerConstancia">
                     <img src="{{ asset('img/ojo.png') }}" alt="Ver" class="btn-icon">
                     {{ __('messages.document_view') }}
                 </button>
@@ -383,35 +401,65 @@
     </div>
 @endsection
 
-{{-- ======================================================
-     SCRIPTS ADICIONALES
-     ====================================================== 
-     Funcionalidad JavaScript:
-     1. Botón generar PDF
-     2. Modal de tutorías (agregar/editar)
-     3. Cargar datos al editar una tutoría
+{{-- 
+    ======================================================
+    SCRIPTS ADICIONALES
+    ======================================================
+    NOTA: FUNCIONALIDADES AGREGADAS
+    ======================================================
+    1. Confirmación antes de generar PDF.
+    2. Confirmación antes de guardar tutoría + validación.
+    3. Confirmación antes de eliminar tutoría.
+    4. Visualización de documentos con SweetAlert.
+    
+    El guardado y eliminación real permanecen a cargo del backend.
+    ======================================================
 --}}
 @push('scripts')
 <script>
-    {{-- 1. BOTÓN GENERAR PDF --}}
+    {{-- 
+        FUNCIONALIDAD JAVASCRIPT:
+        1. Generar PDF (NUEVO)
+        2. Modal de tutorías (agregar/editar)
+        3. Guardar tutoría (NUEVO)
+        4. Editar tutoría
+        5. Eliminar tutoría (NUEVO)
+        6. Visualizar documentos (NUEVO)
+    --}}
+
     document.addEventListener('DOMContentLoaded', function() {
-        const btnPdf = document.querySelector('.btn-generar-pdf');
-        if (btnPdf) {
-            btnPdf.addEventListener('click', function() {
-                alert('Generando PDF del expediente...');
+        
+        // ==============================================
+        // 1. CONFIRMACIÓN DE GENERAR PDF (NUEVO)
+        // ==============================================
+        const btnGenerarPDF = document.getElementById('btnGenerarPDF');
+        if (btnGenerarPDF) {
+            btnGenerarPDF.addEventListener('click', function(e) {
+                e.preventDefault();
+                confirmarAccion(
+                    'Generar PDF del expediente',
+                    '¿Deseas continuar con esta acción?'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        alertaInfo(
+                            'Funcionalidad pendiente',
+                            'La generación del PDF se implementará posteriormente.'
+                        );
+                    }
+                });
             });
         }
-    });
 
-    {{-- 2. MODAL DE TUTORÍAS --}}
-    document.addEventListener('DOMContentLoaded', function() {
+        // ==============================================
+        // 2. MODAL DE TUTORÍAS
+        // ==============================================
         const modal = document.getElementById('modalTutoria');
         const btnAgregar = document.getElementById('btnAgregarTutoria');
         const closeModal = document.getElementById('closeModal');
         const cancelarModal = document.getElementById('cancelarModal');
         const modalTitulo = document.getElementById('modalTitulo');
 
-        {{-- Abrir modal para agregar --}}
+        // Abrir modal para agregar
         if (btnAgregar) {
             btnAgregar.addEventListener('click', function() {
                 modalTitulo.textContent = 'Agregar tutoría';
@@ -422,7 +470,7 @@
             });
         }
 
-        {{-- Cerrar modal --}}
+        // Cerrar modal
         function cerrarModal() {
             modal.style.display = 'none';
         }
@@ -430,30 +478,50 @@
         if (closeModal) closeModal.addEventListener('click', cerrarModal);
         if (cancelarModal) cancelarModal.addEventListener('click', cerrarModal);
 
-        {{-- Cerrar modal al hacer clic fuera --}}
+        // Cerrar modal al hacer clic fuera
         window.addEventListener('click', function(event) {
             if (event.target == modal) {
                 cerrarModal();
             }
         });
 
-        {{-- Guardar tutoría --}}
+        // ==============================================
+        // 3. CONFIRMACIÓN DE GUARDAR TUTORÍA (NUEVO)
+        // ==============================================
         const guardarBtn = document.getElementById('guardarTutoria');
         if (guardarBtn) {
             guardarBtn.addEventListener('click', function() {
-                const fecha = document.getElementById('fechaTutoria').value;
-                const tema = document.getElementById('temaTutoria').value;
+                const fecha = document.getElementById('fechaTutoria').value.trim();
+                const tema = document.getElementById('temaTutoria').value.trim();
                 
-                if (fecha && tema) {
-                    alert('Tutoría guardada correctamente');
-                    cerrarModal();
-                } else {
-                    alert('Por favor completa la fecha y el tema');
+                if (!fecha || !tema) {
+                    alertaInfo(
+                        'Campos incompletos',
+                        'Debes completar todos los campos obligatorios del formulario.'
+                    );
+                    return;
                 }
+                
+                confirmarAccion(
+                    'Guardar tutoría',
+                    '¿Estás seguro de que quieres guardar esta tutoría?',
+                    'Guardar',
+                    'Cancelar'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        alertaExito(
+                            'Tutoría guardada',
+                            'La tutoría se ha registrado correctamente.'
+                        );
+                        cerrarModal();
+                    }
+                });
             });
         }
 
-        {{-- 3. EDITAR TUTORÍA (cargar datos en el modal) --}}
+        // ==============================================
+        // 4. EDITAR TUTORÍA
+        // ==============================================
         document.querySelectorAll('.btn-editar-tutoria').forEach(btn => {
             btn.addEventListener('click', function() {
                 modalTitulo.textContent = 'Editar tutoría';
@@ -462,7 +530,7 @@
                 const tema = row.cells[1].textContent;
                 const notas = row.cells[2].textContent;
                 
-                {{-- Convertir fecha al formato del input date --}}
+                // Convertir fecha al formato del input date
                 if (fecha && fecha.includes('/')) {
                     const partes = fecha.split('/');
                     document.getElementById('fechaTutoria').value = `${partes[2]}-${partes[1]}-${partes[0]}`;
@@ -474,6 +542,55 @@
                 modal.style.display = 'flex';
             });
         });
+
+        // ==============================================
+        // 5. CONFIRMACIÓN DE ELIMINAR TUTORÍA (NUEVO)
+        // ==============================================
+        document.querySelectorAll('.btn-eliminar-tutoria').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const row = this.closest('tr');
+                const fecha = row.cells[0].textContent;
+                const tema = row.cells[1].textContent;
+                
+                confirmarEliminacion(
+                    '¿Eliminar tutoría?',
+                    `La tutoría "${tema}" del ${fecha} se eliminará permanentemente.`
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        alertaInfo(
+                            'Funcionalidad pendiente',
+                            'La eliminación de tutorías se implementará posteriormente.'
+                        );
+                    }
+                });
+            });
+        });
+
+        // ==============================================
+        // 6. VISUALIZAR DOCUMENTOS (NUEVO)
+        // ==============================================
+        const btnVerActa = document.getElementById('btnVerActa');
+        if (btnVerActa) {
+            btnVerActa.addEventListener('click', function(e) {
+                e.preventDefault();
+                alertaInfo(
+                    'Ver documento',
+                    'La visualización de documentos se implementará posteriormente.'
+                );
+            });
+        }
+
+        const btnVerConstancia = document.getElementById('btnVerConstancia');
+        if (btnVerConstancia) {
+            btnVerConstancia.addEventListener('click', function(e) {
+                e.preventDefault();
+                alertaInfo(
+                    'Ver documento',
+                    'La visualización de documentos se implementará posteriormente.'
+                );
+            });
+        }
     });
 </script>
 @endpush

@@ -166,10 +166,14 @@
              ====================================================== 
              Sección para mostrar las carreras que el maestro imparte.
              Los datos se cargarán dinámicamente desde el backend.
+             
+             NOTA: Se cambió la clase "carreras-grid" por
+             "carreras-perfil-tabla" para evitar conflictos con
+             los estilos del grid de carreras del dashboard.
+             ======================================================
         --}}
         <h3 class="seccion-titulo">{{ __('messages.profile_teaching_careers') }}</h3>
-        <div class="carreras-grid tabla-calificaciones">
-            {{-- Las carreras se cargarán dinámicamente desde el backend --}}
+        <div class="carreras-perfil-tabla">
             <table>
                 <thead>
                     <tr>

@@ -32,6 +32,7 @@
    24.  RESPONSIVE - EXPEDIENTE
    25.  DOCUMENTOS (Vista Maestro - Expediente)
    26.  RESPONSIVE - DOCUMENTOS
+   27.  FILTRO DE PERÍODO - BOTÓN BUSCAR (NUEVO)
 
    ============================================================ */
 
@@ -608,46 +609,126 @@
 }
 
 /* ============================================================
-   11. CARRERAS EN PERFIL
+   11. CARRERAS EN PERFIL - TABLA 100% ANCHO
    ============================================================ */
-.perfil-container .carreras-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.25rem;
-    margin-bottom: 1rem;
-}
 
-.perfil-container .carrera-card {
-    text-align: center;
-    cursor: default;
-}
-
-.perfil-container .carrera-img {
-    width: 5rem;
-    height: 5rem;
-    margin: 0 auto;
-    border-radius: 50%;
-    background: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.75rem;
-    box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.08);
-    border: 0.125rem solid #e2e8f0;
-    overflow: hidden;
-}
-
-.perfil-container .carrera-img img {
+/* Contenedor de la tabla de carreras - 100% ancho */
+.carreras-perfil-tabla {
     width: 100%;
-    height: 100%;
-    object-fit: contain;
+    margin-bottom: 1.5rem;
+    overflow-x: auto;
 }
 
-.perfil-container .carrera-nombre {
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: #1e293b;
-    margin-top: 0.375rem;
+/* Tabla de carreras - 100% ancho */
+.carreras-perfil-tabla table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.04);
+}
+
+.carreras-perfil-tabla table th {
+    text-align: left;
+    padding: 0.75rem 1.25rem;
+    background: #1e293b;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.carreras-perfil-tabla table td {
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid #f1f5f9;
+    color: #334155;
+    font-size: 0.95rem;
+    background: #ffffff;
+}
+
+.carreras-perfil-tabla table tr:last-child td {
+    border-bottom: none;
+}
+
+.carreras-perfil-tabla table tr:hover td {
+    background: #f8fafc;
+}
+
+/* Columna "Nombre" - 70% */
+.carreras-perfil-tabla table th:first-child,
+.carreras-perfil-tabla table td:first-child {
+    width: 70%;
+}
+
+/* Columna "Es Tutor" - 30% */
+.carreras-perfil-tabla table th:last-child,
+.carreras-perfil-tabla table td:last-child {
+    width: 30%;
+    text-align: center;
+}
+
+/* Badge para el estado del tutor */
+.carreras-perfil-tabla .badge-tutor {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.carreras-perfil-tabla .badge-tutor.tutor-si {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.carreras-perfil-tabla .badge-tutor.tutor-no {
+    background: #f1f5f9;
+    color: #94a3b8;
+}
+
+/* ============================================================
+   11.1 RESPONSIVE - CARRERAS EN PERFIL
+   ============================================================ */
+@media (max-width: 768px) {
+    .carreras-perfil-tabla table th,
+    .carreras-perfil-tabla table td {
+        padding: 0.625rem 0.875rem;
+        font-size: 0.85rem;
+    }
+
+    .carreras-perfil-tabla table th:first-child,
+    .carreras-perfil-tabla table td:first-child {
+        width: 60%;
+    }
+
+    .carreras-perfil-tabla table th:last-child,
+    .carreras-perfil-tabla table td:last-child {
+        width: 40%;
+    }
+}
+
+@media (max-width: 480px) {
+    .carreras-perfil-tabla table th,
+    .carreras-perfil-tabla table td {
+        padding: 0.5rem 0.625rem;
+        font-size: 0.75rem;
+    }
+
+    .carreras-perfil-tabla table th:first-child,
+    .carreras-perfil-tabla table td:first-child {
+        width: 55%;
+    }
+
+    .carreras-perfil-tabla table th:last-child,
+    .carreras-perfil-tabla table td:last-child {
+        width: 45%;
+    }
+
+    .carreras-perfil-tabla .badge-tutor {
+        font-size: 0.65rem;
+        padding: 0.125rem 0.5rem;
+    }
 }
 
 /* ============================================================
@@ -1832,5 +1913,53 @@
         width: 100%;
         justify-content: center;
         padding: 0.5rem 1rem;
+    }
+}
+
+/* ============================================================
+   27. FILTRO DE PERÍODO - BOTÓN BUSCAR (NUEVO)
+   ============================================================ */
+.periodo-select-expediente .btn-buscar {
+    background: #1e293b;
+    color: #ffffff;
+    border: none;
+    padding: 0.375rem 1.25rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.periodo-select-expediente .btn-buscar:hover {
+    background: #0f172a;
+    transform: translateY(-0.125rem);
+    box-shadow: 0 0.25rem 0.75rem rgba(30, 41, 59, 0.2);
+}
+
+.periodo-select-expediente .btn-buscar:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* ============================================================
+   27.1 RESPONSIVE - BOTÓN BUSCAR
+   ============================================================ */
+@media (max-width: 768px) {
+    .periodo-select-expediente .btn-buscar {
+        padding: 0.25rem 1rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .periodo-select-expediente .btn-buscar {
+        width: 100%;
+        justify-content: center;
+        padding: 0.375rem 1rem;
     }
 }
