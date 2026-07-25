@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nombre', 10);
             $table->enum('grado', ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11']);
             $table->foreignId('carrera_id')->constrained('carreras')->onDelete('cascade');
+            $table->foreignId('maestro_id')->nullable()->constrained('maestros')->onDelete('set null');
             $table->timestamps();
 
             // Restriccion que evita duplicidad de grupos
