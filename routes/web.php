@@ -73,6 +73,10 @@ Route::middleware(['auth'])->group(function () {
         AdminCarreraController::class, 'storeMaestro'
     ])->middleware('role:admin')->name('admin.carrera.storeMaestro');
 
+    Route::post('/admin/carrera/{carreraId}/grupo', [
+        AdminCarreraController::class, 'storeGrupo'
+    ])->middleware('role:admin')->name('admin.carrera.storeGrupo');
+
     Route::post('/respaldo', [
         AdminCarreraController::class, 'manejarBackupManual'
     ])->middleware(['auth', 'role:admin']);

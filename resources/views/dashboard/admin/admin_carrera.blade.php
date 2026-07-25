@@ -164,9 +164,20 @@
                         @endforeach
                     </select>
                 </form>
-                
+
+                {{-- Contador de alumnos --}}
+                <span class="contador-alumnos">
+                    {{ $totalAlumnosGrupo }} {{ $totalAlumnosGrupo === 1 ? 'alumno' : 'alumnos' }}
+                    @if($grupoSeleccionado)
+                        en grupo {{ $grupoSeleccionado->nombre }}
+                    @endif
+                </span>
+
                 {{-- Botones de acción --}}
                 <div class="botones-accion">
+                    <button class="btn-agregar" id="btnAgregarGrupo">
+                        + Agregar Grupo
+                    </button>
                     <button class="btn-agregar" id="btnAgregarAlumno">
                         {{ __('messages.btn_add_student') }}
                     </button>
@@ -194,6 +205,7 @@
                             <th>{{ __('messages.column_id') }}</th>
                             <th>{{ __('messages.column_name') }}</th>
                             <th>{{ __('messages.column_lastname') }}</th>
+                            <th>Grupo</th>
                             <th>{{ __('messages.column_actions') }}</th>
                         </tr>
                     </thead>
@@ -204,6 +216,7 @@
                                 <td class="col-matricula">{{ $alumno->matricula }}</td>
                                 <td class="col-nombre">{{ $alumno->user?->name }}</td>
                                 <td class="col-nombre">{{ $alumno->user?->apellido }}</td>
+                                <td class="col-grupo">{{ $alumno->grupos->first()?->nombre ?? '—' }}</td>
                                 <td class="col-acciones">
                                     {{-- Botón Ver Expediente --}}
                                     <a href="{{ route('admin.alumno.expediente', $alumno->id) }}" style="text-decoration: none;">
@@ -510,6 +523,37 @@
             </div>
         </div>
     </form>
+
+    {{-- MODAL AGREGAR GRUPO --}}
+    <div id="modalAgregarGrupo" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Agregar Grupo</h3>
+                <span class="modal-close" id="closeModalGrupo">&times;</span>
+            </div>
+            <form action="{{ route('admin.carrera.storeGrupo', $carrera) }}" method="POST" id="formAgregarGrupo">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nombre del grupo</label>
+                        <input name="nombre" type="text" id="nombreGrupo" placeholder="Ej: A" maxlength="10" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Grado</label>
+                        <select name="grado" id="gradoGrupo" required>
+                            <option value="">Selecciona un grado</option>
+                            @for($g = 1; $g <= 11; $g++)
+                                <option value="{{ $g }}">{{ $g }}</option>
+                            @endfor
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn-guardar">Guardar grupo</button>
+                </div>
+            </form>
+        </div>
+    </div>
 @endsection
 
 {{-- 
@@ -658,12 +702,63 @@
         if (closeModalCarrera) closeModalCarrera.onclick = cerrarModalCarrera;
 
         // ==============================================
+        // 5b. MODAL AGREGAR GRUPO
+        // ==============================================
+        const modalGrupo = document.getElementById('modalAgregarGrupo');
+        const btnAgregarGrupo = document.getElementById('btnAgregarGrupo');
+        const closeModalGrupo = document.getElementById('closeModalGrupo');
+
+        if (btnAgregarGrupo) {
+            btnAgregarGrupo.onclick = function() {
+                modalGrupo.style.display = 'flex';
+            };
+        }
+
+        function cerrarModalGrupo() {
+            modalGrupo.style.display = 'none';
+            document.getElementById('nombreGrupo').value = '';
+            document.getElementById('gradoGrupo').value = '';
+        }
+
+        if (closeModalGrupo) closeModalGrupo.onclick = cerrarModalGrupo;
+
+        // Confirmación antes de guardar grupo
+        const formAgregarGrupo = document.getElementById('formAgregarGrupo');
+        if (formAgregarGrupo) {
+            formAgregarGrupo.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const nombre = document.getElementById('nombreGrupo').value.trim();
+                const grado = document.getElementById('gradoGrupo').value;
+
+                if (!nombre || !grado) {
+                    alertaInfo(
+                        'Campos incompletos',
+                        'Debes completar todos los campos obligatorios del formulario.'
+                    );
+                    return;
+                }
+
+                confirmarAccion(
+                    'Guardar grupo',
+                    '¿Estás seguro de que quieres crear este grupo?',
+                    'Guardar',
+                    'Cancelar'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        formAgregarGrupo.submit();
+                    }
+                });
+            });
+        }
+
+        // ==============================================
         // 6. CERRAR MODALES AL HACER CLIC FUERA
         // ==============================================
         window.onclick = function(e) {
             if (e.target === modalAlumno) cerrarModalAlumno();
             if (e.target === modalMaestro) cerrarModalMaestro();
             if (e.target === modalCarrera) cerrarModalCarrera();
+            if (e.target === modalGrupo) cerrarModalGrupo();
         };
 
         // ==============================================
