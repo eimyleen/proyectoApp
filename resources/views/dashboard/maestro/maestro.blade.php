@@ -148,7 +148,7 @@
                                     <td>{{ $alumno->matricula }}</td>
                                     <td>{{ $alumno->user?->name }}</td>
                                     <td>{{ $alumno->carrera?->nombre }}</td>
-                                    <td>{{ $alumno->grupos->first()?->nombre ?? 'No Asignado' }}</td>
+                                    <td>{{ $alumno->grupos->first()?->nombre ?? __('messages.not_assigned') }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

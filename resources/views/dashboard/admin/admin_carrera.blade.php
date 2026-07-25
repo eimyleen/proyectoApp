@@ -87,7 +87,7 @@
             {{-- Información de la carrera --}}
             <div class="carrera-info">
                 <h2>{{ $carrera->nombre }}</h2>
-                <p class="carrera-clave">Clave: {{ $carrera->clave }}</p>
+                <p class="carrera-clave">{{ __('messages.groups_id_card') . ': ' . $carrera->clave }}</p>
                 <p>{{ __('messages.career_management') }}</p>
             </div>
             
@@ -182,10 +182,10 @@
                 {{-- Botones de acción --}}
                 <div class="botones-accion">
                     <button class="btn-agregar" id="btnAgregarGrupo">
-                        + Agregar Grupo
+                        {{ '+ ' . __('messages.btn_add_group') }}
                     </button>
                     <button class="btn-agregar" id="btnEditarGrupo" style="background: #ffffff; color: #1e293b; border: 1px solid #e2e8f0;">
-                        <img src="{{ asset('img/editar.png') }}" alt="Editar" style="width: 1rem; height: 1rem;"> Editar Grupo
+                        <img src="{{ asset('img/editar.png') }}" alt="Editar" style="width: 1rem; height: 1rem;"> {{ __('messages.btn_edit_group') }}
                     </button>
                     <button class="btn-agregar" id="btnAgregarAlumno">
                         {{ __('messages.btn_add_student') }}
@@ -383,7 +383,7 @@
                     <div class="form-group">
                         <label>Grupo</label>
                         <select name="grupo" id="grupoAlumno" required>
-                            <option value="">Selecciona un Grupo</option>
+                            <option value="">{{ __('messages.select_group') }}</option>
                             @foreach ($grupos as $grup)
                                 <option value="{{ $grup->id }}">{{ $grup->nombre }}</option>
                             @endforeach
@@ -467,7 +467,7 @@
                     </div>
                     <div class="form-group">
                         <label>{{ __('messages.field_rfc') }}</label>
-                        <input type="text" id="numEmpleado" placeholder="{{ __('messages.placeholder_rfc_teacher') }}" name="rfc" required>
+                        <input type="text" id="numEmpleado" placeholder="{{ __('messages.placeholder_rfc') }}" name="rfc" required>
                     </div>
                     <div class="form-group">
                         <label>{{ __('messages.field_employee_num') }}</label>

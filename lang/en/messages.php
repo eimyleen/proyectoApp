@@ -47,6 +47,8 @@ return [
     'th_subject' => 'Subject',
     'th_teacher' => 'Teacher',
     'th_day' => 'Day',
+    'th_classroom' => 'Classroom',
+    'th_hour' => 'Hour',
     'th_schedule' => 'Schedule',
     'day_monday' => 'Monday',
     'day_tuesday' => 'Tuesday',
@@ -72,12 +74,13 @@ return [
     'label_major' => 'Major',
     'label_group' => 'Group',
     'label_id_number' => 'Student ID',
-    'label_curp' => 'Tax ID (CURP)',
+    'label_curp' => 'ID (CURP)',
     'label_years' => 'years old',
     'not_assigned' => 'Not assigned',
     'not_available' => 'N/A',
     'subtitle_record' => 'Here you can consult your personal and academic information',
     'expedient_documents' => 'Expedient Documents',
+    'btn_search' => 'Search',
 
     // --- Teacher Module ---
     'teacher_panel' => 'Teacher Dashboard',
@@ -88,6 +91,9 @@ return [
     'upload_grades' => 'Upload Grades',
     'academic_unit' => 'Academic Unit',
     'employee_number' => 'Employee ID',
+    'not_tutor' => 'It\'s not Tutor',
+    'no_tutor' => 'Not Tutor',
+    'table_career_name' => 'Career Name',
 
     // --- Teacher Dashboard ---
     'teacher_panel_title' => 'Teacher Panel',
@@ -113,6 +119,8 @@ return [
     'profile_email' => 'Institutional Email',
     'profile_teaching_careers' => 'Assigned Careers',
     'profile_tutored_groups' => 'Tutored Group(s)',
+    'profile_gender' => 'Gender',
+    'profile_birth_date' => 'Birth Date',
 
     'groups_title' => 'Groups - Teacher',
     'groups_welcome' => 'Group Management',
@@ -136,9 +144,10 @@ return [
     'expedient_id' => 'Student ID',
     'expedient_career' => 'Career',
     'expedient_group' => 'Group',
-    'expedient_curp' => 'CURP',
+    'expedient_curp' => 'ID (CURP)',
     'expedient_age' => 'Age',
     'expedient_gender' => 'Gender',
+    'expedient_phone' => 'Phone',
     'expedient_birth_date' => 'Birth Date',
     'expedient_email' => 'Email Address',
     'expedient_grades' => 'Grades',
@@ -183,7 +192,7 @@ return [
     'admin_no_logo' => 'No logo',
 
     // --- CAREER DETAIL VIEW ---
-    'career_detail_title' => 'Admin - Career Detail',
+    'career_detail_title' => 'Administrator - Career Detail',
     'career_detail_subtitle' => 'Manage groups and teachers for this career',
     'career_key_label' => 'Key',
     'career_management' => 'Career Management',
@@ -200,6 +209,16 @@ return [
     'btn_add_teacher' => '+ Add teacher',
     'btn_download_teachers' => 'Download teachers list',
     'groups_no_tutor' => 'This Group Doesn\'t have an Tutor',
+    'btn_edit_group' => 'Edit Group',
+    'btn_add_group' => 'Add Group',
+
+    //expediente alumno en admin
+    'student_record_admin_detail_title' => 'Administrator - Student Record',
+    'student_record_admin_detail_subtitle' => 'View the student\'s personal information.',
+
+    //perfil maestro en admin
+    'teacher_profile_admin_detail_title' => 'Administrator - Teacher Profile',
+    'teacher_profile_admin_detail_subtitle' => 'View and edit the teacher\'s information.',
 
     // --- TABLES ---
     'column_number' => 'No.',
@@ -209,6 +228,9 @@ return [
     'column_email' => 'Email',
     'column_actions' => 'Actions',
     'btn_delete' => 'Delete',
+
+    'table_empty_generic' => 'There\'s no Results.',
+    'table_empty_grades' => 'There\'s no Results, Check the periods...',
 
     // --- MODALS (Add/Edit) ---
     'modal_add_student' => 'Add student',
@@ -224,7 +246,6 @@ return [
     'field_career_name' => 'Career Name',
     'field_career_key' => 'Career Key',
     'field_career_logo' => 'Career Logo',
-    'btn_save' => 'Save',
     'btn_save_changes' => 'Save changes',
     'helper_logo' => 'Select a new image for the logo',
     'placeholder_id' => 'E.g.: UTN-2024-001',
@@ -233,15 +254,11 @@ return [
     'placeholder_email' => 'example@utnay.edu.mx',
     'placeholder_id_teacher' => 'E.g.: EMP-2024-001',
     'placeholder_phone' => 'E.g.: 311-123-4567',
-    'field_employee_num' => 'Employee Number',
-    'field_phone' => 'Phone Number',
 
     'profile_admin_title' => 'My Profile - Administrator',
     'profile_admin_subtitle' => 'View your administrator personal information',
-    'profile_welcome' => 'My Profile',
     'btn_edit_profile' => 'Edit profile',
     'btn_change_password' => 'Change password',
-    'btn_upload_photo' => 'Upload Photo',
     'personal_data' => 'Personal data',
     'field_role' => 'Role',
     'field_member_since' => 'Member since',
@@ -253,8 +270,6 @@ return [
     'placeholder_current_password' => 'Enter your current password',
     'placeholder_new_password' => 'Enter your new password',
     'placeholder_confirm_password' => 'Confirm your new password',
-    'btn_cancel' => 'Cancel',
-    'btn_save_changes' => 'Save changes',
 
     // --- LOGS ---
     'logs_title' => 'System Logs',
@@ -268,4 +283,19 @@ return [
     'column_description' => 'Description',
     'log_no_detail' => 'No detail',
     'log_js_loaded' => 'Logs page loaded',
+
+    //documents
+    'view_document' => 'View Document',
+    'document_not_sent' => 'Document not Sent',
+    'document_sent' => 'Document Sent',
+
+    'document_birth_act' => 'Birth Act',
+    'document_study_constancy' => 'Study Constancy',
+    'document_curp' => 'ID (CURP)',
+    'document_institute_certificate' => 'Institute Certificate',
+
+    ///student document related stuff
+    'document_upload' => 'Upload Document',
+    'document_not_upload' => 'The Document has not yet been Uploaded.',
+    'document_replace' => 'Replace Document',
 ];

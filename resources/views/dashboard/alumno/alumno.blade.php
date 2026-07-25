@@ -94,7 +94,7 @@
 
             <div>
                 {{-- Título principal con margen inferior para separar del grupo --}}
-                <h2 style="margin-bottom: 1.5rem;">Horario de Clases</h2>
+                <h2 style="margin-bottom: 1.5rem;">{{ __('messages.title_my_schedule') }}</h2>
 
                 {{-- 
                     INFORMACIÓN DEL GRUPO
@@ -105,7 +105,7 @@
                 --}}
                 @if($grupo)
                     <div class="grupo-info">
-                        <span class="grupo-etiqueta">Grupo:</span>
+                        <span class="grupo-etiqueta">{{ __('messages.field_group') . ':' }}</span>
                         <span class="grupo-valor">{{ $grupo->nombre }}</span>
                     </div>
                 @endif
@@ -131,17 +131,41 @@
                 --}}
                 @foreach($diasSemana as $dia)
                     <section>
-                        <h3>{{ $dia }}</h3>
+                        @switch($dia)
+                            @case("Lunes")
+                                <h3>{{ __('messages.day_monday') }}</h3>
+                                @break
+                            @case("Martes")
+                                <h3>{{ __('messages.day_tuesday') }}</h3>
+                                @break
+                            @case("Miércoles")
+                                <h3>{{ __('messages.day_wednesday') }}</h3>
+                                @break
+                            @case("Jueves")
+                                <h3>{{ __('messages.day_thursday') }}</h3>
+                                @break
+                            @case("Viernes")
+                                <h3>{{ __('messages.day_friday') }}</h3>
+                                @break
+                            @case("Sabado")
+                                <h3>{{ __('messages.day_saturday') }}</h3>
+                                @break
+                            @case("Domingo")
+                                <h3>{{ __('messages.day_sunday') }}</h3>
+                                @break
+                            @default
+                                
+                        @endswitch
 
                         {{-- Contenedor con la clase 'tabla-horario' para aplicar los estilos CSS --}}
                         <div class="tabla-horario">
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>Hora</th>
-                                        <th>Materia</th>
-                                        <th>Docente</th>
-                                        <th>Aula</th>
+                                        <th>{{ __('messages.th_hour') }}</th>
+                                        <th>{{ __('messages.th_subject') }}</th>
+                                        <th>{{ __('messages.th_teacher') }}</th>
+                                        <th>{{ __('messages.th_classroom') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -159,7 +183,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="4">Sin clases programadas</td>
+                                            <td colspan="4">{{ __('messages.no_classes') }}</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

@@ -150,7 +150,7 @@
 
             {{-- Edad --}}
             <div class="dato-item">
-                <label>{{ __('messages.profile_sex') }}</label>
+                <label>{{ __('messages.profile_gender') }}</label>
                 <span class="dato-valor">{{ $maestro->sexo_texto ?? 'N/A' }}</span>
             </div>
             
@@ -183,17 +183,22 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Nombre</th>
-                        <th>Es Tutor</th>
+                        <th>{{ __('messages.table_career_name') }}</th>
+                        <th>{{ __('messages.label_is_tutor') }}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($carreras as $carrera)
+                    @forelse ($carreras as $carrera)
                         <tr>
-                            <td>{{ $carrera->nombre ?? 'Sin Nombre' }}</td>
-                            <td>No Es Tutor</td>
+                            <td>{{ $carrera->nombre ?? __('messages.not_available') }}</td>
+                            <td>{{ __('messages.no_tutor') }}</td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td>{{__('messages.table_empty_generic') }}</td>
+                            <td></td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

@@ -22,8 +22,8 @@
 @extends('layouts.dashboard')
 
 {{-- TÍTULOS DE LA PÁGINA --}}
-@section('title', 'Administrador - Perfil del Maestro')
-@section('subtitle', 'Consulta y edita la información del maestro')
+@section('title', __('messages.teacher_profile_admin_detail_title'))
+@section('subtitle', __('messages.teacher_profile_admin_detail_subtitle'))
 
 {{-- 
     BOTÓN DE REGRESO
@@ -65,10 +65,10 @@
         <div class="acciones-superiores">
             <button class="btn-editar-perfil" id="btnEditarMaestro">
                 <img src="{{ asset('img/editar.png') }}" alt="Editar" class="btn-icono"> 
-                Editar maestro
+                {{ __('messages.btn_edit_teacher') }}
             </button>
             <button class="btn-eliminar-perfil" id="btnEliminarMaestro">
-                ✕ Eliminar maestro
+                {{ '✕ ' . __('messages.btn_delete_teacher') }}
             </button>
         </div>
 
@@ -91,7 +91,7 @@
                         </span>
                     @endif
                 </div>
-                <button class="btn-subir-foto" id="btnCambiarFoto">Cambiar foto</button>
+                <button class="btn-subir-foto" id="btnCambiarFoto">{{ __('messages.btn_change_photo') }}</button>
             </div>
         </div>
 
@@ -100,48 +100,48 @@
              ====================================================== 
              Grid de 2 columnas con los datos del maestro.
         --}}
-        <h3 class="perfil-seccion-titulo">Datos personales</h3>
+        <h3 class="perfil-seccion-titulo">{{ __('messages.profile_personal_data') }}</h3>
         <div class="datos-grid">
             
             {{-- Nombre --}}
             <div class="dato-item">
-                <label>Nombre(s)</label>
+                <label>{{ __('messages.profile_names') }}</label>
                 <span class="dato-valor" id="datoNombre">{{ $maestro->user->name }}</span>
             </div>
             
             {{-- Apellidos --}}
             <div class="dato-item">
-                <label>Apellidos</label>
+                <label>{{ __('messages.profile_last_names') }}</label>
                 <span class="dato-valor" id="datoApellidos">{{ $maestro->user->apellido }}</span>
             </div>
             
             {{-- Número de empleado --}}
             <div class="dato-item">
-                <label>Número de empleado</label>
+                <label>{{ __('messages.profile_employee_num') }}</label>
                 <span class="dato-valor" id="datoEmpleado">{{ $maestro->num_empleado }}</span>
             </div>
             
             {{-- RFC --}}
             <div class="dato-item">
-                <label>RFC</label>
+                <label>{{ __('messages.profile_rfc') }}</label>
                 <span class="dato-valor" id="datoRFC">{{ $maestro->rfc }}</span>
             </div>
             
             {{-- Edad --}}
             <div class="dato-item">
-                <label>Edad</label>
-                <span class="dato-valor" id="datoEdad">{{ $maestro->edad }} años</span>
+                <label>{{ __('messages.profile_age') }}</label>
+                <span class="dato-valor" id="datoEdad">{{ $maestro->edad ?? __('messages.not_assigned') }} {{ __('messages.label_years') }}</span>
             </div>
             
             {{-- Sexo --}}
             <div class="dato-item">
-                <label>Sexo</label>
+                <label>{{ __('messages.profile_gender') }}</label>
                 <span class="dato-valor" id="datoSexo">{{ $maestro->sexo_texto }}</span>
             </div>
             
             {{-- Fecha de nacimiento --}}
             <div class="dato-item">
-                <label>Fecha de nacimiento</label>
+                <label>{{ __('messages.profile_birth_date') }}</label>
                 <span class="dato-valor" id="datoFechaNac">
                     {{ \Carbon\Carbon::parse($maestro->fecha_nacimiento)->format('d/m/Y') }}
                 </span>
@@ -149,13 +149,13 @@
             
             {{-- Correo electrónico --}}
             <div class="dato-item">
-                <label>Correo electrónico</label>
+                <label>{{ __('messages.profile_email') }}</label>
                 <span class="dato-valor" id="datoCorreo">{{ $maestro->user->email }}</span>
             </div>
             
             {{-- Teléfono --}}
             <div class="dato-item">
-                <label>Teléfono</label>
+                <label>{{ __('messages.profile_phone') }}</label>
                 <span class="dato-valor" id="datoTelefono">{{ $maestro->telefono }}</span>
             </div>
         </div>
@@ -165,7 +165,7 @@
              ====================================================== 
              Muestra la lista de carreras que el maestro imparte.
         --}}
-        <h3 class="seccion-titulo">Carreras que imparte</h3>
+        <h3 class="seccion-titulo">{{ __('messages.title_taught_careers') }}</h3>
         <div class="carreras-grid-perfil" id="carrerasContainer">
             <ul>
                 @foreach ($maestro->carreras as $carrera)
@@ -179,7 +179,7 @@
              ====================================================== 
              Muestra el grupo que el maestro tiene asignado como tutor.
         --}}
-        <h3 class="seccion-titulo">Grupo tutorado</h3>
+        <h3 class="seccion-titulo">{{ __('messages.title_tutored_group') }}</h3>
         <div class="grupo-tutorado-info">
             <span class="grupo-nombre-perfil" id="grupoTutorado"></span>
         </div>

@@ -47,6 +47,8 @@ return [
     'th_subject' => 'Materia',
     'th_teacher' => 'Docente',
     'th_day' => 'Día',
+    'th_classroom' => 'Aula',
+    'th_hour' => 'Hora',
     'th_schedule' => 'Horario',
     'day_monday' => 'Lunes',
     'day_tuesday' => 'Martes',
@@ -78,6 +80,7 @@ return [
     'not_available' => 'N/A',
     'subtitle_record' => 'Aquí puedes consultar tu información personal y académica',
     'expedient_documents' => 'Documentos de Expediente',
+    'btn_search' => 'Buscar',
 
     // --- Módulo Maestro ---
     'teacher_panel' => 'Panel del Maestro',
@@ -88,6 +91,9 @@ return [
     'upload_grades' => 'Subir Calificaciones',
     'academic_unit' => 'Unidad Académica',
     'employee_number' => 'Número de Empleado',
+    'not_tutor' => 'No es un Tutor',
+    'no_tutor' => 'No es Tutor',
+    'table_career_name' => 'Nombre de la Carrera',
 
     // --- Dashboard Maestro ---
     'teacher_panel_title' => 'Panel Maestro',
@@ -114,6 +120,8 @@ return [
     'profile_email' => 'Correo institucional',
     'profile_teaching_careers' => 'Carreras que imparte',
     'profile_tutored_groups' => 'Grupo(s) tutorado',
+    'profile_gender' => 'Sexo',
+    'profile_birth_date' => 'Fecha de Nacimiento',
 
     'groups_title' => 'Grupos - Maestro',
     'groups_welcome' => 'Gestión de Grupos',
@@ -140,6 +148,7 @@ return [
     'expedient_curp' => 'CURP',
     'expedient_age' => 'Edad',
     'expedient_gender' => 'Sexo',
+    'expedient_phone' => 'Telefono',
     'expedient_birth_date' => 'Fecha de nacimiento',
     'expedient_email' => 'Correo electrónico',
     'expedient_grades' => 'Calificaciones',
@@ -201,6 +210,16 @@ return [
     'btn_add_teacher' => '+ Agregar maestro',
     'btn_download_teachers' => 'Descargar lista de maestros',
     'groups_no_tutor' => 'Este Grupo no tiene Tutor',
+    'btn_edit_group' => 'Editar Grupo',
+    'btn_add_group' => 'Añadir Grupo',
+    
+    //expediente alumno en admin
+    'student_record_admin_detail_title' => 'Administrador - Expediente del Alumno',
+    'student_record_admin_detail_subtitle' => 'Consulta la información personal del alumno.',
+
+    //perfil maestro en admin
+    'teacher_profile_admin_detail_title' => 'Administrador - Perfil del Maestro',
+    'teacher_profile_admin_detail_subtitle' => 'Consulta y edita la información del maestro.',
 
     // --- TABLAS ---
     'column_number' => 'No.',
@@ -210,6 +229,9 @@ return [
     'column_email' => 'Correo',
     'column_actions' => 'Acciones',
     'btn_delete' => 'Eliminar',
+
+    'table_empty_generic' => 'No hay resultados.',
+    'table_empty_grades' => 'No hay resultados, revise si hay periodos...',
 
     // --- MODALES (Agregar/Editar) ---
     'modal_add_student' => 'Agregar alumno',
@@ -222,10 +244,10 @@ return [
     'field_email' => 'Correo electrónico',
     'field_phone' => 'Teléfono',
     'field_group' => 'Grupo',
+    'field_rfc' => 'RFC',
     'field_career_name' => 'Nombre de la carrera',
     'field_career_key' => 'Clave de la carrera',
     'field_career_logo' => 'Logo de la carrera',
-    'btn_save' => 'Guardar',
     'btn_save_changes' => 'Guardar cambios',
     'helper_logo' => 'Selecciona una nueva imagen para el logo',
     'placeholder_id' => 'Ej: UTN-2024-001',
@@ -234,15 +256,12 @@ return [
     'placeholder_email' => 'ejemplo@utnay.edu.mx',
     'placeholder_id_teacher' => 'Ej: EMP-2024-001',
     'placeholder_phone' => 'Ej: 311-123-4567',
-    'field_employee_num' => 'Número de empleado',
-    'field_phone' => 'Teléfono',
+    'placeholder_rfc' => 'Ej: MAR00012427A',
 
     'profile_admin_title' => 'Mi Perfil - Administrador',
     'profile_admin_subtitle' => 'Consulta tu información personal de administrador',
-    'profile_welcome' => 'Mi Perfil',
     'btn_edit_profile' => 'Editar perfil',
     'btn_change_password' => 'Cambiar contraseña',
-    'btn_upload_photo' => 'Subir Foto',
     'personal_data' => 'Datos personales',
     'field_role' => 'Rol',
     'field_member_since' => 'Miembro desde',
@@ -254,8 +273,6 @@ return [
     'placeholder_current_password' => 'Ingrese su contraseña actual',
     'placeholder_new_password' => 'Ingrese su nueva contraseña',
     'placeholder_confirm_password' => 'Confirme su nueva contraseña',
-    'btn_cancel' => 'Cancelar',
-    'btn_save_changes' => 'Guardar cambios',
 
     // --- LOGS ---
     'logs_title' => 'Logs del Sistema',
@@ -269,4 +286,19 @@ return [
     'column_description' => 'Descripción',
     'log_no_detail' => 'Sin detalle',
     'log_js_loaded' => 'Página de logs cargada',
+
+    //documentos
+    'view_document' => 'Ver Documento',
+    'document_not_sent' => 'Documento no Subido',
+    'document_sent' => 'Documento Subido',
+
+    'document_birth_act' => 'Acta de Nacimiento',
+    'document_study_constancy' => 'Constancia de Estudios',
+    'document_curp' => 'CURP',
+    'document_institute_certificate' => 'Certificado de Bachillerato',
+
+    ///cosas relacionadas a los documentos de estudiante
+    'document_upload' => 'Subir Documento',
+    'document_not_upload' => 'El Documento aún no esta subido.',
+    'document_replace' => 'Remplazar Documento',
 ];

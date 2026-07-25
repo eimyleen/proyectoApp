@@ -129,7 +129,7 @@
                                 <circle cx="11" cy="11" r="8"/>
                                 <line x1="21" y1="21" x2="16.65" y2="16.65"/>
                             </svg>
-                            Buscar
+                            {{ __('messages.btn_search') }}
                         </button>
                     </div>
                 </div>
@@ -172,7 +172,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="2" style="text-align: center;">No hay calificaciones registradas en este período.</td>
+                                    <td colspan="2" style="text-align: center;">{{ __('messages.table_empty_grades') }}</td>
                                 </tr>
                             @endforelse
                         </tbody>

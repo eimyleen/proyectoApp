@@ -101,7 +101,7 @@
                             @method('PUT')
                             <input type="file" name="foto" id="inputFoto" style="display: none;" accept="image/*" onchange="document.getElementById('fotoForm').submit();">
                             <button type="button" class="btn-subir-foto" onclick="document.getElementById('inputFoto').click();">
-                                Subir Foto
+                                {{ __('messages.btn_upload_photo') }}
                             </button>
                         </form>
                     </div>
@@ -125,43 +125,43 @@
                     {{-- Carrera (relación con modelo Carrera) --}}
                     <div class="dato-item">
                         <label><label>{{ __('messages.label_major') }}</label></label>
-                        <span class="dato-valor">{{ $carrera->nombre ?? 'No asignada' }}</span>
+                        <span class="dato-valor">{{ $carrera->nombre ?? __('messages.not_assigned') }}</span>
                     </div>
                     
                     {{-- Grupo --}}
                     <div class="dato-item">
                         <label>{{ __('messages.label_group') }}</label>
-                        <span class="dato-valor">{{ $grupo->nombre ?? 'N/A' }}</span>
+                        <span class="dato-valor">{{ $grupo->nombre ?? __('messages.not_available') }}</span>
                     </div>
                     
                     {{-- Matrícula --}}
                     <div class="dato-item">
                         <label>{{ __('messages.label_id_number') }}</label>
-                        <span class="dato-valor">{{ $alumno->matricula ?? 'N/A' }}</span>
+                        <span class="dato-valor">{{ $alumno->matricula ?? __('messages.not_available') }}</span>
                     </div>
                     
                     {{-- CURP --}}
                     <div class="dato-item">
                        <label>{{ __('messages.label_curp') }}</label>
-                        <span class="dato-valor">{{ $alumno->curp ?? 'N/A' }}</span>
+                        <span class="dato-valor">{{ $alumno->curp ?? __('messages.not_available') }}</span>
                     </div>
                     
                     {{-- Edad --}}
                     <div class="dato-item">
                         <label>{{ __('messages.label_age') }}</label>
-                        <span class="dato-valor">{{ $alumno->edad ?? 'N/A' }} años</span>
+                        <span class="dato-valor">{{ $alumno->edad ?? __('messages.not_available') }} años</span>
                     </div>
                     
                     {{-- Sexo --}}
                     <div class="dato-item">
                         <label>{{ __('messages.label_gender') }}</label>
-                        <span class="dato-valor">{{ $alumno->sexo_texto ?? 'N/A' }}</span>
+                        <span class="dato-valor">{{ $alumno->sexo_texto ?? __('messages.not_available') }}</span>
                     </div>
                     
                     {{-- Fecha de nacimiento --}}
                     <div class="dato-item">
                         <label>{{ __('messages.label_birthdate') }}</label>
-                        <span class="dato-valor">{{ $alumno->fecha_nacimiento ?? 'N/A' }}</span>
+                        <span class="dato-valor">{{ $alumno->fecha_nacimiento ?? __('messages.not_available') }}</span>
                     </div>
                     
                     {{-- Correo electrónico --}}
@@ -203,18 +203,18 @@
                          ============================================== --}}
                     <div class="documento-item">
                         <div class="documento-info">
-                            <span class="documento-nombre">Acta de nacimiento</span>
+                            <span class="documento-nombre">{{ __('messages.document_birth_act') }}</span>
                             @if($alumno->doc_acta_nacimiento)
                                 <span class="documento-estado">
-                                    <a href="{{ asset('storage/' . $alumno->doc_acta_nacimiento) }}" target="_blank">Ver documento</a>
+                                    <a href="{{ asset('storage/' . $alumno->doc_acta_nacimiento) }}" target="_blank">{{ __('messages.view_document') }}</a>
                                 </span>
                             @else
-                                <span class="documento-estado no-cargado">Aún no has cargado este documento.</span>
+                                <span class="documento-estado no-cargado">{{ __('messages.document_not_upload') }}</span>
                             @endif
                         </div>
                         <label class="btn-cargar-documento">
                             <img src="{{ asset('img/subir.png') }}" alt="Subir" class="btn-icon">
-                            {{ $alumno->doc_acta_nacimiento ? 'Reemplazar archivo' : 'Cargar archivo' }}
+                            {{ $alumno->doc_acta_nacimiento ? __('messages.document_replace') : __('messages.document_upload') }}
                             <input type="file" name="doc_acta_nacimiento" accept=".pdf,.png,.jpg,.jpeg" onchange="this.form.submit()" style="display: none;">
                         </label>
                     </div>
@@ -223,18 +223,18 @@
                          ============================================== --}}
                     <div class="documento-item">
                         <div class="documento-info">
-                            <span class="documento-nombre">CURP</span>
+                            <span class="documento-nombre">{{ __('messages.document_curp') }}</span>
                             @if($alumno->doc_curp)
                                 <span class="documento-estado">
-                                    <a href="{{ asset('storage/' . $alumno->doc_curp) }}" target="_blank">Ver documento</a>
+                                    <a href="{{ asset('storage/' . $alumno->doc_curp) }}" target="_blank">{{ __('messages.view_document') }}</a>
                                 </span>
                             @else
-                                <span class="documento-estado no-cargado">Aún no has cargado este documento.</span>
+                                <span class="documento-estado no-cargado">{{ __('messages.document_not_upload') }}</span>
                             @endif
                         </div>
                         <label class="btn-cargar-documento">
                             <img src="{{ asset('img/subir.png') }}" alt="Subir" class="btn-icon">
-                            {{ $alumno->doc_curp ? 'Reemplazar archivo' : 'Cargar archivo' }}
+                            {{ $alumno->doc_curp ? __('messages.document_replace') : __('messages.document_upload') }}
                             <input type="file" name="doc_curp" accept=".pdf,.png,.jpg,.jpeg" onchange="this.form.submit()" style="display: none;">
                         </label>
                     </div>
@@ -243,18 +243,18 @@
                          ============================================== --}}
                     <div class="documento-item">
                         <div class="documento-info">
-                            <span class="documento-nombre">Certificado de bachillerato</span>
+                            <span class="documento-nombre">{{ __('messages.document_institute_certificate') }}</span>
                             @if($alumno->doc_certificado_bachillerato)
                                 <span class="documento-estado">
-                                    <a href="{{ asset('storage/' . $alumno->doc_certificado_bachillerato) }}" target="_blank">Ver documento</a>
+                                    <a href="{{ asset('storage/' . $alumno->doc_certificado_bachillerato) }}" target="_blank">{{ __('messages.view_document') }}</a>
                                 </span>
                             @else
-                                <span class="documento-estado no-cargado">Aún no has cargado este documento.</span>
+                                <span class="documento-estado no-cargado">{{ __('messages.document_not_upload') }}</span>
                             @endif
                         </div>
                         <label class="btn-cargar-documento">
                             <img src="{{ asset('img/subir.png') }}" alt="Subir" class="btn-icon">
-                            {{ $alumno->doc_certificado_bachillerato ? 'Reemplazar archivo' : 'Cargar archivo' }}
+                            {{ $alumno->doc_certificado_bachillerato ? __('messages.document_replace') : __('messages.document_upload') }}
                             <input type="file" name="doc_certificado_bachillerato" accept=".pdf,.png,.jpg,.jpeg" onchange="this.form.submit()" style="display: none;">
                         </label>
                     </div>
@@ -263,18 +263,18 @@
                          ============================================== --}}
                     <div class="documento-item">
                         <div class="documento-info">
-                            <span class="documento-nombre">Constancia de estudios</span>
+                            <span class="documento-nombre">{{ __('messages.document_study_constancy') }}</span>
                             @if($alumno->doc_constancia_estudios)
                                 <span class="documento-estado">
-                                    <a href="{{ asset('storage/' . $alumno->doc_constancia_estudios) }}" target="_blank">Ver documento</a>
+                                    <a href="{{ asset('storage/' . $alumno->doc_constancia_estudios) }}" target="_blank">{{ __('messages.view_document') }}</a>
                                 </span>
                             @else
-                                <span class="documento-estado no-cargado">Aún no has cargado este documento.</span>
+                                <span class="documento-estado no-cargado">{{ __('messages.document_not_upload') }}</span>
                             @endif
                         </div>
                         <label class="btn-cargar-documento">
                             <img src="{{ asset('img/subir.png') }}" alt="Subir" class="btn-icon">
-                            {{ $alumno->doc_constancia_estudios ? 'Reemplazar archivo' : 'Cargar archivo' }}
+                            {{ $alumno->doc_constancia_estudios ? __('messages.document_replace') : __('messages.document_upload') }}
                             <input type="file" name="doc_constancia_estudios" accept=".pdf,.png,.jpg,.jpeg" onchange="this.form.submit()" style="display: none;">
                         </label>
                     </div>

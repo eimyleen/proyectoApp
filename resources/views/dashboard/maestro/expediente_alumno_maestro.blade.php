@@ -164,6 +164,12 @@
                 <label>{{ __('messages.expedient_email') }}</label>
                 <span class="dato-valor">{{ $alumno->user->email }}</span>
             </div>
+
+            {{-- Telefono --}}
+            <div class="dato-item">
+                <label>{{ __('messages.expedient_phone') }}</label>
+                <span class="dato-valor">{{ $alumno->telefono ?? __('messages.not_assigned') }}</span>
+            </div>
         </div>
 
         {{-- ======================================================
@@ -176,80 +182,80 @@
         <div class="documentos-container">
             <h3 class="seccion-titulo documentos-titulo">{{ __('messages.expedient_documents') }}</h3>
             
-            {{-- Documento 1: Acta de nacimiento (subido) --}}
+            {{-- Documento 1: Acta de nacimiento --}}
             <div class="documento-item">
                 <div class="documento-info">
-                    <span class="documento-nombre">Acta de nacimiento</span>
+                    <span class="documento-nombre">{{ __('messages.document_birth_act') }}</span>
                     @if($alumno->doc_acta_nacimiento)
-                        <span class="documento-estado subido">Documento subido</span>
+                        <span class="documento-estado subido">{{ __('messages.document_sent') }}</span>
                     @else
-                        <span class="documento-estado no-subido">No subido</span>
+                        <span class="documento-estado no-subido">{{ __('messages.document_not_sent') }}</span>
                     @endif
                 </div>
                 @if($alumno->doc_acta_nacimiento)
                     <button class="btn-ver-documento" onclick="window.location.href='{{ asset('storage/' . $alumno->doc_acta_nacimiento) }}'">
                         <img src="{{ asset('img/ojo.png') }}" alt="Ver" class="btn-icon">
-                        Ver documento
+                        {{ __('messages.view_document') }}
                     </button>
                 @else
                     <span class="estado-sin-boton">—</span>
                 @endif
             </div>
 
-            {{-- Documento 2: CURP (no subido) --}}
+            {{-- Documento 2: CURP --}}
             <div class="documento-item">
                 <div class="documento-info">
-                    <span class="documento-nombre">CURP</span>
+                    <span class="documento-nombre">{{ __('messages.document_curp') }}</span>
                     @if($alumno->doc_curp)
-                        <span class="documento-estado subido">Documento subido</span>
+                        <span class="documento-estado subido">{{ __('messages.document_sent') }}</span>
                     @else
-                        <span class="documento-estado no-subido">No subido</span>
+                        <span class="documento-estado no-subido">{{ __('messages.document_not_sent') }}</span>
                     @endif
                 </div>
                 @if($alumno->doc_curp)
                     <button class="btn-ver-documento" onclick="window.location.href='{{ asset('storage/' . $alumno->doc_curp) }}'">
                         <img src="{{ asset('img/ojo.png') }}" alt="Ver" class="btn-icon">
-                        Ver documento
+                        {{ __('messages.view_document') }}
                     </button>
                 @else
                     <span class="estado-sin-boton">—</span>
                 @endif
             </div>
 
-            {{-- Documento 3: Certificado de bachillerato (no subido) --}}
+            {{-- Documento 3: Certificado de bachillerato --}}
             <div class="documento-item">
                 <div class="documento-info">
-                    <span class="documento-nombre">Certificado de bachillerato</span>
+                    <span class="documento-nombre">{{ __('messages.document_institute_certificate') }}</span>
                     @if($alumno->doc_certificado_bachillerato)
-                        <span class="documento-estado subido">Documento subido</span>
+                        <span class="documento-estado subido">{{ __('messages.document_sent') }}</span>
                     @else
-                        <span class="documento-estado no-subido">No subido</span>
+                        <span class="documento-estado no-subido">{{ __('messages.document_not_sent') }}</span>
                     @endif
                 </div>
                 @if($alumno->doc_certificado_bachillerato)
                     <button class="btn-ver-documento" onclick="window.location.href='{{ asset('storage/' . $alumno->doc_certificado_bachillerato) }}'">
                         <img src="{{ asset('img/ojo.png') }}" alt="Ver" class="btn-icon">
-                        Ver documento
+                        {{ __('messages.view_document') }}
                     </button>
                 @else
                     <span class="estado-sin-boton">—</span>
                 @endif
             </div>
 
-            {{-- Documento 4: Constancia de estudios (subido) --}}
+            {{-- Documento 4: Constancia de estudios --}}
             <div class="documento-item">
                 <div class="documento-info">
-                    <span class="documento-nombre">Constancia de estudios</span>
+                    <span class="documento-nombre">{{ __('messages.document_study_constancy') }}</span>
                     @if($alumno->doc_constancia_estudios)
-                        <span class="documento-estado subido">Documento subido</span>
+                        <span class="documento-estado subido">{{ __('messages.document_sent') }}</span>
                     @else
-                        <span class="documento-estado no-subido">No subido</span>
+                        <span class="documento-estado no-subido">{{ __('messages.document_not_sent') }}</span>
                     @endif
                 </div>
                 @if($alumno->doc_constancia_estudios)
                     <button class="btn-ver-documento" onclick="window.location.href='{{ asset('storage/' . $alumno->doc_constancia_estudios) }}'">
                         <img src="{{ asset('img/ojo.png') }}" alt="Ver" class="btn-icon">
-                        Ver documento
+                        {{ __('messages.view_document') }}
                     </button>
                 @else
                     <span class="estado-sin-boton">—</span>
@@ -293,7 +299,7 @@
                             <circle cx="11" cy="11" r="8"/>
                             <line x1="21" y1="21" x2="16.65" y2="16.65"/>
                         </svg>
-                        Buscar
+                        {{ __('messages.btn_search') }}
                     </button>
                 </div>
             </form>
@@ -320,7 +326,7 @@
                         @endforeach
                     @else
                         <tr>
-                            <td>No hay resultados, revise si hay periodos...</td>
+                            <td>{{ __('messages.table_empty_grades') }}</td>
                             <td class="calificacion"></td>
                         </tr>
                     @endif
