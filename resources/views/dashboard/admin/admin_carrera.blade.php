@@ -198,7 +198,7 @@
                         </tr>
                     </thead>
                     <tbody id="alumnosBody">
-                        @foreach($alumnos as $i => $alumno)
+                        @forelse($alumnos as $i => $alumno)
                             <tr>
                                 <td class="col-numero">{{ $i+1 }}</td>
                                 <td class="col-matricula">{{ $alumno->matricula }}</td>
@@ -228,7 +228,11 @@
                                     </button>
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td>No hay Resultados para esta tabla...</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -278,39 +282,41 @@
                     </thead>
                     <tbody id="maestrosBody">
                         {{-- Solo mostrar maestros que están asignados a esta carrera --}}
-                        @foreach($maestros as $i => $maestro)
-                            @if ($maestro->carreras->contains('id', $carrera->id))
-                                <tr>
-                                    <td class="col-numero">{{ $i+1 }}</td>
-                                    <td class="col-nombre">{{ $maestro->user?->name }}</td>
-                                    <td class="col-nombre">{{ $maestro->user?->apellido }}</td>
-                                    <td class="col-correo">{{ $maestro->user?->email }}</td>
-                                    <td class="col-acciones">
-                                        {{-- Botón Ver Perfil --}}
-                                        <a href="{{ route('admin.maestro.perfil', $maestro->id) }}" style="text-decoration: none;">
-                                            <button class="btn-ver-perfil">{{ __('messages.btn_view_profile') }}</button>
-                                        </a>
+                        @forelse($maestros as $i => $maestro)
+                            <tr>
+                                <td class="col-numero">{{ $i+1 }}</td>
+                                <td class="col-nombre">{{ $maestro->user?->name }}</td>
+                                <td class="col-nombre">{{ $maestro->user?->apellido }}</td>
+                                <td class="col-correo">{{ $maestro->user?->email }}</td>
+                                <td class="col-acciones">
+                                    {{-- Botón Ver Perfil --}}
+                                    <a href="{{ route('admin.maestro.perfil', $maestro->id) }}" style="text-decoration: none;">
+                                        <button class="btn-ver-perfil">{{ __('messages.btn_view_profile') }}</button>
+                                    </a>
+                                    
+                                    {{-- 
+                                        ======================================================
+                                        NOTA: CAMBIO REALIZADO - CONFIRMACIÓN DE ELIMINAR MAESTRO
+                                        ======================================================
+                                        Se agregó data attributes para manejar la alerta
+                                        de confirmación con SweetAlert antes de ejecutar
+                                        la acción de eliminación.
                                         
-                                        {{-- 
-                                            ======================================================
-                                            NOTA: CAMBIO REALIZADO - CONFIRMACIÓN DE ELIMINAR MAESTRO
-                                            ======================================================
-                                            Se agregó data attributes para manejar la alerta
-                                            de confirmación con SweetAlert antes de ejecutar
-                                            la acción de eliminación.
-                                            
-                                            La eliminación real permanece a cargo del backend.
-                                            ======================================================
-                                        --}}
-                                        <button class="btn-eliminar btn-eliminar-maestro" 
-                                                data-id="{{ $maestro->id }}" 
-                                                data-nombre="{{ $maestro->user?->name }} {{ $maestro->user?->apellido }}">
-                                            {{ __('messages.btn_delete') }}
-                                        </button>
-                                    </td>
-                                </tr>
-                            @endif
-                        @endforeach
+                                        La eliminación real permanece a cargo del backend.
+                                        ======================================================
+                                    --}}
+                                    <button class="btn-eliminar btn-eliminar-maestro" 
+                                            data-id="{{ $maestro->id }}" 
+                                            data-nombre="{{ $maestro->user?->name }} {{ $maestro->user?->apellido }}">
+                                        {{ __('messages.btn_delete') }}
+                                    </button>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td>No hay Resultados para esta tabla...</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

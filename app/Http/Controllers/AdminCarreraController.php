@@ -40,7 +40,9 @@ class AdminCarreraController extends Controller {
             }
         })
         ->get();
-        $maestros = Maestro::with('user:id,name,apellido,email')->get();
+        $maestros = Maestro::with('user:id,name,apellido,email')->whereHas('carreras', function($d) use ($id) {
+            $d->where('carrera_id', $id);
+        })->get();
         return view('dashboard.admin.admin_carrera', compact('carrera', 'alumnos', 'maestros', 'grupos'));
     }
 
