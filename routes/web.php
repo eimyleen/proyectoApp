@@ -73,15 +73,6 @@ Route::middleware(['auth'])->group(function () {
         AdminCarreraController::class, 'storeMaestro'
     ])->middleware('role:admin')->name('admin.carrera.storeMaestro');
 
-    Route::get('/dashboard/admin/logs', [
-        LogController::class, 'index'
-    ])->middleware(['auth', 'role:admin'])->name('admin.logs');
-
-    // --- Ruta para DESCARGAR el PDF con la lista de alumnos completa ---
-    Route::get('/dashboard/admin/descargar-alumnos', [
-        AdminCarreraController::class, 'descargarAlumnosPDF'
-    ])->middleware(['auth', 'role:admin'])->name('admin.alumnos.pdf');
-
     Route::post('/respaldo', [
         AdminCarreraController::class, 'manejarBackupManual'
     ])->middleware(['auth', 'role:admin']);
