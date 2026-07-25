@@ -184,8 +184,11 @@
                     <button class="btn-agregar" id="btnAgregarGrupo">
                         + Agregar Grupo
                     </button>
-                    <button class="btn-agregar" id="btnEditarGrupo" style="background: #ffffff; color: #1e293b; border: 1px solid #e2e8f0;">
-                        <img src="{{ asset('img/editar.png') }}" alt="Editar" style="width: 1rem; height: 1rem;"> Editar Grupo
+                    <button class="btn-agregar" id="btnEditarGrupo" style="background: #ffffff; color: #1e293b; border: 1px solid #e2e8f0; padding: 0.5rem 0.875rem; font-size: 0.8rem;">
+                        <img src="{{ asset('img/editar.png') }}" alt="Editar" style="width: 0.875rem; height: 0.875rem;"> Editar Grupo
+                    </button>
+                    <button class="btn-agregar" id="btnEliminarGrupo" style="background: #ffffff; color: #ef4444; border: 1px solid #fecaca; padding: 0.5rem 0.875rem; font-size: 0.8rem;">
+                        <img src="{{ asset('img/borrar.svg') }}" alt="Eliminar" style="width: 0.875rem; height: 0.875rem;"> Eliminar Grupo
                     </button>
                     <button class="btn-agregar" id="btnAgregarAlumno">
                         {{ __('messages.btn_add_student') }}
@@ -246,12 +249,13 @@
                                             title="Editar alumno">
                                         <img src="{{ asset('img/editar.png') }}" alt="Editar">
                                     </button>
-                                    <button class="btn-icono-tabla btn-eliminar btn-eliminar-alumno"
-                                            data-id="{{ $alumno->id }}"
-                                            data-nombre="{{ $alumno->user?->name }} {{ $alumno->user?->apellido }}"
-                                            title="Eliminar alumno">
-                                        <img src="{{ asset('img/borrar.svg') }}" alt="Eliminar">
-                                    </button>
+                                    <form action="{{ route('admin.carrera.deleteAlumno', [$carrera, $alumno->id]) }}" method="POST" class="form-eliminar-inline" data-nombre="{{ $alumno->user?->name }} {{ $alumno->user?->apellido }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn-icono-tabla btn-eliminar" title="Eliminar alumno">
+                                            <img src="{{ asset('img/borrar.svg') }}" alt="Eliminar">
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         @empty
@@ -333,12 +337,13 @@
                                             title="Editar maestro">
                                         <img src="{{ asset('img/editar.png') }}" alt="Editar">
                                     </button>
-                                    <button class="btn-icono-tabla btn-eliminar btn-eliminar-maestro"
-                                            data-id="{{ $maestro->id }}"
-                                            data-nombre="{{ $maestro->user?->name }} {{ $maestro->user?->apellido }}"
-                                            title="Eliminar maestro">
-                                        <img src="{{ asset('img/borrar.svg') }}" alt="Eliminar">
-                                    </button>
+                                    <form action="{{ route('admin.carrera.deleteMaestro', [$carrera, $maestro->id]) }}" method="POST" class="form-eliminar-inline" data-nombre="{{ $maestro->user?->name }} {{ $maestro->user?->apellido }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn-icono-tabla btn-eliminar" title="Eliminar maestro">
+                                            <img src="{{ asset('img/borrar.svg') }}" alt="Eliminar">
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         @empty
@@ -764,6 +769,32 @@
             </form>
         </div>
     </div>
+
+    {{-- MODAL ELIMINAR GRUPO --}}
+    <div id="modalEliminarGrupo" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Eliminar Grupo</h3>
+                <span class="modal-close" id="closeModalEliminarGrupo">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Selecciona el grupo a eliminar</label>
+                    <select id="selectGrupoEliminar" class="grupo-select" required>
+                        <option value="">Selecciona un grupo</option>
+                        @foreach ($grupos as $grup)
+                            <option value="{{ $grup->id }}" data-nombre="{{ $grup->nombre }}">
+                                {{ $grup->nombre }} - Grado {{ $grup->grado }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-guardar" id="btnConfirmarEliminarGrupo" style="background: #ef4444;">Eliminar</button>
+            </div>
+        </div>
+    </div>
 @endsection
 
 {{-- 
@@ -881,7 +912,7 @@
                 document.getElementById('formEditarAlumno').action = '{{ route("admin.carrera.updateAlumno", [$carrera, "__ID__"]) }}'.replace('__ID__', id);
                 document.getElementById('editAlumnoNombre').value = this.dataset.nombre || '';
                 document.getElementById('editAlumnoApellido').value = this.dataset.apellido || '';
-                document.getElementById('editAlumnoEmail').value = this.dataset.email || '';
+                document.getElementById('editAlumnoEmail').value = this.getAttribute('data-email') || '';
                 document.getElementById('editAlumnoMatricula').value = this.dataset.matricula || '';
                 document.getElementById('editAlumnoCurp').value = this.dataset.curp || '';
                 document.getElementById('editAlumnoFecha').value = this.dataset.fecha || '';
@@ -990,6 +1021,53 @@
                 e.preventDefault();
                 confirmarAccion('Confirmar eliminación', '¿Deseas continuar con esta acción?').then(r => {
                     if (r.isConfirmed) formEliminarCarrera.submit();
+                });
+            });
+        }
+
+        // Eliminar alumno (formularios reales)
+        document.querySelectorAll('.form-eliminar-inline').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const nombre = this.dataset.nombre || 'este registro';
+                confirmarAccion('Confirmar eliminación', `¿Estás seguro de que deseas eliminar a "${nombre}"?`, 'Eliminar', 'Cancelar').then(r => {
+                    if (r.isConfirmed) form.submit();
+                });
+            });
+        });
+
+        // Eliminar grupo (modal con select)
+        const modalEliminarGrupo = document.getElementById('modalEliminarGrupo');
+        const btnEliminarGrupo = document.getElementById('btnEliminarGrupo');
+        const selectGrupoEliminar = document.getElementById('selectGrupoEliminar');
+        const btnConfirmarEliminarGrupo = document.getElementById('btnConfirmarEliminarGrupo');
+
+        if (btnEliminarGrupo) {
+            btnEliminarGrupo.onclick = function() { modalEliminarGrupo.style.display = 'flex'; };
+        }
+
+        document.getElementById('closeModalEliminarGrupo').onclick = function() {
+            modalEliminarGrupo.style.display = 'none';
+            selectGrupoEliminar.value = '';
+        };
+
+        if (btnConfirmarEliminarGrupo) {
+            btnConfirmarEliminarGrupo.addEventListener('click', function() {
+                const grupoId = selectGrupoEliminar.value;
+                if (!grupoId) {
+                    alertaInfo('Sin selección', 'Selecciona un grupo para eliminar.');
+                    return;
+                }
+                const nombre = selectGrupoEliminar.options[selectGrupoEliminar.selectedIndex].dataset.nombre || 'este grupo';
+                confirmarAccion('Eliminar grupo', `¿Estás seguro de que deseas eliminar el grupo "${nombre}"? Los alumnos se desvincularán.`, 'Eliminar', 'Cancelar').then(r => {
+                    if (r.isConfirmed) {
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = '{{ route("admin.carrera.deleteGrupo", [$carrera, "__ID__"]) }}'.replace('__ID__', grupoId);
+                        form.innerHTML = '@csrf <input type="hidden" name="_method" value="DELETE">';
+                        document.body.appendChild(form);
+                        form.submit();
+                    }
                 });
             });
         }
@@ -1123,27 +1201,6 @@
             });
         }
 
-        // Eliminar alumno
-        document.querySelectorAll('.btn-eliminar-alumno').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const nombre = this.dataset.nombre || 'este alumno';
-                confirmarAccion('Confirmar eliminación', `¿Estás seguro de que deseas eliminar al alumno "${nombre}"?`).then(r => {
-                    if (r.isConfirmed) alertaInfo('Funcionalidad pendiente', 'La eliminación de alumnos se implementará posteriormente.');
-                });
-            });
-        });
-
-        // Eliminar maestro
-        document.querySelectorAll('.btn-eliminar-maestro').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const nombre = this.dataset.nombre || 'este maestro';
-                confirmarAccion('Confirmar eliminación', `¿Estás seguro de que deseas eliminar al maestro "${nombre}"?`).then(r => {
-                    if (r.isConfirmed) alertaInfo('Funcionalidad pendiente', 'La eliminación de maestros se implementará posteriormente.');
-                });
-            });
-        });
     });
 </script>
 @endpush

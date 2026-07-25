@@ -349,4 +349,34 @@ class AdminCarreraController extends Controller {
 
         return redirect()->route('admin.show', $carreraId)->with('success', 'Grupo creado correctamente');
     }
+
+    public function deleteAlumno($carreraId, $alumnoId)
+    {
+        $alumno = Alumno::findOrFail($alumnoId);
+        $alumno->grupos()->detach();
+        $alumno->user()->delete();
+        $alumno->delete();
+
+        return redirect()->route('admin.show', $carreraId)->with('success', 'Alumno eliminado correctamente');
+    }
+
+    public function deleteMaestro($carreraId, $maestroId)
+    {
+        $maestro = Maestro::findOrFail($maestroId);
+        $maestro->carreras()->detach();
+        Grupo::where('maestro_id', $maestroId)->update(['maestro_id' => null]);
+        $maestro->user()->delete();
+        $maestro->delete();
+
+        return redirect()->route('admin.show', $carreraId)->with('success', 'Maestro eliminado correctamente');
+    }
+
+    public function deleteGrupo($carreraId, $grupoId)
+    {
+        $grupo = Grupo::findOrFail($grupoId);
+        $grupo->alumnos()->detach();
+        $grupo->delete();
+
+        return redirect()->route('admin.show', $carreraId)->with('success', 'Grupo eliminado correctamente');
+    }
 }

@@ -89,6 +89,18 @@ Route::middleware(['auth'])->group(function () {
         AdminCarreraController::class, 'updateGrupo'
     ])->middleware('role:admin')->name('admin.carrera.updateGrupo');
 
+    Route::delete('/admin/carrera/{carreraId}/alumno/{alumnoId}', [
+        AdminCarreraController::class, 'deleteAlumno'
+    ])->middleware('role:admin')->name('admin.carrera.deleteAlumno');
+
+    Route::delete('/admin/carrera/{carreraId}/maestro/{maestroId}', [
+        AdminCarreraController::class, 'deleteMaestro'
+    ])->middleware('role:admin')->name('admin.carrera.deleteMaestro');
+
+    Route::delete('/admin/carrera/{carreraId}/grupo/{grupoId}', [
+        AdminCarreraController::class, 'deleteGrupo'
+    ])->middleware('role:admin')->name('admin.carrera.deleteGrupo');
+
     Route::post('/respaldo', [
         AdminCarreraController::class, 'manejarBackupManual'
     ])->middleware(['auth', 'role:admin']);
