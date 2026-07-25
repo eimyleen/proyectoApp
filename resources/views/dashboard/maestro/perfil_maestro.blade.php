@@ -147,6 +147,12 @@
                 <label>{{ __('messages.profile_age') }}</label>
                 <span class="dato-valor">{{ $maestro->edad ?? 'N/A' }} {{ __('messages.profile_years') }}</span>
             </div>
+
+            {{-- Edad --}}
+            <div class="dato-item">
+                <label>{{ __('messages.profile_sex') }}</label>
+                <span class="dato-valor">{{ $maestro->sexo_texto ?? 'N/A' }}</span>
+            </div>
             
             {{-- Teléfono --}}
             <div class="dato-item">

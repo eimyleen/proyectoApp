@@ -149,7 +149,7 @@
                 {{-- Sexo --}}
                 <div class="dato-item">
                     <label>{{ __('messages.expedient_gender') }}</label>
-                    <span class="dato-valor">{{ $alumno->sexo }}</span>
+                    <span class="dato-valor">{{ $alumno->sexo_texto }}</span>
                 </div>
 
                 {{-- Fecha de nacimiento --}}

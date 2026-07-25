@@ -150,7 +150,7 @@
             {{-- Sexo --}}
             <div class="dato-item">
                 <label>{{ __('messages.expedient_gender') }}</label>
-                <span class="dato-valor">{{ $alumno->sexo }}</span>
+                <span class="dato-valor">{{ $alumno->sexo_texto }}</span>
             </div>
 
             {{-- Fecha de nacimiento --}}
@@ -319,14 +319,11 @@
                             </tr>
                         @endforeach
                     @else
-                        @for($i = 0; $i < 5; $i++)
-                            <tr>
-                                <td></td>
-                                <td class="calificacion"></td>
-                            </tr>
-                        @endfor
+                        <tr>
+                            <td>No hay resultados, revise si hay periodos...</td>
+                            <td class="calificacion"></td>
+                        </tr>
                     @endif
-                    
                 </tbody>
             </table>
         </div>

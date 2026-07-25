@@ -136,7 +136,7 @@
             {{-- Sexo --}}
             <div class="dato-item">
                 <label>Sexo</label>
-                <span class="dato-valor" id="datoSexo">{{ $maestro->sexo }}</span>
+                <span class="dato-valor" id="datoSexo">{{ $maestro->sexo_texto }}</span>
             </div>
             
             {{-- Fecha de nacimiento --}}
