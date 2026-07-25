@@ -31,9 +31,9 @@ class Alumno extends Model
     public function getSexoTextoAttribute()
     {
         $sexos = [
-            'M' => 'Masculino',
-            'F' => 'Femenino',
-            'Otro' => 'Otro',
+            'M' => __('messages.gender_male'),
+            'F' => __('messages.gender_female'),
+            'Otro' => __('messages.gender_other'),
         ];
 
         return $sexos[$this->sexo] ?? $this->sexo;

@@ -173,7 +173,7 @@
 
                 {{-- Contador de alumnos --}}
                 <span class="contador-alumnos">
-                    {{ $totalAlumnosGrupo }} {{ $totalAlumnosGrupo === 1 ? 'alumno' : 'alumnos' }}
+                    {{ $totalAlumnosGrupo }} {{ $totalAlumnosGrupo === 1 ? __('messages.number_students_label_singular') : __('messages.number_students_label_plural') }}
                     @if($grupoSeleccionado)
                         en grupo {{ $grupoSeleccionado->nombre }}
                     @endif

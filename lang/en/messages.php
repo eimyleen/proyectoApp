@@ -212,6 +212,8 @@ return [
     'btn_edit_group' => 'Edit Group',
     'btn_add_group' => 'Add Group',
     'btn_delete_group' => 'Delete Group',
+    'number_students_label_singular' => 'Student',
+    'number_students_label_plural' => 'Students',
 
     //expediente alumno en admin
     'student_record_admin_detail_title' => 'Administrator - Student Record',

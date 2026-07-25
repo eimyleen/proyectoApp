@@ -213,7 +213,9 @@ return [
     'btn_edit_group' => 'Editar Grupo',
     'btn_add_group' => 'Añadir Grupo',
     'btn_delete_group' => 'Borrar Grupo',
-    
+    'number_students_label_singular' => 'Alumno',
+    'number_students_label_plural' => 'Alumnos',
+
     //expediente alumno en admin
     'student_record_admin_detail_title' => 'Administrador - Expediente del Alumno',
     'student_record_admin_detail_subtitle' => 'Consulta la información personal del alumno.',
