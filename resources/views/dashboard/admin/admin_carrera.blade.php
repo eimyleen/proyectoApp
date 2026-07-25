@@ -281,38 +281,36 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Nombre(s)</label>
-                        <input name="name" type="text" id="nombreAlumno" placeholder="Ej: Juan">
+                        <input name="name" type="text" id="nombreAlumno" placeholder="Ej: Juan" required>
                     </div>
                     <div class="form-group">
                         <label>Apellidos</label>
-                        <input name="apellido" type="text" id="apellidosAlumno" placeholder="Ej: Pérez García">
+                        <input name="apellido" type="text" id="apellidosAlumno" placeholder="Ej: Pérez García" required>
                     </div>
                     <div class="form-group">
                         <label>Grupo</label>
-                        <select name="grupo" id="grupoAlumno">
-                            <option value=""></option>
-                            <option value="TI-XX">TI-XX</option>
+                        <select name="grupo" id="grupoAlumno" required>
+                            <option value="">Selecciona un Grupo</option>
+                            @foreach ($grupos as $grup)
+                                <option value="{{ $grup->id }}">{{ $grup->nombre }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="form-group">
                         <label>Matrícula</label>
-                        <input name="matricula" type="text" id="matriculaAlumno" placeholder="Ej: UTN-2024-001">
+                        <input name="matricula" type="text" id="matriculaAlumno" placeholder="Ej: UTN-2024-001" required>
                     </div>
                     <div class="form-group">
                         <label>Correo electrónico</label>
-                        <input name="email" type="email" id="correoAlumno" placeholder="ejemplo@utnay.edu.mx">
+                        <input name="email" type="email" id="correoAlumno" placeholder="ejemplo@utnay.edu.mx" required>
                     </div>
                     <div class="form-group">
                         <label>CURP</label>
-                        <input name="curp" type="input" id="curpAlumno" placeholder="48932HJFIE">
+                        <input name="curp" type="input" id="curpAlumno" placeholder="48932HJFIE" required>
                     </div>
                     <div class="form-group">
                         <label>Fecha Nacimiento</label>
-                        <input name="fecha_nacimiento" type="date" id="fechaNacAlumno" placeholder="">
-                    </div>
-                    <div class="form-group">
-                        <label>Edad</label>
-                        <input name="edad" type="number" value="18" min="18" max="80" id="edadAlumno" placeholder="18">
+                        <input name="fecha_nacimiento" type="date" id="fechaNacAlumno" placeholder="" required>
                     </div>
                     <div class="form-group">
                         <label>Sexo</label>
@@ -323,9 +321,9 @@
                                 <td><label>Otro</label></td>
                             </tr>
                             <tr>
-                                <td><input id="sexoAlumnoMas" name="sexo" type="radio" value="Masculino"></td>
-                                <td><input id="sexoAlumnoFem" name="sexo" type="radio" value="Femenino"></td>
-                                <td><input id="sexoAlumnoOt" name="sexo" type="radio" value="Otro"></td>
+                                <td><input id="sexoAlumnoMas" name="sexo" type="radio" value="M" required></td>
+                                <td><input id="sexoAlumnoFem" name="sexo" type="radio" value="F" required></td>
+                                <td><input id="sexoAlumnoOt" name="sexo" type="radio" value="Otro" required></td>
                             </tr>
                         </table>
                     </div>
@@ -353,31 +351,57 @@
                 <h3>{{ __('messages.modal_add_teacher') }}</h3>
                 <span class="modal-close" id="closeModalMaestro">&times;</span>
             </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label>{{ __('messages.field_employee_num') }}</label>
-                    <input type="text" id="numEmpleado" placeholder="{{ __('messages.placeholder_id_teacher') }}">
+            <form action="{{ route('admin.carrera.storeMaestro', $carrera) }}" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>{{ __('messages.field_firstname') }}</label>
+                        <input type="text" id="nombreMaestro" placeholder="{{  __('messages.placeholder_name')  }}" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>{{ __('messages.field_lastname') }}</label>
+                        <input type="text" id="apellidosMaestro" placeholder="{{ __('messages.placeholder_lastname') }}" name="apellido" required>
+                    </div>
+                    <div class="form-group">
+                        <label>{{ __('messages.field_email') }}</label>
+                        <input type="email" id="correoMaestro" placeholder="{{ __('messages.placeholder_email') }}" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>{{ __('messages.field_rfc') }}</label>
+                        <input type="text" id="numEmpleado" placeholder="{{ __('messages.placeholder_rfc_teacher') }}" name="rfc" required>
+                    </div>
+                    <div class="form-group">
+                        <label>{{ __('messages.field_employee_num') }}</label>
+                        <input type="text" id="numEmpleado" placeholder="{{ __('messages.placeholder_id_teacher') }}" name="num_empleado" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Nacimiento</label>
+                        <input name="fecha_nacimiento" type="date" id="fechaNacAlumno" placeholder="" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Sexo</label>
+                        <table>
+                            <tr style="text-align: center">
+                                <td><label>Masculino</label></td>
+                                <td><label>Femenino</label></td>
+                                <td><label>Otro</label></td>
+                            </tr>
+                            <tr>
+                                <td><input id="sexoAlumnoMas" name="sexo" type="radio" value="M" required></td>
+                                <td><input id="sexoAlumnoFem" name="sexo" type="radio" value="F" required></td>
+                                <td><input id="sexoAlumnoOt" name="sexo" type="radio" value="Otro" required></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="form-group">
+                        <label>{{ __('messages.field_phone') }}</label>
+                        <input type="text" name="telefono" id="telefonoMaestro" placeholder="{{ __('messages.placeholder_phone') }}" required>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>{{ __('messages.field_firstname') }}</label>
-                    <input type="text" id="nombreMaestro" placeholder="{{  __('messages.placeholder_name')  }}">
+                <div class="modal-footer">
+                    <button type="submit" class="btn-guardar">{{ __('messages.btn_save') }}</button>
                 </div>
-                <div class="form-group">
-                    <label>{{ __('messages.field_lastname') }}</label>
-                    <input type="text" id="apellidosMaestro" placeholder="{{ __('messages.placeholder_lastname') }}">
-                </div>
-                <div class="form-group">
-                    <label>{{ __('messages.field_email') }}</label>
-                    <input type="email" id="correoMaestro" placeholder="{{ __('messages.placeholder_email') }}">
-                </div>
-                <div class="form-group">
-                    <label>{{ __('messages.field_phone') }}</label>
-                    <input type="text" id="telefonoMaestro" placeholder="{{ __('messages.placeholder_phone') }}">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-guardar" id="guardarMaestro">{{ __('messages.btn_save') }}</button>
-            </div>
+            </form>
         </div>
     </div>
 

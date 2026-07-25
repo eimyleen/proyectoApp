@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\ProcessDBBackup;
-use App\Jobs\RunBackupJob;
+use App\Http\Requests\CreateAlumnoRequest;
+use App\Http\Requests\CreateMaestroRequest;
 use App\Models\ConfiguracionBackupAuto;
 use App\Models\Log;
 use App\Models\Maestro;
@@ -44,20 +44,9 @@ class AdminCarreraController extends Controller {
         return view('dashboard.admin.admin_carrera', compact('carrera', 'alumnos', 'maestros', 'grupos'));
     }
 
-    public function storeAlumno($carreraId) {
-        // 1. Validación corregida (quitamos 'alpha' para permitir números/guiones)
-        $data = request()->validate([
-            'name'             => 'required|string|max:255',
-            'apellido'         => 'required|string|max:255',
-            'email'            => 'required|email|unique:users,email',
-            'matricula'        => 'required|string|unique:alumnos,matricula',
-            'grupo'            => 'required|string',
-            'curp'             => 'required|string|max:18',
-            'fecha_nacimiento' => 'required|date',
-            'edad'             => 'required|integer',
-            'sexo'             => 'required',
-            'telefono'      => 'required' 
-        ]);
+    public function storeAlumno($carreraId, CreateAlumnoRequest $req) {
+        // 1. Obtener los datos del formulario validados
+        $data = $req->validated();
 
         // 2. Crear Usuario
         $usuario = User::create([
@@ -65,24 +54,54 @@ class AdminCarreraController extends Controller {
             'apellido' => $data['apellido'],
             'email'    => $data['email'],
             'role'     => 'alumno',
-            'foto'     => '',
             'password' => Hash::make('password') // Considera una lógica de password más segura
         ]);
 
-        // 3. Crear Alumno
+        //3. Crear el Alumno
         $alumno = Alumno::create([
-            'user_id'          => $usuario->id,
-            'matricula'        => $data['matricula'],
-            'carrera_id'       => $carreraId,
-            'grupo'            => $data['grupo'],
-            'curp'             => $data['curp'],
-            'edad'             => $data['edad'],
-            'sexo'             => $data['sexo'],
+            'matricula' => $data['matricula'],
+            'curp' => $data['curp'],
+            'sexo' => $data['sexo'],
             'fecha_nacimiento' => $data['fecha_nacimiento'],
-            'telefono'         => request('telefono') ?? 'Sin teléfono' // Evita el error de nulo
+            'telefono' => $data['telefono'],
+            'user_id' => $usuario->id,
+            'carrera_id' => $carreraId
         ]);
 
-        return redirect()->route('admin.show', $carreraId)->with('success', 'Alumno registrado');
+        //4. Anclarlo al grupo asignado
+        $alumno->grupos()->attachOrFail($data['grupo'], ['periodo' => 'Primero']);
+
+        return redirect() -> route('admin.show', $carreraId) -> with('success', 'Alumno creado');
+    }
+
+    public function storeMaestro($carreraId, CreateMaestroRequest $req) {
+        // 1. Obtener los datos del formulario validados
+        $data = $req->validated();
+
+        // 2. Crear Usuario
+        $usuario = User::create([
+            'name'     => $data['name'],
+            'apellido' => $data['apellido'],
+            'email'    => $data['email'],
+            'role'     => 'maestro',
+            'password' => Hash::make('password') // Considera una lógica de password más segura
+        ]);
+
+        //3. Crear el Maestro
+        $maestro = Maestro::create([
+            'num_empleado' => $data['num_empleado'],
+            'rfc' => $data['rfc'],
+            'sexo' => $data['sexo'], 
+            'fecha_nacimiento' => $data['fecha_nacimiento'], 
+            'telefono' => $data['telefono'], 
+            'es_tutor' => 0,
+            'user_id' => $usuario->id
+        ]);
+
+        //4. Anclarlo a la carrera perteneciente
+        $maestro->carreras()->attachOrFail($carreraId);
+
+        return redirect() -> route('admin.show', $carreraId) -> with('success', 'Maestro creado');
     }
 
     public function update(Request $request, string $id) {

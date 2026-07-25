@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('rfc', 13)->unique();
             $table->enum('sexo', ['M', 'F', 'Otro']);
             $table->date('fecha_nacimiento');
-            $table->string('telefono', 20);
+            $table->string('telefono', 20)->nullable();
             $table->boolean('es_tutor')->default(false);
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();

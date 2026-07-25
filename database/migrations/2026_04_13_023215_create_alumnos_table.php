@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('curp', 18)->unique();
             $table->enum('sexo', ['M', 'F', 'Otro']);
             $table->date('fecha_nacimiento');
-            $table->string('telefono', 20);
+            $table->string('telefono', 20)->nullable();
             $table->string('doc_acta_nacimiento')->nullable();
             $table->string('doc_curp')->nullable();
             $table->string('doc_certificado_bachillerato')->nullable();
