@@ -129,6 +129,7 @@
         <div class="tabs">
             <button class="tab-btn active" data-tab="grupos">{{ __('messages.tab_groups') }}</button>
             <button class="tab-btn" data-tab="maestros">{{ __('messages.tab_teachers') }}</button>
+            <button class="tab-btn" data-tab="materias">Materias</button>
         </div>
 
         {{-- ======================================================
@@ -353,7 +354,99 @@
                         @endforelse
                     </tbody>
                 </table>
+                </div>
+                </div>
+
+                {{-- ======================================================
+                CONTENIDO - MATERIAS
+                ====================================================== 
+                --}}
+                <div class="tab-content" id="tab-materias">
+                <div class="filtro-grupo" style="justify-content: flex-end;">
+                <div class="botones-accion">
+                    <button class="btn-agregar" id="btnAgregarMateria">Agregar Materia</button>
+                </div>
+                </div>
+
+                <div class="tabla-container">
+                <table class="tabla-maestros">
+                    <thead>
+                        <tr>
+                            <th>Número</th>
+                            <th>Nombre</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="materiasBody">
+                        @forelse($materias as $i => $materia)
+                            <tr>
+                                <td>{{ $i+1 }}</td>
+                                <td>{{ $materia->nombre }}</td>
+                                <td>
+                                    <button class="btn-icono-tabla btn-editar-materia"
+                                            data-id="{{ $materia->id }}"
+                                            data-nombre="{{ $materia->nombre }}">
+                                        Editar
+                                    </button>
+                                    <form action="{{ route('admin.carrera.deleteMateria', [$carrera, $materia->id]) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit">Eliminar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3">No hay materias registradas.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+                </div>
+                </div>
+                </div>
+    {{-- MODAL AGREGAR MATERIA --}}
+    <div id="modalAgregarMateria" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Agregar Materia</h3>
+                <span class="modal-close" id="closeModalMateria">&times;</span>
             </div>
+            <form action="{{ route('admin.carrera.storeMateria', $carrera) }}" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nombre de la materia</label>
+                        <input name="nombre" type="text" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn-guardar">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {{-- MODAL EDITAR MATERIA --}}
+    <div id="modalEditarMateria" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Editar Materia</h3>
+                <span class="modal-close" id="closeModalEditarMateria">&times;</span>
+            </div>
+            <form method="POST" id="formEditarMateria">
+                @csrf
+                @method('PATCH')
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nombre de la materia</label>
+                        <input name="nombre" type="text" id="editMateriaNombre" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn-guardar">Guardar cambios</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -998,6 +1091,29 @@
         if (closeModalEditarGrupo) closeModalEditarGrupo.onclick = cerrarModalEditarGrupo;
 
         // ==============================================
+        // 11. MATERIAS CRUD
+        // ==============================================
+        const modalAgregarMateria = document.getElementById('modalAgregarMateria');
+        const modalEditarMateria = document.getElementById('modalEditarMateria');
+        const btnAgregarMateria = document.getElementById('btnAgregarMateria');
+
+        if (btnAgregarMateria) {
+            btnAgregarMateria.onclick = () => modalAgregarMateria.style.display = 'flex';
+        }
+
+        document.getElementById('closeModalMateria').onclick = () => modalAgregarMateria.style.display = 'none';
+        document.getElementById('closeModalEditarMateria').onclick = () => modalEditarMateria.style.display = 'none';
+
+        document.querySelectorAll('.btn-editar-materia').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const id = this.dataset.id;
+                document.getElementById('editMateriaNombre').value = this.dataset.nombre;
+                document.getElementById('formEditarMateria').action = '{{ route("admin.carrera.updateMateria", [$carrera, "__ID__"]) }}'.replace('__ID__', id);
+                modalEditarMateria.style.display = 'flex';
+            });
+        });
+
+        // ==============================================
         // 9. CERRAR MODALES AL HACER CLIC FUERA
         // ==============================================
         window.onclick = function(e) {
@@ -1008,6 +1124,8 @@
             if (e.target === modalEditarAlumno) cerrarModalEditarAlumno();
             if (e.target === modalEditarMaestro) cerrarModalEditarMaestro();
             if (e.target === modalEditarGrupo) cerrarModalEditarGrupo();
+            if (e.target === modalAgregarMateria) modalAgregarMateria.style.display = 'none';
+            if (e.target === modalEditarMateria) modalEditarMateria.style.display = 'none';
         };
 
         // ==============================================

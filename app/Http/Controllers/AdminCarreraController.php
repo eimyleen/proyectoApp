@@ -13,6 +13,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use App\Models\Carrera;
 use App\Models\Alumno;
+use App\Models\Materia;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -43,6 +44,8 @@ class AdminCarreraController extends Controller {
         $maestros = Maestro::with('user:id,name,apellido,email')->whereHas('carreras', function($d) use ($id) {
             $d->where('carrera_id', $id);
         })->get();
+        
+        $materias = Materia::where('carrera_id', $id)->get();
 
         $totalAlumnosGrupo = $grupoId
             ? $alumnos->count()
@@ -50,7 +53,7 @@ class AdminCarreraController extends Controller {
 
         $grupoSeleccionado = $grupoId ? $grupos->firstWhere('id', $grupoId) : null;
 
-        return view('dashboard.admin.admin_carrera', compact('carrera', 'alumnos', 'maestros', 'grupos', 'grupoSeleccionado', 'totalAlumnosGrupo', 'grupoId'));
+        return view('dashboard.admin.admin_carrera', compact('carrera', 'alumnos', 'maestros', 'materias', 'grupos', 'grupoSeleccionado', 'totalAlumnosGrupo', 'grupoId'));
     }
 
     public function storeAlumno($carreraId, CreateAlumnoRequest $req) {
@@ -379,4 +382,40 @@ class AdminCarreraController extends Controller {
 
         return redirect()->route('admin.show', $carreraId)->with('success', 'Grupo eliminado correctamente');
     }
-}
+
+    public function storeMateria(Request $request, $carreraId)
+    {
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+        ]);
+
+        Materia::create([
+            'nombre'     => $request->nombre,
+            'carrera_id' => $carreraId,
+        ]);
+
+        return redirect()->route('admin.show', $carreraId)->with('success', 'Materia creada correctamente');
+    }
+
+    public function updateMateria(Request $request, $carreraId, $materiaId)
+    {
+        $data = $request->validate([
+            'nombre' => 'required|string|max:255',
+        ]);
+
+        $materia = Materia::findOrFail($materiaId);
+        $materia->update([
+            'nombre' => $data['nombre'],
+        ]);
+
+        return redirect()->route('admin.show', $carreraId)->with('success', 'Materia actualizada correctamente');
+    }
+
+    public function deleteMateria($carreraId, $materiaId)
+    {
+        $materia = Materia::findOrFail($materiaId);
+        $materia->delete();
+
+        return redirect()->route('admin.show', $carreraId)->with('success', 'Materia eliminada correctamente');
+    }
+    }

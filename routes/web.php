@@ -101,6 +101,19 @@ Route::middleware(['auth'])->group(function () {
         AdminCarreraController::class, 'deleteGrupo'
     ])->middleware('role:admin')->name('admin.carrera.deleteGrupo');
 
+    // --- Rutas para Materias ---
+    Route::post('/admin/carrera/{carreraId}/materia', [
+        AdminCarreraController::class, 'storeMateria'
+    ])->middleware('role:admin')->name('admin.carrera.storeMateria');
+
+    Route::patch('/admin/carrera/{carreraId}/materia/{materiaId}', [
+        AdminCarreraController::class, 'updateMateria'
+    ])->middleware('role:admin')->name('admin.carrera.updateMateria');
+
+    Route::delete('/admin/carrera/{carreraId}/materia/{materiaId}', [
+        AdminCarreraController::class, 'deleteMateria'
+    ])->middleware('role:admin')->name('admin.carrera.deleteMateria');
+
     Route::post('/respaldo', [
         AdminCarreraController::class, 'manejarBackupManual'
     ])->middleware(['auth', 'role:admin']);
