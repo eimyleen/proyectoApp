@@ -19,6 +19,19 @@ class Horario extends Model
         'materia_id'
     ];
 
+    public function getDiaLangAttribute() {
+        $dias = [
+            'Lunes' => __('messages.day_monday'),
+            'Martes' => __('messages.day_tuesday'),
+            'Miércoles' => __('messages.day_wednesday'),
+            'Jueves' => __('messages.day_thursday'),
+            'Viernes' => __('messages.day_friday'),
+            'Sábado' => __('messages.day_saturday'),
+            'Domingo' => __('messages.day_sunday')
+        ];
+        return $dias[$this->dia] ?? $this->dia;
+    }
+
     /**
      * Relación con el grupo a la que pertenece el horario.
      */
