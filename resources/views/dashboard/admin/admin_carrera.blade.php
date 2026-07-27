@@ -385,11 +385,11 @@
                                 <td>{{ $i+1 }}</td>
                                 <td>{{ $materia->nombre }}</td>
                                 <td>
-                                    @forelse($materia->horarios as $horario)
-                                        <p>{{ $horario->maestro?->user?->name }} {{ $horario->maestro?->user?->apellido }} - {{ $horario->grupo?->nombre }}</p>
-                                    @empty
-                                        <p>Esta materia no esta asignada..</p>
-                                    @endforelse
+                                    @if ($materia->horarios->first())
+                                        <p>{{ $materia->horarios->first()->maestro?->user?->name . ' ' . $materia->horarios->first()->maestro?->user?->apellido . ' - ' . $materia->horarios->first()->grupo?->nombre}}</p>
+                                    @else
+                                        <p>{{ __('messages.table_empty_generic') }}</p>
+                                    @endif
                                 </td>
                                 <td>
                                     <button class="btn-icono-tabla btn-editar-materia"
