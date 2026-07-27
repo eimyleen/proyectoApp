@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Models\Carrera;
 use App\Models\Alumno;
 use App\Models\Materia;
+use App\Models\Horario;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -45,7 +46,7 @@ class AdminCarreraController extends Controller {
             $d->where('carrera_id', $id);
         })->get();
         
-        $materias = Materia::where('carrera_id', $id)->get();
+        $materias = Materia::with('horarios.maestro.user', 'horarios.grupo')->where('carrera_id', $id)->get();
 
         $totalAlumnosGrupo = $grupoId
             ? $alumnos->count()
@@ -418,4 +419,25 @@ class AdminCarreraController extends Controller {
 
         return redirect()->route('admin.show', $carreraId)->with('success', 'Materia eliminada correctamente');
     }
+
+    public function asignarMateria(Request $request, $carreraId)
+    {
+        $request->validate([
+            'materia_id' => 'required|exists:materias,id',
+            'maestro_id' => 'required|exists:maestros,id',
+            'grupo_id'   => 'required|exists:grupos,id',
+        ]);
+
+        Horario::create([
+            'materia_id' => $request->materia_id,
+            'maestro_id' => $request->maestro_id,
+            'grupo_id'   => $request->grupo_id,
+            'dia'        => null,
+            'hora_inicio' => null,
+            'hora_fin'    => null,
+            'aula'        => null,
+        ]);
+
+        return redirect()->route('admin.show', $carreraId)->with('success', 'Materia asignada correctamente');
     }
+}

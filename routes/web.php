@@ -114,6 +114,10 @@ Route::middleware(['auth'])->group(function () {
         AdminCarreraController::class, 'deleteMateria'
     ])->middleware('role:admin')->name('admin.carrera.deleteMateria');
 
+    Route::post('/admin/carrera/{carreraId}/asignar-materia', [
+        AdminCarreraController::class, 'asignarMateria'
+    ])->middleware('role:admin')->name('admin.carrera.asignarMateria');
+
     Route::post('/respaldo', [
         AdminCarreraController::class, 'manejarBackupManual'
     ])->middleware(['auth', 'role:admin']);

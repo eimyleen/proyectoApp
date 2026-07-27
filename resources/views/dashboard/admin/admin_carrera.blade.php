@@ -365,6 +365,7 @@
                 <div class="filtro-grupo" style="justify-content: flex-end;">
                 <div class="botones-accion">
                     <button class="btn-agregar" id="btnAgregarMateria">Agregar Materia</button>
+                    <button class="btn-agregar" id="btnAsignarMateria">Asignar Maestro</button>
                 </div>
                 </div>
 
@@ -373,7 +374,8 @@
                     <thead>
                         <tr>
                             <th>Número</th>
-                            <th>Nombre</th>
+                            <th>Materia</th>
+                            <th>Asignaciones (Maestro - Grupo)</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -382,6 +384,13 @@
                             <tr>
                                 <td>{{ $i+1 }}</td>
                                 <td>{{ $materia->nombre }}</td>
+                                <td>
+                                    @forelse($materia->horarios as $horario)
+                                        <p>{{ $horario->maestro?->user?->name }} {{ $horario->maestro?->user?->apellido }} - {{ $horario->grupo?->nombre }}</p>
+                                    @empty
+                                        <p>Esta materia no esta asignada..</p>
+                                    @endforelse
+                                </td>
                                 <td>
                                     <button class="btn-icono-tabla btn-editar-materia"
                                             data-id="{{ $materia->id }}"
@@ -397,7 +406,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="3">No hay materias registradas.</td>
+                                <td colspan="4">No hay materias registradas.</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -405,6 +414,51 @@
                 </div>
                 </div>
                 </div>
+    {{-- MODAL ASIGNAR MATERIA --}}
+    <div id="modalAsignarMateria" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Asignar Materia a Maestro</h3>
+                <span class="modal-close" id="closeModalAsignarMateria">&times;</span>
+            </div>
+            <form action="{{ route('admin.carrera.asignarMateria', $carrera) }}" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Materia</label>
+                        <select name="materia_id" required>
+                            <option value="">Selecciona una materia</option>
+                            @foreach($materias as $materia)
+                                <option value="{{ $materia->id }}">{{ $materia->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Maestro</label>
+                        <select name="maestro_id" required>
+                            <option value="">Selecciona un maestro</option>
+                            @foreach($maestros as $maestro)
+                                <option value="{{ $maestro->id }}">{{ $maestro->user?->name }} {{ $maestro->user?->apellido }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Grupo</label>
+                        <select name="grupo_id" required>
+                            <option value="">Selecciona un grupo</option>
+                            @foreach($grupos as $grupo)
+                                <option value="{{ $grupo->id }}">{{ $grupo->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn-guardar">Asignar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     {{-- MODAL AGREGAR MATERIA --}}
     <div id="modalAgregarMateria" class="modal">
         <div class="modal-content">
@@ -1095,14 +1149,21 @@
         // ==============================================
         const modalAgregarMateria = document.getElementById('modalAgregarMateria');
         const modalEditarMateria = document.getElementById('modalEditarMateria');
+        const modalAsignarMateria = document.getElementById('modalAsignarMateria');
         const btnAgregarMateria = document.getElementById('btnAgregarMateria');
+        const btnAsignarMateria = document.getElementById('btnAsignarMateria');
 
         if (btnAgregarMateria) {
             btnAgregarMateria.onclick = () => modalAgregarMateria.style.display = 'flex';
         }
+        
+        if (btnAsignarMateria) {
+            btnAsignarMateria.onclick = () => modalAsignarMateria.style.display = 'flex';
+        }
 
         document.getElementById('closeModalMateria').onclick = () => modalAgregarMateria.style.display = 'none';
         document.getElementById('closeModalEditarMateria').onclick = () => modalEditarMateria.style.display = 'none';
+        document.getElementById('closeModalAsignarMateria').onclick = () => modalAsignarMateria.style.display = 'none';
 
         document.querySelectorAll('.btn-editar-materia').forEach(btn => {
             btn.addEventListener('click', function() {
@@ -1126,6 +1187,7 @@
             if (e.target === modalEditarGrupo) cerrarModalEditarGrupo();
             if (e.target === modalAgregarMateria) modalAgregarMateria.style.display = 'none';
             if (e.target === modalEditarMateria) modalEditarMateria.style.display = 'none';
+            if (e.target === modalAsignarMateria) modalAsignarMateria.style.display = 'none';
         };
 
         // ==============================================
