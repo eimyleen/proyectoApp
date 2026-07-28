@@ -8,6 +8,7 @@ use App\Models\Carrera;
 use App\Models\Grupo;
 use App\Models\Alumno;
 use App\Models\Maestro;
+use App\Models\Calificacion;
 use App\Models\Log;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -97,16 +98,23 @@ class MaestroCarreraController extends Controller
 
         $periodoSeleccionado = $request->query('periodo');
 
-        $periodos = \App\Models\Calificacion::where('alumno_id', $alumno->id)
+        $periodos = Calificacion::where('alumno_id', $alumno->id)
         ->distinct()
         ->pluck('periodo');
         
-        $calificaciones = $periodoSeleccionado 
+        $calificaciones = Calificacion::with('materia')
+        ->when($periodoSeleccionado, function($request) use ($periodoSeleccionado) {
+            if($periodoSeleccionado) {
+                $request->where('periodo', $periodoSeleccionado);
+            }
+        })->get();
+        
+        /*$periodoSeleccionado 
             ? \App\Models\Calificacion::with('materia')
                 ->where('alumno_id', $alumno->id)
                 ->where('periodo', $periodoSeleccionado)
                 ->get()
-            : collect();
+            : collect();*/
 
         return view('dashboard.maestro.expediente_alumno_maestro', compact('alumno', 'grupo', 'carrera', 'periodoSeleccionado', 'periodos', 'calificaciones'));
     }

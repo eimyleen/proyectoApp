@@ -286,7 +286,7 @@
             <form action="{{ route('maestro.alumno.expediente', $alumno->id) }}" method="get">
                 <div class="periodo-select-expediente">
                     <label for="periodoSelect">{{ __('messages.expedient_period') }}:</label>
-                    <select name="periodo" id="periodoSelect">
+                    <select name="periodo" id="periodoSelect" onchange="this.form.submit()">
                         <option value="">{{ __('messages.expedient_select_period') }}</option>
                         @foreach($periodos as $periodo)
                             <option value="{{ $periodo }}" {{ $periodoSeleccionado == $periodo ? 'selected' : '' }}>
@@ -294,13 +294,6 @@
                             </option>
                         @endforeach
                     </select>
-                    <button type="submit" class="btn-buscar">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="11" cy="11" r="8"/>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                        </svg>
-                        {{ __('messages.btn_search') }}
-                    </button>
                 </div>
             </form>
         </div>
