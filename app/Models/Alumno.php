@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Carbon\Carbon;
 
@@ -24,6 +25,68 @@ class Alumno extends Model
         'user_id',
         'carrera_id',
     ];
+
+    /**
+     * Relación con las calificaciones del alumno.
+     */
+    public function calificaciones(): HasMany
+    {
+        return $this->hasMany(Calificacion::class);
+    }
+
+    /**
+     * Obtiene la calificación definitiva de un parcial (mejor tipo de evaluación).
+     */
+    public function getCalificacionDefinitivaParcial($materiaId, $periodo, $parcial)
+    {
+        $calificaciones = $this->calificaciones()
+            ->where('materia_id', $materiaId)
+            ->where('periodo', $periodo)
+            ->where('parcial', $parcial)
+            ->get();
+
+        if ($calificaciones->isEmpty()) {
+            return 0; // O null, dependiendo de la política de notas faltantes
+        }
+
+        // Ordenar por prioridad definida en el modelo Calificacion
+        return $calificaciones->sortByDesc(function ($cal) {
+            return Calificacion::PRIORIDAD_EVALUACION[$cal->tipo_evaluacion] ?? 0;
+        })->first()->calificacion;
+    }
+
+    /**
+     * Calcula la calificación final de una materia en un período.
+     */
+    public function getCalificacionFinalMateria($materiaId, $periodo)
+    {
+        $p1 = $this->getCalificacionDefinitivaParcial($materiaId, $periodo, 1);
+        $p2 = $this->getCalificacionDefinitivaParcial($materiaId, $periodo, 2);
+
+        return ($p1 + $p2) / 2;
+    }
+
+    /**
+     * Calcula el promedio del cuatrimestre filtrado por período.
+     */
+    public function getPromedioPeriodo($periodo)
+    {
+        $materiasIds = $this->calificaciones()
+            ->where('periodo', $periodo)
+            ->pluck('materia_id')
+            ->unique();
+
+        if ($materiasIds->isEmpty()) {
+            return 0;
+        }
+
+        $sumaCalificaciones = 0;
+        foreach ($materiasIds as $materiaId) {
+            $sumaCalificaciones += $this->getCalificacionFinalMateria($materiaId, $periodo);
+        }
+
+        return $sumaCalificaciones / $materiasIds->count();
+    }
 
     /**
      *  Accesor para completar el sexo 

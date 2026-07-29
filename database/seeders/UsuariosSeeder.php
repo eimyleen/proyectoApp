@@ -231,42 +231,121 @@ class UsuariosSeeder extends Seeder
         // ---------- Calificaciones de prueba para el alumno ----------
 
         $calificaciones = [
+            // Materia 1 (Base de Datos)
             [
                 'alumno_id' => $alumnoModelo->id, 
                 'materia_id' => $m1->id,
                 'periodo' => 'Enero - Abril 2026',
-                'calificacion' => 9.5,
+                'parcial' => 1,
+                'tipo_evaluacion' => 'ordinario',
+                'calificacion' => 9.0,
+            ],
+            [
+                'alumno_id' => $alumnoModelo->id, 
+                'materia_id' => $m1->id,
+                'periodo' => 'Enero - Abril 2026',
+                'parcial' => 2,
+                'tipo_evaluacion' => 'ordinario',
+                'calificacion' => 10.0,
+            ],
+
+            // Materia 2 (Desarrollo Web)
+            [
+                'alumno_id' => $alumnoModelo->id,
+                'materia_id' => $m2->id,
+                'periodo' => 'Enero - Abril 2026',
+                'parcial' => 1,
+                'tipo_evaluacion' => 'ordinario',
+                'calificacion' => 10.0,
             ],
             [
                 'alumno_id' => $alumnoModelo->id,
                 'materia_id' => $m2->id,
                 'periodo' => 'Enero - Abril 2026',
+                'parcial' => 2,
+                'tipo_evaluacion' => 'ordinario',
                 'calificacion' => 10.0,
+            ],
+
+            // Materia 3 (Aplicaciones Móviles - Ejemplo con Remedial en P1)
+            [
+                'alumno_id' => $alumnoModelo->id,
+                'materia_id' => $m3->id,
+                'periodo' => 'Enero - Abril 2026',
+                'parcial' => 1,
+                'tipo_evaluacion' => 'ordinario',
+                'calificacion' => 5.0, // Reprobó ordinario
             ],
             [
                 'alumno_id' => $alumnoModelo->id,
                 'materia_id' => $m3->id,
                 'periodo' => 'Enero - Abril 2026',
-                'calificacion' => 8.8,
+                'parcial' => 1,
+                'tipo_evaluacion' => 'remedial',
+                'calificacion' => 8.0, // Aprobó en remedial
+            ],
+            [
+                'alumno_id' => $alumnoModelo->id,
+                'materia_id' => $m3->id,
+                'periodo' => 'Enero - Abril 2026',
+                'parcial' => 2,
+                'tipo_evaluacion' => 'ordinario',
+                'calificacion' => 9.5,
+            ],
+
+            // Materia 4 (Seguridad Informática)
+            [
+                'alumno_id' => $alumnoModelo->id,
+                'materia_id' => $m4->id,
+                'periodo' => 'Enero - Abril 2026',
+                'parcial' => 1,
+                'tipo_evaluacion' => 'ordinario',
+                'calificacion' => 9.0,
             ],
             [
                 'alumno_id' => $alumnoModelo->id,
                 'materia_id' => $m4->id,
                 'periodo' => 'Enero - Abril 2026',
-                'calificacion' => 9.2,
+                'parcial' => 2,
+                'tipo_evaluacion' => 'ordinario',
+                'calificacion' => 9.4,
+            ],
+
+            // Materia 5 (Inglés IX)
+            [
+                'alumno_id' => $alumnoModelo->id,
+                'materia_id' => $m5->id,
+                'periodo' => 'Enero - Abril 2026',
+                'parcial' => 1,
+                'tipo_evaluacion' => 'ordinario',
+                'calificacion' => 9.5,
             ],
             [
                 'alumno_id' => $alumnoModelo->id,
                 'materia_id' => $m5->id,
                 'periodo' => 'Enero - Abril 2026',
-                'calificacion' => 9.7,
+                'parcial' => 2,
+                'tipo_evaluacion' => 'ordinario',
+                'calificacion' => 9.9,
+            ],
+
+            // Materia 6 (Desarrollo Web Integral - Otro período)
+            [
+                'alumno_id' => $alumnoModelo->id,
+                'materia_id' => $m6->id,
+                'periodo' => 'Mayo - Agosto 2026',
+                'parcial' => 1,
+                'tipo_evaluacion' => 'ordinario',
+                'calificacion' => 9.0,
             ],
             [
                 'alumno_id' => $alumnoModelo->id,
                 'materia_id' => $m6->id,
                 'periodo' => 'Mayo - Agosto 2026',
-                'calificacion' => 9.2,
-            ]
+                'parcial' => 2,
+                'tipo_evaluacion' => 'ordinario',
+                'calificacion' => 9.4,
+            ],
         ];
 
         foreach ($calificaciones as $c) {

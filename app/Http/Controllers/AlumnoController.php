@@ -49,15 +49,29 @@ class AlumnoController extends Controller
         ->distinct()
         ->pluck('periodo');
 
-        // Solo se traen las calificaciones si el usuario eligió un período
-        $calificaciones = $periodoSeleccionado 
-            ? \App\Models\Calificacion::with('materia')
-                ->where('alumno_id', $alumno->id)
-                ->where('periodo', $periodoSeleccionado)
-                ->get()
-            : collect();
+        $calificacionesCalculadas = collect();
+        $promedioPeriodo = 0;
 
-        return view('dashboard.alumno.alumno_calificaciones', compact('calificaciones', 'periodos', 'grupo', 'carrera', 'periodoSeleccionado'));
+        if ($periodoSeleccionado) {
+            $materiasIds = \App\Models\Calificacion::where('alumno_id', $alumno->id)
+                ->where('periodo', $periodoSeleccionado)
+                ->pluck('materia_id')
+                ->unique();
+
+            foreach ($materiasIds as $id) {
+                $materia = \App\Models\Materia::find($id);
+                $notaFinal = $alumno->getCalificacionFinalMateria($id, $periodoSeleccionado);
+                
+                $calificacionesCalculadas->push((object)[
+                    'materia' => $materia,
+                    'nota_final' => $notaFinal
+                ]);
+            }
+            
+            $promedioPeriodo = $alumno->getPromedioPeriodo($periodoSeleccionado);
+        }
+
+        return view('dashboard.alumno.alumno_calificaciones', compact('calificacionesCalculadas', 'promedioPeriodo', 'periodos', 'grupo', 'carrera', 'periodoSeleccionado'));
     }
 
     public function expediente() {

@@ -102,21 +102,29 @@ class MaestroCarreraController extends Controller
         ->distinct()
         ->pluck('periodo');
         
-        $calificaciones = Calificacion::with('materia')
-        ->when($periodoSeleccionado, function($request) use ($periodoSeleccionado) {
-            if($periodoSeleccionado) {
-                $request->where('periodo', $periodoSeleccionado);
-            }
-        })->get();
-        
-        /*$periodoSeleccionado 
-            ? \App\Models\Calificacion::with('materia')
-                ->where('alumno_id', $alumno->id)
-                ->where('periodo', $periodoSeleccionado)
-                ->get()
-            : collect();*/
+        $calificacionesCalculadas = collect();
+        $promedioPeriodo = 0;
 
-        return view('dashboard.maestro.expediente_alumno_maestro', compact('alumno', 'grupo', 'carrera', 'periodoSeleccionado', 'periodos', 'calificaciones'));
+        if ($periodoSeleccionado) {
+            $materiasIds = Calificacion::where('alumno_id', $alumno->id)
+                ->where('periodo', $periodoSeleccionado)
+                ->pluck('materia_id')
+                ->unique();
+
+            foreach ($materiasIds as $materiaId) {
+                $materia = \App\Models\Materia::find($materiaId);
+                $notaFinal = $alumno->getCalificacionFinalMateria($materiaId, $periodoSeleccionado);
+                
+                $calificacionesCalculadas->push((object)[
+                    'materia' => $materia,
+                    'nota_final' => $notaFinal
+                ]);
+            }
+            
+            $promedioPeriodo = $alumno->getPromedioPeriodo($periodoSeleccionado);
+        }
+
+        return view('dashboard.maestro.expediente_alumno_maestro', compact('alumno', 'grupo', 'carrera', 'periodoSeleccionado', 'periodos', 'calificacionesCalculadas', 'promedioPeriodo'));
     }
 
     public function maestroPerfil() {

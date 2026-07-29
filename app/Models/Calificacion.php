@@ -12,10 +12,16 @@ class Calificacion extends Model
     protected $fillable = [
         'periodo',
         'parcial',
-        'tipo_evalucion',
+        'tipo_evaluacion',
         'calificacion',
         'alumno_id',
         'materia_id'
+    ];
+
+    const PRIORIDAD_EVALUACION = [
+        'extraordinario' => 3,
+        'remedial' => 2,
+        'ordinario' => 1,
     ];
 
     /**

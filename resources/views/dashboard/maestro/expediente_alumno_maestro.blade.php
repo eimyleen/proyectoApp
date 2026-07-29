@@ -309,14 +309,20 @@
                 </thead>
                 <tbody id="calificacionesBody">
                     @if ($periodoSeleccionado)
-                        @foreach($calificaciones as $cal)
+                        @foreach($calificacionesCalculadas as $cal)
                             <tr>
                                 <td>{{ $cal->materia->nombre ?? 'N/A' }}</td>
-                                <td class="calificacion" {{ $cal->calificacion >= 8 ? 'aprobado' : 'reprobado' }}>
-                                    {{ number_format($cal->calificacion, 1) }}
+                                <td class="calificacion {{ $cal->nota_final >= 8 ? 'aprobado' : 'reprobado' }}">
+                                    {{ number_format($cal->nota_final, 1) }}
                                 </td>
                             </tr>
                         @endforeach
+                        <tr>
+                            <td><strong>Promedio del Período:</strong></td>
+                            <td class="calificacion {{ $promedioPeriodo >= 8 ? 'aprobado' : 'reprobado' }}">
+                                {{ number_format($promedioPeriodo, 1) }}
+                            </td>
+                        </tr>
                     @else
                         <tr>
                             <td>{{ __('messages.table_empty_grades') }}</td>
