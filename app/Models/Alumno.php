@@ -35,6 +35,19 @@ class Alumno extends Model
     }
 
     /**
+     * Obtiene la calificación de un tipo de evaluación específico para un parcial.
+     */
+    public function getCalificacionParcialTipo($materiaId, $periodo, $parcial, $tipo)
+    {
+        return $this->calificaciones()
+            ->where('materia_id', $materiaId)
+            ->where('periodo', $periodo)
+            ->where('parcial', $parcial)
+            ->where('tipo_evaluacion', $tipo)
+            ->value('calificacion');
+    }
+
+    /**
      * Obtiene la calificación definitiva de un parcial (mejor tipo de evaluación).
      */
     public function getCalificacionDefinitivaParcial($materiaId, $periodo, $parcial)

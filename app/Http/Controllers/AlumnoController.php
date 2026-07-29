@@ -60,11 +60,33 @@ class AlumnoController extends Controller
 
             foreach ($materiasIds as $id) {
                 $materia = \App\Models\Materia::find($id);
-                $notaFinal = $alumno->getCalificacionFinalMateria($id, $periodoSeleccionado);
                 
+                $parciales = [];
+                for ($p = 1; $p <= 2; $p++) {
+                    $co = $alumno->getCalificacionParcialTipo($id, $periodoSeleccionado, $p, 'ordinario');
+                    $cr = $alumno->getCalificacionParcialTipo($id, $periodoSeleccionado, $p, 'remedial');
+                    $ce = $alumno->getCalificacionParcialTipo($id, $periodoSeleccionado, $p, 'extraordinario');
+                    
+                    // Calcular CF parcial (prioridad: extraordinario > remedial > ordinario)
+                    $cf = $ce ?? $cr ?? $co ?? null;
+
+                    $parciales[$p] = [
+                        'co' => $co,
+                        'cr' => $cr,
+                        'ce' => $ce,
+                        'cf' => $cf
+                    ];
+                }
+
+                // CF Materia: promedio de CF parciales
+                $cf1 = $parciales[1]['cf'];
+                $cf2 = $parciales[2]['cf'];
+                $notaFinalMateria = ($cf1 !== null && $cf2 !== null) ? ($cf1 + $cf2) / 2 : null;
+
                 $calificacionesCalculadas->push((object)[
                     'materia' => $materia,
-                    'nota_final' => $notaFinal
+                    'parciales' => $parciales,
+                    'nota_final' => $notaFinalMateria
                 ]);
             }
             

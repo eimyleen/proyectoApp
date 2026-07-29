@@ -158,27 +158,41 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>{{ __('messages.th_subject') }}</th>
-                                <th>{{ __('messages.th_grade') }}</th>
+                                <th rowspan="2">{{ __('messages.th_subject') }}</th>
+                                <th colspan="4">Parcial 1</th>
+                                <th colspan="4">Parcial 2</th>
+                                <th rowspan="2">C.F.</th>
+                            </tr>
+                            <tr>
+                                <th>C.O.1</th><th>C.R.1</th><th>C.E.1</th><th>C.F.1</th>
+                                <th>C.O.2</th><th>C.R.2</th><th>C.E.2</th><th>C.F.2</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($calificacionesCalculadas as $cal)
                                 <tr>
                                     <td>{{ $cal->materia->nombre ?? 'N/A' }}</td>
-                                    <td class="calificacion {{ $cal->nota_final >= 8 ? 'aprobado' : 'reprobado' }}">
-                                        {{ number_format($cal->nota_final, 1) }}
+                                    @for($p=1; $p<=2; $p++)
+                                        <td>{{ $cal->parciales[$p]['co'] ?? '-' }}</td>
+                                        <td>{{ $cal->parciales[$p]['cr'] ?? '-' }}</td>
+                                        <td>{{ $cal->parciales[$p]['ce'] ?? '-' }}</td>
+                                        <td class="calificacion {{ ($cal->parciales[$p]['cf'] ?? 0) >= 8 ? 'aprobado' : 'reprobado' }}">
+                                            {{ $cal->parciales[$p]['cf'] !== null ? number_format($cal->parciales[$p]['cf'], 1) : '-' }}
+                                        </td>
+                                    @endfor
+                                    <td class="calificacion {{ ($cal->nota_final ?? 0) >= 8 ? 'aprobado' : 'reprobado' }}">
+                                        {{ $cal->nota_final !== null ? number_format($cal->nota_final, 1) : '-' }}
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="2" style="text-align: center;">{{ __('messages.table_empty_grades') }}</td>
+                                    <td colspan="10" style="text-align: center;">{{ __('messages.table_empty_grades') }}</td>
                                 </tr>
                             @endforelse
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td><strong>Promedio del Período:</strong></td>
+                                <td colspan="9" style="text-align: right;"><strong>Promedio del Período:</strong></td>
                                 <td class="calificacion {{ $promedioPeriodo >= 8 ? 'aprobado' : 'reprobado' }}">
                                     {{ number_format($promedioPeriodo, 1) }}
                                 </td>
