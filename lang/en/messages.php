@@ -66,6 +66,18 @@ return [
     'select_period' => 'Select period',
     'th_grade' => 'Grade',
     'career_logo_alt' => 'Major Logo',
+    'period_average' => 'Period Average',
+    'first_period' => 'Period 1',
+    'second_period' => 'Period 2',
+    'first_ordinal_grade' => 'O.G.1',
+    'first_remedial_grade' => 'R.G.1',
+    'first_extraordinary_grade' => 'E.G.1',
+    'first_final_grade' => 'F.G.1',
+    'second_ordinal_grade' => 'O.G.2',
+    'second_remedial_grade' => 'R.G.2',
+    'second_extraordinary_grade' => 'E.G.2',
+    'second_final_grade' => 'F.G.2',
+    'final_grade' => 'F.G',
 
     // --- Record View ---
     'title_my_record' => 'My Record - Student',
@@ -288,6 +300,7 @@ return [
     'log_js_loaded' => 'Logs page loaded',
 
     //documents
+    'documents_title' => 'Documents',
     'view_document' => 'View Document',
     'document_not_sent' => 'Document not Sent',
     'document_sent' => 'Document Sent',

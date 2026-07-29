@@ -159,19 +159,19 @@
                         <thead>
                             <tr>
                                 <th rowspan="2">{{ __('messages.th_subject') }}</th>
-                                <th colspan="4">Parcial 1</th>
-                                <th colspan="4">Parcial 2</th>
-                                <th rowspan="2">C.F.</th>
+                                <th colspan="4">{{ __('messages.first_period') }}</th>
+                                <th colspan="4">{{ __('messages.second_period') }}</th>
+                                <th rowspan="2">{{ __('messages.final_grade') }}</th>
                             </tr>
                             <tr>
-                                <th>C.O.1</th><th>C.R.1</th><th>C.E.1</th><th>C.F.1</th>
-                                <th>C.O.2</th><th>C.R.2</th><th>C.E.2</th><th>C.F.2</th>
+                                <th>{{ __('messages.first_ordinal_grade') }}</th><th>{{ __('messages.first_remedial_grade') }}</th><th>{{ __('messages.first_extraordinary_grade') }}</th><th>{{ __('messages.first_final_grade') }}</th>
+                                <th>{{ __('messages.second_ordinal_grade') }}</th><th>{{ __('messages.second_remedial_grade') }}</th><th>{{ __('messages.second_extraordinary_grade') }}</th><th>{{ __('messages.second_final_grade') }}</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($calificacionesCalculadas as $cal)
                                 <tr>
-                                    <td>{{ $cal->materia->nombre ?? 'N/A' }}</td>
+                                    <td>{{ $cal->materia->nombre ?? __('messages.not_assigned') }}</td>
                                     @for($p=1; $p<=2; $p++)
                                         <td>{{ $cal->parciales[$p]['co'] ?? '-' }}</td>
                                         <td>{{ $cal->parciales[$p]['cr'] ?? '-' }}</td>
@@ -192,7 +192,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="9" style="text-align: right;"><strong>Promedio del Período:</strong></td>
+                                <td colspan="9" style="text-align: right;"><strong>{{ __('messages.period_average') . ':' }}</strong></td>
                                 <td class="calificacion {{ $promedioPeriodo >= 8 ? 'aprobado' : 'reprobado' }}">
                                     {{ number_format($promedioPeriodo, 1) }}
                                 </td>

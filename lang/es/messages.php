@@ -66,6 +66,18 @@ return [
     'select_period' => 'Seleccionar período',
     'th_grade' => 'Calificación',
     'career_logo_alt' => 'Logo de la carrera',
+    'period_average' => 'Promedio del Período',
+    'first_period' => 'Período 1',
+    'second_period' => 'Período 2',
+    'first_ordinal_grade' => 'C.O.1',
+    'first_remedial_grade' => 'C.R.1',
+    'first_extraordinary_grade' => 'C.E.1',
+    'first_final_grade' => 'C.F.1',
+    'second_ordinal_grade' => 'C.O.2',
+    'second_remedial_grade' => 'C.R.2',
+    'second_extraordinary_grade' => 'C.E.2',
+    'second_final_grade' => 'C.F.2',
+    'final_grade' => 'C.F',
 
     // --- Vista Expediente ---
     'title_my_record' => 'Mi Expediente - Alumno',
@@ -291,6 +303,7 @@ return [
     'log_js_loaded' => 'Página de logs cargada',
 
     //documentos
+    'documents_title' => 'Documentos',
     'view_document' => 'Ver Documento',
     'document_not_sent' => 'Documento no Subido',
     'document_sent' => 'Documento Subido',

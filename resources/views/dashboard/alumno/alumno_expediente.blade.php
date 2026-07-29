@@ -149,7 +149,7 @@
                     {{-- Edad --}}
                     <div class="dato-item">
                         <label>{{ __('messages.label_age') }}</label>
-                        <span class="dato-valor">{{ $alumno->edad ?? __('messages.not_available') }} años</span>
+                        <span class="dato-valor">{{ $alumno->edad ?? __('messages.not_available') . ' ' . __('messages.profile_years') }}</span>
                     </div>
                     
                     {{-- Sexo --}}
@@ -193,7 +193,7 @@
             <div class="documentos-container">
                 
                 {{-- Título de la sección --}}
-                <h3 class="documentos-titulo">Documentos</h3>
+                <h3 class="documentos-titulo">{{ __('messages.documents_title') }}</h3>
                 
                 {{-- Formulario para enviar los archivos al controlador --}}
                 <form action="{{ route('alumno.subirDocumentos') }}" method="POST" enctype="multipart/form-data">
