@@ -110,12 +110,13 @@
                  NOTA: Las opciones del select se llenan desde
                  el controlador con la variable $periodos.
             --}}
-            <form method="GET" action="{{ route('alumno.calificaciones') }}">
-                <div class="filtro-periodo">
-                    <div class="periodo-select">
+            
+            <div class="filtro-periodo">
+                <div class="periodo-select">
+                    <form method="GET" action="{{ route('alumno.calificaciones') }}">
                         <label for="periodoSelect">{{ __('messages.label_period') }}</label>
-                        <select name="periodo" id="periodoSelect">
-                            <option value="" {{ empty($periodoSeleccionado) ? 'selected' : '' }}>
+                        <select name="periodo" id="periodoSelect" onchange="this.form.submit()">
+                            <option value="" {{ $periodoSeleccionado ? 'selected' : '' }}>
                                 {{ __('messages.select_period') }}
                             </option>
                             @foreach($periodos as $periodo)
@@ -124,16 +125,10 @@
                                 </option>
                             @endforeach
                         </select>
-                        <button type="submit" class="btn-buscar">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="11" cy="11" r="8"/>
-                                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                            </svg>
-                            {{ __('messages.btn_search') }}
-                        </button>
-                    </div>
+                    </form>
                 </div>
-            </form>
+            </div>
+            
 
             {{-- ==================================================
                  TABLA DE CALIFICACIONES
