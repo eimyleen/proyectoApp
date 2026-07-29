@@ -123,7 +123,7 @@
                             ROLE BADGE
                             Muestra el rol del usuario (Alumno, Admin, Maestro) en mayúscula inicial.
                         --}}
-                        <span class="role-badge">{{ ucfirst(Auth::user()->role) }}</span>
+                        <span class="role-badge">{{ ucfirst(Auth::user()->role_lang) }}</span>
                         
                         {{-- ==============================================
                              DROPDOWN DE IDIOMA
@@ -168,7 +168,7 @@
                                     Auth::user()->role == 'admin' ? route('admin.index') : 
                                     (Auth::user()->role == 'maestro' ? route('maestro.index') : route('alumno.index')) 
                                 }}" id="menuInicio">
-                                    <img src="{{ asset('img/inicio.png') }}" alt="Inicio" class="dropdown-icon"> Inicio
+                                    <img src="{{ asset('img/inicio.png') }}" alt="Inicio" class="dropdown-icon"> {{ __('messages.dashboard_main_page') }}
                                 </a>
                                 
                                 <hr>
@@ -176,7 +176,7 @@
                                     Auth::user()->role == 'admin' ? route('admin.perfil') : 
                                     (Auth::user()->role == 'maestro' ? route('maestro.perfil') : route('alumno.expediente')) 
                                 }}" id="menuPerfil">
-                                    <img src="{{ asset('img/perfil.png') }}" alt="Perfil" class="dropdown-icon"> Mi Perfil
+                                    <img src="{{ asset('img/perfil.png') }}" alt="Perfil" class="dropdown-icon"> {{ __('messages.dashboard_my_profile') }}
                                 </a>
                                 <hr>
                                 {{-- 
@@ -192,7 +192,7 @@
                                 <form action="{{ route('logout') }}" method="POST" id="logout-form">
                                     @csrf
                                     <a href="#" id="btnCerrarSesion">
-                                        <img src="{{ asset('img/flecha.png') }}" alt="Cerrar" class="dropdown-icon"> Cerrar Sesión
+                                        <img src="{{ asset('img/flecha.png') }}" alt="Cerrar" class="dropdown-icon"> {{ __('messages.dashboard_log_out') }}
                                     </a>
                                 </form>
                             </div>

@@ -53,4 +53,13 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function getRoleLangAttribute() {
+        $rolesLang = [
+            'alumno' => __('messages.dashboard_role_student'),
+            'maestro' => __('messages.dashboard_role_teacher'),
+            'admin' => __('messages.dashboard_role_admin'),
+        ];
+        return $rolesLang[$this->role] ?? $this->role;
+    }
 }

@@ -1,6 +1,14 @@
 <?php
 
 return [
+    // --- Plantilla Dashboards ---
+    'dashboard_main_page' => 'Main Page',
+    'dashboard_my_profile' => 'My Profile',
+    'dashboard_log_out' => 'Log Out',
+    'dashboard_role_student' => 'Student',
+    'dashboard_role_teacher' => 'Teacher',
+    'dashboard_role_admin' => 'Administrator',
+
     // --- Titles and General ---
     'title_welcome_dashboard' => 'Welcome',
     'title_teacher_profile' => 'Teacher Profile',
