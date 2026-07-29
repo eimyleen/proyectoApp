@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('calificaciones', function (Blueprint $table) {
             $table->id();
             $table->string('periodo', 30); // Ej: Mayo - Agosto 2026
-            $table->unsignedTinyInteger('parcial'); // parcial 1 o 2
+            $table->unsignedTinyInteger('parcial')->default(1); // parcial 1 o 2
             $table->enum('tipo_evaluacion',['ordinario', 'remedial', 'extraordinario'])->default('ordinario');
             $table->decimal('calificacion', 4, 2);
             $table->foreignId('alumno_id')->constrained('alumnos')->onDelete('cascade');
