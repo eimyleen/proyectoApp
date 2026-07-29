@@ -11,6 +11,8 @@ class Calificacion extends Model
 
     protected $fillable = [
         'periodo',
+        'parcial',
+        'tipo_evalucion',
         'calificacion',
         'alumno_id',
         'materia_id'

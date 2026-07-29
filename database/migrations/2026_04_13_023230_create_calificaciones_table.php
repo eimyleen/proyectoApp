@@ -13,14 +13,16 @@ return new class extends Migration
     {
         Schema::create('calificaciones', function (Blueprint $table) {
             $table->id();
-            $table->string('periodo', 30);
+            $table->string('periodo', 30); // Ej: Mayo - Agosto 2026
+            $table->unsignedTinyInteger('parcial'); // parcial 1 o 2
+            $table->enum('tipo_evaluacion',['ordinario', 'remedial', 'extraordinario'])->default('ordinario');
             $table->decimal('calificacion', 4, 2);
             $table->foreignId('alumno_id')->constrained('alumnos')->onDelete('cascade');
             $table->foreignId('materia_id')->constrained()->onDelete('cascade');
             $table->timestamps();
 
             // Restricción que evita la combinacion exacta de las 3 cosas
-            $table->unique(['alumno_id', 'materia_id', 'periodo'], 'calificacion_unica_periodo');
+            $table->unique(['alumno_id', 'materia_id', 'periodo', 'parcial', 'tipo_evaluacion'], 'calificacion_unica_periodo_parcial_tipo');
         });
     }
 
