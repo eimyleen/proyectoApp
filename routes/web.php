@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminCarreraController;
 use App\Http\Controllers\MaestroCarreraController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\AlumnoController;
+use App\Http\Controllers\Api\UserController;
 
 // Redirección raíz al login
 Route::redirect('/', '/login');
@@ -209,6 +210,8 @@ Route::middleware(['auth'])->group(function () {
         AlumnoController::class, 'calificaciones'
     ])->middleware(['auth', 'role:alumno'])->name('alumno.calificaciones');
 });
+
+Route::apiResource('users', UserController::class);
 
 Route::get('/welcome', function () {
     return view('welcome');
