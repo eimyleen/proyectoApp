@@ -8,6 +8,7 @@ use App\Models\Carrera;
 use App\Models\Grupo;
 use App\Models\Alumno;
 use App\Models\Maestro;
+use App\Models\Materia;
 use App\Models\Calificacion;
 use App\Models\Log;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -95,6 +96,7 @@ class MaestroCarreraController extends Controller
         $alumno = Alumno::findOrFail($id);
         $grupo = $alumno->grupos->first();
         $carrera = $grupo?->carrera;
+        $materias = Materia::all()->where('carrera_id', $carrera->id);
 
         $periodoSeleccionado = $request->query('periodo');
 
@@ -104,6 +106,17 @@ class MaestroCarreraController extends Controller
         
         $calificacionesCalculadas = collect();
         $promedioPeriodo = 0;
+
+        $materiasPorPeriodo = Calificacion::with('materia')
+            ->get()
+            ->groupBy('periodo')
+            ->map(function ($items) {
+                return $items->pluck('materia')->unique('id')->values();
+        });
+
+        $calificacionesPorMateriaYPeriodo = Calificacion::all()->where('alumno_id', $alumno->id)->groupBy(['periodo', 'materia_id'])->map(function ($items) {
+                return $items->pluck('calificacion')->values();
+        });
 
         if ($periodoSeleccionado) {
             $materiasIds = Calificacion::where('alumno_id', $alumno->id)
@@ -146,7 +159,28 @@ class MaestroCarreraController extends Controller
             $promedioPeriodo = $alumno->getPromedioPeriodo($periodoSeleccionado);
         }
 
-        return view('dashboard.maestro.expediente_alumno_maestro', compact('alumno', 'grupo', 'carrera', 'periodoSeleccionado', 'periodos', 'calificacionesCalculadas', 'promedioPeriodo'));
+        return view('dashboard.maestro.expediente_alumno_maestro', compact('alumno', 'grupo', 'carrera', 'materias', 'periodoSeleccionado', 'periodos', 'calificacionesCalculadas', 'promedioPeriodo', 'materiasPorPeriodo'));
+    }
+
+    public function guardarEditarCalificacion($alumnoId) {
+        $data = request()->validate([
+            'periodo' => ['required', 'string'],
+            'materia' => ['required', 'exists:materias,id'],
+            'parcial' => ['required', 'min:1', 'max:2'],
+            'evaluacion' => ['required', 'string'],
+            'calificacion' => ['required', 'min:0', 'max:10']
+        ]);
+
+        Calificacion::create([
+            'periodo' => $data['periodo'],
+            'parcial' => $data['parcial'],
+            'tipo_evaluacion' => $data['evaluacion'],
+            'calificacion' => $data['calificacion'],
+            'alumno_id' => $alumnoId,
+            'materia_id' => $data['materia']
+        ]);
+
+        return redirect()->route('maestro.alumno.expediente', $alumnoId)->with('success', 'se modifico o añadio una nueva calificación');
     }
 
     public function maestroPerfil() {

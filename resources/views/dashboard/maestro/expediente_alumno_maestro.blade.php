@@ -283,6 +283,7 @@
             ======================================================
         --}}
         <div class="filtro-periodo-expediente">
+            <button id="btnAnadirEditarCalificacion" class="btn-agregar">Añadir Calificación</button>
             <form action="{{ route('maestro.alumno.expediente', $alumno->id) }}" method="get">
                 <div class="periodo-select-expediente">
                     <label for="periodoSelect">{{ __('messages.expedient_period') }}:</label>
@@ -388,6 +389,69 @@
             </div>
         </div>
     </div>
+
+    <div id="modalCalificaciones" class="modal small">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitulo">{{ __('messages.modal_add_edit_notes') }}</h3>
+                <span class="modal-close" id="cerrarModalCalificaciones">&times;</span>
+            </div>
+            <form action="{{ route('maestro.show.guardarEditarCalificacion', $alumno) }}" id="formAladirEditarCalificacion" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Periodo</label>
+                        <select name="periodo" id="selCalficacionId" required>
+                            <option value="">Selecciona un Periodo</option>
+                            {{-- -data-materias='@json($materiasPorPeriodo[$periodo] ?? [])'para la edición --}}
+                            @foreach ($periodos as $periodo)
+                                <option value="{{ $periodo }}"
+                                >
+                                    {{ $periodo }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Materia</label>
+                        <select name="materia" id="selectMateriaCalificacion" required>
+                            <option value="">Selecciona una Materia</option>
+                            @foreach ($materias as $materia)
+                                <option value="{{ $materia->id }}">{{ $materia->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Parcial</label>
+                        <select name="parcial" id="selectParcialCalificacion" required>
+                            <option value="">Selecciona un Parcial</option>
+                            <option value="1">Primer Parcial</option>
+                            <option value="2">Segundo Parcial</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tipo de Evaluación</label>
+                        <select name="evaluacion" id="selectEvaluacionCalificacion" required>
+                            <option value="">Selecciona una Evaluación</option>
+                            <option value="ordinario">Ordinario</option>
+                            <option value="remedial">Remedial</option>
+                            <option value="extraordinario">Extraordinario</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Calificación</label>
+                        <input type="number" name="calificacion" min="0.0" max="10.0" value="0.0" step="0.1" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn-guardar" id="formGuardarCalificacion">Añadir Calificación</button>
+                </div>
+            </form>
+        </div>
+    </div>
 @endsection
 
 {{-- 
@@ -471,13 +535,6 @@
         if (closeModal) closeModal.addEventListener('click', cerrarModal);
         if (cancelarModal) cancelarModal.addEventListener('click', cerrarModal);
 
-        // Cerrar modal al hacer clic fuera
-        window.addEventListener('click', function(event) {
-            if (event.target == modal) {
-                cerrarModal();
-            }
-        });
-
         // ==============================================
         // 3. BOTONES DE EDICIÓN EN FILAS DE TUTORÍAS
         // ==============================================
@@ -503,7 +560,61 @@
         });
 
         // ==============================================
-        // 4. CONFIRMAR GENERACIÓN DE PDF DEL EXPEDIENTE
+        // 4. MODAL DE CALIFICACIONES
+        // ==============================================
+        const modalCalificaciones = document.getElementById('modalCalificaciones');
+        const btnAnadirEditarCalificacion = document.getElementById('btnAnadirEditarCalificacion');
+        const cerrarModalCalificaciones = document.getElementById('cerrarModalCalificaciones');
+
+        //form modal
+        const selCalficacionId = document.getElementById('selCalficacionId');
+        const formRestoCalififacionesDiv = document.getElementById('formRestoCalififacionesDiv');
+        const selectMateriaCalificacion = document.getElementById('selectMateriaCalificacion');
+
+        selCalficacionId.addEventListener('change', function() {
+            const selected = this.options[this.selectedIndex];
+            if (selected.value) {
+                formRestoCalififacionesDiv.style.display = 'inline'
+
+                selectMateriaCalificacion.innerHTML = '<option value="">Selecciona una Materia</option>';
+                const materias = JSON.parse(selected.getAttribute('data-materias') || '[]');
+
+                materias.forEach(materia => {
+                    const option = document.createElement('option');
+                    option.value = materia.id;
+                    option.textContent = materia.nombre;
+                    selectMateriaCalificacion.appendChild(option);
+                });
+            } else {
+                formRestoCalififacionesDiv.style.display = 'none'
+            }
+        });
+
+        // Abrir modal para agregar
+        if (btnAnadirEditarCalificacion) {
+            btnAnadirEditarCalificacion.addEventListener('click', function() {
+                modalCalificaciones.style.display = 'flex';
+            });
+        }
+
+        // Cerrar modal
+        function cerrarModalCalific() {
+            modalCalificaciones.style.display = 'none';
+        }
+
+        if (cerrarModalCalificaciones) cerrarModalCalificaciones.addEventListener('click', cerrarModalCalific);
+
+        // Cerrar modal al hacer clic fuera
+        window.addEventListener('click', function(event) {
+            if (event.target == modal) {
+                cerrarModal();
+            } else if(event.target == modalCalificaciones) {
+                cerrarModalCalific();
+            }
+        });
+
+        // ==============================================
+        // 5. CONFIRMAR GENERACIÓN DE PDF DEL EXPEDIENTE
         // ==============================================
         // Originalmente redirigía a '#' sin confirmación.
         // Ahora muestra una alerta de confirmación antes de mostrar el mensaje.

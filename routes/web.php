@@ -165,6 +165,8 @@ Route::middleware(['auth'])->group(function () {
         MaestroCarreraController::class, 'show'
     ])->middleware('role:maestro')->name('maestro.show');
 
+    
+
     // --- Ruta del perfil del Maestro ---
     Route::get('/dashboard/maestro/perfil', [
         MaestroCarreraController::class, 'maestroPerfil'
@@ -179,6 +181,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/maestro/expediente/alumno/{id}', [
         MaestroCarreraController::class, 'verExpedienteAlumno'
     ])->middleware('role:maestro')->name('maestro.alumno.expediente');
+
+    Route::post('/dashboard/maestro/expediente/alumno/{alumnoId}/guardarCambiarCalificacion', [
+        MaestroCarreraController::class, 'guardarEditarCalificacion'
+    ])->middleware('role:maestro')->name('maestro.show.guardarEditarCalificacion');
 
 
     // ---------- Rutas para el Alumno ----------
