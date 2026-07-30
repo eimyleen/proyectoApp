@@ -23,6 +23,4 @@ Homestead.json
 Homestead.yaml
 Thumbs.db
 /.vite
-/docker
 docker-compose.yml
-Dockerfile

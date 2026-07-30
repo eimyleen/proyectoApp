@@ -162,7 +162,7 @@ class UsuariosSeeder extends Seeder
             'sexo' => 'M',
             'fecha_nacimiento' => '1990-01-01',
             'telefono' => '3111234567',
-            'es_tutor' => true,
+            'es_tutor' => false,
         ]);
 
         // Datos de prueba para el alumno
