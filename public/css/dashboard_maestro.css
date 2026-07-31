@@ -9,7 +9,7 @@
    1.   RESET Y CONFIGURACIÓN GLOBAL
    2.   BOTONES SUPERIORES
    3.   GRID DE CARRERAS (Dashboard principal)
-   4.   MODALES
+   4.   MODALES (Z-INDEX: 9999)
    5.   ACCIONES DEL MODAL (filtro + botón descargar)
    6.   TABLAS (reutilizables)
    7.   BOTONES DE ACCIÓN EN TABLAS
@@ -75,6 +75,29 @@
 }
 
 /* ============================================================
+   2.1 BOTONES DE ACCIÓN (NUEVO)
+   ============================================================ */
+.btn-agregar {
+    background: #1e293b;
+    color: #ffffff;
+    border: none;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-agregar:hover {
+    transform: translateY(-0.125rem);
+    box-shadow: 0 0.25rem 1rem rgba(30, 41, 59, 0.2);
+}
+
+/* ============================================================
    3. GRID DE CARRERAS (Dashboard principal)
    ============================================================ */
 .carreras-container {
@@ -132,7 +155,7 @@
 }
 
 /* ============================================================
-   4. MODALES
+   4. MODALES (Z-INDEX: 9999) ← CAMBIADO
    ============================================================ */
 .modal {
     display: none;
@@ -143,7 +166,7 @@
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(4px);
-    z-index: 1000;
+    z-index: 9999; /* ← CAMBIADO: antes era 1000 */
     align-items: center;
     justify-content: center;
 }
@@ -203,7 +226,7 @@
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(4px);
-    z-index: 1000;
+    z-index: 9999; /* ← CAMBIADO: antes era 1000 */
     align-items: center;
     justify-content: center;
 }

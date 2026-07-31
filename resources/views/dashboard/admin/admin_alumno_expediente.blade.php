@@ -216,9 +216,13 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td>
-                                <button class="btn-editar-tutoria" data-fila="{{ $i }}">Editar</button> 
-                                <button class="btn-eliminar-tutoria" data-fila="{{ $i }}">Eliminar</button>
+                            <td class="col-acciones">
+                                <button class="btn-icono-tabla btn-editar-tutoria" data-fila="{{ $i }}" title="Editar tutoría">
+                                    <img src="{{ asset('img/editar.png') }}" alt="Editar">
+                                </button>
+                                <button class="btn-icono-tabla btn-eliminar-tutoria" data-fila="{{ $i }}" title="Eliminar tutoría">
+                                    <img src="{{ asset('img/borrar.svg') }}" alt="Eliminar">
+                                </button>
                             </td>
                         </tr>
                     @endfor

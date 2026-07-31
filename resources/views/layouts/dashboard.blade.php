@@ -243,6 +243,16 @@
     </div>
 
     {{-- ======================================================
+         MODALES - FUERA DEL profile-container
+         ====================================================== 
+         ⭐ NUEVA SECCIÓN AGREGADA
+         Los modales se renderizan aquí para estar fuera del
+         stacking context del profile-container y así poder
+         mostrarse por encima del header.
+    --}}
+    @yield('modals')
+
+    {{-- ======================================================
          SCRIPTS
          ====================================================== --}}
     <script>

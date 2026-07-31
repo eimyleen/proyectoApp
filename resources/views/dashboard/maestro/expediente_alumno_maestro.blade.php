@@ -390,7 +390,10 @@
         </div>
     </div>
 
-    <div id="modalCalificaciones" class="modal small">
+    {{-- ======================================================
+         MODAL PARA AGREGAR/EDITAR CALIFICACIONES
+         ====================================================== --}}
+    <div id="modalCalificaciones" class="modal modal-small">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 id="modalTitulo">{{ __('messages.modal_add_edit_notes') }}</h3>
@@ -403,12 +406,8 @@
                         <label>Periodo</label>
                         <select name="periodo" id="selCalficacionId" required>
                             <option value="">Selecciona un Periodo</option>
-                            {{-- -data-materias='@json($materiasPorPeriodo[$periodo] ?? [])'para la edición --}}
                             @foreach ($periodos as $periodo)
-                                <option value="{{ $periodo }}"
-                                >
-                                    {{ $periodo }}
-                                </option>
+                                <option value="{{ $periodo }}">{{ $periodo }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -421,7 +420,6 @@
                             @endforeach
                         </select>
                     </div>
-
                     <div class="form-group">
                         <label>Parcial</label>
                         <select name="parcial" id="selectParcialCalificacion" required>
@@ -430,7 +428,6 @@
                             <option value="2">Segundo Parcial</option>
                         </select>
                     </div>
-
                     <div class="form-group">
                         <label>Tipo de Evaluación</label>
                         <select name="evaluacion" id="selectEvaluacionCalificacion" required>
@@ -440,7 +437,6 @@
                             <option value="extraordinario">Extraordinario</option>
                         </select>
                     </div>
-
                     <div class="form-group">
                         <label>Calificación</label>
                         <input type="number" name="calificacion" min="0.0" max="10.0" value="0.0" step="0.1" required>
@@ -565,6 +561,31 @@
         const modalCalificaciones = document.getElementById('modalCalificaciones');
         const btnAnadirEditarCalificacion = document.getElementById('btnAnadirEditarCalificacion');
         const cerrarModalCalificaciones = document.getElementById('cerrarModalCalificaciones');
+        const formCalificacion = document.getElementById('formAladirEditarCalificacion');
+
+        // ⭐ NUEVO: Validación de campos antes de enviar
+        if (formCalificacion) {
+            formCalificacion.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const periodo = this.querySelector('[name="periodo"]').value;
+                const materia = this.querySelector('[name="materia"]').value;
+                const parcial = this.querySelector('[name="parcial"]').value;
+                const evaluacion = this.querySelector('[name="evaluacion"]').value;
+                const calificacion = this.querySelector('[name="calificacion"]').value.trim();
+                
+                if (!periodo || !materia || !parcial || !evaluacion || !calificacion) {
+                    alertaInfo(
+                        'Campos incompletos',
+                        'Debes completar todos los campos obligatorios del formulario.'
+                    );
+                    return;
+                }
+                
+                // Si todos los campos están completos, enviar el formulario
+                this.submit();
+            });
+        }
 
         //form modal
         const selCalficacionId = document.getElementById('selCalficacionId');
@@ -641,7 +662,7 @@
         }
 
         // ==============================================
-        // 5. CONFIRMAR GUARDAR TUTORÍA
+        // 6. CONFIRMAR GUARDAR TUTORÍA
         // ==============================================
         // Originalmente usaba alert() para éxito y error.
         // Ahora usa SweetAlert para confirmar el guardado.

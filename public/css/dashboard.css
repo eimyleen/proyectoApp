@@ -7,58 +7,23 @@
    ============================================================
 
    1.   RESET Y CONFIGURACIÓN GLOBAL
-        → Reinicia márgenes, paddings y box-sizing
-
    2.   CUERPO DEL DOCUMENTO (BODY)
-        → Fuente, fondo degradado azul-verde, altura completa
-
    3.   PATRÓN DE PUNTOS DE FONDO
-        → Puntos blancos con opacidad 0.35 y separación 28px
-
-   4.   CONTENEDOR PRINCIPAL
-        → z-index, flex-column para header y main
-
-   5.   HEADER CON EFECTO GLASS
-        → Fondo semitransparente con blur de 16px
-
+   4.   CONTENEDOR PRINCIPAL (Z-INDEX: AUTO)
+   5.   HEADER CON EFECTO GLASS (Z-INDEX: 10)
    6.   CONTENEDOR DE INFORMACIÓN
-        → Ancho máximo 1200px, padding 0 40px
-
    7.   FILA SUPERIOR
-        → Flex con avatar a la izquierda y botones a la derecha
-
    8.   AVATAR (CÍRCULO CON INICIALES)
-        → Círculo de 40px con degradado azul-verde
-
    9.   NOMBRE DEL USUARIO
-        → Texto blanco, tamaño 0.95rem
-
-   10.  ETIQUETA DEL ROL
-        → Badge semitransparente con borde sutil
-
+   10.  ETIQUETA DEL ROL (CON TRUNCAMIENTO)
    11.  BOTONES DE ACCIÓN
-        → Íconos de tuerca y puntitos con hover
-
    12.  LOGO JAGUAR
-        → Logo blanco con hover scale
-
-   13.  DROPDOWNS
-        → Menús desplegables con efecto glass
-
+   13.  DROPDOWNS (Z-INDEX: 20)
    14.  LÍNEA DE SEPARACIÓN
-        → Línea gris de extremo a extremo
-
    15.  TÍTULOS Y SUBTÍTULOS
-        → Título 2.8rem, subtítulo 1rem
-
-   16.  CONTENIDO PRINCIPAL
-        → Área de tablas y expedientes
-
+   16.  CONTENIDO PRINCIPAL (Z-INDEX: AUTO)
    17.  RESPONSIVE - TABLETS
-        → Ajustes para pantallas menores a 768px
-
-   18.  RESPONSIVE - MÓVILES
-        → Ajustes para pantallas menores a 480px
+   18.  RESPONSIVE - MÓVILES (CON BADGE TRUNCADO)
 
    ============================================================ */
 
@@ -100,11 +65,11 @@ body::before {
 }
 
 /* ============================================================
-   4. CONTENEDOR PRINCIPAL
+   4. CONTENEDOR PRINCIPAL (Z-INDEX: AUTO)
    ============================================================ */
 .profile-container {
     position: relative;
-    z-index: 1;
+    z-index: auto;
     width: 100%;
     min-height: 100vh;
     display: flex;
@@ -112,7 +77,7 @@ body::before {
 }
 
 /* ============================================================
-   5. HEADER CON EFECTO GLASS
+   5. HEADER CON EFECTO GLASS (Z-INDEX: 10)
    ============================================================ */
 .profile-header {
     background: rgba(30, 41, 59, 0.65);
@@ -123,7 +88,7 @@ body::before {
     box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.3);
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     position: relative;
-    z-index: 2;
+    z-index: 10;
 }
 
 /* ============================================================
@@ -183,7 +148,7 @@ body::before {
 }
 
 /* ============================================================
-   11. ETIQUETA DEL ROL
+   11. ETIQUETA DEL ROL (CON TRUNCAMIENTO)
    ============================================================ */
 .role-badge {
     color: #f1f5f9;
@@ -193,6 +158,14 @@ body::before {
     padding: 0.375rem 1rem;
     border-radius: 2.5rem;
     border: 1px solid rgba(255, 255, 255, 0.08);
+    
+    /* ⭐ NUEVO: Truncar texto si es muy largo */
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 /* ============================================================
@@ -246,10 +219,11 @@ body::before {
 }
 
 /* ============================================================
-   15. DROPDOWNS (MENÚS DESPLEGABLES)
+   15. DROPDOWNS - MENÚS DESPLEGABLES (Z-INDEX: 20)
    ============================================================ */
 .dropdown-container {
     position: relative;
+    overflow: visible !important;
 }
 
 .dropdown-menu {
@@ -264,7 +238,7 @@ body::before {
     visibility: hidden;
     transform: translateY(-0.625rem);
     transition: all 0.3s ease;
-    z-index: 100;
+    z-index: 20 !important;
     margin-top: 0.5rem;
     backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.06);
@@ -332,7 +306,7 @@ body::before {
 }
 
 /* ============================================================
-   18. CONTENIDO PRINCIPAL
+   18. CONTENEDOR PRINCIPAL (Z-INDEX: AUTO)
    ============================================================ */
 .main-content {
     max-width: 75rem;
@@ -341,7 +315,7 @@ body::before {
     flex: 1;
     width: 100%;
     position: relative;
-    z-index: 2;
+    z-index: auto;
 }
 
 /* ============================================================
@@ -366,15 +340,23 @@ body::before {
     }
 
     .profile-top {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.75rem;
+        flex-direction: row !important;
+        align-items: center !important;
+        flex-wrap: wrap !important;
+        gap: 0.5rem !important;
+    }
+
+    .profile-left {
+        flex: 0 1 auto !important;
+        gap: 0.5rem !important;
     }
 
     .profile-actions {
-        width: 100%;
-        justify-content: flex-start;
-        gap: 0.625rem;
+        flex: 0 1 auto !important;
+        width: auto !important;
+        justify-content: flex-start !important;
+        gap: 0.5rem !important;
+        flex-wrap: wrap !important;
     }
 
     .avatar-circle {
@@ -390,6 +372,11 @@ body::before {
         font-size: 0.85rem;
     }
 
+    .role-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.75rem;
+    }
+
     .action-icon {
         width: 2.25rem;
         height: 2.25rem;
@@ -403,11 +390,6 @@ body::before {
     .jaguar-img {
         width: 2.375rem;
         height: 2.375rem;
-    }
-
-    .role-badge {
-        font-size: 0.75rem;
-        padding: 0.25rem 0.75rem;
     }
 
     body::before {
@@ -440,12 +422,23 @@ body::before {
     }
 
     .profile-top {
-        gap: 0.625rem;
+        flex-direction: row !important;
+        align-items: center !important;
+        flex-wrap: wrap !important;
+        gap: 0.375rem !important;
+    }
+
+    .profile-left {
+        flex: 0 1 auto !important;
+        gap: 0.375rem !important;
     }
 
     .profile-actions {
-        gap: 0.5rem;
-        flex-wrap: wrap;
+        flex: 0 1 auto !important;
+        width: auto !important;
+        justify-content: flex-start !important;
+        gap: 0.375rem !important;
+        flex-wrap: wrap !important;
     }
 
     .avatar-circle {
@@ -461,8 +454,17 @@ body::before {
         font-size: 0.8rem;
     }
 
-    .profile-left {
-        gap: 0.5rem;
+    /* ⭐ MODIFICADO: Badge más pequeño */
+    .role-badge {
+        font-size: 0.6rem;
+        padding: 0.1rem 0.5rem;
+        max-width: 60px; /* ← Ancho máximo reducido */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+        vertical-align: middle;
+        border-radius: 1.5rem;
     }
 
     .action-icon {
@@ -478,11 +480,6 @@ body::before {
     .jaguar-img {
         width: 2rem;
         height: 2rem;
-    }
-
-    .role-badge {
-        font-size: 0.65rem;
-        padding: 0.125rem 0.625rem;
     }
 
     .dropdown-menu {

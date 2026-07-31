@@ -359,59 +359,61 @@
 
                 {{-- ======================================================
                 CONTENIDO - MATERIAS
-                ====================================================== 
-                --}}
+                ====================================================== --}}
                 <div class="tab-content" id="tab-materias">
-                <div class="filtro-grupo" style="justify-content: flex-end;">
-                <div class="botones-accion">
-                    <button class="btn-agregar" id="btnAgregarMateria">Agregar Materia</button>
-                    <button class="btn-agregar" id="btnAsignarMateria">Asignar Maestro</button>
-                </div>
-                </div>
+                    <div class="filtro-grupo" style="justify-content: flex-end;">
+                        <div class="botones-accion">
+                            <button class="btn-agregar" id="btnAgregarMateria">Agregar Materia</button>
+                            <button class="btn-agregar" id="btnAsignarMateria">Asignar Maestro</button>
+                        </div>
+                    </div>
 
-                <div class="tabla-container">
-                <table class="tabla-maestros">
-                    <thead>
-                        <tr>
-                            <th>Número</th>
-                            <th>Materia</th>
-                            <th>Asignaciones (Maestro - Grupo)</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="materiasBody">
-                        @forelse($materias as $i => $materia)
-                            <tr>
-                                <td>{{ $i+1 }}</td>
-                                <td>{{ $materia->nombre }}</td>
-                                <td>
-                                    @if ($materia->horarios->first())
-                                        <p>{{ $materia->horarios->first()->maestro?->user?->name . ' ' . $materia->horarios->first()->maestro?->user?->apellido . ' - ' . $materia->horarios->first()->grupo?->nombre}}</p>
-                                    @else
-                                        <p>{{ __('messages.table_empty_generic') }}</p>
-                                    @endif
-                                </td>
-                                <td>
-                                    <button class="btn-icono-tabla btn-editar-materia"
-                                            data-id="{{ $materia->id }}"
-                                            data-nombre="{{ $materia->nombre }}">
-                                        Editar
-                                    </button>
-                                    <form action="{{ route('admin.carrera.deleteMateria', [$carrera, $materia->id]) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit">Eliminar</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="4">No hay materias registradas.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-                </div>
+                    <div class="tabla-container">
+                        <table class="tabla-maestros">
+                            <thead>
+                                <tr>
+                                    <th>Número</th>
+                                    <th>Materia</th>
+                                    <th>Asignaciones (Maestro - Grupo)</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="materiasBody">
+                                @forelse($materias as $i => $materia)
+                                    <tr>
+                                        <td>{{ $i+1 }}</td>
+                                        <td>{{ $materia->nombre }}</td>
+                                        <td>
+                                            @if ($materia->horarios->first())
+                                                <p>{{ $materia->horarios->first()->maestro?->user?->name . ' ' . $materia->horarios->first()->maestro?->user?->apellido . ' - ' . $materia->horarios->first()->grupo?->nombre}}</p>
+                                            @else
+                                                <p>{{ __('messages.table_empty_generic') }}</p>
+                                            @endif
+                                        </td>
+                                        <td class="col-acciones">
+                                            <button class="btn-icono-tabla btn-editar-materia"
+                                                    data-id="{{ $materia->id }}"
+                                                    data-nombre="{{ $materia->nombre }}"
+                                                    title="Editar materia">
+                                                <img src="{{ asset('img/editar.png') }}" alt="Editar">
+                                            </button>
+                                            <form action="{{ route('admin.carrera.deleteMateria', [$carrera, $materia->id]) }}" method="POST" class="form-eliminar-inline" data-nombre="{{ $materia->nombre }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn-icono-tabla btn-eliminar" title="Eliminar materia">
+                                                    <img src="{{ asset('img/borrar.svg') }}" alt="Eliminar">
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4">No hay materias registradas.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 </div>
     {{-- MODAL ASIGNAR MATERIA --}}

@@ -13,7 +13,7 @@
 <body>
 
     <div class="contenedor-general">
-        <img src="{{ asset('img/IconUTNAY.png') }}" alt="IconUTNAY" style="width: 10%;">
+        <img src="{{ asset('img/IconUTNAY.png') }}" alt="IconUTNAY" style="width: 25%; max-width: 150px; min-width: 80px;">
         <h1 class="titulo-principal">
             Portal de Expedientes de la UTNay
         </h1>
