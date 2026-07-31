@@ -12,6 +12,7 @@ use App\Models\Materia;
 use App\Models\Calificacion;
 use App\Models\Log;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Validation\ValidationException;
 
 class MaestroCarreraController extends Controller
 {
@@ -125,7 +126,7 @@ class MaestroCarreraController extends Controller
                 ->unique();
 
             foreach ($materiasIds as $materiaId) {
-                $materia = \App\Models\Materia::find($materiaId);
+                $materia = Materia::find($materiaId);
                 
                 $parciales = [];
                 for ($p = 1; $p <= 2; $p++) {
@@ -162,14 +163,73 @@ class MaestroCarreraController extends Controller
         return view('dashboard.maestro.expediente_alumno_maestro', compact('alumno', 'grupo', 'carrera', 'materias', 'periodoSeleccionado', 'periodos', 'calificacionesCalculadas', 'promedioPeriodo', 'materiasPorPeriodo'));
     }
 
-    public function guardarEditarCalificacion($alumnoId) {
+    public function guardarCalificacion($alumnoId) {
         $data = request()->validate([
             'periodo' => ['required', 'string'],
             'materia' => ['required', 'exists:materias,id'],
-            'parcial' => ['required', 'min:1', 'max:2'],
+            'parcial' => ['required', 'integer', 'min:1', 'max:2'],
             'evaluacion' => ['required', 'string'],
-            'calificacion' => ['required', 'min:0', 'max:10']
+            'calificacion' => ['required', 'numeric', 'min:0', 'max:10']
         ]);
+
+        $existeParcialAnterior = Calificacion::where('alumno_id', $alumnoId)
+            ->where('materia_id', $data['materia'])
+            ->where('periodo', $data['periodo'])
+            ->where('parcial', $data['parcial'] - 1)
+        ->exists();
+        
+        if ($data['parcial'] > 1 && !$existeParcialAnterior) {
+            throw ValidationException::withMessages([
+                'parcial' => 'Debes registrar primero la calificación del parcial anterior.'
+            ]);
+        }
+
+        $tieneOrdinario = Calificacion::where([
+            'alumno_id' => $alumnoId,
+            'materia_id' => $data['materia'],
+            'periodo' => $data['periodo'],
+            'tipo_evaluacion' => 'ordinario'
+        ])->exists();
+
+        $tieneRemedial = Calificacion::where([
+            'alumno_id' => $alumnoId,
+            'materia_id' => $data['materia'],
+            'periodo' => $data['periodo'],
+            'tipo_evaluacion' => 'remedial'
+        ])->exists();
+
+        $yaExiste = Calificacion::where([
+            'alumno_id' => $alumnoId,
+            'materia_id' => $data['materia'],
+            'periodo' => $data['periodo'],
+            'tipo_evaluacion' => $data['evaluacion']
+        ])->exists();
+
+        if ($yaExiste) {
+            throw ValidationException::withMessages([
+                'evaluacion' => 'Este tipo de evaluación ya fue registrado.'
+            ]);
+        }
+
+        if ($data['evaluacion'] === 'remedial' && !$tieneOrdinario) {
+            throw ValidationException::withMessages([
+                'evaluacion' => 'No puedes registrar remedial sin ordinario.'
+            ]);
+        }
+
+        if ($data['evaluacion'] === 'extraordinario' && !$tieneRemedial) {
+            throw ValidationException::withMessages([
+                'evaluacion' => 'No puedes registrar extraordinario sin remedial.'
+            ]);
+        }
+
+        $noExisteNinguna = !$tieneOrdinario && !$tieneRemedial;
+
+        if ($noExisteNinguna && $data['evaluacion'] !== 'ordinario') {
+            throw ValidationException::withMessages([
+                'evaluacion' => 'La primera evaluación debe ser ordinario.'
+            ]);
+        }
 
         Calificacion::create([
             'periodo' => $data['periodo'],
@@ -180,7 +240,27 @@ class MaestroCarreraController extends Controller
             'materia_id' => $data['materia']
         ]);
 
-        return redirect()->route('maestro.alumno.expediente', $alumnoId)->with('success', 'se modifico o añadio una nueva calificación');
+        return redirect()->route('maestro.alumno.expediente', $alumnoId)->with('success', 'se añadio una nueva calificación');
+    }
+
+    public function editarCalificacion($alumnoId) {
+        $data = request()->validate([
+            'periodo' => ['required', 'string'],
+            'materia' => ['required', 'exists:materias,id'],
+            'parcial' => ['required', 'integer', 'min:1', 'max:2'],
+            'evaluacion' => ['required', 'string'],
+            'calificacion' => ['required', 'numeric', 'min:0', 'max:10']
+        ]);
+
+        $cal = Calificacion::where('alumno_id', $alumnoId)
+            ->where('periodo', $data['periodo'])
+            ->where('materia_id', $data['materia'])
+            ->where('parcial', $data['parcial'])
+            ->where('tipo_evaluacion', $data['evaluacion'])
+            ;
+        $cal->update(['calificacion' => $data['calificacion']]);
+
+        return redirect()->route('maestro.alumno.expediente', $alumnoId)->with('success', 'se modifico una calificación');
     }
 
     public function maestroPerfil() {

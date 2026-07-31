@@ -308,17 +308,18 @@
                         <th colspan="4">{{ __('messages.first_period') }}</th>
                         <th colspan="4">{{ __('messages.second_period') }}</th>
                         <th rowspan="2">{{ __('messages.final_grade') }}</th>
+                        <th rowspan="2">{{ __('messages.column_actions') }}</th>
                     </tr>
                     <tr>
                         <th>{{ __('messages.first_ordinal_grade') }}</th><th>{{ __('messages.first_remedial_grade') }}</th><th>{{ __('messages.first_extraordinary_grade') }}</th><th>{{ __('messages.first_final_grade') }}</th>
-                                <th>{{ __('messages.second_ordinal_grade') }}</th><th>{{ __('messages.second_remedial_grade') }}</th><th>{{ __('messages.second_extraordinary_grade') }}</th><th>{{ __('messages.second_final_grade') }}</th>
+                        <th>{{ __('messages.second_ordinal_grade') }}</th><th>{{ __('messages.second_remedial_grade') }}</th><th>{{ __('messages.second_extraordinary_grade') }}</th><th>{{ __('messages.second_final_grade') }}</th>
                     </tr>
                 </thead>
                 <tbody id="calificacionesBody">
                     @if ($periodoSeleccionado)
                         @foreach($calificacionesCalculadas as $cal)
                             <tr>
-                                <td>{{ $cal->materia->nombre ?? 'N/A' }}</td>
+                                <td>{{ $cal->materia->nombre ?? __('messages.not_assigned') }}</td>
                                 @for($p=1; $p<=2; $p++)
                                     <td>{{ $cal->parciales[$p]['co'] ?? '-' }}</td>
                                     <td>{{ $cal->parciales[$p]['cr'] ?? '-' }}</td>
@@ -330,6 +331,14 @@
                                 <td class="calificacion {{ ($cal->nota_final ?? 0) >= 8 ? 'aprobado' : 'reprobado' }}">
                                     {{ $cal->nota_final !== null ? number_format($cal->nota_final, 1) : '-' }}
                                 </td>
+                                <td class="calificacion btn-editar-materia">
+                                    <button class="" 
+                                    data-materia-id="{{ $cal->materia->id }}"
+                                    data-materia-nombre="{{ $cal->materia->nombre }}"
+                                    data-parciales='@json($cal->parciales ?? '')'
+                                    >Editar
+                                    </button>
+                                </td>
                             </tr>
                         @endforeach
                         <tr>
@@ -340,7 +349,7 @@
                         </tr>
                     @else
                         <tr>
-                            <td colspan="10" style="text-align: center;">{{ __('messages.table_empty_grades') }}</td>
+                            <td colspan="11" style="text-align: center;">{{ __('messages.table_empty_grades') }}</td>
                         </tr>
                     @endif
                 </tbody>
@@ -362,9 +371,9 @@
 
     {{-- ======================================================
          MODAL PARA AGREGAR/EDITAR TUTORÍA
-         ====================================================== --}}
-    <div id="modalTutoria" class="modal modal-small">
-        <div class="modal-content">
+    ====================================================== --}}
+    <div id="modalTutoria">
+        <div class="modal-small modal-content">
             <div class="modal-header">
                 <h3 id="modalTitulo">{{ __('messages.modal_add_tutoria') }}</h3>
                 <span class="modal-close" id="closeModal">&times;</span>
@@ -399,12 +408,12 @@
                 <h3 id="modalTitulo">{{ __('messages.modal_add_edit_notes') }}</h3>
                 <span class="modal-close" id="cerrarModalCalificaciones">&times;</span>
             </div>
-            <form action="{{ route('maestro.show.guardarEditarCalificacion', $alumno) }}" id="formAladirEditarCalificacion" method="POST">
+            <form action="{{ route('maestro.show.guardarCalificacion', $alumno) }}" id="formAladirEditarCalificacion" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Periodo</label>
-                        <select name="periodo" id="selCalficacionId" required>
+                        <select name="periodo" required>
                             <option value="">Selecciona un Periodo</option>
                             @foreach ($periodos as $periodo)
                                 <option value="{{ $periodo }}">{{ $periodo }}</option>
@@ -444,6 +453,48 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn-guardar" id="formGuardarCalificacion">Añadir Calificación</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modalCalificacionesEditar" class="modal small">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitulo">Editar Calificación</h3>
+                <span class="modal-close" id="cerrarModalCalificacionesEditar">&times;</span>
+            </div>
+            <form action="{{ route('maestro.show.editarCalificacion', $alumno) }}" method="post">
+                @csrf
+                @method('PATCH')
+                <div class="modal-body">
+                    <div class="form-group" id="">
+                        <label for="">Periodo</label>
+                        <input type="text" name="periodo" value="{{ $periodoSeleccionado }}" id="formEditPeriodoInput" readonly required>
+                    </div>
+                    <div class="form-group" id="">
+                        <label for="">Materia</label>
+                        <input type="text" name="materia" value="" id="formEditMateriaInput" readonly required>
+                    </div>
+                    <div class="form-group" id="">
+                        <label for="">Parciales</label>
+                        <select name="parcial" id="formEditParcialesSelect" required>
+                            <option value="">Selecciona un Parcial</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="evaluacionEditarDiv">
+                        <label for="">Evaluaciones Disponibles</label>
+                        <select name="evaluacion" id="formEditEvaluacionesSelect" required>
+                            <option value="">Selecciona una Evaluación</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="calificacionEditarDiv">
+                        <label for="">Calificación</label>
+                        <input type="number" name="calificacion" min="0.0" max="10.0" value="0.0" step="0.1" id="formEditCalificacionInput" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn-guardar" id="formEditarCalificacion">Cambiar Calificación</button>
                 </div>
             </form>
         </div>
@@ -556,7 +607,7 @@
         });
 
         // ==============================================
-        // 4. MODAL DE CALIFICACIONES
+        // 4. MODAL DE CALIFICACIONES AGREGAR
         // ==============================================
         const modalCalificaciones = document.getElementById('modalCalificaciones');
         const btnAnadirEditarCalificacion = document.getElementById('btnAnadirEditarCalificacion');
@@ -587,29 +638,9 @@
             });
         }
 
-        //form modal
-        const selCalficacionId = document.getElementById('selCalficacionId');
+        //form modal cal agregar
         const formRestoCalififacionesDiv = document.getElementById('formRestoCalififacionesDiv');
         const selectMateriaCalificacion = document.getElementById('selectMateriaCalificacion');
-
-        selCalficacionId.addEventListener('change', function() {
-            const selected = this.options[this.selectedIndex];
-            if (selected.value) {
-                formRestoCalififacionesDiv.style.display = 'inline'
-
-                selectMateriaCalificacion.innerHTML = '<option value="">Selecciona una Materia</option>';
-                const materias = JSON.parse(selected.getAttribute('data-materias') || '[]');
-
-                materias.forEach(materia => {
-                    const option = document.createElement('option');
-                    option.value = materia.id;
-                    option.textContent = materia.nombre;
-                    selectMateriaCalificacion.appendChild(option);
-                });
-            } else {
-                formRestoCalififacionesDiv.style.display = 'none'
-            }
-        });
 
         // Abrir modal para agregar
         if (btnAnadirEditarCalificacion) {
@@ -622,8 +653,117 @@
         function cerrarModalCalific() {
             modalCalificaciones.style.display = 'none';
         }
-
         if (cerrarModalCalificaciones) cerrarModalCalificaciones.addEventListener('click', cerrarModalCalific);
+
+        // ==============================================
+        // 5. MODAL DE CALIFICACIONES EDITAR
+        // ==============================================
+        const modalCalificacionesEditar = document.getElementById('modalCalificacionesEditar');
+        const cerrarModalCalificacionesEditar = document.getElementById('cerrarModalCalificacionesEditar');
+
+        const formEditMateriaInput = document.getElementById('formEditMateriaInput');
+        const formEditParcialesSelect = document.getElementById('formEditParcialesSelect');
+        const formEditEvaluacionesSelect = document.getElementById('formEditEvaluacionesSelect');
+        const formEditCalificacionInput = document.getElementById('formEditCalificacionInput');
+
+        //botones de editar
+        document.querySelectorAll('.btn-editar-materia').forEach(btn => {
+            btn.addEventListener('click', function() {
+                let btnSrc = btn.children[0];
+                let dataParciales = JSON.parse(btnSrc.dataset.parciales);
+                let dataMateriaId = btnSrc.dataset.materiaId;
+                let dataMateriaNombre = btnSrc.dataset.materiaNombre;
+
+                const evaluacionesMap = {
+                    co: 'Ordinario',
+                    cr: 'Remedial',
+                    ce: 'Extraordinario'
+                };
+
+                let evaluaciones;
+
+                formEditMateriaInput.value = dataMateriaId;
+                formEditMateriaInput.textContent = btnSrc.dataset.materiaNombre;
+                formEditMateriaInput.readonly = true;
+
+                formEditParcialesSelect.innerHTML = '';
+
+                Object.keys(dataParciales).forEach(parcial => {
+                    evaluaciones = dataParciales[parcial];
+
+                    const tieneAlgo = Object.values(evaluaciones).some(v => v !== null);
+
+                    if (tieneAlgo) {
+                        formEditParcialesSelect.innerHTML += `
+                            <option value="${parcial}">Parcial ${parcial}</option>
+                        `;
+                    }
+                });
+
+                formEditEvaluacionesSelect.innerHTML = '';
+
+                
+                Object.keys(evaluaciones).forEach(key => {
+                    if (evaluaciones[key] !== null && key !== 'cf') {
+                        formEditEvaluacionesSelect.innerHTML += `
+                            <option 
+                                value="${evaluacionesMap[key].toLowerCase()}" 
+                                data-key="${key}">
+                                ${evaluacionesMap[key]}
+                            </option>
+                        `;
+                    }
+                });
+
+                function actualizarEvaluaciones() {
+                    const parcial = formEditParcialesSelect.value;
+                    const evaluaciones = dataParciales[parcial];
+
+                    formEditEvaluacionesSelect.innerHTML = '';
+
+                    Object.keys(evaluaciones).forEach(key => {
+                        if (evaluaciones[key] !== null && key !== 'cf') {
+                            formEditEvaluacionesSelect.innerHTML += `
+                                <option 
+                                    value="${evaluacionesMap[key].toLowerCase()}" 
+                                    data-key="${key}">
+                                    ${evaluacionesMap[key]}
+                                </option>
+                            `;
+                        }
+                    });
+                }
+
+                function actualizarCalificacion() {
+                    const parcial = formEditParcialesSelect.value;
+
+                    const selectedOption = formEditEvaluacionesSelect.selectedOptions[0];
+                    const key = selectedOption.dataset.key;
+
+                    const valor = dataParciales[parcial][key];
+
+                    formEditCalificacionInput.value = valor ?? '';
+                }
+
+                formEditParcialesSelect.addEventListener('change', () => {
+                    actualizarEvaluaciones();
+                    actualizarCalificacion();
+                });
+                formEditEvaluacionesSelect.addEventListener('change', actualizarCalificacion);
+                
+                actualizarEvaluaciones();
+                actualizarCalificacion();
+
+                modalCalificacionesEditar.style.display = 'flex';
+            });
+        });
+
+        // Cerrar modal
+        function cerrarModalCalificEditar() {
+            modalCalificacionesEditar.style.display = 'none';
+        }
+
+        if (cerrarModalCalificacionesEditar) cerrarModalCalificacionesEditar.addEventListener('click', cerrarModalCalificEditar);
 
         // Cerrar modal al hacer clic fuera
         window.addEventListener('click', function(event) {
@@ -631,11 +771,13 @@
                 cerrarModal();
             } else if(event.target == modalCalificaciones) {
                 cerrarModalCalific();
+            } else if(event.target == modalCalificacionesEditar) {
+                cerrarModalCalificEditar();
             }
         });
 
         // ==============================================
-        // 5. CONFIRMAR GENERACIÓN DE PDF DEL EXPEDIENTE
+        // 6. CONFIRMAR GENERACIÓN DE PDF DEL EXPEDIENTE
         // ==============================================
         // Originalmente redirigía a '#' sin confirmación.
         // Ahora muestra una alerta de confirmación antes de mostrar el mensaje.
