@@ -1,7 +1,7 @@
 <?php
 
-
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CarreraController;
 use App\Http\Controllers\Api\MaestroController;
@@ -12,8 +12,13 @@ use App\Http\Controllers\Api\HorarioController;
 use App\Http\Controllers\Api\CalificacionController;
 use App\Http\Middleware\ApiKeyMiddleware;
 
-// Rutas protegidas con API Key
-Route::middleware(ApiKeyMiddleware::class)->group(function () {
+// Ruta pública de login
+Route::post('/login', [AuthController::class, 'login']);
+
+// Rutas protegidas con API Key y Sanctum
+Route::middleware([ApiKeyMiddleware::class, 'auth:sanctum'])->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+
     // Api Users
     Route::apiResource('users', UserController::class);
     // Api Carreras
