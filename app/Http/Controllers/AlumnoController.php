@@ -38,76 +38,79 @@ class AlumnoController extends Controller
         return view('dashboard.alumno.alumno', compact('alumno', 'grupo', 'carrera', 'horarios'));
     }
 
-    public function calificaciones(Request $request)
-    {
-        $user = Auth::user();
-        $alumno = $user->alumno;
-        $grupo = $alumno->grupos->first();
-        $carrera = $grupo?->carrera;
+    public function calificaciones(Request $request) 
+    { 
+        $user = Auth::user(); 
+        $alumno = $user->alumno; 
+        $grupo = $alumno->grupos->first(); 
+        $carrera = $grupo?->carrera; 
 
-        // -- NUEVA LÓGICA DE CIENCIA DE DATOS --
-        $dataCienciaDatos = null;
-        try {
-            $result = Process::timeout(10)->run("python3 " . base_path('scripts/analisis_alumno.py') . " " . $alumno->id);
-            if ($result->successful()) {
-                $dataCienciaDatos = json_decode($result->output(), true);
-            }
-        } catch (\Exception $e) {
-            // Fallback silencioso en caso de error
-        }
-        // --------------------------------------
+        // Ejecutar al cargar la página
+        $dataCienciaDatos = null; 
+        try { 
+            $result = Process::timeout(10)->run("python3 " . base_path('scripts/analisis_alumno.py') . " " . $alumno->id); 
+            if ($result->successful()) { 
+                $dataCienciaDatos = json_decode($result->output(), true); 
+            } 
+        } catch (\Exception $e) { 
+            // Fallback en caso de error 
+        } 
 
-        $periodoSeleccionado = $request->query('periodo');
+        // CALCULO GLOBAL PARA GRÁFICA (SIEMPRE)
+        $promedioP1 = Calificacion::where('alumno_id', $alumno->id)->where('parcial', 1)->avg('calificacion') ?? 0;
+        $promedioP2 = Calificacion::where('alumno_id', $alumno->id)->where('parcial', 2)->avg('calificacion') ?? 0;
 
-        $periodos = Calificacion::where('alumno_id', $alumno->id)
-        ->distinct()
-        ->pluck('periodo');
+        // Filtro y Calificaciones por Período
+        $periodoSeleccionado = $request->query('periodo'); 
 
-        $calificacionesCalculadas = collect();
-        $promedioPeriodo = 0;
+        $periodos = Calificacion::where('alumno_id', $alumno->id) 
+            ->distinct() 
+            ->pluck('periodo'); 
 
-        if ($periodoSeleccionado) {
-            $materiasIds = Calificacion::where('alumno_id', $alumno->id)
-                ->where('periodo', $periodoSeleccionado)
-                ->pluck('materia_id')
-                ->unique();
+        $calificacionesCalculadas = collect(); 
+        $promedioPeriodo = 0; 
 
-            foreach ($materiasIds as $id) {
-                $materia = Materia::find($id);
+        if ($periodoSeleccionado) { 
+            $materiasIds = Calificacion::where('alumno_id', $alumno->id) 
+                ->where('periodo', $periodoSeleccionado) 
+                ->pluck('materia_id') 
+                ->unique(); 
+
+            foreach ($materiasIds as $id) { 
+                $materia = Materia::find($id); 
                 
-                $parciales = [];
-                for ($p = 1; $p <= 2; $p++) {
-                    $co = $alumno->getCalificacionParcialTipo($id, $periodoSeleccionado, $p, 'ordinario');
-                    $cr = $alumno->getCalificacionParcialTipo($id, $periodoSeleccionado, $p, 'remedial');
-                    $ce = $alumno->getCalificacionParcialTipo($id, $periodoSeleccionado, $p, 'extraordinario');
+                $parciales = []; 
+                for ($p = 1; $p <= 2; $p++) { 
+                    $co = $alumno->getCalificacionParcialTipo($id, $periodoSeleccionado, $p, 'ordinario'); 
+                    $cr = $alumno->getCalificacionParcialTipo($id, $periodoSeleccionado, $p, 'remedial'); 
+                    $ce = $alumno->getCalificacionParcialTipo($id, $periodoSeleccionado, $p, 'extraordinario'); 
                     
-                    // Calcular CF parcial (prioridad: extraordinario > remedial > ordinario)
-                    $cf = $ce ?? $cr ?? $co ?? null;
+                    // Prioridad: Extraordinario > Remedial > Ordinario
+                    $cf = $ce ?? $cr ?? $co ?? null; 
 
-                    $parciales[$p] = [
-                        'co' => $co,
-                        'cr' => $cr,
-                        'ce' => $ce,
-                        'cf' => $cf
-                    ];
-                }
+                    $parciales[$p] = [ 
+                        'co' => $co, 
+                        'cr' => $cr, 
+                        'ce' => $ce, 
+                        'cf' => $cf 
+                    ]; 
+                } 
 
-                // CF Materia: promedio de CF parciales
-                $cf1 = $parciales[1]['cf'];
-                $cf2 = $parciales[2]['cf'];
-                $notaFinalMateria = ($cf1 !== null && $cf2 !== null) ? ($cf1 + $cf2) / 2 : null;
+                $cf1 = $parciales[1]['cf']; 
+                $cf2 = $parciales[2]['cf']; 
+                $notaFinalMateria = ($cf1 !== null && $cf2 !== null) ? ($cf1 + $cf2) / 2 : null; 
 
-                $calificacionesCalculadas->push((object)[
-                    'materia' => $materia,
-                    'parciales' => $parciales,
-                    'nota_final' => $notaFinalMateria
-                ]);
-            }
+                $calificacionesCalculadas->push((object)[ 
+                    'materia' => $materia, 
+                    'parciales' => $parciales, 
+                    'nota_final' => $notaFinalMateria 
+                ]); 
+            } 
             
-            $promedioPeriodo = $alumno->getPromedioPeriodo($periodoSeleccionado);
-        }
+            $promedioPeriodo = $alumno->getPromedioPeriodo($periodoSeleccionado); 
+        } 
 
-        return view('dashboard.alumno.alumno_calificaciones', compact('calificacionesCalculadas', 'promedioPeriodo', 'periodos', 'grupo', 'carrera', 'periodoSeleccionado', 'dataCienciaDatos'));
+        return view('dashboard.alumno.alumno_calificaciones', compact('calificacionesCalculadas', 'promedioPeriodo', 'promedioP1', 'promedioP2', 'periodos', 'grupo', 'carrera', 'periodoSeleccionado', 'dataCienciaDatos')); 
     }
 
     public function expediente() {

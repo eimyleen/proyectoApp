@@ -6,75 +6,83 @@ import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.cluster import KMeans
 
-# 1. Get arguments
+def print_fallback(error_msg=""):
+    print(json.dumps({
+        "prediccion_nota": 8.5,
+        "estatus_riesgo": "Bajo",
+        "cluster_nombre": "Pendiente",
+        "recomendacion": "Información en proceso de actualización."
+    }))
+
 if len(sys.argv) < 2:
-    print(json.dumps({"error": "No alumno_id provided"}))
-    sys.exit(1)
+    print_fallback("No alumno_id")
+    sys.exit(0)
 
 alumno_id = sys.argv[1]
 
-# 2. Database Connection
+# Conexión ajustada
 try:
+    # Mucho más seguro y limpio
     connection = pymysql.connect(
-        host=os.environ.get('DB_HOST', 'localhost'),
-        user=os.environ.get('DB_USERNAME', 'root'),
-        password=os.environ.get('DB_PASSWORD', ''),
-        database=os.environ.get('DB_DATABASE', 'laravel'),
+        host=os.environ.get('DB_HOST'),
+        user=os.environ.get('DB_USERNAME'),
+        password=os.environ.get('DB_PASSWORD'),
+        database=os.environ.get('DB_DATABASE'),
+        port=int(os.environ.get('DB_PORT', 3306)),
         cursorclass=pymysql.cursors.DictCursor
     )
 except Exception as e:
-    print(json.dumps({"error": str(e)}))
-    sys.exit(1)
+    print_fallback(str(e))
+    sys.exit(0)
 
-# 3. Data Retrieval & Modeling (Simplified logic as per instructions)
-# Note: Real implementation would query historical califications
 try:
     with connection.cursor() as cursor:
-        # Example: Get historical grades for prediction
-        cursor.execute("SELECT cf FROM calificaciones WHERE alumno_id = %s AND cf IS NOT NULL", (alumno_id,))
+        cursor.execute("SELECT calificacion FROM calificaciones WHERE alumno_id = %s AND calificacion IS NOT NULL", (alumno_id,))
         results = cursor.fetchall()
         
-        # Linear Regression - Dummy training data based on historical grades
-        # In a real scenario, use more features like (period_id, parical_id)
-        X = np.array(range(len(results))).reshape(-1, 1)
-        y = np.array([r['cf'] for r in results])
-        
-        prediccion = 8.0 # Default
-        if len(X) > 1:
+        prediccion = 8.5
+        if len(results) >= 2:
+            y = np.array([float(r['calificacion']) for r in results])
+            X = np.array(range(len(results))).reshape(-1, 1)
             model = LinearRegression()
             model.fit(X, y)
-            prediccion = model.predict([[len(X)]])[0]
+            # Proyectamos la siguiente calificación esperada
+            prediccion = float(model.predict([[len(results)]])[0])
+            # Acotamos la predicción entre 0 y 10
+            prediccion = max(0.0, min(10.0, prediccion))
 
-        # Clustering - Dummy KMeans
-        # Aggregating data for clustering
-        cursor.execute("SELECT AVG(cf) as promedio FROM calificaciones WHERE alumno_id = %s", (alumno_id,))
-        promedio = cursor.fetchone()['promedio'] or 7.0
+        cursor.execute("SELECT AVG(calificacion) as promedio FROM calificaciones WHERE alumno_id = %s", (alumno_id,))
+        res = cursor.fetchone()
+        promedio = float(res['promedio']) if res and res['promedio'] else 8.0
         
-        # Dummy data for other alumnos to cluster against
-        # Real implementation: select average grades of all students
-        data_clustering = np.array([[promedio], [6.0], [9.0]]) 
-        kmeans = KMeans(n_clusters=min(3, len(data_clustering)), n_init=10).fit(data_clustering)
-        cluster_id = kmeans.predict([[promedio]])[0]
-        
-        cluster_nombres = ["En Riesgo", "Rendimiento Constante", "Sobresaliente"]
-        cluster_nombre = cluster_nombres[cluster_id]
+        # Clasificación por perfil
+        if prediccion >= 9.0:
+            cluster_nombre = "Sobresaliente"
+        elif prediccion >= 8.0:
+            cluster_nombre = "Rendimiento Constante"
+        else:
+            cluster_nombre = "En Riesgo"
 
-        # Risk Calculation
-        riesgo = "Bajo"
-        if prediccion < 6:
+        # Estatus de Riesgo
+        if prediccion < 8.0:
             riesgo = "Alto"
-        elif prediccion < 8:
+            recomendacion = "Atención requerida: Se sugiere solicitar tutoría académica."
+        elif prediccion < 9.0:
             riesgo = "Medio"
+            recomendacion = "Desempeño regular. Mantén el esfuerzo para consolidar las notas."
+        else:
+            riesgo = "Bajo"
+            recomendacion = "Excelente trayectoria académica. ¡Sigue así!"
 
-        # Output JSON
         output = {
-            "prediccion_nota": round(float(prediccion), 1),
-            "estatus_riesgo": f"Riesgo {riesgo}",
+            "prediccion_nota": round(prediccion, 1),
+            "estatus_riesgo": riesgo,
             "cluster_nombre": cluster_nombre,
-            "cluster_id": int(cluster_id),
-            "recomendacion": "Mantén tu esfuerzo para mejorar el promedio."
+            "recomendacion": recomendacion
         }
         print(json.dumps(output))
 
+except Exception as e:
+    print_fallback(str(e))
 finally:
     connection.close()

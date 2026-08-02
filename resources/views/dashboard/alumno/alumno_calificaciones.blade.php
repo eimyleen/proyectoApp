@@ -48,24 +48,160 @@
         {{-- CONTENIDO PRINCIPAL --}}
         <div class="contenido-principal">
             
-            {{-- DIAGNÓSTICO ACADÉMICO PROYECTADO --}}
+            {{-- ============================================================ --}}
+            {{-- SECCIÓN GLOBAL: ANALÍTICA E INTELIGENCIA ARTIFICIAL          --}}
+            {{-- ============================================================ --}}
             @if(isset($dataCienciaDatos))
-                <div class="diagnostico-card" style="margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 8px; background-color: #f9f9f9;">
-                    <h3>Diagnóstico Académico Proyectado</h3>
-                    <p>Calificación Estimada: <strong>{{ $dataCienciaDatos['prediccion_nota'] }}</strong></p>
-                    <p>Estatus: <strong>{{ $dataCienciaDatos['estatus_riesgo'] }}</strong></p>
-                    <p>Perfil: <strong>{{ $dataCienciaDatos['cluster_nombre'] }}</strong></p>
-                    <p>Recomendación: <em>{{ $dataCienciaDatos['recomendacion'] }}</em></p>
+                <!-- DIAGNÓSTICO ACADÉMICO EN TEXTO -->
+                <div class="diagnostico-card" style="
+                    margin-bottom: 25px; 
+                    padding: 20px; 
+                    background: #ffffff; 
+                    border-radius: 12px; 
+                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); 
+                    border-left: 6px solid #20B2AA;
+                    font-family: inherit;
+                ">
+                    <h3 style="
+                        margin: 0 0 15px 0; 
+                        color: #1a252f; 
+                        font-size: 1.15rem; 
+                        font-weight: 700; 
+                        display: flex; 
+                        align-items: center; 
+                        gap: 8px;
+                    ">
+                        📊 Diagnóstico Académico Proyectado
+                    </h3>
+
+                    <div style="
+                        display: grid; 
+                        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
+                        gap: 12px; 
+                        margin-bottom: 15px;
+                    ">
+                        <!-- Calificación Estimada -->
+                        <div style="background: #f8f9fa; padding: 10px 14px; border-radius: 8px; border: 1px solid #e9ecef;">
+                            <span style="font-size: 0.8rem; color: #6c757d; display: block; font-weight: 600; text-transform: uppercase;">Calificación Estimada</span>
+                            <strong style="font-size: 1.2rem; color: #2b3a4a;">{{ $dataCienciaDatos['prediccion_nota'] }}</strong>
+                        </div>
+
+                        <!-- Estatus de Riesgo -->
+                        <div style="background: #f8f9fa; padding: 10px 14px; border-radius: 8px; border: 1px solid #e9ecef;">
+                            <span style="font-size: 0.8rem; color: #6c757d; display: block; font-weight: 600; text-transform: uppercase;">Estatus de Riesgo</span>
+                            <strong style="font-size: 1rem; color: #2b3a4a;">{{ $dataCienciaDatos['estatus_riesgo'] }}</strong>
+                        </div>
+
+                        <!-- Perfil -->
+                        <div style="background: #f8f9fa; padding: 10px 14px; border-radius: 8px; border: 1px solid #e9ecef;">
+                            <span style="font-size: 0.8rem; color: #6c757d; display: block; font-weight: 600; text-transform: uppercase;">Perfil Académico</span>
+                            <strong style="font-size: 1rem; color: #008080;">{{ $dataCienciaDatos['cluster_nombre'] }}</strong>
+                        </div>
+                    </div>
+
+                    <!-- Recomendación -->
+                    <div style="
+                        background: #eef9f8; 
+                        padding: 12px 15px; 
+                        border-radius: 8px; 
+                        color: #0f5132; 
+                        font-size: 0.9rem; 
+                        line-height: 1.4;
+                    ">
+                        💡 <strong>Recomendación:</strong> <em>{{ $dataCienciaDatos['recomendacion'] }}</em>
+                    </div>
                 </div>
+
+                <!-- CONTENEDOR DEL GRÁFICO GLOBAL -->
+                <div style="margin-bottom: 25px; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                    <h3 style="margin-bottom: 5px; color: #333; font-weight: bold;">Trayectoria Académica y Proyección</h3>
+                    <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Evolución del desempeño histórico y tendencia proyectada.</p>
+                    
+                    <div style="position: relative; height:320px; width: 100%;">
+                        <canvas id="graficaDesempenio"></canvas>
+                    </div>
+                </div>
+
+                <!-- Carga directa de Chart.js y Script del Gráfico -->
+                <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+                <script>
+                    (function() {
+                        function initChart() {
+                            const ctx = document.getElementById('graficaDesempenio');
+                            if (!ctx) return;
+
+                            const p1 = {{ $promedioP1 ?? 0 }};
+                            const p2 = {{ $promedioP2 ?? 0 }};
+                            const prediccionFinal = {{ $dataCienciaDatos['prediccion_nota'] ?? 0 }};
+
+                            new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels: ['Parcial 1', 'Parcial 2 (Actual)', 'Proyección Final'],
+                                    datasets: [{
+                                        label: 'Desempeño y Tendencia',
+                                        data: [p1, p2, prediccionFinal],
+                                        borderColor: 'rgba(54, 162, 235, 1)',
+                                        backgroundColor: 'rgba(54, 162, 235, 0.15)',
+                                        borderWidth: 3,
+                                        pointRadius: 6,
+                                        pointBackgroundColor: ['#36A2EB', '#36A2EB', '#FF6384'],
+                                        pointBorderColor: '#fff',
+                                        pointHoverRadius: 8,
+                                        fill: true,
+                                        tension: 0.3
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    plugins: {
+                                        legend: {
+                                            display: true,
+                                            position: 'top'
+                                        },
+                                        tooltip: {
+                                            callbacks: {
+                                                label: function(context) {
+                                                    return ` Calificación: ${context.parsed.y}`;
+                                                }
+                                            }
+                                        }
+                                    },
+                                    scales: {
+                                        y: {
+                                            beginAtZero: false,
+                                            min: 0,
+                                            max: 10,
+                                            ticks: {
+                                                stepSize: 1
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        }
+
+                        if (document.readyState === 'loading') {
+                            document.addEventListener('DOMContentLoaded', initChart);
+                        } else {
+                            initChart();
+                        }
+                    })();
+                </script>
             @endif
 
-            {{-- FILTRO DE PERÍODO --}}
+            <hr style="border: 0; height: 1px; background: #e0e0e0; margin: 30px 0;">
+
+            {{-- ============================================================ --}}
+            {{-- SECCIÓN DETALLE: DESGLOSE POR PERÍODO                       --}}
+            {{-- ============================================================ --}}
             <div class="filtro-periodo">
                 <div class="periodo-select">
                     <form method="GET" action="{{ route('alumno.calificaciones') }}">
                         <label for="periodoSelect">{{ __('messages.label_period') }}</label>
                         <select name="periodo" id="periodoSelect" onchange="this.form.submit()">
-                            <option value="" {{ $periodoSeleccionado ? 'selected' : '' }}>
+                            <option value="" {{ !$periodoSeleccionado ? 'selected' : '' }}>
                                 {{ __('messages.select_period') }}
                             </option>
                             @foreach($periodos as $periodo)
@@ -78,7 +214,7 @@
                 </div>
             </div>
 
-            {{-- TABLA Y GRÁFICO --}}
+            {{-- TABLA DE CALIFICACIONES --}}
             @if($periodoSeleccionado)
                 <div class="tabla-calificaciones">
                     <table>
@@ -132,60 +268,8 @@
                         </tfoot>
                     </table>
                 </div>
-
-                <!-- CONTENEDOR DEL GRÁFICO -->
-                <div style="margin-top: 20px; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <h3 style="margin-bottom: 15px; color: #333; font-weight: bold;">Análisis de Desempeño Escolar</h3>
-                    <div style="position: relative; height:300px; width: 100%;">
-                        <canvas id="graficaDesempenio"></canvas>
-                    </div>
-                </div>
-
-                <!-- Carga directa de CDN y Script Inline -->
-                <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-                <script>
-                    (function() {
-                        function initChart() {
-                            const ctx = document.getElementById('graficaDesempenio');
-                            if (!ctx) return;
-
-                            const promedio = {{ $promedioPeriodo ?? 0 }};
-                            const prediccion = {{ $dataCienciaDatos['prediccion_nota'] ?? 'promedio' }};
-
-                            new Chart(ctx, {
-                                type: 'bar',
-                                data: {
-                                    labels: ['Promedio Actual', 'Proyección Ciencia de Datos'],
-                                    datasets: [{
-                                        label: 'Calificación',
-                                        data: [promedio, prediccion],
-                                        backgroundColor: ['rgba(54, 162, 235, 0.6)', 'rgba(75, 192, 192, 0.6)'],
-                                        borderColor: ['rgba(54, 162, 235, 1)', 'rgba(75, 192, 192, 1)'],
-                                        borderWidth: 1.5,
-                                        borderRadius: 4
-                                    }]
-                                },
-                                options: {
-                                    responsive: true,
-                                    maintainAspectRatio: false,
-                                    scales: {
-                                        y: {
-                                            beginAtZero: true,
-                                            max: 10
-                                        }
-                                    }
-                                }
-                            });
-                        }
-
-                        if (document.readyState === 'loading') {
-                            document.addEventListener('DOMContentLoaded', initChart);
-                        } else {
-                            initChart();
-                        }
-                    })();
-                </script>
             @endif
+
         </div>
     </div>
 @endsection
