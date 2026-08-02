@@ -94,6 +94,30 @@
         </div>
 
         {{-- ======================================================
+             MÓDULO DE ANÁLISIS DE GRUPO
+             ====================================================== --}}
+        @if(isset($analisisGrupo))
+            <div style="margin-bottom: 20px; padding: 18px 24px; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-radius: 12px; border: 1px solid #334155; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="background: rgba(59, 130, 246, 0.15); padding: 12px; border-radius: 10px; border: 1px solid rgba(59, 130, 246, 0.3);">
+                        <span style="font-size: 1.8rem;">📊</span>
+                    </div>
+                    <div>
+                        <span style="display: block; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; font-weight: 600;">Análisis Académico Predictivo</span>
+                        <h3 style="margin: 2px 0 0; color: #f8fafc; font-size: 1.15rem; font-weight: 600;">Promedio General Proyectado del Grupo</h3>
+                    </div>
+                </div>
+                
+                <div style="text-align: right; background: #0f172a; padding: 8px 18px; border-radius: 10px; border: 1px solid #1e293b;">
+                    <span style="font-size: 1.75rem; font-weight: 800; color: #38bdf8; font-family: monospace;">
+                        {{ number_format($analisisGrupo['promedio_grupo_proyectado'], 1) }}
+                    </span>
+                    <span style="display: block; font-size: 0.75rem; color: #64748b;">/ 10.0 pts</span>
+                </div>
+            </div>
+        @endif
+
+        {{-- ======================================================
              FILTRO DE GRUPOS
              ====================================================== 
              Select para elegir el grupo a visualizar.
@@ -159,6 +183,7 @@
                         <th>{{ __('messages.groups_id_card') }}</th>
                         <th>{{ __('messages.groups_name') }}</th>
                         <th>{{ __('messages.groups_last_name') }}</th>
+                        <th>Riesgo Académico</th>
                         <th>{{ __('messages.groups_actions') }}</th>
                     </tr>
                 </thead>
@@ -174,6 +199,24 @@
                             <td class="col-matricula">{{ $alumno->matricula }}</td>
                             <td class="col-nombre">{{ $alumno->user?->name }}</td>
                             <td class="col-nombre">{{ $alumno->user?->apellido }}</td>
+                            <td class="col-riesgo">
+                                @php
+                                    $riesgo = 'Bajo';
+                                    $color = 'green';
+                                    if ($analisisGrupo) {
+                                        foreach($analisisGrupo['alumnos_riesgo'] as $a) {
+                                            if ($a['alumno_id'] == $alumno->id) {
+                                                $riesgo = $a['riesgo'];
+                                                $color = $riesgo == 'Alto' ? 'red' : ($riesgo == 'Medio' ? 'orange' : 'green');
+                                                break;
+                                            }
+                                        }
+                                    }
+                                @endphp
+                                <span style="background: {{ $color }}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">
+                                    {{ $riesgo }}
+                                </span>
+                            </td>
                             <td class="col-acciones">
                                 {{-- 
                                     BOTÓN VER EXPEDIENTE

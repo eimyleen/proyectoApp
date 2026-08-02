@@ -63,8 +63,23 @@ class MaestroCarreraController extends Controller
             }
         })
         ->get();
+
+        // --- MÓDULO ANÁLISIS DE GRUPO ---
+        $analisisGrupo = null;
+        if ($grupoId) {
+            try {
+                $result = \Illuminate\Support\Facades\Process::timeout(10)->run("python3 " . base_path('scripts/analisis_grupo.py') . " " . $grupoId);
+                if ($result->successful()) {
+                    $analisisGrupo = json_decode($result->output(), true);
+                }
+            } catch (\Exception $e) {
+                // Silencioso
+            }
+        }
+        // -------------------------------
+
         $maestros = Maestro::with('user:id,name,apellido,email')->get();
-        return view('dashboard.maestro.grupos', compact('carrera', 'alumnos', 'maestros', 'grupos'));
+        return view('dashboard.maestro.grupos', compact('carrera', 'alumnos', 'maestros', 'grupos', 'analisisGrupo'));
     }
 
     /**
