@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Process;
 use App\Models\Materia;
 use App\Models\Horario;
 use App\Models\Grupo;
+use App\Models\Calificacion;
 
 class AlumnoController extends Controller
 {
@@ -43,9 +45,21 @@ class AlumnoController extends Controller
         $grupo = $alumno->grupos->first();
         $carrera = $grupo?->carrera;
 
+        // -- NUEVA LÓGICA DE CIENCIA DE DATOS --
+        $dataCienciaDatos = null;
+        try {
+            $result = Process::timeout(10)->run("python3 " . base_path('scripts/analisis_alumno.py') . " " . $alumno->id);
+            if ($result->successful()) {
+                $dataCienciaDatos = json_decode($result->output(), true);
+            }
+        } catch (\Exception $e) {
+            // Fallback silencioso en caso de error
+        }
+        // --------------------------------------
+
         $periodoSeleccionado = $request->query('periodo');
 
-        $periodos = \App\Models\Calificacion::where('alumno_id', $alumno->id)
+        $periodos = Calificacion::where('alumno_id', $alumno->id)
         ->distinct()
         ->pluck('periodo');
 
@@ -53,13 +67,13 @@ class AlumnoController extends Controller
         $promedioPeriodo = 0;
 
         if ($periodoSeleccionado) {
-            $materiasIds = \App\Models\Calificacion::where('alumno_id', $alumno->id)
+            $materiasIds = Calificacion::where('alumno_id', $alumno->id)
                 ->where('periodo', $periodoSeleccionado)
                 ->pluck('materia_id')
                 ->unique();
 
             foreach ($materiasIds as $id) {
-                $materia = \App\Models\Materia::find($id);
+                $materia = Materia::find($id);
                 
                 $parciales = [];
                 for ($p = 1; $p <= 2; $p++) {
@@ -93,7 +107,7 @@ class AlumnoController extends Controller
             $promedioPeriodo = $alumno->getPromedioPeriodo($periodoSeleccionado);
         }
 
-        return view('dashboard.alumno.alumno_calificaciones', compact('calificacionesCalculadas', 'promedioPeriodo', 'periodos', 'grupo', 'carrera', 'periodoSeleccionado'));
+        return view('dashboard.alumno.alumno_calificaciones', compact('calificacionesCalculadas', 'promedioPeriodo', 'periodos', 'grupo', 'carrera', 'periodoSeleccionado', 'dataCienciaDatos'));
     }
 
     public function expediente() {

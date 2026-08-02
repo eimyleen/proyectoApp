@@ -24,3 +24,5 @@ Homestead.yaml
 Thumbs.db
 /.vite
 docker-compose.yml
+Dockerfile.dev
+docker/nginx/default_dev.conf

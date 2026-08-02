@@ -2,63 +2,24 @@
     ============================================================
     ALUMNO - CALIFICACIONES
     ============================================================
-    Esta vista muestra las calificaciones del alumno con:
-    - Botones laterales (Expediente, Calificaciones activo, Logo carrera)
-    - Filtro de período para seleccionar el período académico
-    - Tabla de calificaciones (Materia + Calificación)
-    
-    RELACIÓN CON OTRAS VISTAS:
-    - Extiende el layout: layouts.dashboard
-    - Usa los estilos de: dashboard_alumno.css
-    - Botón de regreso: visible (back-button)
-    - Comparte botones con: alumno y alumno_expediente
-    ============================================================ 
 --}}
 
 @extends('layouts.dashboard')
 
 @section('title', __('messages.title_my_grades'))
-
 @section('subtitle', __('messages.subtitle_grades'))
 
-@section('title', 'Mis Calificaciones - Alumno')
-
-@section('subtitle', 'Aquí puedes consultar tus calificaciones por período')
-
-{{-- 
-    BOTÓN DE REGRESO
-    Esta sección hace visible el botón de regreso en el header.
---}}
 @section('back-button')
     <!-- Botón de regreso visible -->
 @endsection
 
-{{-- ======================================================
-     CSS ADICIONAL
-     ====================================================== --}}
-@push('styles')
-    <link rel="stylesheet" href="{{ asset('css/dashboard_alumno.css') }}">
-@endpush
-
-{{-- ======================================================
-     CONTENIDO PRINCIPAL
-     ====================================================== --}}
 @section('content')
-    {{-- 
-        CONTENEDOR PRINCIPAL CON FLEX
-        Organiza en dos columnas:
-        - Izquierda: Botones laterales (Expediente, Calificaciones activo, Logo carrera)
-        - Derecha: Contenido de calificaciones (filtro + tabla)
-    --}}
+    <!-- Carga directa del CSS del módulo -->
+    <link rel="stylesheet" href="{{ asset('css/dashboard_alumno.css') }}">
+
     <div class="contenido-con-botones">
         
-        {{-- ======================================================
-             BOTONES LATERALES (Columna izquierda)
-             ====================================================== 
-             - "Expediente" → redirige a alumno_expediente
-             - "Calificaciones" tiene la clase 'active' porque estamos en esta sección
-             - "Logo de carrera" muestra el logo circular de la carrera del alumno
-        --}}
+        {{-- BOTONES LATERALES --}}
         <div class="botones-laterales">
             <a href="{{ route('alumno.expediente') }}" style="text-decoration: none;">
                 <button class="btn-expediente {{ Request::routeIs('alumno.expediente') ? 'active' : '' }}">
@@ -71,12 +32,6 @@
                 </button>
             </a>
             
-            {{-- ==================================================
-                 LOGO CIRCULAR DE LA CARRERA
-                 ================================================== 
-                 Muestra el logo de la carrera del alumno.
-                 Si no hay logo, muestra el logo de UTNay por defecto.
-            --}}
             <div class="carrera-logo">
                 <div class="logo-circular">
                     @if($carrera?->logo)
@@ -87,30 +42,24 @@
                         <img src="{{ asset('img/jaguar.png') }}" alt="UTNay">
                     @endif
                 </div>
-                
             </div>
         </div>
 
-        {{-- ======================================================
-             CONTENIDO PRINCIPAL DE CALIFICACIONES (Columna derecha)
-             ====================================================== --}}
+        {{-- CONTENIDO PRINCIPAL --}}
         <div class="contenido-principal">
             
-            {{-- ==================================================
-                 FILTRO DE PERÍODO
-                 ================================================== 
-                 Permite al alumno seleccionar el período académico
-                 para filtrar sus calificaciones.
-                 
-                 ESTRUCTURA:
-                 - Label: "Período:"
-                 - Select: Desplegable con opciones de períodos
-                 - Botón: "Buscar" con ícono de lupa
-                 
-                 NOTA: Las opciones del select se llenan desde
-                 el controlador con la variable $periodos.
-            --}}
-            
+            {{-- DIAGNÓSTICO ACADÉMICO PROYECTADO --}}
+            @if(isset($dataCienciaDatos))
+                <div class="diagnostico-card" style="margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 8px; background-color: #f9f9f9;">
+                    <h3>Diagnóstico Académico Proyectado</h3>
+                    <p>Calificación Estimada: <strong>{{ $dataCienciaDatos['prediccion_nota'] }}</strong></p>
+                    <p>Estatus: <strong>{{ $dataCienciaDatos['estatus_riesgo'] }}</strong></p>
+                    <p>Perfil: <strong>{{ $dataCienciaDatos['cluster_nombre'] }}</strong></p>
+                    <p>Recomendación: <em>{{ $dataCienciaDatos['recomendacion'] }}</em></p>
+                </div>
+            @endif
+
+            {{-- FILTRO DE PERÍODO --}}
             <div class="filtro-periodo">
                 <div class="periodo-select">
                     <form method="GET" action="{{ route('alumno.calificaciones') }}">
@@ -128,26 +77,8 @@
                     </form>
                 </div>
             </div>
-            
 
-            {{-- ==================================================
-                 TABLA DE CALIFICACIONES
-                 ================================================== 
-                 Muestra las calificaciones del alumno por materia.
-                 
-                 ESTRUCTURA DE LA TABLA:
-                 - Header: "Materia" y "Calificación"
-                 - Cuerpo: Filas con materia y calificación
-                 - Columna "Calificación": Tiene la clase 'calificacion'
-                   que la centra y le da un ancho fijo (120px)
-                 
-                 NOTA: 
-                 - Los datos se llenan dinámicamente desde el controlador con $calificaciones
-                 - Cada calificación tiene colores según su valor:
-                   - >= 8: 'aprobado' (verde)
-                   - < 8: 'reprobado' (rojo)
-                 - La tabla solo se muestra si el usuario seleccionó un período
-            --}}
+            {{-- TABLA Y GRÁFICO --}}
             @if($periodoSeleccionado)
                 <div class="tabla-calificaciones">
                     <table>
@@ -159,8 +90,14 @@
                                 <th rowspan="2">{{ __('messages.final_grade') }}</th>
                             </tr>
                             <tr>
-                                <th>{{ __('messages.first_ordinal_grade') }}</th><th>{{ __('messages.first_remedial_grade') }}</th><th>{{ __('messages.first_extraordinary_grade') }}</th><th>{{ __('messages.first_final_grade') }}</th>
-                                <th>{{ __('messages.second_ordinal_grade') }}</th><th>{{ __('messages.second_remedial_grade') }}</th><th>{{ __('messages.second_extraordinary_grade') }}</th><th>{{ __('messages.second_final_grade') }}</th>
+                                <th>{{ __('messages.first_ordinal_grade') }}</th>
+                                <th>{{ __('messages.first_remedial_grade') }}</th>
+                                <th>{{ __('messages.first_extraordinary_grade') }}</th>
+                                <th>{{ __('messages.first_final_grade') }}</th>
+                                <th>{{ __('messages.second_ordinal_grade') }}</th>
+                                <th>{{ __('messages.second_remedial_grade') }}</th>
+                                <th>{{ __('messages.second_extraordinary_grade') }}</th>
+                                <th>{{ __('messages.second_final_grade') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -195,6 +132,59 @@
                         </tfoot>
                     </table>
                 </div>
+
+                <!-- CONTENEDOR DEL GRÁFICO -->
+                <div style="margin-top: 20px; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <h3 style="margin-bottom: 15px; color: #333; font-weight: bold;">Análisis de Desempeño Escolar</h3>
+                    <div style="position: relative; height:300px; width: 100%;">
+                        <canvas id="graficaDesempenio"></canvas>
+                    </div>
+                </div>
+
+                <!-- Carga directa de CDN y Script Inline -->
+                <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+                <script>
+                    (function() {
+                        function initChart() {
+                            const ctx = document.getElementById('graficaDesempenio');
+                            if (!ctx) return;
+
+                            const promedio = {{ $promedioPeriodo ?? 0 }};
+                            const prediccion = {{ $dataCienciaDatos['prediccion_nota'] ?? 'promedio' }};
+
+                            new Chart(ctx, {
+                                type: 'bar',
+                                data: {
+                                    labels: ['Promedio Actual', 'Proyección Ciencia de Datos'],
+                                    datasets: [{
+                                        label: 'Calificación',
+                                        data: [promedio, prediccion],
+                                        backgroundColor: ['rgba(54, 162, 235, 0.6)', 'rgba(75, 192, 192, 0.6)'],
+                                        borderColor: ['rgba(54, 162, 235, 1)', 'rgba(75, 192, 192, 1)'],
+                                        borderWidth: 1.5,
+                                        borderRadius: 4
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true,
+                                            max: 10
+                                        }
+                                    }
+                                }
+                            });
+                        }
+
+                        if (document.readyState === 'loading') {
+                            document.addEventListener('DOMContentLoaded', initChart);
+                        } else {
+                            initChart();
+                        }
+                    })();
+                </script>
             @endif
         </div>
     </div>
