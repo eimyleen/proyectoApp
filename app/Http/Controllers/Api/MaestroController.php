@@ -137,7 +137,7 @@ class MaestroController extends Controller
         return response()->json($maestro);
     }
 
-    public function getUserWithMaestroWithMaterias($id) {
+    public function getUserWithMaestroWithCarreras($id) {
         $maestro = Maestro::with('user')->find($id)->with('carreras');
 
         if (!$maestro) {
