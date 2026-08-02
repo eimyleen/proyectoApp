@@ -143,4 +143,22 @@ class AlumnoController extends Controller
             'message' => 'Alumno eliminado correctamente'
         ], 200);
     }
+
+    public function getUserWithAlumno($id) {
+        $alumno = Alumno::with('user')->find($id);
+
+        if (!$alumno) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Alumno no encontrado'
+                ],
+                404);
+        }
+
+        return response()->json([
+            'data'=>$alumno,
+            'status'=>false
+        ],
+        202);
+    }
 }

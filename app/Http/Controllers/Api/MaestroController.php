@@ -122,4 +122,32 @@ class MaestroController extends Controller
             'message' => 'Maestro eliminado correctamente'
         ], 200);
     }
+
+    public function getUserWithMaestro($id) {
+        $maestro = Maestro::with('user')->find($id);
+
+        if (!$maestro) {
+            return response()->json([
+                'message' => 'Maestro no encontrado',
+                'status' => false
+                ], 
+                404);
+        }
+
+        return response()->json($maestro);
+    }
+
+    public function getUserWithMaestroWithMaterias($id) {
+        $maestro = Maestro::with('user')->find($id)->with('carreras');
+
+        if (!$maestro) {
+            return response()->json(['message' => 'Maestro no encontrado'], 404);
+        }
+
+        return response()->json([
+            'status' => false,
+            'data' => $maestro
+            ],
+            202);
+    }
 }
