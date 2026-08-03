@@ -19,6 +19,15 @@ class Carrera extends Model
         return $this->hasOne(Alumno::class);
     }
 
+    public function maestros() {
+        return $this->belongsToMany(
+            Maestro::class,
+            'maestros_carreras',
+            'carrera_id',
+            'maestro_id'
+        );
+    }
+
     public function materias(): HasMany
     {
         return $this->hasMany(Materia::class);

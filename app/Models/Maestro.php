@@ -31,7 +31,7 @@ class Maestro extends Model
 
     public function carreras(): BelongsToMany
     {
-        return $this->belongsToMany(Carrera::class, 'maestros_carreras');
+        return $this->belongsToMany(Carrera::class, 'maestros_carreras', 'maestro_id', 'carrera_id');
     }
 
     public function getSexoTextoAttribute()
