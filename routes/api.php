@@ -24,7 +24,7 @@ Route::middleware([ApiKeyMiddleware::class, 'auth:sanctum'])->group(function () 
     Route::get('users/{id}/maestro/carreras', [UserController::class, 'getUserWithMaestroAndCarreras']);
     // Api Carreras
     Route::apiResource('carreras', CarreraController::class);
-    Route::get('carreras/{id}/alumnos/grupos', [CarreraController::class, 'getCarreraWithGruposAndAlumnos']);
+    Route::get('carreras/{id}/grupos/alumnos/user', [CarreraController::class, 'getCarreraWithGruposAndAlumnosUser']);
     // Api Maestros
     Route::apiResource('maestros', MaestroController::class);
     // Api Grupos

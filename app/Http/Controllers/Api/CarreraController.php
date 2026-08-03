@@ -89,8 +89,8 @@ class CarreraController extends Controller
         ], 200);
     }
 
-    public function getCarreraWithGruposAndAlumnos(String $id) {
-        $carrera = Carrera::with('grupos.alumnos')
+    public function getCarreraWithGruposAndAlumnosUser(String $id) {
+        $carrera = Carrera::with('grupos.alumnos.user')
         ->where('id', $id)
         ->first();
 
