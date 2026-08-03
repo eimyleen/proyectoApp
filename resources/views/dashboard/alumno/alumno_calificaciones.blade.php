@@ -137,7 +137,7 @@
                             new Chart(ctx, {
                                 type: 'line',
                                 data: {
-                                    labels: ['Parcial 1', 'Parcial 2 (Actual)', 'Proyección Final'],
+                                    labels: ['Parcial 1', 'Parcial 2', 'Proyección Final'],
                                     datasets: [{
                                         label: 'Desempeño y Tendencia',
                                         data: [p1, p2, prediccionFinal],
@@ -221,8 +221,8 @@
                         <thead>
                             <tr>
                                 <th rowspan="2">{{ __('messages.th_subject') }}</th>
-                                <th colspan="4">{{ __('messages.first_period') }}</th>
-                                <th colspan="4">{{ __('messages.second_period') }}</th>
+                                <th colspan="4">{{ __('messages.first_partial') }}</th>
+                                <th colspan="4">{{ __('messages.second_partial') }}</th>
                                 <th rowspan="2">{{ __('messages.final_grade') }}</th>
                             </tr>
                             <tr>
