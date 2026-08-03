@@ -132,7 +132,7 @@ class UserController extends Controller
     }
 
     public function getUserWithMaestroAndCarreras(string $id) {
-        $user = User::with(['maestro.carreras'])->find($id);
+        $user = User::with(['maestros.carreras'])->find($id);
 
         if (!$user) {
             return response()->json([
