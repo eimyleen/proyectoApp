@@ -381,8 +381,14 @@
                 e.preventDefault();
                 
                 const select = document.querySelector('.grupo-select');
-                const optionSelected = select ? select.options[select.selectedIndex] : null;
-                const nombreGrupo = optionSelected ? optionSelected.textContent : 'seleccionado';
+                const grupoId = select ? select.value : null;
+                
+                if (!grupoId) {
+                    alertaInfo('Sin selección', 'Por favor, selecciona un grupo primero.');
+                    return;
+                }
+
+                const nombreGrupo = select.options[select.selectedIndex].textContent;
                 
                 confirmarAccion(
                     'Descargar lista del grupo',
@@ -391,10 +397,7 @@
                     'Cancelar'
                 ).then((result) => {
                     if (result.isConfirmed) {
-                        alertaInfo(
-                            'Descarga de lista',
-                            'La funcionalidad de descarga se integrará próximamente.'
-                        );
+                        window.location.href = '{{ route("maestro.grupo.alumnos.pdf", "__ID__") }}'.replace('__ID__', grupoId);
                     }
                 });
             });

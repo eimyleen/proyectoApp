@@ -332,11 +332,12 @@
                                     {{ $cal->nota_final !== null ? number_format($cal->nota_final, 1) : '-' }}
                                 </td>
                                 <td class="calificacion btn-editar-materia">
-                                    <button class="" 
+                                    <button class="btn-icono-tabla"
                                     data-materia-id="{{ $cal->materia->id }}"
                                     data-materia-nombre="{{ $cal->materia->nombre }}"
                                     data-parciales='@json($cal->parciales ?? '')'
-                                    >Editar
+                                    title="Editar materia">
+                                        <img src="{{ asset('img/editar.png') }}" alt="Editar" style="width: 16px; height: 16px;">
                                     </button>
                                 </td>
                             </tr>
@@ -779,8 +780,6 @@
         // ==============================================
         // 6. CONFIRMAR GENERACIÓN DE PDF DEL EXPEDIENTE
         // ==============================================
-        // Originalmente redirigía a '#' sin confirmación.
-        // Ahora muestra una alerta de confirmación antes de mostrar el mensaje.
         const btnGenerarPDF = document.getElementById('btnGenerarPDF');
         if (btnGenerarPDF) {
             btnGenerarPDF.addEventListener('click', function(e) {
@@ -788,16 +787,12 @@
                 
                 confirmarAccion(
                     'Generar PDF del expediente',
-                    'Se generará un archivo PDF con el expediente completo del alumno. ¿Deseas continuar?',
+                    'Se generará un archivo PDF con los datos personales del alumno. ¿Deseas continuar?',
                     'Generar PDF',
                     'Cancelar'
                 ).then((result) => {
                     if (result.isConfirmed) {
-                        // NOTA: La descarga real se integrará cuando la ruta esté definida
-                        alertaInfo(
-                            'Descarga de PDF',
-                            'La funcionalidad de descarga del expediente se integrará próximamente.'
-                        );
+                        window.location.href = '{{ route("maestro.alumno.expediente.pdf", $alumno->id) }}';
                     }
                 });
             });
