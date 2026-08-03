@@ -130,4 +130,20 @@ class UserController extends Controller
             'message' => 'Usuario eliminado correctamente'
         ], 200);
     }
+
+    public function getUserWithMaestroAndCarreras(string $id) {
+        $user = User::with(['maestro.carreras'])->find($id);
+
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Usuario no encontrado'
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => $user
+        ], 200);
+    }
 }

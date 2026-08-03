@@ -21,17 +21,15 @@ Route::middleware([ApiKeyMiddleware::class, 'auth:sanctum'])->group(function () 
 
     // Api Users
     Route::apiResource('users', UserController::class);
+    Route::get('/api/user/{id}/maestro/carreras', [UserController::class, 'getUserWithMaestroAndCarreras']);
     // Api Carreras
     Route::apiResource('carreras', CarreraController::class);
     // Api Maestros
     Route::apiResource('maestros', MaestroController::class);
-    Route::get('/api/maestros/user/{id}', [MaestroController::class, 'getUserWithMaestro']);
-    Route::get('/api/maestros/user/{id}/carreras', [MaestroController::class, 'getUserWithMaestroWithCarreras']);
     // Api Grupos
     Route::apiResource('grupos', GrupoController::class);
     // Api Alumnos
     Route::apiResource('alumnos', AlumnoController::class);
-    Route::get('/api/alumnos/user/{id}', [AlumnoController::class, 'getUserWithAlumno']);
     // Api Materias
     Route::apiResource('materias', MateriaController::class);
     // Api Horarios
