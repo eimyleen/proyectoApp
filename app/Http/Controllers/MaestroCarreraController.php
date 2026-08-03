@@ -313,4 +313,18 @@ class MaestroCarreraController extends Controller
 
         return $pdf->download('lista_alumnos_grupo_' . $grupo->nombre . '_' . now()->format('d-m-Y') . '.pdf');
     }
+
+    public function descargarExpedientePersonalPDF($alumnoId)
+    {
+        $alumno = Alumno::with('user', 'grupos.carrera')->findOrFail($alumnoId);
+        $grupo = $alumno->grupos->first();
+        $carrera = $grupo?->carrera;
+
+        Log::registrar('Descarga PDF', 'El maestro descargó el expediente personal de: ' . $alumno->user->name);
+
+        // Cargamos una vista que muestre solo los datos personales
+        $pdf = Pdf::loadView('pdf.expediente_personal', compact('alumno', 'grupo', 'carrera'));
+
+        return $pdf->download('expediente_personal_' . $alumno->user->name . '_' . now()->format('d-m-Y') . '.pdf');
+    }
 }

@@ -779,8 +779,6 @@
         // ==============================================
         // 6. CONFIRMAR GENERACIÓN DE PDF DEL EXPEDIENTE
         // ==============================================
-        // Originalmente redirigía a '#' sin confirmación.
-        // Ahora muestra una alerta de confirmación antes de mostrar el mensaje.
         const btnGenerarPDF = document.getElementById('btnGenerarPDF');
         if (btnGenerarPDF) {
             btnGenerarPDF.addEventListener('click', function(e) {
@@ -788,16 +786,12 @@
                 
                 confirmarAccion(
                     'Generar PDF del expediente',
-                    'Se generará un archivo PDF con el expediente completo del alumno. ¿Deseas continuar?',
+                    'Se generará un archivo PDF con los datos personales del alumno. ¿Deseas continuar?',
                     'Generar PDF',
                     'Cancelar'
                 ).then((result) => {
                     if (result.isConfirmed) {
-                        // NOTA: La descarga real se integrará cuando la ruta esté definida
-                        alertaInfo(
-                            'Descarga de PDF',
-                            'La funcionalidad de descarga del expediente se integrará próximamente.'
-                        );
+                        window.location.href = '{{ route("maestro.alumno.expediente.pdf", $alumno->id) }}';
                     }
                 });
             });
