@@ -94,28 +94,62 @@
         </div>
 
         {{-- ======================================================
-             MÓDULO DE ANÁLISIS DE GRUPO
+             MÓDULO DE ANÁLISIS DE GRUPO & DOUGHNUT CHART
              ====================================================== --}}
-        @if(isset($analisisGrupo))
-            <div style="margin-bottom: 20px; padding: 18px 24px; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-radius: 12px; border: 1px solid #334155; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);">
-                <div style="display: flex; align-items: center; gap: 15px;">
-                    <div style="background: rgba(59, 130, 246, 0.15); padding: 12px; border-radius: 10px; border: 1px solid rgba(59, 130, 246, 0.3);">
-                        <span style="font-size: 1.8rem;">📊</span>
+            @if(isset($analisisGrupo))
+                <div style="margin-bottom: 25px; padding: 20px 24px; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-radius: 12px; border: 1px solid #334155; display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);">
+                    
+                    {{-- LADO IZQUIERDO: Promedio General Proyectado --}}
+                    <div style="display: flex; align-items: center; justify-content: space-between; border-right: 1px solid #334155; padding-right: 25px;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="background: rgba(59, 130, 246, 0.15); padding: 12px; border-radius: 10px; border: 1px solid rgba(59, 130, 246, 0.3);">
+                                <span style="font-size: 1.8rem;">📊</span>
+                            </div>
+                            <div>
+                                <span style="display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; font-weight: 600;">Análisis Académico Predictivo</span>
+                                <h3 style="margin: 2px 0 0; color: #f8fafc; font-size: 1.15rem; font-weight: 600;">Promedio General Proyectado</h3>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: right; background: #0f172a; padding: 10px 18px; border-radius: 10px; border: 1px solid #1e293b;">
+                            <span style="font-size: 1.8rem; font-weight: 800; color: #38bdf8; font-family: monospace;">
+                                {{ number_format($analisisGrupo['promedio_grupo_proyectado'], 1) }}
+                            </span>
+                            <span style="display: block; font-size: 0.75rem; color: #64748b;">/ 10.0 pts</span>
+                        </div>
                     </div>
-                    <div>
-                        <span style="display: block; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; font-weight: 600;">Análisis Académico Predictivo</span>
-                        <h3 style="margin: 2px 0 0; color: #f8fafc; font-size: 1.15rem; font-weight: 600;">Promedio General Proyectado del Grupo</h3>
+
+                    {{-- LADO DERECHO: Gráfico de Distribución de Riesgo --}}
+                    <div style="display: flex; align-items: center; gap: 15px; width: 280px;">
+                        <div style="position: relative; width: 110px; height: 110px;">
+                            <canvas id="chartRiesgoGrupo"></canvas>
+                        </div>
+                        <div>
+                            <span style="display: block; font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; font-weight: 700; margin-bottom: 6px;">
+                                Distribución de Riesgo
+                            </span>
+                            @php
+                                $dist = $analisisGrupo['distribucion_riesgo'] ?? ['Alto' => 0, 'Medio' => 0, 'Bajo' => 0];
+                            @endphp
+                            <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.8rem; color: #e2e8f0; display: flex; flex-direction: column; gap: 3px;">
+                                <li style="display: flex; align-items: center; gap: 6px;">
+                                    <span style="width: 8px; height: 8px; border-radius: 50%; background-color: #ef4444; display: inline-block;"></span>
+                                    Alto: <strong>{{ $dist['Alto'] ?? 0 }}</strong>
+                                </li>
+                                <li style="display: flex; align-items: center; gap: 6px;">
+                                    <span style="width: 8px; height: 8px; border-radius: 50%; background-color: #f59e0b; display: inline-block;"></span>
+                                    Medio: <strong>{{ $dist['Medio'] ?? 0 }}</strong>
+                                </li>
+                                <li style="display: flex; align-items: center; gap: 6px;">
+                                    <span style="width: 8px; height: 8px; border-radius: 50%; background-color: #22c55e; display: inline-block;"></span>
+                                    Bajo: <strong>{{ $dist['Bajo'] ?? 0 }}</strong>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
+
                 </div>
-                
-                <div style="text-align: right; background: #0f172a; padding: 8px 18px; border-radius: 10px; border: 1px solid #1e293b;">
-                    <span style="font-size: 1.75rem; font-weight: 800; color: #38bdf8; font-family: monospace;">
-                        {{ number_format($analisisGrupo['promedio_grupo_proyectado'], 1) }}
-                    </span>
-                    <span style="display: block; font-size: 0.75rem; color: #64748b;">/ 10.0 pts</span>
-                </div>
-            </div>
-        @endif
+            @endif
 
         {{-- ======================================================
              FILTRO DE GRUPOS
@@ -252,16 +286,62 @@
     ======================================================
 --}}
 @push('scripts')
-<script>
-    {{-- 
-        FUNCIONALIDAD JAVASCRIPT:
-        1. Botón de regreso
-        2. Carga de tutor al seleccionar grupo
-        3. Confirmación antes de descargar lista del grupo (NUEVO)
-    --}}
+{{-- CDN de Chart.js --}}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<script>
     document.addEventListener('DOMContentLoaded', function() {
         
+        // ==============================================
+        // INICIALIZACIÓN DE CHART.JS (DOUGHNUT CHART)
+        // ==============================================
+        const ctxRiesgo = document.getElementById('chartRiesgoGrupo');
+        if (ctxRiesgo) {
+            @php
+                $dist = $analisisGrupo['distribucion_riesgo'] ?? ['Alto' => 0, 'Medio' => 0, 'Bajo' => 0];
+            @endphp
+            
+            const distribucionData = {
+                alto: {{ $dist['Alto'] ?? 0 }},
+                medio: {{ $dist['Medio'] ?? 0 }},
+                bajo: {{ $dist['Bajo'] ?? 0 }}
+            };
+
+            new Chart(ctxRiesgo, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Alto', 'Medio', 'Bajo'],
+                    datasets: [{
+                        data: [distribucionData.alto, distribucionData.medio, distribucionData.bajo],
+                        backgroundColor: [
+                            '#ef4444', // Rojo (Alto)
+                            '#f59e0b', // Naranja/Amarillo (Medio)
+                            '#22c55e'  // Verde (Bajo)
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false // Ocultamos la leyenda nativa porque la hicimos personalizada en HTML
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ` Alumnos: ${context.raw}`;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '70%' // Hace el anillo más delgado y elegante
+                }
+            });
+        }
+
         // ==============================================
         // 1. BOTÓN DE REGRESO
         // ==============================================
@@ -279,8 +359,6 @@
         const grupoSelect = document.getElementById('grupoSelect');
 
         function cargarTutor(grupo) {
-            // Esta función se llenará con datos del backend
-            // Por ahora, muestra un mensaje por defecto
             if (tutorNombreSpan) {
                 tutorNombreSpan.textContent = '{{ __('messages.groups_no_tutor') }}';
             }
@@ -295,18 +373,15 @@
         // ==============================================
         // 3. CONFIRMAR DESCARGA DE LISTA DEL GRUPO
         // ==============================================
-        // Originalmente: alert('{{ __('messages.groups_download_alert') }}');
         const btnDescargarGrupo = document.getElementById('btnDescargarGrupo');
         if (btnDescargarGrupo) {
             btnDescargarGrupo.addEventListener('click', function(e) {
                 e.preventDefault();
                 
-                // Obtener el nombre del grupo seleccionado
                 const select = document.querySelector('.grupo-select');
                 const optionSelected = select ? select.options[select.selectedIndex] : null;
                 const nombreGrupo = optionSelected ? optionSelected.textContent : 'seleccionado';
                 
-                // Mostrar alerta de confirmación
                 confirmarAccion(
                     'Descargar lista del grupo',
                     `Se generará un archivo PDF con la lista de alumnos del grupo "${nombreGrupo}". ¿Deseas continuar?`,
@@ -314,7 +389,6 @@
                     'Cancelar'
                 ).then((result) => {
                     if (result.isConfirmed) {
-                        // NOTA: La descarga real se integrará cuando la ruta esté definida
                         alertaInfo(
                             'Descarga de lista',
                             'La funcionalidad de descarga se integrará próximamente.'
