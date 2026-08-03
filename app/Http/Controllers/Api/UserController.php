@@ -132,18 +132,27 @@ class UserController extends Controller
     }
 
     public function getUserWithMaestroAndCarreras(string $id) {
-        $user = User::with(['maestro.carreras'])->find($id);
+        try {
+            $user = User::with(['maestro.carreras'])->find($id);
 
-        if (!$user) {
+            if (!$user) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Usuario no encontrado'
+                ], 404);
+            }
+
             return response()->json([
-                'status' => false,
-                'message' => 'Usuario no encontrado'
-            ], 404);
-        }
+                'status' => true,
+                'data' => $user
+            ], 200);
 
-        return response()->json([
-            'status' => true,
-            'data' => $user
-        ], 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile()
+            ], 500);
+        }
     }
 }
