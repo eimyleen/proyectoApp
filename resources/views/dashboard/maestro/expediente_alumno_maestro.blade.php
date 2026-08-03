@@ -332,11 +332,12 @@
                                     {{ $cal->nota_final !== null ? number_format($cal->nota_final, 1) : '-' }}
                                 </td>
                                 <td class="calificacion btn-editar-materia">
-                                    <button class="" 
+                                    <button class="btn-icono-tabla"
                                     data-materia-id="{{ $cal->materia->id }}"
                                     data-materia-nombre="{{ $cal->materia->nombre }}"
                                     data-parciales='@json($cal->parciales ?? '')'
-                                    >Editar
+                                    title="Editar materia">
+                                        <img src="{{ asset('img/editar.png') }}" alt="Editar" style="width: 16px; height: 16px;">
                                     </button>
                                 </td>
                             </tr>
