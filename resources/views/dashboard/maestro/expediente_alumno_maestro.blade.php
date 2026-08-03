@@ -305,8 +305,8 @@
                 <thead>
                     <tr>
                         <th rowspan="2">{{ __('messages.expedient_subject') }}</th>
-                        <th colspan="4">{{ __('messages.first_period') }}</th>
-                        <th colspan="4">{{ __('messages.second_period') }}</th>
+                        <th colspan="4">{{ __('messages.first_partial') }}</th>
+                        <th colspan="4">{{ __('messages.second_partial') }}</th>
                         <th rowspan="2">{{ __('messages.final_grade') }}</th>
                         <th rowspan="2">{{ __('messages.column_actions') }}</th>
                     </tr>

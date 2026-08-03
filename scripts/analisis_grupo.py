@@ -6,6 +6,11 @@ import pymysql
 def print_fallback(error_msg=""):
     print(json.dumps({
         "promedio_grupo_proyectado": 0.0,
+        "distribucion_riesgo": {
+            "Alto": 0,
+            "Medio": 0,
+            "Bajo": 0
+        },
         "alumnos_riesgo": []
     }))
 
@@ -50,6 +55,13 @@ try:
         alumnos_riesgo = []
         promedios_grupo = []
         
+        # Contador para la gráfica de dona[cite: 2]
+        distribucion_riesgo = {
+            "Alto": 0,
+            "Medio": 0,
+            "Bajo": 0
+        }
+        
         for alumno_id in alumnos:
             if periodo_actual:
                 cursor.execute(
@@ -64,7 +76,7 @@ try:
             promedio = sum(cals)/len(cals) if cals else 0.0
             promedios_grupo.append(promedio)
             
-            # Clasificación alineada
+            # Clasificación alineada[cite: 2]
             if promedio < 8.0:
                 riesgo = "Alto"
             elif promedio < 8.8:
@@ -72,17 +84,21 @@ try:
             else:
                 riesgo = "Bajo"
             
+            # Incrementar el contador correspondiente
+            distribucion_riesgo[riesgo] += 1
+            
             alumnos_riesgo.append({
                 "alumno_id": alumno_id,
                 "riesgo": riesgo,
                 "promedio_actual": round(promedio, 1)
             })
             
-        # Proyección del grupo
+        # Proyección del grupo[cite: 2]
         promedio_proyectado = sum(promedios_grupo) / len(promedios_grupo) if promedios_grupo else 0.0
 
         print(json.dumps({
             "promedio_grupo_proyectado": round(promedio_proyectado, 1),
+            "distribucion_riesgo": distribucion_riesgo,
             "alumnos_riesgo": alumnos_riesgo
         }))
 
