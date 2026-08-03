@@ -138,16 +138,20 @@ class MaestroController extends Controller
     }
 
     public function getUserWithMaestroWithCarreras($id) {
-        $maestro = Maestro::with('user')->find($id)->with('carreras');
+        // Carga las relaciones 'user' y 'carreras' en la misma consulta
+        $maestro = Maestro::with(['user', 'carreras'])->find($id);
 
+        // Si el maestro no existe, retorna 404
         if (!$maestro) {
-            return response()->json(['message' => 'Maestro no encontrado'], 404);
+            return response()->json([
+                'status'  => false,
+                'message' => 'Maestro no encontrado'
+            ], 404);
         }
 
         return response()->json([
-            'status' => false,
-            'data' => $maestro
-            ],
-            202);
+            'status' => true,
+            'data'   => $maestro
+        ], 200);
     }
 }
