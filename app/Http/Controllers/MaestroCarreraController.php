@@ -298,4 +298,19 @@ class MaestroCarreraController extends Controller
         // Retornamos el archivo para descarga con un nombre dinámico
         return $pdf->download('lista_global_alumnos_' . now()->format('d-m-Y') . '.pdf');
     }
+
+    public function descargarAlumnosPorGrupoPDF($grupoId)
+    {
+        $grupo = Grupo::findOrFail($grupoId);
+        // Obtenemos solo los alumnos de este grupo
+        $alumnos = Alumno::whereHas('grupos', function($q) use ($grupoId) {
+            $q->where('grupos.id', $grupoId);
+        })->with('user', 'carrera')->get();
+
+        Log::registrar('Descarga PDF', 'El maestro descargó la lista del grupo: ' . $grupo->nombre);
+
+        $pdf = Pdf::loadView('pdf.lista_alumnos_maestro', compact('alumnos', 'grupo'));
+
+        return $pdf->download('lista_alumnos_grupo_' . $grupo->nombre . '_' . now()->format('d-m-Y') . '.pdf');
+    }
 }
