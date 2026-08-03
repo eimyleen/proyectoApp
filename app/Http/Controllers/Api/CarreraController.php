@@ -88,4 +88,22 @@ class CarreraController extends Controller
             'message' => 'Carrera eliminada correctamente'
         ], 200);
     }
+
+    public function getCarreraWithGruposAndAlumnos(String $id) {
+        $carrera = Carrera::with('grupos.alumnos')
+        ->where('id', $id)
+        ->first();
+
+        if($carrera == null) {
+            return response()->json([
+                    'status' => false,
+                    'message' => 'Carrera no encontrada'
+                ], 404);
+        }
+
+        return response()->json([
+                'status' => true,
+                'data' => $carrera
+            ], 200);
+    }
 }
