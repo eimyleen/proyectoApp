@@ -13,6 +13,7 @@ use App\Models\Calificacion;
 use App\Models\Log;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Process;
 
 class MaestroCarreraController extends Controller
 {
@@ -326,5 +327,35 @@ class MaestroCarreraController extends Controller
         $pdf = Pdf::loadView('pdf.expediente_personal', compact('alumno', 'grupo', 'carrera'));
 
         return $pdf->download('expediente_personal_' . $alumno->user->name . '_' . now()->format('d-m-Y') . '.pdf');
+    }
+
+    public function descargarAnalisisGrupoPDF($grupoId)
+    {
+        $grupo = Grupo::findOrFail($grupoId);
+        
+        $analisis = null;
+        try {
+            $result = Process::timeout(10)->run("python3 " . base_path('scripts/analisis_grupo.py') . " " . $grupoId);
+            if ($result->successful()) {
+                $analisis = json_decode($result->output(), true);
+            }
+        } catch (\Exception $e) {
+            // Silencioso
+        }
+
+        if (!$analisis) {
+            return back()->with('error', 'No se pudo generar el análisis.');
+        }
+
+        // Obtener alumnos para la tabla
+        $alumnos = Alumno::whereHas('grupos', function($q) use ($grupoId) {
+            $q->where('grupos.id', $grupoId);
+        })->with('user')->get();
+
+        Log::registrar('Descarga PDF', 'El maestro descargó el análisis del grupo: ' . $grupo->nombre);
+
+        $pdf = Pdf::loadView('pdf.reporte_analisis_grupo', compact('grupo', 'analisis', 'alumnos'));
+
+        return $pdf->download('analisis_grupo_' . $grupo->nombre . '_' . now()->format('d-m-Y') . '.pdf');
     }
 }
