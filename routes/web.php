@@ -222,6 +222,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/alumno/calificaciones', [
         AlumnoController::class, 'calificaciones'
     ])->middleware(['auth', 'role:alumno'])->name('alumno.calificaciones');
+
+    // --- Ruta para DESCARGAR el PDF con el reporte de predicción del alumno ---
+    Route::get('/dashboard/alumno/descargar-prediccion-pdf', [
+        AlumnoController::class, 'descargarPrediccionPDF'
+    ])->middleware(['auth', 'role:alumno'])->name('alumno.prediccion.pdf');
 });
 
 Route::get('/welcome', function () {

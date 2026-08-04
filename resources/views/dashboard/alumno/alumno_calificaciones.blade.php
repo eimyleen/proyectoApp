@@ -196,7 +196,7 @@
             {{-- ============================================================ --}}
             {{-- SECCIÓN DETALLE: DESGLOSE POR PERÍODO                       --}}
             {{-- ============================================================ --}}
-            <div class="filtro-periodo">
+            <div class="filtro-periodo" style="display: flex; align-items: center; gap: 20px;">
                 <div class="periodo-select">
                     <form method="GET" action="{{ route('alumno.calificaciones') }}">
                         <label for="periodoSelect">{{ __('messages.label_period') }}</label>
@@ -212,6 +212,25 @@
                         </select>
                     </form>
                 </div>
+                
+                {{-- Botón de descarga PDF --}}
+                <a href="{{ route('alumno.prediccion.pdf') }}" 
+                   class="btn-generar-pdf" 
+                   style="
+                    display: inline-block;
+                    padding: 8px 16px;
+                    background-color: #20B2AA;
+                    color: white;
+                    text-decoration: none;
+                    border-radius: 6px;
+                    font-size: 0.9rem;
+                    font-weight: 600;
+                    transition: background-color 0.3s ease;
+                   "
+                   onmouseover="this.style.backgroundColor='#1a918a'"
+                   onmouseout="this.style.backgroundColor='#20B2AA'">
+                    {{ __('messages.expedient_generate_pdf') }}
+                </a>
             </div>
 
             {{-- TABLA DE CALIFICACIONES --}}
