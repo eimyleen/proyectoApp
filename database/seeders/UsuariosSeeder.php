@@ -50,10 +50,20 @@ class UsuariosSeeder extends Seeder
             'role' => 'alumno',
         ]);
 
-        $userAlumno2 = User::create([
-            'name' => 'Pepe',
-            'apellido' => 'Toño',
-            'email' => 'alumnotono@utnay.edu.mx',
+        // Usuario Alumno 2 (Riesgo Medio)
+        $userAlumnoMedio = User::create([
+            'name' => 'Carlos',
+            'apellido' => 'Mendoza',
+            'email' => 'alumno2@utnay.edu.mx',
+            'password' => Hash::make('password123'),
+            'role' => 'alumno',
+        ]);
+
+        // Usuario Alumno 3 (Riesgo Alto)
+        $userAlumnoAlto = User::create([
+            'name' => 'Sofía',
+            'apellido' => 'Ramírez',
+            'email' => 'alumno3@utnay.edu.mx',
             'password' => Hash::make('password123'),
             'role' => 'alumno',
         ]);
@@ -176,13 +186,25 @@ class UsuariosSeeder extends Seeder
             'carrera_id' => $carrera->id,
         ]);
 
-        $alumnoModelo2 = Alumno::create([
-            'user_id' => $userAlumno2->id,
-            'matricula' => 'TIC-310054',
-            'curp' => 'FHJDBIVDIJ98380798',
+        // Alumno Riesgo Medio
+        $alumnoMedio = Alumno::create([
+            'user_id' => $userAlumnoMedio->id,
+            'matricula' => 'TIC-310010',
+            'curp' => 'MENC000101HNTNNN02',
             'sexo' => 'M',
-            'fecha_nacimiento' => '2004-01-01',
-            'telefono' => '3111234527',
+            'fecha_nacimiento' => '2004-05-15',
+            'telefono' => '3119876543',
+            'carrera_id' => $carrera->id,
+        ]);
+
+        // Alumno Riesgo Alto
+        $alumnoAlto = Alumno::create([
+            'user_id' => $userAlumnoAlto->id,
+            'matricula' => 'TIC-310025',
+            'curp' => 'RAMS000101MNTNNN03',
+            'sexo' => 'F',
+            'fecha_nacimiento' => '2005-08-20',
+            'telefono' => '3115554433',
             'carrera_id' => $carrera->id,
         ]);
 
@@ -236,210 +258,40 @@ class UsuariosSeeder extends Seeder
         // ---------- Calificaciones de prueba para el alumno ----------
 
         $calificaciones = [
-            // Materia 1 (Base de Datos)
-            [
-                'alumno_id' => $alumnoModelo->id, 
-                'materia_id' => $m1->id,
-                'periodo' => 'Enero - Abril 2026',
-                'parcial' => 1,
-                'tipo_evaluacion' => 'ordinario',
-                'calificacion' => 8.0,
-            ],
-            [
-                'alumno_id' => $alumnoModelo->id, 
-                'materia_id' => $m1->id,
-                'periodo' => 'Enero - Abril 2026',
-                'parcial' => 2,
-                'tipo_evaluacion' => 'ordinario',
-                'calificacion' => 9.5,
-            ],
+            // --- Luis García ---
+            ['alumno_id' => $alumnoModelo->id, 'materia_id' => $m1->id, 'periodo' => 'Enero - Abril 2026', 'parcial' => 1, 'tipo_evaluacion' => 'ordinario', 'calificacion' => 8.0],
+            ['alumno_id' => $alumnoModelo->id, 'materia_id' => $m1->id, 'periodo' => 'Enero - Abril 2026', 'parcial' => 2, 'tipo_evaluacion' => 'ordinario', 'calificacion' => 9.5],
+            ['alumno_id' => $alumnoModelo->id, 'materia_id' => $m2->id, 'periodo' => 'Enero - Abril 2026', 'parcial' => 1, 'tipo_evaluacion' => 'ordinario', 'calificacion' => 8.0],
+            ['alumno_id' => $alumnoModelo->id, 'materia_id' => $m2->id, 'periodo' => 'Enero - Abril 2026', 'parcial' => 2, 'tipo_evaluacion' => 'ordinario', 'calificacion' => 10.0],
+            ['alumno_id' => $alumnoModelo->id, 'materia_id' => $m3->id, 'periodo' => 'Enero - Abril 2026', 'parcial' => 1, 'tipo_evaluacion' => 'ordinario', 'calificacion' => 5.0],
+            ['alumno_id' => $alumnoModelo->id, 'materia_id' => $m3->id, 'periodo' => 'Enero - Abril 2026', 'parcial' => 1, 'tipo_evaluacion' => 'remedial', 'calificacion' => 8.0],
+            ['alumno_id' => $alumnoModelo->id, 'materia_id' => $m3->id, 'periodo' => 'Enero - Abril 2026', 'parcial' => 2, 'tipo_evaluacion' => 'ordinario', 'calificacion' => 9.5],
+            ['alumno_id' => $alumnoModelo->id, 'materia_id' => $m4->id, 'periodo' => 'Enero - Abril 2026', 'parcial' => 1, 'tipo_evaluacion' => 'ordinario', 'calificacion' => 8.2],
+            ['alumno_id' => $alumnoModelo->id, 'materia_id' => $m4->id, 'periodo' => 'Enero - Abril 2026', 'parcial' => 2, 'tipo_evaluacion' => 'ordinario', 'calificacion' => 9.6],
+            ['alumno_id' => $alumnoModelo->id, 'materia_id' => $m5->id, 'periodo' => 'Enero - Abril 2026', 'parcial' => 1, 'tipo_evaluacion' => 'ordinario', 'calificacion' => 8.0],
+            ['alumno_id' => $alumnoModelo->id, 'materia_id' => $m5->id, 'periodo' => 'Enero - Abril 2026', 'parcial' => 2, 'tipo_evaluacion' => 'ordinario', 'calificacion' => 9.8],
+            
+            // Periodo Mayo - Agosto 2026 (Actual)
+            ['alumno_id' => $alumnoModelo->id, 'materia_id' => $m6->id, 'periodo' => 'Mayo - Agosto 2026', 'parcial' => 1, 'tipo_evaluacion' => 'ordinario', 'calificacion' => 8.0],
+            ['alumno_id' => $alumnoModelo->id, 'materia_id' => $m6->id, 'periodo' => 'Mayo - Agosto 2026', 'parcial' => 2, 'tipo_evaluacion' => 'ordinario', 'calificacion' => 9.4],
+            ['alumno_id' => $alumnoModelo->id, 'materia_id' => $m7->id, 'periodo' => 'Mayo - Agosto 2026', 'parcial' => 1, 'tipo_evaluacion' => 'ordinario', 'calificacion' => 8.5],
+            ['alumno_id' => $alumnoModelo->id, 'materia_id' => $m7->id, 'periodo' => 'Mayo - Agosto 2026', 'parcial' => 2, 'tipo_evaluacion' => 'ordinario', 'calificacion' => 9.0],
+            ['alumno_id' => $alumnoModelo->id, 'materia_id' => $m8->id, 'periodo' => 'Mayo - Agosto 2026', 'parcial' => 1, 'tipo_evaluacion' => 'ordinario', 'calificacion' => 9.0],
+            ['alumno_id' => $alumnoModelo->id, 'materia_id' => $m8->id, 'periodo' => 'Mayo - Agosto 2026', 'parcial' => 2, 'tipo_evaluacion' => 'ordinario', 'calificacion' => 9.5],
+            ['alumno_id' => $alumnoModelo->id, 'materia_id' => $m9->id, 'periodo' => 'Mayo - Agosto 2026', 'parcial' => 1, 'tipo_evaluacion' => 'ordinario', 'calificacion' => 8.8],
+            ['alumno_id' => $alumnoModelo->id, 'materia_id' => $m9->id, 'periodo' => 'Mayo - Agosto 2026', 'parcial' => 2, 'tipo_evaluacion' => 'ordinario', 'calificacion' => 9.2],
+            ['alumno_id' => $alumnoModelo->id, 'materia_id' => $m10->id, 'periodo' => 'Mayo - Agosto 2026', 'parcial' => 1, 'tipo_evaluacion' => 'ordinario', 'calificacion' => 8.2],
+            ['alumno_id' => $alumnoModelo->id, 'materia_id' => $m10->id, 'periodo' => 'Mayo - Agosto 2026', 'parcial' => 2, 'tipo_evaluacion' => 'ordinario', 'calificacion' => 8.9],
+            ['alumno_id' => $alumnoModelo->id, 'materia_id' => $m11->id, 'periodo' => 'Mayo - Agosto 2026', 'parcial' => 1, 'tipo_evaluacion' => 'ordinario', 'calificacion' => 9.0],
+            ['alumno_id' => $alumnoModelo->id, 'materia_id' => $m11->id, 'periodo' => 'Mayo - Agosto 2026', 'parcial' => 2, 'tipo_evaluacion' => 'ordinario', 'calificacion' => 9.7],
 
-            // Materia 2 (Desarrollo Web)
-            [
-                'alumno_id' => $alumnoModelo->id,
-                'materia_id' => $m2->id,
-                'periodo' => 'Enero - Abril 2026',
-                'parcial' => 1,
-                'tipo_evaluacion' => 'ordinario',
-                'calificacion' => 8.0,
-            ],
-            [
-                'alumno_id' => $alumnoModelo->id,
-                'materia_id' => $m2->id,
-                'periodo' => 'Enero - Abril 2026',
-                'parcial' => 2,
-                'tipo_evaluacion' => 'ordinario',
-                'calificacion' => 10.0,
-            ],
+            // --- Carlos Mendoza (Riesgo Medio) ---
+            ['alumno_id' => $alumnoMedio->id, 'materia_id' => $m6->id, 'periodo' => 'Mayo - Agosto 2026', 'parcial' => 1, 'tipo_evaluacion' => 'ordinario', 'calificacion' => 8.1],
+            ['alumno_id' => $alumnoMedio->id, 'materia_id' => $m7->id, 'periodo' => 'Mayo - Agosto 2026', 'parcial' => 1, 'tipo_evaluacion' => 'ordinario', 'calificacion' => 8.5],
 
-            // Materia 3 (Aplicaciones Móviles) 
-            [
-                'alumno_id' => $alumnoModelo->id,
-                'materia_id' => $m3->id,
-                'periodo' => 'Enero - Abril 2026',
-                'parcial' => 1,
-                'tipo_evaluacion' => 'ordinario',
-                'calificacion' => 5.0,
-            ],
-            [
-                'alumno_id' => $alumnoModelo->id,
-                'materia_id' => $m3->id,
-                'periodo' => 'Enero - Abril 2026',
-                'parcial' => 1,
-                'tipo_evaluacion' => 'remedial',
-                'calificacion' => 8.0,
-            ],
-            [
-                'alumno_id' => $alumnoModelo->id,
-                'materia_id' => $m3->id,
-                'periodo' => 'Enero - Abril 2026',
-                'parcial' => 2,
-                'tipo_evaluacion' => 'ordinario',
-                'calificacion' => 9.5,
-            ],
-
-            // Materia 4 (Seguridad Informática)
-            [
-                'alumno_id' => $alumnoModelo->id,
-                'materia_id' => $m4->id,
-                'periodo' => 'Enero - Abril 2026',
-                'parcial' => 1,
-                'tipo_evaluacion' => 'ordinario',
-                'calificacion' => 8.2,
-            ],
-            [
-                'alumno_id' => $alumnoModelo->id,
-                'materia_id' => $m4->id,
-                'periodo' => 'Enero - Abril 2026',
-                'parcial' => 2,
-                'tipo_evaluacion' => 'ordinario',
-                'calificacion' => 9.6,
-            ],
-
-            // Materia 5 (Inglés VII)
-            [
-                'alumno_id' => $alumnoModelo->id,
-                'materia_id' => $m5->id,
-                'periodo' => 'Enero - Abril 2026',
-                'parcial' => 1,
-                'tipo_evaluacion' => 'ordinario',
-                'calificacion' => 8.0,
-            ],
-            [
-                'alumno_id' => $alumnoModelo->id,
-                'materia_id' => $m5->id,
-                'periodo' => 'Enero - Abril 2026',
-                'parcial' => 2,
-                'tipo_evaluacion' => 'ordinario',
-                'calificacion' => 9.8,
-            ],
-
-            // Materia 6 (Desarrollo Web Integral)
-            [
-                'alumno_id' => $alumnoModelo->id,
-                'materia_id' => $m6->id,
-                'periodo' => 'Mayo - Agosto 2026',
-                'parcial' => 1,
-                'tipo_evaluacion' => 'ordinario',
-                'calificacion' => 8.0,
-            ],
-            [
-                'alumno_id' => $alumnoModelo->id,
-                'materia_id' => $m6->id,
-                'periodo' => 'Mayo - Agosto 2026',
-                'parcial' => 2,
-                'tipo_evaluacion' => 'ordinario',
-                'calificacion' => 9.4,
-            ],
-            // Materia 7 (Administración de Proyectos)
-            [
-                'alumno_id' => $alumnoModelo->id,
-                'materia_id' => $m7->id,
-                'periodo' => 'Mayo - Agosto 2026',
-                'parcial' => 1,
-                'tipo_evaluacion' => 'ordinario',
-                'calificacion' => 8.5,
-            ],
-            [
-                'alumno_id' => $alumnoModelo->id,
-                'materia_id' => $m7->id,
-                'periodo' => 'Mayo - Agosto 2026',
-                'parcial' => 2,
-                'tipo_evaluacion' => 'ordinario',
-                'calificacion' => 9.0,
-            ],
-
-            // Materia 8 (Desarrollo para Dispositivos Inteligentes)
-            [
-                'alumno_id' => $alumnoModelo->id,
-                'materia_id' => $m8->id,
-                'periodo' => 'Mayo - Agosto 2026',
-                'parcial' => 1,
-                'tipo_evaluacion' => 'ordinario',
-                'calificacion' => 9.0,
-            ],
-            [
-                'alumno_id' => $alumnoModelo->id,
-                'materia_id' => $m8->id,
-                'periodo' => 'Mayo - Agosto 2026',
-                'parcial' => 2,
-                'tipo_evaluacion' => 'ordinario',
-                'calificacion' => 9.5,
-            ],
-
-            // Materia 9 (Dirección de Equipos de Alto Rendimiento)
-            [
-                'alumno_id' => $alumnoModelo->id,
-                'materia_id' => $m9->id,
-                'periodo' => 'Mayo - Agosto 2026',
-                'parcial' => 1,
-                'tipo_evaluacion' => 'ordinario',
-                'calificacion' => 8.8,
-            ],
-            [
-                'alumno_id' => $alumnoModelo->id,
-                'materia_id' => $m9->id,
-                'periodo' => 'Mayo - Agosto 2026',
-                'parcial' => 2,
-                'tipo_evaluacion' => 'ordinario',
-                'calificacion' => 9.2,
-            ],
-
-            // Materia 10 (Extracción de Conocimiento en Bases de Datos)
-            [
-                'alumno_id' => $alumnoModelo->id,
-                'materia_id' => $m10->id,
-                'periodo' => 'Mayo - Agosto 2026',
-                'parcial' => 1,
-                'tipo_evaluacion' => 'ordinario',
-                'calificacion' => 8.2,
-            ],
-            [
-                'alumno_id' => $alumnoModelo->id,
-                'materia_id' => $m10->id,
-                'periodo' => 'Mayo - Agosto 2026',
-                'parcial' => 2,
-                'tipo_evaluacion' => 'ordinario',
-                'calificacion' => 8.9,
-            ],
-
-            // Materia 11 (Inglés VIII)
-            [
-                'alumno_id' => $alumnoModelo->id,
-                'materia_id' => $m11->id,
-                'periodo' => 'Mayo - Agosto 2026',
-                'parcial' => 1,
-                'tipo_evaluacion' => 'ordinario',
-                'calificacion' => 9.0,
-            ],
-            [
-                'alumno_id' => $alumnoModelo->id,
-                'materia_id' => $m11->id,
-                'periodo' => 'Mayo - Agosto 2026',
-                'parcial' => 2,
-                'tipo_evaluacion' => 'ordinario',
-                'calificacion' => 9.7,
-            ],
+            // --- Sofía Ramírez (Riesgo Alto) ---
+            ['alumno_id' => $alumnoAlto->id, 'materia_id' => $m6->id, 'periodo' => 'Mayo - Agosto 2026', 'parcial' => 1, 'tipo_evaluacion' => 'ordinario', 'calificacion' => 7.0],
+            ['alumno_id' => $alumnoAlto->id, 'materia_id' => $m7->id, 'periodo' => 'Mayo - Agosto 2026', 'parcial' => 1, 'tipo_evaluacion' => 'ordinario', 'calificacion' => 7.4],
         ];
 
         foreach ($calificaciones as $c) {
@@ -450,6 +302,10 @@ class UsuariosSeeder extends Seeder
 
         $maestro->carreras()->attach([$maestro->id]);
 
-        $grupo->alumnos()->attach([$alumnoModelo->id], ['periodo' => 'Noveno']);
+        $grupo->alumnos()->attach([
+            $alumnoModelo->id,
+            $alumnoMedio->id,
+            $alumnoAlto->id
+        ], ['periodo' => 'Noveno']);
     }
 }
