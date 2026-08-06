@@ -71,7 +71,7 @@
                         align-items: center; 
                         gap: 8px;
                     ">
-                        📊 Diagnóstico Académico Proyectado
+                         Diagnóstico Académico Proyectado
                     </h3>
 
                     <div style="
@@ -108,7 +108,7 @@
                         font-size: 0.9rem; 
                         line-height: 1.4;
                     ">
-                        💡 <strong>Recomendación:</strong> <em>{{ $dataCienciaDatos['recomendacion'] }}</em>
+                         <strong>Recomendación:</strong> <em>{{ $dataCienciaDatos['recomendacion'] }}</em>
                     </div>
                 </div>
 
