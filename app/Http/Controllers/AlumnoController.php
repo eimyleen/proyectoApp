@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Process;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Materia;
 use App\Models\Horario;
 use App\Models\Grupo;
@@ -165,5 +166,29 @@ class AlumnoController extends Controller
         $alumno->save();
 
         return back()->with('success', 'Documento(s) actualizado(s) con éxito.');
+    }
+
+    public function descargarPrediccionPDF()
+    {
+        $user = Auth::user();
+        $alumno = $user->alumno;
+
+        // Ejecutar el script de Python
+        $data = null;
+        try {
+            $result = Process::timeout(10)->run("python3 " . base_path('scripts/analisis_alumno.py') . " " . $alumno->id);
+            if ($result->successful()) {
+                $data = json_decode($result->output(), true);
+            }
+        } catch (\Exception $e) {
+            // Fallback en caso de error
+        }
+        
+        if (!$data) {
+            return back()->with('error', 'No se pudo generar el reporte.');
+        }
+
+        $pdf = Pdf::loadView('pdf.reporte_prediccion', compact('alumno', 'data'));
+        return $pdf->download('reporte_prediccion_' . $alumno->user->name . '.pdf');
     }
 }

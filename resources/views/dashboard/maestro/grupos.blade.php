@@ -197,6 +197,13 @@
                 <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-descarga">
                 {{ __('messages.groups_download_list') }}
             </button>
+            <a href="{{ request('grupo_id') ? route('maestro.grupo.analisis.pdf', request('grupo_id')) : '#' }}" 
+               class="btn-descargar-grupo" 
+               style="margin-left: 10px; text-decoration: none; display: inline-flex; align-items: center;"
+               @if(!request('grupo_id')) onclick="alertaInfo('Sin selección', 'Por favor, selecciona un grupo primero.'); return false;" @endif>
+                <img src="{{ asset('img/descargas.png') }}" alt="Descargar" class="btn-icon-descarga">
+                Descargar Análisis PDF
+            </a>
         </div>
 
         {{-- ======================================================
@@ -402,6 +409,27 @@
                 });
             });
         }
+
+        // ==============================================
+        // 4. DESCARGAR ANÁLISIS DE GRUPO PDF
+        // ==============================================
+        const btnDescargarAnalisis = document.getElementById('btnDescargarAnalisis');
+        if (btnDescargarAnalisis) {
+            btnDescargarAnalisis.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const select = document.querySelector('.grupo-select');
+                const grupoId = select ? select.value : null;
+
+                if (!grupoId) {
+                    alertaInfo('Sin selección', 'Por favor, selecciona un grupo primero.');
+                    return;
+                }
+
+                window.location.href = '{{ route("maestro.grupo.analisis.pdf", "__ID__") }}'.replace('__ID__', grupoId);
+            });
+        }
     });
 </script>
+
 @endpush

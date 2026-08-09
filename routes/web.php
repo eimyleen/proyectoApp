@@ -170,6 +170,11 @@ Route::middleware(['auth'])->group(function () {
         MaestroCarreraController::class, 'descargarExpedientePersonalPDF'
     ])->middleware(['auth', 'role:maestro'])->name('maestro.alumno.expediente.pdf');
 
+    // --- Ruta para DESCARGAR el PDF con el reporte de análisis de grupo ---
+    Route::get('/dashboard/maestro/descargar-analisis-grupo/{grupoId}', [
+        MaestroCarreraController::class, 'descargarAnalisisGrupoPDF'
+    ])->middleware(['auth', 'role:maestro'])->name('maestro.grupo.analisis.pdf');
+
     // --- Ruta para VER el detalle-información de una carrera específica desde la perspectiva del Maestro ---
     Route::get('/maestro/carrera/{id}', [
         MaestroCarreraController::class, 'show'
@@ -222,6 +227,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/alumno/calificaciones', [
         AlumnoController::class, 'calificaciones'
     ])->middleware(['auth', 'role:alumno'])->name('alumno.calificaciones');
+
+    // --- Ruta para DESCARGAR el PDF con el reporte de predicción del alumno ---
+    Route::get('/dashboard/alumno/descargar-prediccion-pdf', [
+        AlumnoController::class, 'descargarPrediccionPDF'
+    ])->middleware(['auth', 'role:alumno'])->name('alumno.prediccion.pdf');
 });
 
 Route::get('/welcome', function () {
